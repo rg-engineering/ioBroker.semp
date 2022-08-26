@@ -18,6 +18,11 @@
 	<script type="text/javascript" src="words.js"></script>
 
 	<script type="text/javascript">
+
+		function showHideSettings() {
+		}
+
+
 		// This will be called by the admin adapter when the settings page loads
 		function load(settings, onChange) {
 			// example: select elements with id=key and class=value and insert value
@@ -39,9 +44,19 @@
 				}
 			});
 			onChange(false);
+
+            showHideSettings();
+
 			// reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
 			if (M) M.updateTextFields();
+
+            values2table('devices', settings.devices, onChange, tableSystemsOnReady);
 		}
+
+        function tableSystemsOnReady() {
+
+        }
+
 
 		// This will be called by the admin adapter when the user presses the save button
 		function save(callback) {
@@ -57,6 +72,9 @@
 					obj[$this.attr('id')] = $this.val();
 				}
 			});
+
+            obj.devices = table2values('devices');
+
 			callback(obj);
 		}
 	</script>
@@ -67,29 +85,89 @@
 
 	<div class="m adapter-container">
 
-		<div class="row">
-			<div class="col s12 m4 l2">
-				<img src="semp.png" class="logo">
+		<div class="col s12">
+			<ul class="tabs">
+				<li class="tab col s2"><a href="#tab-main" class="translate active">Main settings</a></li>
+				<li class="tab col s2 le-settings"><a href="#tab-devices" class="translate">devices</a></li>
+			</ul>
+		</div>
+
+		<!--  main - settings  -->
+		<div id="tab-main" class="col s12 page">
+			<div class="row">
+				<div class="col s6">
+					<img src="semp.png" class="logo">
+				</div>
+			</div>
+
+
+			<div class="row">
+				<div class="input-field col s6">
+					<input type="text" id="UUID" class="value" />
+					<label for="UUID" class="translate">UUID</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s6">
+					<input type="number" id="SempPort" class="value" />
+					<label for="SempPort" class="translate">SempPort</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s6">
+					<input type="text" id="SempName" class="value" />
+					<label for="SempName" class="translate">SempName</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s6">
+					<input type="text" id="SempManufacturer" class="value" />
+					<label for="SempManufacturer" class="translate">SempManufacturer</label>
+				</div>
 			</div>
 		</div>
 
-		<!-- Put your content here -->
 
-		<!-- For example columns with settings: -->
-		<div class="row">
-			<div class="col s6 input-field">
-				<input type="checkbox" class="value" id="option1" />
-				<label for="option1" class="translate">option1</label>
-			</div>
 
-			<div class="col s6 input-field">
-				<input type="text" class="value" id="option2" />
-				<label for="option2" class="translate">option2</label>
+
+
+		<!--  settings for devices -->
+		<div id="tab-devices" class="col s12 page">
+
+			<div class="row">
+				<div class="col s12" id="devices">
+
+					<a class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">add</i></a>
+
+					<div class="table-values-div">
+						<table id="table_systems" class="table-values" style="width: 100%;">
+							<thead>
+								<tr>
+									<th id="tableDevices_col1" data-name="IsActive" data-type="checkbox" style="background: #64b5f6 " class="translate">IsActive</th>
+									<th id="tableDevices_col2" data-name="ID" data-type="text" style="background: #64b5f6 " class="translate">ID</th>
+									<th id="tableDevices_col3" data-name="Name" data-type="text" style="background: #64b5f6 " class="translate">Name</th>
+									<th id="tableDevices_col4" data-name="Type" data-type="text" style="background: #64b5f6 " class="translate">Type</th>
+									<th id="tableDevices_col5" data-name="MeasurementMethod" data-type="text" style="background: #64b5f6 " class="translate">measurementMethod</th>
+									<th id="tableDevices_col6" data-name="InterruptionsAllowed" data-type="checkbox" style="background: #64b5f6 " class="translate">interruptionsAllowed</th>
+									<th id="tableDevices_col7" data-name="MaxPower" data-type="text" style="background: #64b5f6 " class="translate">maxPower</th>
+									<th id="tableDevices_col8" data-name="Vendor" data-type="text" style="background: #64b5f6 " class="translate">vendor</th>
+									<th id="tableDevices_col9" data-name="SerialNr" data-type="text" style="background: #64b5f6 " class="translate">serialNr</th>
+									<th id="tableDevices_col10" data-name="OptionalEnergy" data-type="checkbox" style="background: #64b5f6 " class="translate">optionalEnergy</th>
+									<th id="tableDevices_col11" data-name="MinOnTime" data-type="text" style="background: #64b5f6 " class="translate">minOnTime</th>
+									<th id="tableDevices_col12" data-name="MinOffTime" data-type="text" style="background: #64b5f6 " class="translate">minOffTime</th>
+
+									<th id="tableDevices_col13" data-name="OID_Power" data-type="text" style="background: #64b5f6 " class="translate">OID_Power</th>
+									<th id="tableDevices_col14" data-name="OID_OnOff" data-type="text" style="background: #64b5f6 " class="translate">OID_OnOff</th>
+									<th data-buttons="up down delete" style="width: 100px; background: #64b5f6"></th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+
+				</div>
 			</div>
 		</div>
-
 	</div>
-
 </body>
 
 </html>

@@ -70,8 +70,12 @@
 		]
 	},
 	"native": {
-		"option1": true,
-		"option2": "42"
+		"UUID": "",
+		"SempPort": 9765,
+		"SempName": "ioBroker Gateway",
+		"SempManufacturer": "ioBroker",
+		"devices": []
+
 	},
 	"objects": [],
 	"instanceObjects": []
