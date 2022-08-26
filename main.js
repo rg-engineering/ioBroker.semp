@@ -72,7 +72,7 @@ class Semp extends utils.Adapter {
 					//just for test:
 					this.gw.addDummyDevice();
 
-					this.DummyDeviceUpdateIntervalID = setInterval(() => this.UpdateDummyDevice, 10 * 60 * 1000);
+					//this.DummyDeviceUpdateIntervalID = setInterval(() => this.UpdateDummyDevice, 10 * 60 * 1000);
 					//=================================
 
 				}
@@ -90,11 +90,12 @@ class Semp extends utils.Adapter {
 			this.log.error("exception in onReady [" + e + "]");
 		}
 	}
-
+	/*
 	UpdateDummyDevice() {
+		this.log.debug("UpdateDummyDevice");
 		this.gw.UpdateDummyDevice();
     }
-
+	*/
 
 	/**
 	 * Is called when adapter shuts down - callback has to be called under any circumstances!
