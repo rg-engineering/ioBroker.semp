@@ -1,89 +1,88 @@
 {
-	"common": {
-		"name": "semp",
-		"version": "0.0.1",
-		"news": {
-			"0.0.1": {
-				"en": "initial release",
-				"de": "Erstveröffentlichung",
-				"ru": "Начальная версия",
-				"pt": "lançamento inicial",
-				"nl": "Eerste uitgave",
-				"fr": "Première version",
-				"it": "Versione iniziale",
-				"es": "Versión inicial",
-				"pl": "Pierwsze wydanie",
-				"zh-cn": "首次出版"
-			}
-		},
-		"title": "semp",
-		"titleLang": {
-			"en": "semp",
-			"de": "semp",
-			"ru": "семп",
-			"pt": "semp",
-			"nl": "semp",
-			"fr": "semp",
-			"it": "semp",
-			"es": "semp",
-			"pl": "semp",
-			"zh-cn": "标准"
-		},
-		"desc": {
-			"en": "Interface to SMA SunnyPortal via SEMP",
-			"de": "Schnittstelle zu SMA SunnyPortal über SEMP",
-			"ru": "Интерфейс к SMA SunnyPortal через SEMP",
-			"pt": "Interface para SMA SunnyPortal via SEMP",
-			"nl": "Interface naar SMA SunnyPortal via SEMP",
-			"fr": "Interface avec SMA SunnyPortal via SEMP",
-			"it": "Interfaccia a SMA SunnyPortal tramite SEMP",
-			"es": "Interfaz con SMA SunnyPortal a través de SEMP",
-			"pl": "Interfejs do SMA SunnyPortal przez SEMP",
-			"zh-cn": "通过 SEMP 连接到 SMA SunnyPortal"
-		},
-		"authors": [
-			"René G. <info@rg-engineering.eu>"
-		],
-		"keywords": [
-			"SMA",
-			"SunnyPortal",
-			"SEMP"
-		],
-		"license": "MIT",
-		"platform": "Javascript/Node.js",
-		"main": "main.js",
-		"icon": "semp.png",
-		"enabled": true,
-		"messagebox": true,
-		"extIcon": "https://raw.githubusercontent.com/rg-engineering/ioBroker.semp/main/admin/semp.png",
-		"readme": "https://github.com/rg-engineering/ioBroker.semp/blob/main/README.md",
-		"loglevel": "info",
-		"mode": "daemon",
-		"type": "protocols",
-		"compact": true,
-		"connectionType": "local",
-		"dataSource": "push",
-		"materialize": true,
-		"dependencies": [
-			{
-				"js-controller": ">=2.0.0"
-			}
-		],
-		"plugins": {
-			"sentry": {
-				"dsn": "https://5799cf9f70cb43c7a761192a5f35d419@o390433.ingest.sentry.io/5434781"
-			}
-		}
-	},
-	"native": {
-		"IPAddress": "",
-		"UUID": "",
-		"SempPort": 9765,
-		"SempName": "ioBroker Gateway",
-		"SempManufacturer": "ioBroker",
-		"devices": []
-
-	},
-	"objects": [],
-	"instanceObjects": []
+    "common": {
+        "name": "semp",
+        "version": "0.0.1",
+        "news": {
+            "0.0.1": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "zh-cn": "首次出版"
+            }
+        },
+        "title": "semp",
+        "titleLang": {
+            "en": "semp",
+            "de": "semp",
+            "ru": "семп",
+            "pt": "semp",
+            "nl": "semp",
+            "fr": "semp",
+            "it": "semp",
+            "es": "semp",
+            "pl": "semp",
+            "zh-cn": "标准"
+        },
+        "desc": {
+            "en": "Interface to SMA SunnyPortal via SEMP",
+            "de": "Schnittstelle zu SMA SunnyPortal über SEMP",
+            "ru": "Интерфейс к SMA SunnyPortal через SEMP",
+            "pt": "Interface para SMA SunnyPortal via SEMP",
+            "nl": "Interface naar SMA SunnyPortal via SEMP",
+            "fr": "Interface avec SMA SunnyPortal via SEMP",
+            "it": "Interfaccia a SMA SunnyPortal tramite SEMP",
+            "es": "Interfaz con SMA SunnyPortal a través de SEMP",
+            "pl": "Interfejs do SMA SunnyPortal przez SEMP",
+            "zh-cn": "通过 SEMP 连接到 SMA SunnyPortal"
+        },
+        "authors": [
+            "René G. <info@rg-engineering.eu>"
+        ],
+        "keywords": [
+            "SMA",
+            "SunnyPortal",
+            "SEMP"
+        ],
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "main": "main.js",
+        "icon": "semp.png",
+        "enabled": true,
+        "messagebox": true,
+        "extIcon": "https://raw.githubusercontent.com/rg-engineering/ioBroker.semp/main/admin/semp.png",
+        "readme": "https://github.com/rg-engineering/ioBroker.semp/blob/main/README.md",
+        "loglevel": "info",
+        "mode": "daemon",
+        "type": "protocols",
+        "compact": true,
+        "connectionType": "local",
+        "dataSource": "push",
+        "materialize": true,
+        "dependencies": [
+            {
+                "js-controller": ">=2.0.0"
+            }
+        ],
+        "plugins": {
+            "sentry": {
+                "dsn": "https://5799cf9f70cb43c7a761192a5f35d419@o390433.ingest.sentry.io/5434781"
+            }
+        }
+    },
+    "native": {
+        "IPAddress": "",
+        "UUID": "",
+        "SempPort": 9765,
+        "SempName": "ioBroker Gateway",
+        "SempManufacturer": "ioBroker",
+        "devices": []
+    },
+    "objects": [],
+    "instanceObjects": []
 }
