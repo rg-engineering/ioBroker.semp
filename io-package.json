@@ -54,6 +54,7 @@
 		"main": "main.js",
 		"icon": "semp.png",
 		"enabled": true,
+		"messagebox": true,
 		"extIcon": "https://raw.githubusercontent.com/rg-engineering/ioBroker.semp/main/admin/semp.png",
 		"readme": "https://github.com/rg-engineering/ioBroker.semp/blob/main/README.md",
 		"loglevel": "info",
@@ -67,9 +68,15 @@
 			{
 				"js-controller": ">=2.0.0"
 			}
-		]
+		],
+		"plugins": {
+			"sentry": {
+				"dsn": "https://5799cf9f70cb43c7a761192a5f35d419@o390433.ingest.sentry.io/5434781"
+			}
+		}
 	},
 	"native": {
+		"IPAddress": "",
 		"UUID": "",
 		"SempPort": 9765,
 		"SempName": "ioBroker Gateway",

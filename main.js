@@ -7,6 +7,8 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require("@iobroker/adapter-core");
+const networkInterfaces = require('os').networkInterfaces;
+const { v4: uuidv4 } = require('uuid');
 
 const Gateway = require("./lib/semp/Gateway").Gateway;
 
@@ -14,7 +16,7 @@ const Gateway = require("./lib/semp/Gateway").Gateway;
 /* to do
  * uuid generieren und speichern
  * ip holen
- * sempport einstellbar in admin
+
  * dummydevice entfernen
  * devices bei start holen und anlegen
  * neues device im admin anlegen und löschen
@@ -25,7 +27,7 @@ const Gateway = require("./lib/semp/Gateway").Gateway;
 
 class Semp extends utils.Adapter {
 
-	
+
 
 	/**
 	 * @param {Partial<utils.AdapterOptions>} [options={}]
@@ -38,12 +40,12 @@ class Semp extends utils.Adapter {
 		this.on("ready", this.onReady.bind(this));
 		this.on("stateChange", this.onStateChange.bind(this));
 		// this.on("objectChange", this.onObjectChange.bind(this));
-		// this.on("message", this.onMessage.bind(this));
+		this.on("message", this.onMessage.bind(this));
 		this.on("unload", this.onUnload.bind(this));
 
 		this.gw = null;
 		this.DummyDeviceUpdateIntervalID = null;
-		
+
 	}
 
 	/**
@@ -52,14 +54,24 @@ class Semp extends utils.Adapter {
 	async onReady() {
 
 		try {
-			let uuid = "290B3891-0311-4854-4333-7C70BC802C2D";
-			let ip = "192.168.3.51";
-			let sempPort = 9765;
-			let name = "ioBroker Gateway";
-			let manufacturer = "ioBroker";
+			//"290B3891-0311-4854-4333-7C70BC802C2D"
+			let uuid = this.config.UUID;
+			let ip = this.config.IPAddress;
+			//9765
+			let sempPort = this.config.SempPort;
+			//"ioBroker Gateway"
+			let name = this.config.SempName;
+			//"ioBroker"
+			let manufacturer = this.config.SempManufacturer;
 
 			if (!ip) {
 				this.log.error("IP not specified!");
+			}
+			else if (!sempPort) {
+				this.log.error("Port not specified!");
+			}
+			else if (!uuid) {
+				this.log.error("UUID not specified!");
 			}
 			else {
 
@@ -94,7 +106,7 @@ class Semp extends utils.Adapter {
 	UpdateDummyDevice() {
 		this.log.debug("UpdateDummyDevice");
 		this.gw.UpdateDummyDevice();
-    }
+	}
 	*/
 
 	/**
@@ -111,7 +123,7 @@ class Semp extends utils.Adapter {
 
 			if (this.DummyDeviceUpdateIntervalID != null) {
 				clearInterval(this.DummyDeviceUpdateIntervalID);
-            }
+			}
 
 			if (this.gw != null) {
 				this.gw.stop();
@@ -154,24 +166,56 @@ class Semp extends utils.Adapter {
 		}
 	}
 
-	// If you need to accept messages in your adapter, uncomment the following block and the corresponding line in the constructor.
-	// /**
-	//  * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
-	//  * Using this method requires "common.messagebox" property to be set to true in io-package.json
-	//  * @param {ioBroker.Message} obj
-	//  */
-	// onMessage(obj) {
-	// 	if (typeof obj === "object" && obj.message) {
-	// 		if (obj.command === "send") {
-	// 			// e.g. send email or pushover or whatever
-	// 			this.log.info("send command");
+	/**
+	 * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
+	 * Using this method requires "common.messagebox" property to be set to true in io-package.json
+	* @param {ioBroker.Message} obj
+	 */
+	onMessage(obj) {
+		this.log.info("on message " + JSON.stringify(obj));
+		if (typeof obj === "object" && obj.command) {
+			if (obj.command === "getIP") {
+				this.log.info("get IP");
 
-	// 			// Send response in callback if required
-	// 			if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-	// 		}
-	// 	}
-	// }
+				let myIP = this.GetIP();
+				// Send response in callback if required
+				if (obj.callback) this.sendTo(obj.from, obj.command, myIP, obj.callback);
+			}
+			else if (obj.command === "getUUID") {
+				this.log.info("get UUID");
 
+				let uuid = this.GetUUID();
+				// Send response in callback if required
+				if (obj.callback) this.sendTo(obj.from, obj.command, uuid, obj.callback);
+			}
+			else {
+				this.log.warn("unnown command " + obj.command);
+			}
+		}
+	}
+
+
+	GetIP() {
+		let ip = "";
+		const nets = networkInterfaces();
+
+		for (const name of Object.keys(nets)) {
+			for (const net of nets[name]) {
+				if (net.family === 'IPv4' && !net.internal) {
+					ip = net.address;
+				}
+			}
+		}
+		return ip;
+    }
+
+	GetUUID() {
+		let uuid = "000-todo";
+
+		uuid = uuidv4();
+
+		return uuid;
+	}
 }
 
 if (require.main !== module) {
