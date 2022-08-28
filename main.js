@@ -27,6 +27,9 @@ const Gateway = require("./lib/semp/Gateway").Gateway;
  *	Seriennummer automatisch vervollständigen
  *	ID nur ändern, wenn sie nicht dem Format entspricht
  *	bei OID ONOff ebenfalls ID prüfen
+ *	
+ *	
+ *	readme bzgl. der einstellbaren Parameter vervollständigen
 
 
 */
@@ -189,15 +192,51 @@ class Semp extends utils.Adapter {
 	 * @param {string} id
 	 * @param {ioBroker.State | null | undefined} state
 	 */
-	onStateChange(id, state) {
+	async onStateChange(id, state) {
 		if (state) {
 			// The state was changed
-			this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
+			let bRet = this.UpdateDevice(id, state);
+
+			if (!bRet) {
+				this.log.warn(`state ${id} changed: ${state.val} (ack = ${state.ack}) but not handled`);
+            }
+
+			/*
+				state javascript.0.semp.Device1_OnOff changed: true(ack = false)
+				state javascript.0.semp.Device1_Power changed: 73.32042175039992(ack = false)
+				*/
+
+
 		} else {
 			// The state was deleted
 			this.log.info(`state ${id} deleted`);
 		}
 	}
+
+	UpdateDevice(id, state) {
+
+		let bRet = false;
+		//find device and OID
+		for (let d = 0; d < this.config.devices.length; d++) {
+
+			let device = this.config.devices[d];
+			if (device.IsActive) {
+				if (device.OID_Power == id) {
+					this.gw.setPowerDevice(device.ID, state.val);
+					bRet = true;
+				}
+
+				if (device.OID_OnOff == id) {
+					this.gw.setOnOffDevice(device.ID, state.val);
+					bRet = true;
+				}
+			}
+		}
+
+		return bRet;
+    }
+
+
 
 	/**
 	 * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
