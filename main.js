@@ -14,13 +14,19 @@ const Gateway = require("./lib/semp/Gateway").Gateway;
 
 
 /* to do
- * uuid generieren und speichern
- * ip holen
 
- * dummydevice entfernen
- * devices bei start holen und anlegen
- * neues device im admin anlegen und löschen
- * typen in auswahl (z.Bsp. fridge)
+* Power und OnOff update an gw übergeben
+
+
+* Hinweise im admin:
+	* DeviceID Format
+    * UUID
+    * BaseID
+    * 
+ * admin
+ *	Seriennummer automatisch vervollständigen
+ *	ID nur ändern, wenn sie nicht dem Format entspricht
+ *	bei OID ONOff ebenfalls ID prüfen
 
 
 */
@@ -44,7 +50,7 @@ class Semp extends utils.Adapter {
 		this.on("unload", this.onUnload.bind(this));
 
 		this.gw = null;
-		this.DummyDeviceUpdateIntervalID = null;
+		//this.DummyDeviceUpdateIntervalID = null;
 
 	}
 
@@ -82,10 +88,12 @@ class Semp extends utils.Adapter {
 
 					//=================================
 					//just for test:
-					this.gw.addDummyDevice();
+					//this.gw.addDummyDevice();
 
-					this.DummyDeviceUpdateIntervalID = setInterval(this.UpdateDummyDevice.bind(this), 1 * 60 * 1000);
+					//this.DummyDeviceUpdateIntervalID = setInterval(this.UpdateDummyDevice.bind(this), 1 * 60 * 1000);
 					//=================================
+
+					this.AddDevices();
 
 				}
 			}
@@ -102,12 +110,35 @@ class Semp extends utils.Adapter {
 			this.log.error("exception in onReady [" + e + "]");
 		}
 	}
-	
+
+	/*
 	UpdateDummyDevice() {
 		this.log.debug("UpdateDummyDevice");
 		this.gw.UpdateDummyDevice();
 	}
-	
+	*/
+
+	//add all devices which are configured in admin page
+	AddDevices() {
+
+		for (let d = 0; d < this.config.devices.length; d++) {
+
+			let device = this.config.devices[d];
+			if (device.IsActive) {
+				this.gw.addDevice(device);
+				this.SubscribeDevice(device);
+			}
+        }
+    }
+
+	SubscribeDevice(device) {
+		if (device.OID_Power != null) {
+			this.subscribeForeignStates(device.OID_Power);
+		}
+		if (device.OID_OnOff != null) {
+			this.subscribeForeignStates(device.OID_OnOff);
+		}
+    }
 
 	/**
 	 * Is called when adapter shuts down - callback has to be called under any circumstances!
@@ -121,9 +152,11 @@ class Semp extends utils.Adapter {
 			// ...
 			// clearInterval(interval1);
 
+			/*
 			if (this.DummyDeviceUpdateIntervalID != null) {
 				clearInterval(this.DummyDeviceUpdateIntervalID);
 			}
+			*/
 
 			if (this.gw != null) {
 				this.gw.stop();
@@ -171,7 +204,7 @@ class Semp extends utils.Adapter {
 	 * Using this method requires "common.messagebox" property to be set to true in io-package.json
 	* @param {ioBroker.Message} obj
 	 */
-	onMessage(obj) {
+	async onMessage(obj) {
 		this.log.info("on message " + JSON.stringify(obj));
 		if (typeof obj === "object" && obj.command) {
 			if (obj.command === "getIP") {
@@ -187,6 +220,13 @@ class Semp extends utils.Adapter {
 				let uuid = this.GetUUID();
 				// Send response in callback if required
 				if (obj.callback) this.sendTo(obj.from, obj.command, uuid, obj.callback);
+			}
+			else if (obj.command === "getDeviceBaseID") {
+				this.log.info("get DeviceBaseID");
+
+				let devicebaseid = await this.GetDeviceBaseID();
+				// Send response in callback if required
+				if (obj.callback) this.sendTo(obj.from, obj.command, devicebaseid, obj.callback);
 			}
 			else {
 				this.log.warn("unnown command " + obj.command);
@@ -216,6 +256,22 @@ class Semp extends utils.Adapter {
 
 		return uuid;
 	}
+
+	async GetDeviceBaseID() {
+		let devicebaseid = "12345678";
+
+		const ret = await this.getForeignObjectAsync("system.config");
+
+		if (ret != null) {
+			this.log.debug("system config " + JSON.stringify(ret));
+
+			let latidude = ret.common.latitude;
+
+			devicebaseid = ("00000000" + latidude * 100000000).slice(-8);
+		}
+		return devicebaseid;
+    }
+
 }
 
 if (require.main !== module) {

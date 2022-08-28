@@ -3,96 +3,168 @@
 <head>
 
 	<!-- Load ioBroker scripts and styles-->
+	<link rel="stylesheet" type="text/css" href="../../lib/css/fancytree/ui.fancytree.min.css" />
 	<link rel="stylesheet" type="text/css" href="../../css/adapter.css" />
 	<link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
 
 	<script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
 	<script type="text/javascript" src="../../socket.io/socket.io.js"></script>
 
-	<script type="text/javascript" src="../../js/translate.js"></script>
 	<script type="text/javascript" src="../../lib/js/materialize.js"></script>
+	<script type="text/javascript" src="../../lib/js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="../../lib/js/jquery.fancytree-all.min.js"></script>
+
+	<script type="text/javascript" src="../../js/translate.js"></script>
+	<script type="text/javascript" src="../../lib/js/selectID.js"></script>
 	<script type="text/javascript" src="../../js/adapter-settings.js"></script>
 
-	<!-- Load our own files -->
+
+	<!-- my own styles -->
 	<link rel="stylesheet" type="text/css" href="style.css" />
 	<script type="text/javascript" src="words.js"></script>
+
+	<style>
+
+		#dialog-room-edit {
+			max-height: 95% !important;
+			max-width: 85% !important;
+			width: 80% !important;
+			height: 90% !important;
+			overflow: visible !important;
+			top: 10px !important;
+		}
+
+		#dialog-select-member {
+			max-height: 95% !important;
+			max-width: 85% !important;
+			width: 80% !important;
+			height: 90% !important;
+			overflow: visible !important;
+			top: 10px !important;
+		}
+
+		.collapsible-body {
+			margin-left: 2rem !important;
+			padding-top: 0 !important;
+		}
+
+		redlabel {
+			color: red;
+		}
+	</style>
+
 
 	<script type="text/javascript">
 
 		function showHideSettings() {
 		}
 
-        
-        function CheckIP(onChange, instance) {
+
+		function CheckIP(onChange, instance) {
 			console.log("CheckIP");
 			var $ip = $('#IPAddress');
 
 			if (!$ip.val()) {
-                console.log("call get IP from " + instance);
+				console.log("call get IP from " + instance);
 				getIP(onChange, instance);
-            }
+			}
 		}
 
-        //var timeout1;
-        function getIP(onChange, instance) {
-            //timeout1 = setTimeout(function () {
-            //    getIP(onChange, instance);
-            //}, 4000);
+		//var timeout1;
+		function getIP(onChange, instance) {
+			//timeout1 = setTimeout(function () {
+			//    getIP(onChange, instance);
+			//}, 4000);
 
-            //function sendTo(_adapter_instance, command, message, callback)
-            sendTo(instance, 'getIP', null, function (list) {
-                //if (timeout1) {
-                //    clearTimeout(timeout1);
-                //    timeout1 = null;
-                //}
+			//function sendTo(_adapter_instance, command, message, callback)
+			sendTo(instance, 'getIP', null, function (list) {
+				//if (timeout1) {
+				//    clearTimeout(timeout1);
+				//    timeout1 = null;
+				//}
 
-                console.log('got ip ' + JSON.stringify(list));
+				console.log('got ip ' + JSON.stringify(list));
 
 				$('#IPAddress').val(list);
 
 				showHideSettings();
 				onChange(true);
-                M.updateTextFields();
+				M.updateTextFields();
 
-            });
-        }
+			});
+		}
 
 
 
-        function CheckUUID(onChange, instance) {
-            console.log("CheckUUID");
+		function CheckUUID(onChange, instance) {
+			console.log("CheckUUID");
 			var $uuid = $('#UUID');
 
-            if (!$uuid.val()) {
-                console.log("call get UUID from " + instance);
-                getUUID(onChange, instance);
-            }
+			if (!$uuid.val()) {
+				console.log("call get UUID from " + instance);
+				getUUID(onChange, instance);
+			}
 
-        }
+		}
 
-        //var timeout2;
-        function getUUID(onChange, instance) {
-            //timeout2 = setTimeout(function () {
-            //    getUUID(onChange, instance);
-            //}, 4000);
+		//var timeout2;
+		function getUUID(onChange, instance) {
+			//timeout2 = setTimeout(function () {
+			//    getUUID(onChange, instance);
+			//}, 4000);
 
-            //function sendTo(_adapter_instance, command, message, callback)
-            sendTo(instance, 'getUUID', null, function (list) {
-                //if (timeout2) {
-                //    clearTimeout(timeout2);
-                //    timeout2 = null;
-                //}
+			//function sendTo(_adapter_instance, command, message, callback)
+			sendTo(instance, 'getUUID', null, function (list) {
+				//if (timeout2) {
+				//    clearTimeout(timeout2);
+				//    timeout2 = null;
+				//}
 
-                console.log('got uuid ' + JSON.stringify(list));
+				console.log('got uuid ' + JSON.stringify(list));
 
-                $('#UUID').val(list);
+				$('#UUID').val(list);
 
 				showHideSettings();
 				onChange(true);
+				M.updateTextFields();
+
+			});
+		}
+
+        function CheckDeviceBaseId(onChange, instance) {
+            console.log("CheckDeviceBaseId");
+            var $devicebaseid = $('#DeviceBaseID');
+
+            if (!$devicebaseid.val()) {
+                console.log("call get $devicebaseid from " + instance);
+                getDeviceBaseId(onChange, instance);
+            }
+		}
+
+        //var timeout3;
+        function getDeviceBaseId(onChange, instance) {
+            //timeout3 = setTimeout(function () {
+            //    getDeviceBaseId(onChange, instance);
+            //}, 4000);
+
+            //function sendTo(_adapter_instance, command, message, callback)
+            sendTo(instance, 'getDeviceBaseID', null, function (list) {
+                //if (timeout3) {
+                //    clearTimeout(timeout3);
+                //    timeout3 = null;
+                //}
+
+                console.log('got DeviceBaseID ' + JSON.stringify(list));
+
+                $('#DeviceBaseID').val(list);
+
+                showHideSettings();
+                onChange(true);
                 M.updateTextFields();
 
             });
         }
+
 
 		// This will be called by the admin adapter when the settings page loads
 		function load(settings, onChange) {
@@ -120,18 +192,103 @@
 			var _id = 'semp.' + instance;
 			CheckIP(onChange, _id);
 			CheckUUID(onChange, _id);
+            CheckDeviceBaseId(onChange, _id);
 
 			showHideSettings();
 
 			// reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
 			if (M) M.updateTextFields();
 
-			values2table('devices', settings.devices, onChange, tableSystemsOnReady);
+			values2table('devices', settings.devices, onChange, tableDevicesOnReady);
 		}
 
-        function tableSystemsOnReady() {
+		function tableDevicesOnReady() {
 
-        }
+			console.log('tableDevicesOnReady');
+
+			$('#devices .table-values-div .table-values .values-buttons[data-command="edit1"]').on('click', function () {
+
+				let id = $(this).data('index');
+
+				console.log('edit devices Power-OID clicked ID=' + id);
+
+				initSelectId(function (sid) {
+
+					sid.selectId('show', $('#devices .values-input[data-name="Name"][data-index="' + id + '"]').val(), function (newId) {
+						if (newId) {
+							$('#devices .values-input[data-name="OID_Power"][data-index="' + id + '"]').val(newId).trigger('change');
+
+							//define ID F-11223344-112233445566-00
+                            var $devicebaseid = $('#DeviceBaseID');
+
+							var deviceid = "F-" + $devicebaseid.val() + "-" + ("000000000000" + (id + 1)).slice(-12) + "-00";
+							$('#devices .values-input[data-name="ID"][data-index="' + id + '"]').val(deviceid).trigger('change');
+
+							var name = "";
+							var names = newId.split(".");
+							if (names.length > 3) {
+								name = names[2];
+                            }
+                            $('#devices .values-input[data-name="Name"][data-index="' + id + '"]').val(name).trigger('change');
+						}
+					});
+				});
+			});
+            $('#devices .table-values-div .table-values .values-buttons[data-command="edit2"]').on('click', function () {
+
+                let id = $(this).data('index');
+
+                console.log('edit devices OnOff-OID clicked ID=' + id);
+
+                initSelectId(function (sid) {
+                    sid.selectId('show', $('#devices .values-input[data-name="Name"][data-index="' + id + '"]').val(), function (newId) {
+                        if (newId) {
+                            $('#devices .values-input[data-name="OID_OnOff"][data-index="' + id + '"]').val(newId).trigger('change');
+                        }
+                    });
+                });
+            });
+
+		}
+
+		var selectId;
+		function initSelectId(callback) {
+
+			if (selectId) {
+				return callback(selectId);
+			}
+
+			socket.emit('getObjects', function (err, objs) {
+				selectId = $('#dialog-select-member').selectId('init', {
+					noMultiselect: true,
+					objects: objs,
+					imgPath: '../../lib/css/fancytree/',
+					filter: { type: 'state' },
+					name: 'scenes-select-state',
+					texts: {
+						select: _('Select'),
+						cancel: _('Cancel'),
+						all: _('All'),
+						id: _('ID'),
+						name: _('Name'),
+						role: _('Role'),
+						room: _('Room'),
+						value: _('Value'),
+						selectid: _('Select ID'),
+						from: _('From'),
+						lc: _('Last changed'),
+						ts: _('Time stamp'),
+						wait: _('Processing...'),
+						ack: _('Acknowledged'),
+						selectAll: _('Select all'),
+						unselectAll: _('Deselect all'),
+						invertSelection: _('Invert selection')
+					},
+					columns: ['image', 'name', 'role', 'room']
+				});
+				callback(selectId);
+			});
+		}
 
 
 		// This will be called by the admin adapter when the user presses the save button
@@ -149,7 +306,7 @@
 				}
 			});
 
-            obj.devices = table2values('devices');
+			obj.devices = table2values('devices');
 
 			callback(obj);
 		}
@@ -206,12 +363,7 @@
 					</div>
 				</div>
 
-				<div class="row">
-					<div class="input-field col s3">
-						<input type="number" id="DeviceBaseID" class="value"  min="0" max="99999999" />
-						<label for="DeviceBaseID" class="translate">DeviceBaseID</label>
-					</div>
-				</div>
+
 			</div>
 
 
@@ -220,6 +372,13 @@
 
 			<!--  settings for devices -->
 			<div id="tab-devices" class="col s12 page">
+
+				<div class="row">
+					<div class="input-field col s3">
+						<input type="number" id="DeviceBaseID" class="value" min="0" max="99999999" />
+						<label for="DeviceBaseID" class="translate">DeviceBaseID</label>
+					</div>
+				</div>
 
 				<div class="row">
 					<div class="col s12" id="devices">
@@ -244,7 +403,9 @@
 										<th id="tableDevices_col12" data-name="MinOffTime" data-type="text" style="background: #64b5f6 " class="header translate">minOffTime</th>
 
 										<th id="tableDevices_col13" data-name="OID_Power" data-type="text" style="background: #64b5f6 " class="header translate">OID_Power</th>
-										<th id="tableDevices_col14" data-name="OID_OnOff" data-type="text" style="background: #64b5f6 " class="header translate">OID_OnOff</th>
+										<th id="tableDevices_col14" data-buttons="edit1" style="width: 100px; background: #64b5f6"></th>
+										<th id="tableDevices_col15" data-name="OID_OnOff" data-type="text" style="background: #64b5f6 " class="header translate">OID_OnOff</th>
+										<th id="tableDevices_col16" data-buttons="edit2" style="width: 100px; background: #64b5f6"></th>
 										<th data-buttons="up down delete" style="width: 100px; background: #64b5f6"></th>
 									</tr>
 								</thead>
@@ -255,6 +416,25 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="m material-dialogs">
+			<div id="dialog-select-member" class="modal modal-fixed-footer">
+				<div class="modal-content">
+					<div class="row">
+						<div class="col s12 title"></div>
+					</div>
+					<div class="row">
+						<div class="col s12 dialog-content">
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<a class="modal-action modal-close waves-effect waves-green btn btn-set"><i class="large material-icons left">check</i><span class="translate">Select</span></a>
+					<a class="modal-action modal-close waves-effect waves-green btn btn-close"><i class="large material-icons left ">close</i><span class="translate">Cancel</span></a>
+				</div>
+			</div>
+		</div>
+
 	</div>
 </body>
 
