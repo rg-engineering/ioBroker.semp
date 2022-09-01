@@ -81,7 +81,8 @@
         "SempPort": 9765,
         "SempName": "ioBroker Gateway",
         "SempManufacturer": "ioBroker",
-        "DeviceBaseID": 0,
+      "DeviceBaseID": 0,
+        "extendedLog":  false,
         "devices": []
     },
     "objects": [],

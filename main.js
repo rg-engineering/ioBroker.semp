@@ -15,7 +15,7 @@ const Gateway = require("./lib/semp/Gateway").Gateway;
 
 /* to do
 
-* Power und OnOff update an gw übergeben
+
 
 
 * Hinweise im admin:
