@@ -64,7 +64,7 @@
 			console.log("CheckIP");
 			var $ip = $('#IPAddress');
 
-			if (!$ip.val()) {
+			if (!$ip.val() || $ip.val().length < 5) {
 				console.log("call get IP from " + instance);
 				getIP(onChange, instance);
 			}
@@ -100,7 +100,7 @@
 			console.log("CheckUUID");
 			var $uuid = $('#UUID');
 
-			if (!$uuid.val()) {
+			if (!$uuid.val() || $uuid.val().length < 5) {
 				console.log("call get UUID from " + instance);
 				getUUID(onChange, instance);
 			}
@@ -131,39 +131,39 @@
 			});
 		}
 
-        function CheckDeviceBaseId(onChange, instance) {
-            console.log("CheckDeviceBaseId");
-            var $devicebaseid = $('#DeviceBaseID');
+		function CheckDeviceBaseId(onChange, instance) {
+			console.log("CheckDeviceBaseId");
+			var $devicebaseid = $('#DeviceBaseID');
 
-            if (!$devicebaseid.val()) {
-                console.log("call get $devicebaseid from " + instance);
-                getDeviceBaseId(onChange, instance);
-            }
+			if (!$devicebaseid.val() || $devicebaseid.val() < 1000) {
+				console.log("call get $devicebaseid from " + instance);
+				getDeviceBaseId(onChange, instance);
+			}
 		}
 
         //var timeout3;
-        function getDeviceBaseId(onChange, instance) {
-            //timeout3 = setTimeout(function () {
-            //    getDeviceBaseId(onChange, instance);
-            //}, 4000);
+		function getDeviceBaseId(onChange, instance) {
+			//timeout3 = setTimeout(function () {
+			//    getDeviceBaseId(onChange, instance);
+			//}, 4000);
 
-            //function sendTo(_adapter_instance, command, message, callback)
-            sendTo(instance, 'getDeviceBaseID', null, function (list) {
-                //if (timeout3) {
-                //    clearTimeout(timeout3);
-                //    timeout3 = null;
-                //}
+			//function sendTo(_adapter_instance, command, message, callback)
+			sendTo(instance, 'getDeviceBaseID', null, function (list) {
+				//if (timeout3) {
+				//    clearTimeout(timeout3);
+				//    timeout3 = null;
+				//}
 
-                console.log('got DeviceBaseID ' + JSON.stringify(list));
+				console.log('got DeviceBaseID ' + JSON.stringify(list));
 
-                $('#DeviceBaseID').val(list);
+				$('#DeviceBaseID').val(list);
 
-                showHideSettings();
-                onChange(true);
-                M.updateTextFields();
+				showHideSettings();
+				onChange(true);
+				M.updateTextFields();
 
-            });
-        }
+			});
+		}
 
 
 		// This will be called by the admin adapter when the settings page loads
@@ -188,7 +188,6 @@
 			});
 			onChange(false);
 
-
 			var _id = 'semp.' + instance;
 			CheckIP(onChange, _id);
 			CheckUUID(onChange, _id);
@@ -200,6 +199,14 @@
 			if (M) M.updateTextFields();
 
 			values2table('devices', settings.devices, onChange, tableDevicesOnReady);
+
+            $("#refresh-baseid").click(function () {
+				getDeviceBaseId(onChange, _id);
+			});
+
+            $("#refresh-uuid").click(function () {
+                getUUID(onChange, _id);
+            });
 		}
 
 		function tableDevicesOnReady() {
@@ -229,7 +236,12 @@
 							if (names.length > 3) {
 								name = names[2];
                             }
-                            $('#devices .values-input[data-name="Name"][data-index="' + id + '"]').val(name).trigger('change');
+							$('#devices .values-input[data-name="Name"][data-index="' + id + '"]').val(name).trigger('change');
+
+                            $('#devices .values-input[data-name="SerialNr"][data-index="' + id + '"]').val(name).trigger('change');
+
+                            
+
 						}
 					});
 				});
@@ -344,6 +356,11 @@
 						<input type="text" id="UUID" class="value" />
 						<label for="UUID" class="translate">UUID</label>
 					</div>
+					<div class="col s1">
+						<button class="btn-floating btn-small waves-effect waves-light" title="refresh-uuid" id="refresh-uuid">
+							<i class="material-icons">refresh</i>
+						</button>
+					</div>
 				</div>
 				<div class="row">
 					<div class="input-field col s3">
@@ -384,12 +401,17 @@
 						<input type="number" id="DeviceBaseID" class="value" min="0" max="99999999" />
 						<label for="DeviceBaseID" class="translate">DeviceBaseID</label>
 					</div>
+					<div class="col s1">
+						<button class="btn-floating btn-small waves-effect waves-light" title="refresh-baseid" id="refresh-baseid">
+							<i class="material-icons">refresh</i>
+						</button>
+					</div>
 				</div>
 
 				<div class="row">
 					<div class="col s12" id="devices">
 
-						<a class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">add</i></a>
+						<a class="btn-floating waves-effect waves-light blue table-button-add" title="add device"><i class="material-icons">add</i></a>
 
 						<div class="table-values-div">
 							<table id="table_systems" class="table-values" style="width: 100%;">
@@ -405,13 +427,19 @@
 										<th id="tableDevices_col8" data-name="Vendor" data-type="text" style="background: #64b5f6 " class="header translate">vendor</th>
 										<th id="tableDevices_col9" data-name="SerialNr" data-type="text" style="background: #64b5f6 " class="header translate">serialNr</th>
 										<th id="tableDevices_col10" data-name="OptionalEnergy" data-type="checkbox" style="background: #64b5f6 " class="header translate">optionalEnergy</th>
-										<th id="tableDevices_col11" data-name="MinOnTime" data-type="text" style="background: #64b5f6 " class="header translate">minOnTime</th>
-										<th id="tableDevices_col12" data-name="MinOffTime" data-type="text" style="background: #64b5f6 " class="header translate">minOffTime</th>
-
+										<!--
+	<th id="tableDevices_col11" data-name="MinOnTime" data-type="text" style="background: #64b5f6 " class="header translate">minOnTime</th>
+	<th id="tableDevices_col12" data-name="MinOffTime" data-type="text" style="background: #64b5f6 " class="header translate">minOffTime</th>
+		-->
+										<!-- todo: hide OID_Power if MeasurementMethod=Estimation-->
 										<th id="tableDevices_col13" data-name="OID_Power" data-type="text" style="background: #64b5f6 " class="header translate">OID_Power</th>
-										<th id="tableDevices_col14" data-buttons="edit1" style="width: 100px; background: #64b5f6"></th>
-										<th id="tableDevices_col15" data-name="OID_OnOff" data-type="text" style="background: #64b5f6 " class="header translate">OID_OnOff</th>
-										<th id="tableDevices_col16" data-buttons="edit2" style="width: 100px; background: #64b5f6"></th>
+										<th id="tableDevices_col14" data-buttons="edit1" style="width: 100px; background: #64b5f6" title="select object ID"></th>
+
+										<th id="tableDevices_col15" data-name="StatusDetection" data-type="select" data-options="SeparateOID;FromPowerValue;AlwaysOn" style="background: #64b5f6 " class="header translate">StatusDetection</th>
+
+										<!-- todo: hide OID_OnOff if StatusDetection is not equal to SeparateOID-->
+										<th id="tableDevices_col16" data-name="OID_OnOff" data-type="text" style="background: #64b5f6 " class="header translate">OID_OnOff</th>
+										<th id="tableDevices_col17" data-buttons="edit2" style="width: 100px; background: #64b5f6" title="select object ID"></th>
 										<th data-buttons="up down delete" style="width: 100px; background: #64b5f6"></th>
 									</tr>
 								</thead>
