@@ -16,7 +16,7 @@ const Gateway = require("./lib/semp/Gateway").Gateway;
 /* to do
 
 
-
+* bei restart adapter Status der Geräte holen...
 
 * Hinweise im admin:
 	* DeviceID Format
@@ -96,7 +96,7 @@ class Semp extends utils.Adapter {
 					//this.DummyDeviceUpdateIntervalID = setInterval(this.UpdateDummyDevice.bind(this), 1 * 60 * 1000);
 					//=================================
 
-					this.AddDevices();
+					await this.AddDevices();
 
 				}
 			}
@@ -122,24 +122,39 @@ class Semp extends utils.Adapter {
 	*/
 
 	//add all devices which are configured in admin page
-	AddDevices() {
+	async AddDevices() {
 
 		for (let d = 0; d < this.config.devices.length; d++) {
 
 			let device = this.config.devices[d];
 			if (device.IsActive) {
 				this.gw.addDevice(device);
-				this.SubscribeDevice(device);
+				await this.SubscribeDevice(device);
 			}
         }
     }
 
-	SubscribeDevice(device) {
-		if (device.OID_Power != null) {
+	async SubscribeDevice(device) {
+		if (device.OID_Power != null && device.OID_Power.length>5) {
+			this.log.debug("subscribe OID_Power " + device.OID_Power);
 			this.subscribeForeignStates(device.OID_Power);
+
+			//and get last value
+			let current = await this.getForeignStateAsync(device.OID_Power);
+			if (current != null && current.val != null) {
+				this.gw.setPowerDevice(device.ID, current.val);
+            }
+
 		}
-		if (device.OID_OnOff != null) {
+		if (device.OID_OnOff != null && device.OID_OnOff.length>5) {
+			this.log.debug("subscribe OID_OnOff " + device.OID_OnOff);
 			this.subscribeForeignStates(device.OID_OnOff);
+
+			//and get last value
+			let current = await this.getForeignStateAsync(device.OID_OnOff);
+			if (current != null && current.val != null) {
+				this.gw.setOnOffDevice(device.ID, current.val);
+			}
 		}
     }
 
@@ -268,7 +283,7 @@ class Semp extends utils.Adapter {
 				if (obj.callback) this.sendTo(obj.from, obj.command, devicebaseid, obj.callback);
 			}
 			else {
-				this.log.warn("unnown command " + obj.command);
+				this.log.warn("unknown command " + obj.command);
 			}
 		}
 	}
