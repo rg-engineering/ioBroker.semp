@@ -16,7 +16,9 @@ const Gateway = require("./lib/semp/Gateway").Gateway;
 /* to do
 
 
-* bei restart adapter Status der Geräte holen...
+* bei restart adapter Status der Geräte holen... okay
+* Estimation -> keine Power holen sondern Wert direkt verwenden
+* StatusDetection : SeparateOID;FromPowerValue;AlwaysOn hinzufügen
 
 * Hinweise im admin:
 	* DeviceID Format
@@ -130,30 +132,44 @@ class Semp extends utils.Adapter {
 			if (device.IsActive) {
 				this.gw.addDevice(device);
 				await this.SubscribeDevice(device);
+
+				if (device.MeasurementMethod == "Estimation") {
+					this.gw.setPowerDevice(device.ID, device.MaxPower, device.StatusDetection);
+				}
+				if (device.StatusDetection == "AlwaysOn") {
+					this.gw.setOnOffDevice(device.ID, true);
+                }
+
 			}
         }
     }
 
 	async SubscribeDevice(device) {
-		if (device.OID_Power != null && device.OID_Power.length>5) {
-			this.log.debug("subscribe OID_Power " + device.OID_Power);
-			this.subscribeForeignStates(device.OID_Power);
 
-			//and get last value
-			let current = await this.getForeignStateAsync(device.OID_Power);
-			if (current != null && current.val != null) {
-				this.gw.setPowerDevice(device.ID, current.val);
-            }
+		if (device.MeasurementMethod == "Measurement") {
+			if (device.OID_Power != null && device.OID_Power.length > 5) {
+				this.log.debug("subscribe OID_Power " + device.OID_Power);
+				this.subscribeForeignStates(device.OID_Power);
 
+				//and get last value
+				let current = await this.getForeignStateAsync(device.OID_Power);
+				if (current != null && current.val != null) {
+					this.gw.setPowerDevice(device.ID, current.val, device.StatusDetection);
+				}
+
+			}
 		}
-		if (device.OID_OnOff != null && device.OID_OnOff.length>5) {
-			this.log.debug("subscribe OID_OnOff " + device.OID_OnOff);
-			this.subscribeForeignStates(device.OID_OnOff);
 
-			//and get last value
-			let current = await this.getForeignStateAsync(device.OID_OnOff);
-			if (current != null && current.val != null) {
-				this.gw.setOnOffDevice(device.ID, current.val);
+		if (device.StatusDetection == "SeparateOID") {
+			if (device.OID_OnOff != null && device.OID_OnOff.length > 5) {
+				this.log.debug("subscribe OID_OnOff " + device.OID_OnOff);
+				this.subscribeForeignStates(device.OID_OnOff);
+
+				//and get last value
+				let current = await this.getForeignStateAsync(device.OID_OnOff);
+				if (current != null && current.val != null) {
+					this.gw.setOnOffDevice(device.ID, current.val);
+				}
 			}
 		}
     }
