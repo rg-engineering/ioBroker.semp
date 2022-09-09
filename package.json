@@ -25,6 +25,7 @@
     "xml-js": "1.6.11"
   },
   "devDependencies": {
+    "@iobroker/adapter-dev": "^1.0.1",
     "@iobroker/testing": "3.0.2",
     "@types/chai": "4.3.1",
     "@types/chai-as-promised": "7.1.5",
@@ -51,7 +52,8 @@
     "test:package": "mocha test/package --exit",
     "test:unit": "mocha test/unit --exit",
     "test:integration": "mocha test/integration --exit",
-    "lint": "eslint"
+    "lint": "eslint",
+    "translate": "translate-adapter"
   },
   "bugs": {
     "url": "https://github.com/rg-engineering/ioBroker.semp/issues"

@@ -25,14 +25,14 @@
 
 	<style>
 
-		#dialog-room-edit {
-			max-height: 95% !important;
-			max-width: 85% !important;
-			width: 80% !important;
-			height: 90% !important;
-			overflow: visible !important;
-			top: 10px !important;
-		}
+        #dialog-device-edit {
+            max-height: 95% !important;
+            max-width: 85% !important;
+            width: 80% !important;
+            height: 90% !important;
+            overflow: visible !important;
+            top: 10px !important;
+        }
 
 		#dialog-select-member {
 			max-height: 95% !important;
@@ -56,9 +56,71 @@
 
 	<script type="text/javascript">
 
-        
+
 
 		function showHideSettings() {
+            console.log("showHideSettings");
+ 
+			if ($('#DeviceInterruptionAllowed').prop("checked")) {
+                console.log("show DeviceInterruptionAllowed");
+				$('#divDeviceMinOnTime').show();
+				$('#divDeviceMaxOnTime').show();
+				$('#divDeviceMinOffTime').show();
+				$('#divDeviceMaxOffTime').show();
+			}
+			else {
+                console.log("hide DeviceInterruptionAllowed");
+                $('#divDeviceMinOnTime').hide();
+                $('#divDeviceMaxOnTime').hide();
+                $('#divDeviceMinOffTime').hide();
+                $('#divDeviceMaxOffTime').hide();
+            }
+
+			if ($('#DeviceMeasurementMethod').val() == "Measurement") {
+                console.log("show DeviceMeasurementMethod");
+				$('#divDeviceOIDPower').show();
+
+			}
+			else {
+                console.log("hide DeviceMeasurementMethod");
+                $('#divDeviceOIDPower').hide();
+            }
+
+            if ($('#DeviceStatusDetectionType').val() == "SeparateOID") {
+                console.log("show DeviceStatusDetectionType");
+                $('#divDeviceOIDStatus').show();
+
+            }
+            else {
+                console.log("hide DeviceStatusDetectionType");
+                $('#divDeviceOIDStatus').hide();
+            }
+
+			
+            if ($('#DeviceHasOIDSwitch').prop("checked")) {
+                console.log("show DeviceHasOIDSwitch");
+                $('#divDeviceOIDSwitch').show();
+
+            }
+            else {
+                console.log("hide DeviceHasOIDSwitch");
+                $('#divDeviceOIDSwitch').hide();
+			}
+
+            if ($('#DeviceTimerActive').prop("checked")) {
+                console.log("show DeviceTimerActive");
+				$('#divDeviceTimer').show();
+                $('#divDeviceRunningTime').show();
+
+            }
+            else {
+                console.log("hide DeviceTimerActive");
+				$('#divDeviceTimer').hide();
+                $('#divDeviceRunningTime').hide();
+            }
+
+            
+
 
 
 		}
@@ -145,7 +207,7 @@
 			}
 		}
 
-        //var timeout3;
+		//var timeout3;
 		function getDeviceBaseId(onChange, instance) {
 			//timeout3 = setTimeout(function () {
 			//    getDeviceBaseId(onChange, instance);
@@ -169,6 +231,7 @@
 			});
 		}
 
+		let devices = null;
 
 		// This will be called by the admin adapter when the settings page loads
 		function load(settings, onChange) {
@@ -195,27 +258,222 @@
 			var _id = 'semp.' + instance;
 			CheckIP(onChange, _id);
 			CheckUUID(onChange, _id);
-            CheckDeviceBaseId(onChange, _id);
+			CheckDeviceBaseId(onChange, _id);
 
 			showHideSettings();
+
+			devices = settings.devices;
 
 			// reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
 			if (M) M.updateTextFields();
 
 			values2table('devices', settings.devices, onChange, tableDevicesOnReady);
 
-            $("#refresh-baseid").click(function () {
+
+
+
+			$("#refresh-baseid").click(function () {
 				getDeviceBaseId(onChange, _id);
 			});
 
-            $("#refresh-uuid").click(function () {
-                getUUID(onChange, _id);
-            });
+			$("#refresh-uuid").click(function () {
+				getUUID(onChange, _id);
+			});
+
+
+            
+
 		}
+
+		function initDialogDevice(id, device, callback) {
+
+			console.log('initDialogDevice ' + device + " " + id);
+
+			var $editDialog = $('#dialog-device-edit');
+			if (!$editDialog.data('inited')) {
+
+				console.log('init dialog ');
+
+				$editDialog.data('inited', true);
+				$editDialog.modal({
+					dismissible: false
+				});
+
+				$editDialog.find('.btn-set').on('click', function () {
+					var $editDialog = $('#dialog-device-edit');
+					var callback = $editDialog.data('callback');
+					if (typeof callback === 'function') callback();
+					$editDialog.data('callback', null);
+				});
+			}
+
+            $editDialog.data('callback', callback);
+			$editDialog.modal('open');
+
+            $("#DeviceInterruptionAllowed").change( function () {
+                showHideSettings();
+			});
+            $("#DeviceMeasurementMethod").change(function () {
+                showHideSettings();
+			});
+            $("#DeviceHasOIDSwitch").change(function () {
+                showHideSettings();
+            });
+            $("#DeviceStatusDetectionType").change(function () {
+                showHideSettings();
+            });
+            $("#DeviceTimerActive").change(function () {
+                showHideSettings();
+			});
+
+			$("#DeviceTimerDays").change(function () {
+				console.log("DeviceTimerDays " + $("#DeviceTimerDays").val());
+			});
+
+
+            $('#SelectDeviceOIDPower').on('click', function () {
+                initSelectId(function (sid) {
+                    sid.selectId('show', $('#DeviceOIDPower').val(), function (newId) {
+                        if (newId) {
+                            $('#DeviceOIDPower').val(newId).trigger('change');
+                        }
+                    });
+                });
+            });
+            $('#SelectDeviceOIDSwitch').on('click', function () {
+                initSelectId(function (sid) {
+                    sid.selectId('show', $('#DeviceOIDSwitch').val(), function (newId) {
+                        if (newId) {
+                            $('#DeviceOIDSwitch').val(newId).trigger('change');
+                        }
+                    });
+                });
+			});
+            $('#SelectDeviceOIDStatus').on('click', function () {
+                initSelectId(function (sid) {
+                    sid.selectId('show', $('#DeviceOIDStatus').val(), function (newId) {
+                        if (newId) {
+                            $('#DeviceOIDStatus').val(newId).trigger('change');
+                        }
+                    });
+                });
+            });
+
+
+			//fill input elements a bit later
+			setTimeout(function () {
+
+				$('#IndexID').val(id);
+
+				//Name, ID und IsActive aus Tabelle holen
+				let temp_devices = table2values('devices');
+				let deviceisActive = temp_devices[id].IsActive;
+				let deviceid = temp_devices[id].ID;
+				let devicename = temp_devices[id].Name;
+
+				$('#DeviceIsActive').prop("checked", deviceisActive)
+
+				$('#DeviceID').val(deviceid);
+				$('#DeviceVendor').val(devices[id].Vendor);
+				$('#DeviceName').val(devicename);
+				$('#DeviceType').val(devices[id].Type);
+				$('#DeviceType').select();
+
+				$('#DeviceSerialnumber').val(devices[id].SerialNr);
+				$('#DeviceMaxPower').val(devices[id].MaxPower);
+				$('#DeviceInterruptionAllowed').prop("checked", devices[id].InterruptionsAllowed);
+
+				$('#DeviceMinOnTime').val(devices[id].MinOnTime);
+				$('#DeviceMaxOnTime').val(devices[id].MaxOnTime);
+				$('#DeviceMinOffTime').val(devices[id].MinOffTime);
+				$('#DeviceMaxOffTime').val(devices[id].MaxOffTime);
+
+				$('#DeviceMeasurementMethod').val(devices[id].MeasurementMethod);
+				$('#DeviceMeasurementMethod').select();
+
+				$('#DeviceOIDPower').val(devices[id].OID_Power);
+
+				$('#DeviceStatusDetectionType').val(devices[id].StatusDetection);
+				$('#DeviceStatusDetectionType').select();
+
+				$('#DeviceOIDStatus').val(devices[id].OID_Status);
+
+				$('#DeviceHasOIDSwitch').val(devices[id].HasOIDSwitch);
+				$('#DeviceOIDSwitch').val(devices[id].OID_Switch);
+
+				$('#DeviceTimerActive').prop("checked", devices[id].TimerActive);
+				$('#DeviceTimerStart').val(devices[id].TimerStart);
+				$('#DeviceTimerEnd').val(devices[id].TimerEnd);
+				$('#DeviceTimerDays').val(devices[id].TimerDays);
+				$('#DeviceTimerMinRunningtime').val(devices[id].TimerMinRunTime);
+				$('#DeviceTimerMaxRunningtime').val(devices[id].TimerMaxRunTime);
+
+				showHideSettings();
+
+				if (M) M.updateTextFields();
+
+			}, 100);
+
+
+		}
+
 
 		function tableDevicesOnReady() {
 
 			console.log('tableDevicesOnReady');
+
+
+			$('#devices .table-values-div .table-values .values-buttons[data-command="edit"]').on('click', function () {
+
+				let id = $(this).data('index');
+
+				console.log('edit devices clicked ID=' + id);
+
+				let device = $('#devices .values-input[data-name="Name"][data-index="' + id + '"]').val();
+				$('#dialogEditDevice').html(device);
+
+				setTimeout(function () {
+					initDialogDevice(id, device, function () {
+
+						//this is reached when dialog is closing
+						let device = $('#dialogEditDevice')[0].innerHTML;
+
+						let id = $('#IndexID').val();
+
+						console.log('closing for ' + device + " " + id);
+
+						devices[id].IsActive = $('#DeviceIsActive').prop("checked");
+						devices[id].ID = $('#DeviceID').val();
+						devices[id].Vendor = $('#DeviceVendor').val();
+						devices[id].Name = $('#DeviceName').val();
+						devices[id].Type = $('#DeviceType').val();
+						devices[id].SerialNr = $('#DeviceSerialnumber').val();
+						devices[id].MaxPower = $('#DeviceMaxPower').val();
+						devices[id].InterruptionsAllowed = $('#DeviceInterruptionAllowed').prop("checked");
+						devices[id].MinOnTime = $('#DeviceMinOnTime').val();
+						devices[id].MaxOnTime = $('#DeviceMaxOnTime').val();
+						devices[id].MinOffTime = $('#DeviceMinOffTime').val();
+						devices[id].MaxOffTime = $('#DeviceMaxOffTime').val();
+						devices[id].MeasurementMethod = $('#DeviceMeasurementMethod').val();
+						devices[id].OID_Power = $('#DeviceOIDPower').val();
+						devices[id].StatusDetection = $('#DeviceStatusDetectionType').val();
+						devices[id].OID_Status = $('#DeviceOIDStatus').val();
+						devices[id].HasOIDSwitch = $('#DeviceHasOIDSwitch').val();
+						devices[id].OID_Switch = $('#DeviceOIDSwitch').val();
+
+                        devices[id].TimerActive = $('#DeviceTimerActive').prop("checked");
+                        devices[id].TimerStart = $('#DeviceTimerStart').val();
+                        devices[id].TimerEnd = $('#DeviceTimerEnd').val();
+                        devices[id].TimerDays = $('#DeviceTimerDays').val();
+                        devices[id].TimerMinRunTime = $('#DeviceTimerMinRunningtime').val();
+                        devices[id].TimerMaxRunTime = $('#DeviceTimerMaxRunningtime').val();
+
+
+						//tabelle updaten todo
+                        
+					})
+				}, 20);
+			});
 
 			$('#devices .table-values-div .table-values .values-buttons[data-command="edit1"]').on('click', function () {
 
@@ -230,7 +488,7 @@
 							$('#devices .values-input[data-name="OID_Power"][data-index="' + id + '"]').val(newId).trigger('change');
 
 							//define ID F-11223344-112233445566-00
-                            var $devicebaseid = $('#DeviceBaseID');
+							var $devicebaseid = $('#DeviceBaseID');
 
 							var deviceid = "F-" + $devicebaseid.val() + "-" + ("000000000000" + (id + 1)).slice(-12) + "-00";
 							$('#devices .values-input[data-name="ID"][data-index="' + id + '"]').val(deviceid).trigger('change');
@@ -239,31 +497,31 @@
 							var names = newId.split(".");
 							if (names.length > 3) {
 								name = names[2];
-                            }
+							}
 							$('#devices .values-input[data-name="Name"][data-index="' + id + '"]').val(name).trigger('change');
 
-                            $('#devices .values-input[data-name="SerialNr"][data-index="' + id + '"]').val(name).trigger('change');
+							$('#devices .values-input[data-name="SerialNr"][data-index="' + id + '"]').val(name).trigger('change');
 
-                            
+
 
 						}
 					});
 				});
 			});
-            $('#devices .table-values-div .table-values .values-buttons[data-command="edit2"]').on('click', function () {
+			$('#devices .table-values-div .table-values .values-buttons[data-command="edit2"]').on('click', function () {
 
-                let id = $(this).data('index');
+				let id = $(this).data('index');
 
-                console.log('edit devices OnOff-OID clicked ID=' + id);
+				console.log('edit devices OnOff-OID clicked ID=' + id);
 
-                initSelectId(function (sid) {
-                    sid.selectId('show', $('#devices .values-input[data-name="Name"][data-index="' + id + '"]').val(), function (newId) {
-                        if (newId) {
-                            $('#devices .values-input[data-name="OID_OnOff"][data-index="' + id + '"]').val(newId).trigger('change');
-                        }
-                    });
-                });
-            });
+				initSelectId(function (sid) {
+					sid.selectId('show', $('#devices .values-input[data-name="Name"][data-index="' + id + '"]').val(), function (newId) {
+						if (newId) {
+							$('#devices .values-input[data-name="OID_OnOff"][data-index="' + id + '"]').val(newId).trigger('change');
+						}
+					});
+				});
+			});
 
 		}
 
@@ -385,10 +643,11 @@
 				</div>
 				<div class="row">
 					<div class="input-field col s3">
-						<input type="checkbox" id="extendedLog" class="value"  />
+						<input type="checkbox" id="extendedLog" class="value" />
 						<label for="extendedLog" class="translate">extendedLog</label>
 					</div>
 				</div>
+
 
 
 			</div>
@@ -424,27 +683,7 @@
 										<th id="tableDevices_col1" data-name="IsActive" data-type="checkbox" style="background: #64b5f6 " class="header translate">IsActive</th>
 										<th id="tableDevices_col2" data-name="ID" data-type="text" style="background: #64b5f6 " class="header translate">ID</th>
 										<th id="tableDevices_col3" data-name="Name" data-type="text" style="background: #64b5f6 " class="headertranslate">Name</th>
-										<th id="tableDevices_col4" data-name="Type" data-type="select" data-options="AirConditioning;Charger;DishWasher;Dryer;ElectricVehicle;EVCharger;Fridge;Heater;HeatPump;Motor;Pump;WashingMachine;Other" style="background: #64b5f6 " class="header translate">DeviceType</th>
-										<th id="tableDevices_col5" data-name="MeasurementMethod" data-type="select" data-options="Measurement;Estimation;none" style="background: #64b5f6 " class="header translate">measurementMethod</th>
-										<th id="tableDevices_col6" data-name="InterruptionsAllowed" data-type="checkbox" style="background: #64b5f6 " class="header translate">interruptionsAllowed</th>
-										<th id="tableDevices_col7" data-name="MaxPower" data-type="text" style="background: #64b5f6 " class="header translate">maxPower</th>
-										<th id="tableDevices_col8" data-name="Vendor" data-type="text" style="background: #64b5f6 " class="header translate">vendor</th>
-										<th id="tableDevices_col9" data-name="SerialNr" data-type="text" style="background: #64b5f6 " class="header translate">serialNr</th>
-										<th id="tableDevices_col10" data-name="OptionalEnergy" data-type="checkbox" style="background: #64b5f6 " class="header translate">optionalEnergy</th>
-										<!--
-	<th id="tableDevices_col11" data-name="MinOnTime" data-type="text" style="background: #64b5f6 " class="header translate">minOnTime</th>
-	<th id="tableDevices_col12" data-name="MinOffTime" data-type="text" style="background: #64b5f6 " class="header translate">minOffTime</th>
-		-->
-										<!-- todo: hide OID_Power if MeasurementMethod=Estimation-->
-										<th id="tableDevices_col13" data-name="OID_Power" data-type="text" style="background: #64b5f6 " class="header translate">OID_Power</th>
-										<th id="tableDevices_col14" data-buttons="edit1" style="width: 100px; background: #64b5f6" title="select object ID"></th>
-
-										<th id="tableDevices_col15" data-name="StatusDetection" data-type="select" data-options="SeparateOID;FromPowerValue;AlwaysOn" style="background: #64b5f6 " class="header translate">StatusDetection</th>
-
-										<!-- todo: hide OID_OnOff if StatusDetection is not equal to SeparateOID-->
-										<th id="tableDevices_col16" data-name="OID_OnOff" data-type="text" style="background: #64b5f6 " class="header translate">OID_OnOff</th>
-										<th id="tableDevices_col17" data-buttons="edit2" style="width: 100px; background: #64b5f6" title="select object ID"></th>
-										<th data-buttons="up down delete" style="width: 100px; background: #64b5f6"></th>
+										<th data-buttons="up down edit delete" style="width: 100px; background: #64b5f6"></th>
 									</tr>
 								</thead>
 							</table>
@@ -471,8 +710,269 @@
 					<a class="modal-action modal-close waves-effect waves-green btn btn-close"><i class="large material-icons left ">close</i><span class="translate">Cancel</span></a>
 				</div>
 			</div>
-		</div>
 
+			<div id="dialog-device-edit" class="modal modal-fixed-footer">
+				<div class="row">
+					<div class="modal-content">
+
+						<div class="row">
+							<div class="col s12">
+								<h6 class="title"><span class="translate">Edit Device:</span> <span id="dialogEditDevice"></span></h6>
+
+								<!-- just to store table id / index-->
+								<input type="hidden" id="IndexID"  />
+
+								
+
+							</div>
+						</div>
+						<div class="col s12">
+							<ul class="tabs">
+								<li id="page-device-main" class="tab col s3"><a href="#tab-popup_device_main" class="translate active">main settings</a></li>
+								<li id="page-device-counter" class="tab col s3"><a href="#tab-popup_device_counter" class="translate">counter</a></li>
+								<li id="page-device-switch" class="tab col s3"><a href="#tab-popup_device_switch" class="translate">switch</a></li>
+								<li id="page-device-timers" class="tab col s3"><a href="#tab-popup_device_timers" class="translate">timers</a></li>
+							</ul>
+						</div>
+
+						<!-- tab main-->
+						<div id="tab-popup_device_main" class="col s12 page">
+							<div class="row">
+								<div class="col s12 ">
+									<span class="translate">hint_main</span>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="input-field col s3">
+									<input type="checkbox" id="DeviceIsActive" class="value" />
+									<label for="DeviceIsActive" class="translate">DeviceIsActive</label>
+								</div>
+								<div class="input-field col s3">
+									<input type="text" id="DeviceID" class="value" />
+									<label for="DeviceID" class="translate">DeviceID</label>
+								</div>
+							</div>
+							<div class="row">
+								<div class="input-field col s3">
+									<input type="text" id="DeviceVendor" class="value" />
+									<label for="DeviceVendor" class="translate">DeviceVendor</label>
+								</div>
+								<div class="input-field col s3">
+									<input type="text" id="DeviceName" class="value" />
+									<label for="DeviceName" class="translate">DeviceName</label>
+								</div>
+								<div class="input-field col s3">
+
+									<select id="DeviceType" class="value">
+										<option value="AirConditioning" class="translate">AirConditioning</option>
+										<option value="Charger" class="translate">Charger</option>
+										<option value="DishWasher" class="translate">DishWasher</option>
+										<option value="Dryer" class="translate">Dryer</option>
+										<option value="ElectricVehicle" class="translate">ElectricVehicle</option>
+										<option value="EVCharger" class="translate">EVCharger</option>
+										<option value="Fridge" class="translate">Fridge</option>
+										<option value="HeatPump" class="translate">HeatPump</option>
+										<option value="Heater" class="translate">Heater</option>
+										<option value="Motor" class="translate">Motor</option>
+										<option value="Pump" class="translate">Pump</option>
+										<option value="WashingMachine" class="translate">WashingMachine</option>
+										<option value="Other" class="translate">Other</option>
+									</select>
+									<label for="DeviceType" class="translate">DeviceType</label>
+
+
+								</div>
+								<div class="input-field col s3">
+									<input type="text" id="DeviceSerialnumber" class="value" />
+									<label for="DeviceSerialnumber" class="translate">DeviceSerialnumber</label>
+								</div>
+							</div>
+
+
+							<div class="row">
+								<div class="input-field col s3">
+									<input type="number" id="DeviceMaxPower" class="value" />
+									<label for="DeviceMaxPower" class="translate">DeviceMaxPower</label>
+								</div>
+
+								<div class="input-field col s3">
+									<input type="checkbox" id="DeviceInterruptionAllowed" class="value" />
+									<label for="DeviceInterruptionAllowed" class="translate">DeviceInterruptionAllowed</label>
+								</div>
+
+							</div>
+							<div class="row">
+								<div id="divDeviceMinOnTime" class="input-field col s3">
+									<input type="number" id="DeviceMinOnTime" class="value" />
+									<label for="DeviceMinOnTime" class="translate">DeviceMinOnTime</label>
+								</div>
+								<div id="divDeviceMaxOnTime" class="input-field col s3">
+									<input type="number" id="DeviceMaxOnTime" class="value" />
+									<label for="DeviceMaxOnTime" class="translate">DeviceMaxOnTime</label>
+								</div>
+								<div id="divDeviceMinOffTime" class="input-field col s3">
+									<input type="number" id="DeviceMinOffTime" class="value" />
+									<label for="DeviceMinOffTime" class="translate">DeviceMinOffTime</label>
+								</div>
+								<div id="divDeviceMaxOffTime" class="input-field col s3">
+									<input type="number" id="DeviceMaxOffTime" class="value" />
+									<label for="DeviceMaxOffTime" class="translate">DeviceMaxOffTime</label>
+								</div>
+							</div>
+						</div>
+
+
+						<!-- tab counter-->
+						<div id="tab-popup_device_counter" class="col s12 page">
+							<div class="row">
+								<div class="col s12 ">
+									<span class="translate">hint_counter</span>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="input-field col s3">
+									<select id="DeviceMeasurementMethod" class="value">
+										<option value="Measurement" class="translate">Measurement</option>
+										<option value="Estimation" class="translate">Estimation</option>
+									</select>
+									<label for="DeviceMeasurementMethod" class="translate">DeviceMeasurementMethod</label>
+								</div>
+							</div>
+
+
+							<div id="divDeviceOIDPower" class="row">
+								<div class="input-field col s3">
+									<input type="text" id="DeviceOIDPower" class="value" />
+									<label for="DeviceOIDPower" class="translate">DeviceOIDPower</label>
+								</div>
+
+								<div class="col s1 m2 l1">
+									<a id="SelectDeviceOIDPower" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
+								</div>
+
+							</div>
+
+						</div>
+
+						<!-- tab switch-->
+						<div id="tab-popup_device_switch" class="col s12 page">
+							<div class="row">
+								<div class="col s12 ">
+									<span class="translate">hint_switch</span>
+								</div>
+							</div>
+
+
+							<div class="row">
+								<div class="input-field col s3">
+									<select id="DeviceStatusDetectionType" class="value">
+										<option value="SeparateOID" class="translate">SeparateOID</option>
+										<option value="FromPowerValue" class="translate">FromPowerValue</option>
+										<option value="AlwaysOn" class="translate">AlwaysOn</option>
+									</select>
+									<label for="DeviceStatusDetectionType" class="translate">DeviceStatusDetectionType</label>
+								</div>
+							</div>
+
+							<div id="divDeviceOIDStatus" class="row">
+								<div class="input-field col s3">
+									<input type="text" id="DeviceOIDStatus" class="value" />
+									<label for="DeviceOIDStatus" class="translate">DeviceOIDStatus</label>
+								</div>
+								<div class="col s1 m2 l1">
+									<a id="SelectDeviceOIDStatus" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="input-field col s3">
+									<input type="checkbox" id="DeviceHasOIDSwitch" class="value" />
+									<label for="DeviceHasOIDSwitch" class="translate">DeviceHasOIDSwitch</label>
+								</div>
+							</div>
+
+							<div id="divDeviceOIDSwitch" class="row">
+								<div class="input-field col s3">
+									<input type="text" id="DeviceOIDSwitch" class="value" />
+									<label for="DeviceOIDSwitch" class="translate">DeviceOIDSwitch</label>
+								</div>
+								<div class="col s1 m2 l1">
+									<a id="SelectDeviceOIDSwitch" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
+								</div>
+							</div>
+
+						</div>
+
+
+						<!-- tab timer-->
+						<div id="tab-popup_device_timers" class="col s12 page">
+							<div class="row">
+								<div class="col s12 ">
+									<span class="translate">hint_timer</span>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="input-field col s3">
+									<input type="checkbox" id="DeviceTimerActive" class="value" />
+									<label for="DeviceTimerActive" class="translate">DeviceTimerActive</label>
+								</div>
+							</div>
+
+
+
+							<div id="divDeviceTimer" class="row">
+								<div class="input-field col s3">
+									<input type="text" id="DeviceTimerStart" class="value" />
+									<label for="DeviceTimerStart" class="translate">DeviceTimerStart</label>
+								</div>
+
+								<div class="input-field col s3">
+									<input type="text" id="DeviceTimerEnd" class="value" />
+									<label for="DeviceTimerEnd" class="translate">DeviceTimerEnd</label>
+								</div>
+
+								<!--todo multiple select ???-->
+								<div class="input-field col s3">
+									<select  id="DeviceTimerDays" class="value" >
+										<option value="Monday" class="translate">Monday</option>
+										<option value="Tuesday" class="translate">Tuesday</option>
+										<option value="Wednesday" class="translate">Wednesday</option>
+										<option value="Thursday" class="translate">Thursday</option>
+										<option value="Friday" class="translate">Friday</option>
+										<option value="Saturday" class="translate">Saturday</option>
+										<option value="Sunday" class="translate">Sunday</option>
+										<option value="public holiday" class="translate">public holiday</option>
+									</select>
+									<label for="DeviceTimerDays" class="translate">DeviceTimerDays</label>
+
+
+								</div>
+							</div>
+							<div id="divDeviceRunningTime" class="row">
+								<div class="input-field col s3">
+									<input type="text" id="DeviceTimerMinRunningtime" class="value" />
+									<label for="DeviceTimerMinRunningtime" class="translate">DeviceTimerMinRunningtime</label>
+								</div>
+								<div class="input-field col s3">
+									<input type="text" id="DeviceTimerMaxRunningtime" class="value" />
+									<label for="DeviceTimerMaxRunningtime" class="translate">DeviceTimerMaxRunningtime</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<a class="modal-action modal-close waves-effect waves-green btn btn-set"><i class="large material-icons left">check</i><span class="translate">Ok</span></a>
+					<a class="modal-action modal-close waves-effect waves-green btn btn-close"><i class="large material-icons left">close</i><span class="translate">Cancel</span></a>
+				</div>
+
+
+			</div>
+		</div>
 	</div>
 </body>
 
