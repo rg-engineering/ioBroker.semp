@@ -46,6 +46,9 @@
     "sinon": "14.0.0",
     "sinon-chai": "3.7.0"
   },
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "main": "main.js",
   "scripts": {
     "test": "npm run test:package && npm run test:unit",
