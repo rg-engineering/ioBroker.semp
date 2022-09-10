@@ -18,9 +18,9 @@
     "url": "https://github.com/rg-engineering/ioBroker.semp"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.6.0",
-    "express": "4.18.1",
-    "node-ssdp": "4.0.1",
+    "@iobroker/adapter-core": "^2.6.2",
+    "express": "^4.18.1",
+    "node-ssdp": "^4.0.1",
     "uuid": "^8.3.2",
     "xml-js": "1.6.11"
   },
