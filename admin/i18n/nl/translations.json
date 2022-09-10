@@ -30,6 +30,7 @@
     "DishWasher": "Afwasmachine",
     "Dryer": "Droger",
     "EVCharger": "EV-oplader",
+    "Edit Device:": "Apparaat bewerken:",
     "ElectricVehicle": "Electrisch voertuig",
     "Estimation": "Schatting",
     "Friday": "Vrijdag",
@@ -58,6 +59,7 @@
     "Tuesday": "Dinsdag",
     "WashingMachine": "Wasmachine",
     "Wednesday": "Woensdag",
+    "counter": "balie",
     "devices": "apparaten",
     "extendedLog": "uitgebreide logboekregistratie",
     "hint_counter": "als schatting wordt gebruikt, wordt het maximale vermogen van het apparaat gebruikt, anders kan een apart instelbaar datapunt worden gebruikt",
@@ -65,6 +67,7 @@
     "hint_switch": "als status en switch twee verschillende datapunten gebruiken, controleer dan of de switch OID heeft",
     "hint_timer": "activeer timer om een ​​signaal van HomeManager te krijgen om het apparaat in te schakelen",
     "interruptionsAllowed": "onderbrekingen toegestaan",
+    "main settings": "belangrijkste instellingen",
     "maxPower": "maximaal vermogen",
     "measurementMethod": "meetmethode",
     "minOffTime": "minimale uitschakeltijd",
@@ -74,5 +77,7 @@
     "public holiday": "feestdag",
     "semp adapter settings": "Adapterinstellingen voor semp",
     "serialNr": "serienummer",
+    "switch": "schakelaar",
+    "timers": "tijdopnemer",
     "vendor": "Fabrikant"
 }

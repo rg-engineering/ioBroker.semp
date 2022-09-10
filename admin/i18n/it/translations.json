@@ -30,6 +30,7 @@
     "DishWasher": "Lavastoviglie",
     "Dryer": "Asciugatrice",
     "EVCharger": "Caricabatterie per veicoli elettrici",
+    "Edit Device:": "Modifica dispositivo:",
     "ElectricVehicle": "Veicolo elettrico",
     "Estimation": "Stima",
     "Friday": "Venerdì",
@@ -58,6 +59,7 @@
     "Tuesday": "Martedì",
     "WashingMachine": "Lavatrice",
     "Wednesday": "Mercoledì",
+    "counter": "contatore",
     "devices": "dispositivi",
     "extendedLog": "registrazione estesa",
     "hint_counter": "se viene utilizzata la stima, viene utilizzata la potenza massima del dispositivo, altrimenti è possibile utilizzare un punto dati regolabile separato",
@@ -65,6 +67,7 @@
     "hint_switch": "se lo stato e lo switch utilizzano due diversi datapoint, il controllo ha l'OID per lo switch",
     "hint_timer": "attivare il timer per ricevere un segnale da HomeManager per accendere il dispositivo",
     "interruptionsAllowed": "interruzioni consentite",
+    "main settings": "impostazioni principali",
     "maxPower": "potenza massima",
     "measurementMethod": "Metodo di misurazione",
     "minOffTime": "tempo minimo di spegnimento",
@@ -74,5 +77,7 @@
     "public holiday": "festa nazionale",
     "semp adapter settings": "Impostazioni adattatore per semp",
     "serialNr": "seriale n",
+    "switch": "interruttore",
+    "timers": "Timer",
     "vendor": "Produttore"
 }

@@ -30,6 +30,7 @@
     "DishWasher": "Dish Washer",
     "Dryer": "Dryer",
     "EVCharger": "EV Charger",
+    "Edit Device:": "Edit Device:",
     "ElectricVehicle": "Electric Vehicle",
     "Estimation": "Estimation",
     "Friday": "Friday",
@@ -58,6 +59,7 @@
     "Tuesday": "Tuesday",
     "WashingMachine": "Washing Machine",
     "Wednesday": "Wednesday",
+    "counter": "counter",
     "devices": "devices",
     "extendedLog": "extended Logging",
     "hint_counter": "if estimation is used, then maximum power of device is used, otherwise a separete adjustable datapoint can be used ",
@@ -65,6 +67,7 @@
     "hint_switch": "if status and switch use two different datapoints, check has OID for switch ",
     "hint_timer": "activate timer to get a signal from HomeManager to switch on the device",
     "interruptionsAllowed": " interruptions Allowed",
+    "main settings": "main settings",
     "maxPower": "maximal Power",
     "measurementMethod": "Measurement Method",
     "minOffTime": "minimum Off Time",
@@ -74,5 +77,7 @@
     "public holiday": "public holiday",
     "semp adapter settings": "Adapter settings for semp",
     "serialNr": "serial Nr",
+    "switch": "switch",
+    "timers": "timer",
     "vendor": "Manufacturer"
 }

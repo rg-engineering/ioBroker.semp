@@ -30,6 +30,7 @@
     "DishWasher": "Geschirrspülmaschine",
     "Dryer": "Trockner",
     "EVCharger": "EV-Ladegerät",
+    "Edit Device:": "Gerät bearbeiten:",
     "ElectricVehicle": "Elektrisches Fahrzeug",
     "Estimation": "Einschätzung",
     "Friday": "Freitag",
@@ -58,6 +59,7 @@
     "Tuesday": "Dienstag",
     "WashingMachine": "Waschmaschine",
     "Wednesday": "Mittwoch",
+    "counter": "Zähler",
     "devices": "Geräte",
     "extendedLog": "Erweiterte Protokollierung",
     "hint_counter": "Wenn eine Schätzung verwendet wird, wird die maximale Leistung des Geräts verwendet, andernfalls kann ein separater einstellbarer Datenpunkt verwendet werden",
@@ -65,6 +67,7 @@
     "hint_switch": "Wenn Status und Schalter zwei verschiedene Datenpunkte verwenden, überprüfen Sie, ob OID für Schalter vorhanden ist",
     "hint_timer": "Timer aktivieren, um vom HomeManager ein Signal zum Einschalten des Geräts zu erhalten",
     "interruptionsAllowed": "Unterbrechungen erlaubt",
+    "main settings": "Haupteinstellungen",
     "maxPower": "maximale Leistung",
     "measurementMethod": "Messmethode",
     "minOffTime": "minimale Ausschaltzeit",
@@ -74,5 +77,7 @@
     "public holiday": "gesetzlicher Feiertag",
     "semp adapter settings": "Adaptereinstellungen für semp",
     "serialNr": "Serien-Nr",
+    "switch": "Schalter",
+    "timers": "Timer",
     "vendor": "Hersteller"
 }

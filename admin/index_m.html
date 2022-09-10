@@ -269,7 +269,22 @@
 
 			values2table('devices', settings.devices, onChange, tableDevicesOnReady);
 
+			$('#addNewDevice').on('click', function () {
+				
+				let temp_devices = table2values('devices');
+				id = temp_devices.length;
 
+                console.log("new device add " + id);
+				setTimeout(function () {
+					//define ID F-11223344-112233445566-00
+					var $devicebaseid = $('#DeviceBaseID');
+					var deviceid = "F-" + $devicebaseid.val() + "-" + ("000000000000" + (id + 1)).slice(-12) + "-00";
+
+					$('#devices .values-input[data-name="Name"][data-index="' + id + '"]').val("newDevice" + id);
+                    $('#devices .values-input[data-name="IsActive"][data-index="' + id + '"]').prop('checked', true);
+					$('#devices .values-input[data-name="ID"][data-index="' + id + '"]').val(deviceid);
+				}, 100);
+			});
 
 
 			$("#refresh-baseid").click(function () {
@@ -423,6 +438,9 @@
 			console.log('tableDevicesOnReady');
 
 
+			
+
+
 			$('#devices .table-values-div .table-values .values-buttons[data-command="edit"]').on('click', function () {
 
 				let id = $(this).data('index');
@@ -475,53 +493,8 @@
 				}, 20);
 			});
 
-			$('#devices .table-values-div .table-values .values-buttons[data-command="edit1"]').on('click', function () {
-
-				let id = $(this).data('index');
-
-				console.log('edit devices Power-OID clicked ID=' + id);
-
-				initSelectId(function (sid) {
-
-					sid.selectId('show', $('#devices .values-input[data-name="Name"][data-index="' + id + '"]').val(), function (newId) {
-						if (newId) {
-							$('#devices .values-input[data-name="OID_Power"][data-index="' + id + '"]').val(newId).trigger('change');
-
-							//define ID F-11223344-112233445566-00
-							var $devicebaseid = $('#DeviceBaseID');
-
-							var deviceid = "F-" + $devicebaseid.val() + "-" + ("000000000000" + (id + 1)).slice(-12) + "-00";
-							$('#devices .values-input[data-name="ID"][data-index="' + id + '"]').val(deviceid).trigger('change');
-
-							var name = "";
-							var names = newId.split(".");
-							if (names.length > 3) {
-								name = names[2];
-							}
-							$('#devices .values-input[data-name="Name"][data-index="' + id + '"]').val(name).trigger('change');
-
-							$('#devices .values-input[data-name="SerialNr"][data-index="' + id + '"]').val(name).trigger('change');
-
-
-
-						}
-					});
-				});
-			});
-			$('#devices .table-values-div .table-values .values-buttons[data-command="edit2"]').on('click', function () {
-
-				let id = $(this).data('index');
-
-				console.log('edit devices OnOff-OID clicked ID=' + id);
-
-				initSelectId(function (sid) {
-					sid.selectId('show', $('#devices .values-input[data-name="Name"][data-index="' + id + '"]').val(), function (newId) {
-						if (newId) {
-							$('#devices .values-input[data-name="OID_OnOff"][data-index="' + id + '"]').val(newId).trigger('change');
-						}
-					});
-				});
-			});
+			
+			
 
 		}
 
@@ -682,7 +655,7 @@
 				<div class="row">
 					<div class="col s12" id="devices">
 
-						<a class="btn-floating waves-effect waves-light blue table-button-add" title="add device"><i class="material-icons">add</i></a>
+						<a id="addNewDevice" class="btn-floating waves-effect waves-light blue table-button-add" title="add device"><i class="material-icons">add</i></a>
 
 						<div class="table-values-div">
 							<table id="table_devices" class="table-values" style="width: 100%;">
@@ -736,7 +709,7 @@
 						</div>
 						<div class="col s12">
 							<ul class="tabs">
-								<li id="page-device-main" class="tab col s3"><a href="#tab-popup_device_main" class="translate active">main settings</a></li>
+								<li id="page-device-main" class="tab col s3"><a href="#tab-popup_device_main" class="translate" active>main settings</a></li>
 								<li id="page-device-counter" class="tab col s3"><a href="#tab-popup_device_counter" class="translate">counter</a></li>
 								<li id="page-device-switch" class="tab col s3"><a href="#tab-popup_device_switch" class="translate">switch</a></li>
 								<li id="page-device-timers" class="tab col s3"><a href="#tab-popup_device_timers" class="translate">timers</a></li>

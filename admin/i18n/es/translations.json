@@ -30,6 +30,7 @@
     "DishWasher": "Lavavajillas",
     "Dryer": "Secadora",
     "EVCharger": "Cargador para vehículos eléctricos",
+    "Edit Device:": "Editar dispositivo:",
     "ElectricVehicle": "Vehículo eléctrico",
     "Estimation": "Estimacion",
     "Friday": "Viernes",
@@ -58,6 +59,7 @@
     "Tuesday": "martes",
     "WashingMachine": "Lavadora",
     "Wednesday": "miércoles",
+    "counter": "encimera",
     "devices": "dispositivos",
     "extendedLog": "Registro extendido",
     "hint_counter": "si se usa la estimación, entonces se usa la potencia máxima del dispositivo; de lo contrario, se puede usar un punto de datos ajustable por separado",
@@ -65,6 +67,7 @@
     "hint_switch": "si el estado y el interruptor usan dos puntos de datos diferentes, verifique que tenga OID para el interruptor",
     "hint_timer": "active el temporizador para obtener una señal de HomeManager para encender el dispositivo",
     "interruptionsAllowed": "interrupciones permitidas",
+    "main settings": "ajustes principales",
     "maxPower": "Potencia máxima",
     "measurementMethod": "método de medida",
     "minOffTime": "tiempo mínimo de inactividad",
@@ -74,5 +77,7 @@
     "public holiday": "día festivo",
     "semp adapter settings": "Configuración del adaptador para semp",
     "serialNr": "número de serie",
+    "switch": "cambiar",
+    "timers": "Temporizador",
     "vendor": "Fabricante"
 }

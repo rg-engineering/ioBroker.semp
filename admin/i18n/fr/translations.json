@@ -30,6 +30,7 @@
     "DishWasher": "Lave-vaisselle",
     "Dryer": "Séchoir",
     "EVCharger": "Chargeur VÉ",
+    "Edit Device:": "Modifier l'appareil :",
     "ElectricVehicle": "Véhicule électrique",
     "Estimation": "Estimation",
     "Friday": "Vendredi",
@@ -58,6 +59,7 @@
     "Tuesday": "Mardi",
     "WashingMachine": "Machine à laver",
     "Wednesday": "Mercredi",
+    "counter": "compteur",
     "devices": "dispositifs",
     "extendedLog": "journalisation étendue",
     "hint_counter": "si l'estimation est utilisée, alors la puissance maximale de l'appareil est utilisée, sinon un point de données réglable séparé peut être utilisé",
@@ -65,6 +67,7 @@
     "hint_switch": "si l'état et le commutateur utilisent deux points de données différents, vérifiez l'OID du commutateur",
     "hint_timer": "activer la minuterie pour obtenir un signal de HomeManager pour allumer l'appareil",
     "interruptionsAllowed": "interruptions autorisées",
+    "main settings": "Réglages principaux",
     "maxPower": "Puissance maximale",
     "measurementMethod": "méthode de mesure",
     "minOffTime": "Temps d'arrêt minimal",
@@ -74,5 +77,7 @@
     "public holiday": "jour férié",
     "semp adapter settings": "Paramètres de l'adaptateur pour semp",
     "serialNr": "numéro de série",
+    "switch": "changer",
+    "timers": "minuteur",
     "vendor": "Fabricant"
 }

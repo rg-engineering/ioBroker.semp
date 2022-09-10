@@ -30,6 +30,7 @@
     "DishWasher": "洗碗机",
     "Dryer": "烘干机",
     "EVCharger": "电动车充电器",
+    "Edit Device:": "编辑设备：",
     "ElectricVehicle": "电动车",
     "Estimation": "估计",
     "Friday": "星期五",
@@ -58,6 +59,7 @@
     "Tuesday": "周二",
     "WashingMachine": "洗衣机",
     "Wednesday": "周三",
+    "counter": "柜台",
     "devices": "设备",
     "extendedLog": "扩展日志",
     "hint_counter": "如果使用估计，则使用设备的最大功率，否则可以使用单独的可调数据点",
@@ -65,6 +67,7 @@
     "hint_switch": "如果状态和开关使用两个不同的数据点，请检查开关的 OID",
     "hint_timer": "激活计时器以从 HomeManager 获取信号以打开设备",
     "interruptionsAllowed": "允许打断",
+    "main settings": "主要设置",
     "maxPower": "最大功率",
     "measurementMethod": "测量方法",
     "minOffTime": "最短关闭时间",
@@ -74,5 +77,7 @@
     "public holiday": "公共假期",
     "semp adapter settings": "semp 的适配器设置",
     "serialNr": "序列号",
+    "switch": "转变",
+    "timers": "计时器",
     "vendor": "制造商"
 }
