@@ -1,0 +1,144 @@
+http://192.168.3.43:9765/getdummydevice
+
+<?xml version="1.0" encoding="utf-8"?>
+<Device2EM>
+    <Name>dummy</Name>
+    <CurrentPower>53</CurrentPower>
+    <Status>On</Status>
+</Device2EM>
+
+F-08228121-000000000003-00
+
+
+
+http://192.168.3.10:9765/description.xml
+
+<root>
+<specVersion>
+<major>1</major>
+<minor>0</minor>
+</specVersion>
+<device>
+<deviceType>
+urn:schemas-simple-energy-management-protocol:device:Gateway:1
+</deviceType>
+<friendlyName>ioBG2</friendlyName>
+<manufacturer>ioB</manufacturer>
+<manufacturerURL>www.iobroker.net</manufacturerURL>
+<modelDescription>interface to ioBroker</modelDescription>
+<modelName>Semp_Gateway</modelName>
+<modelNumber>0.1</modelNumber>
+<modelURL>www.iobroker.net</modelURL>
+<UDN>uuid:29152118-0f24-4de9-97d0-e03c331fdf14</UDN>
+<semp:X_SEMPSERVICE>
+<semp:server>http://192.168.3.10:9765</semp:server>
+<semp:basePath>/semp</semp:basePath>
+<semp:transport>HTTP/Pull</semp:transport>
+<semp:exchangeFormat>XML</semp:exchangeFormat>
+<semp:wsVersion>1.1.5</semp:wsVersion>
+</semp:X_SEMPSERVICE>
+</device>
+</root>
+
+
+http://192.168.3.10:9765/semp
+
+<?xml version="1.0" encoding="utf-8"?>
+<Device2EM xmlns="http://www.sma.de/communication/schema/SEMP/v1">
+    <DeviceInfo>
+        <Identification>
+            <DeviceId>F-53088661-000000000001-00</DeviceId>
+            <DeviceName>LEQ1275996</DeviceName>
+            <DeviceType>WashingMachine</DeviceType>
+            <DeviceSerial>LEQ1275996</DeviceSerial>
+            <DeviceVendor>HM</DeviceVendor>
+        </Identification>
+        <Characteristics>
+            <MaxPowerConsumption>2000</MaxPowerConsumption>
+        </Characteristics>
+        <Capabilities>
+            <CurrentPower>
+                <Method>Measurement</Method>
+            </CurrentPower>
+            <Timestamps>
+                <AbsoluteTimestamps>true</AbsoluteTimestamps>
+            </Timestamps>
+            <Interruptions>
+                <InterruptionsAllowed>false</InterruptionsAllowed>
+            </Interruptions>
+            <Requests>
+                <OptionalEnergy>false</OptionalEnergy>
+            </Requests>
+        </Capabilities>
+    </DeviceInfo>
+    <DeviceInfo>
+        <Identification>
+            <DeviceId>F-53088661-000000000002-00</DeviceId>
+            <DeviceName>0001DD899736CD</DeviceName>
+            <DeviceType>Other</DeviceType>
+            <DeviceSerial>0001DD899736CD</DeviceSerial>
+            <DeviceVendor>HM</DeviceVendor>
+        </Identification>
+        <Characteristics>
+            <MaxPowerConsumption>100</MaxPowerConsumption>
+        </Characteristics>
+        <Capabilities>
+            <CurrentPower>
+                <Method>Measurement</Method>
+            </CurrentPower>
+            <Timestamps>
+                <AbsoluteTimestamps>true</AbsoluteTimestamps>
+            </Timestamps>
+            <Interruptions>
+                <InterruptionsAllowed>false</InterruptionsAllowed>
+            </Interruptions>
+            <Requests>
+                <OptionalEnergy>false</OptionalEnergy>
+            </Requests>
+        </Capabilities>
+    </DeviceInfo>
+    <DeviceStatus>
+        <DeviceId>F-53088661-000000000001-00</DeviceId>
+        <EMSignalsAccepted>true</EMSignalsAccepted>
+        <Status>On</Status>
+        <PowerConsumption>
+            <PowerInfo>
+                <AveragePower>0</AveragePower>
+                <Timestamp>0</Timestamp>
+                <AveragingInterval>60</AveragingInterval>
+            </PowerInfo>
+        </PowerConsumption>
+    </DeviceStatus>
+    <DeviceStatus>
+        <DeviceId>F-53088661-000000000002-00</DeviceId>
+        <EMSignalsAccepted>true</EMSignalsAccepted>
+        <Status>On</Status>
+        <PowerConsumption>
+            <PowerInfo>
+                <AveragePower>6</AveragePower>
+                <Timestamp>0</Timestamp>
+                <AveragingInterval>60</AveragingInterval>
+            </PowerInfo>
+        </PowerConsumption>
+    </DeviceStatus>
+    <PlanningRequest>
+        <Timeframe>
+            <TimeframeId>1</TimeframeId>
+            <DeviceId>F-53088661-000000000001-00</DeviceId>
+            <EarliestStart>7200</EarliestStart>
+            <LatestEnd>36000</LatestEnd>
+            <MinRunningTime>1200</MinRunningTime>
+            <MaxRunningTime>2400</MaxRunningTime>
+        </Timeframe>
+    </PlanningRequest>
+    <PlanningRequest>
+        <Timeframe>
+            <TimeframeId>1</TimeframeId>
+            <DeviceId>F-53088661-000000000002-00</DeviceId>
+            <EarliestStart>7200</EarliestStart>
+            <LatestEnd>36000</LatestEnd>
+            <MinRunningTime>1200</MinRunningTime>
+            <MaxRunningTime>2400</MaxRunningTime>
+        </Timeframe>
+    </PlanningRequest>
+</Device2EM>

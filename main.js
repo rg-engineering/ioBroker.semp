@@ -129,6 +129,9 @@ class Semp extends utils.Adapter {
 		for (let d = 0; d < this.config.devices.length; d++) {
 
 			let device = this.config.devices[d];
+
+			this.log.debug("add device " + JSON.stringify(device));
+
 			if (device.IsActive) {
 				this.gw.addDevice(device);
 				await this.SubscribeDevice(device);

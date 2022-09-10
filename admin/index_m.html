@@ -469,8 +469,8 @@
                         devices[id].TimerMaxRunTime = $('#DeviceTimerMaxRunningtime').val();
 
 
-						//tabelle updaten todo
-                        
+						//tabelle updaten nicht notwendig, da hier keine Daten aus der Tabelle geändert werden
+
 					})
 				}, 20);
 			});
@@ -580,7 +580,15 @@
 				}
 			});
 
-			obj.devices = table2values('devices');
+			//use devices data instead table and update from table
+            let temp_devices = table2values('devices');
+			for (let d = 0; d < temp_devices.length; d++) {
+                devices[d].IsActive = temp_devices[d].IsActive;
+                devices[d].ID = temp_devices[d].ID;
+                devices[d].Name = temp_devices[d].Name;
+            }
+
+			obj.devices = devices;
 
 			callback(obj);
 		}
@@ -720,9 +728,9 @@
 								<h6 class="title"><span class="translate">Edit Device:</span> <span id="dialogEditDevice"></span></h6>
 
 								<!-- just to store table id / index-->
-								<input type="hidden" id="IndexID"  />
+								<input type="hidden" id="IndexID" />
 
-								
+
 
 							</div>
 						</div>
@@ -735,6 +743,13 @@
 							</ul>
 						</div>
 
+
+						<!-- todo
+								add:
+									optionalEnergy
+									url
+
+								-->
 						<!-- tab main-->
 						<div id="tab-popup_device_main" class="col s12 page">
 							<div class="row">
@@ -744,13 +759,20 @@
 							</div>
 
 							<div class="row">
+								<!-- these values are changeable in main overview table and not here in details-->
+								<!--
 								<div class="input-field col s3">
 									<input type="checkbox" id="DeviceIsActive" class="value" />
 									<label for="DeviceIsActive" class="translate">DeviceIsActive</label>
 								</div>
+									-->
 								<div class="input-field col s3">
-									<input type="text" id="DeviceID" class="value" />
+									<input type="text" id="DeviceID" class="value" readonly />
 									<label for="DeviceID" class="translate">DeviceID</label>
+								</div>
+								<div class="input-field col s3">
+									<input type="text" id="DeviceName" class="value" readonly />
+									<label for="DeviceName" class="translate">DeviceName</label>
 								</div>
 							</div>
 							<div class="row">
@@ -759,8 +781,8 @@
 									<label for="DeviceVendor" class="translate">DeviceVendor</label>
 								</div>
 								<div class="input-field col s3">
-									<input type="text" id="DeviceName" class="value" />
-									<label for="DeviceName" class="translate">DeviceName</label>
+									<input type="text" id="DeviceSerialnumber" class="value" />
+									<label for="DeviceSerialnumber" class="translate">DeviceSerialnumber</label>
 								</div>
 								<div class="input-field col s3">
 
@@ -783,10 +805,7 @@
 
 
 								</div>
-								<div class="input-field col s3">
-									<input type="text" id="DeviceSerialnumber" class="value" />
-									<label for="DeviceSerialnumber" class="translate">DeviceSerialnumber</label>
-								</div>
+								
 							</div>
 
 
@@ -936,7 +955,7 @@
 
 								<!--todo multiple select ???-->
 								<div class="input-field col s3">
-									<select  id="DeviceTimerDays" class="value" >
+									<select id="DeviceTimerDays" class="value">
 										<option value="Monday" class="translate">Monday</option>
 										<option value="Tuesday" class="translate">Tuesday</option>
 										<option value="Wednesday" class="translate">Wednesday</option>
