@@ -119,8 +119,27 @@
                 $('#divDeviceRunningTime').hide();
             }
 
-            
-
+            divDeviceTimerMonday
+			if ($('#DeviceTimerEveryDay').prop("checked")) {
+                console.log("show DeviceTimerEveryDay");
+                $('#divDeviceTimerMonday').hide();
+				$('#divDeviceTimerTuesday').hide();
+				$('#divDeviceTimerWednesday').hide();
+				$('#divDeviceTimerThursday').hide();
+				$('#divDeviceTimerFriday').hide();
+				$('#divDeviceTimerSaturday').hide();
+                $('#divDeviceTimerSunday').hide();
+			}
+			else {
+                console.log("hide DeviceTimerEveryDay");
+                $('#divDeviceTimerMonday').show();
+                $('#divDeviceTimerTuesday').show();
+                $('#divDeviceTimerWednesday').show();
+                $('#divDeviceTimerThursday').show();
+                $('#divDeviceTimerFriday').show();
+                $('#divDeviceTimerSaturday').show();
+                $('#divDeviceTimerSunday').show();
+            }
 
 
 		}
@@ -340,6 +359,12 @@
             $("#DeviceTimerActive").change(function () {
                 showHideSettings();
 			});
+            $("#DeviceTimerEveryDay").change(function () {
+                showHideSettings();
+            });
+
+            
+
 
 			$("#DeviceTimerDays").change(function () {
 				console.log("DeviceTimerDays " + $("#DeviceTimerDays").val());
@@ -913,6 +938,42 @@
 								</div>
 							</div>
 
+							<div class="row">
+								<div id="divDeviceTimerEveryDay" class="input-field col s1">
+									<input type="checkbox" id="DeviceTimerEveryDay" class="value" />
+									<label for="DeviceTimerEveryDay" class="translate">DeviceTimerEveryDay</label>
+								</div>
+							</div>
+							<div class="row">
+								<div id="divDeviceTimerMonday" class="input-field col s2">
+									<input type="checkbox" id="DeviceTimerMonday" class="value" />
+									<label for="DeviceTimerMonday" class="translate">DeviceTimerMonday</label>
+								</div>
+								<div id="divDeviceTimerTuesday" class="input-field col s2">
+									<input type="checkbox" id="DeviceTimerTuesday" class="value" />
+									<label for="DeviceTimerTuesday" class="translate">DeviceTimerTuesday</label>
+								</div>
+								<div id="divDeviceTimerWednesday" class="input-field col s2">
+									<input type="checkbox" id="DeviceTimerWednesday" class="value" />
+									<label for="DeviceTimerWednesday" class="translate">DeviceTimerWednesday</label>
+								</div>
+								<div id="divDeviceTimerThursday" class="input-field col s2">
+									<input type="checkbox" id="DeviceTimerThursday" class="value" />
+									<label for="DeviceTimerThursday" class="translate">DeviceTimerThursday</label>
+								</div>
+								<div id="divDeviceTimerFriday" class="input-field col s2">
+									<input type="checkbox" id="DeviceTimerFriday" class="value" />
+									<label for="DeviceTimerFriday" class="translate">DeviceTimerFriday</label>
+								</div>
+								<div id="divDeviceTimerSaturday" class="input-field col s2">
+									<input type="checkbox" id="DeviceTimerSaturday" class="value" />
+									<label for="DeviceTimerSaturday" class="translate">DeviceTimerSaturday</label>
+								</div>
+								<div id="divDeviceTimerSunday" class="input-field col s2">
+									<input type="checkbox" id="DeviceTimerSunday" class="value" />
+									<label for="DeviceTimerSunday" class="translate">DeviceTimerSunday</label>
+								</div>
+							</div>
 
 
 							<div id="divDeviceTimer" class="row">
@@ -929,6 +990,7 @@
 								<!--todo multiple select ???-->
 								<div class="input-field col s3">
 									<select id="DeviceTimerDays" class="value">
+										<option value="everyDay" class="translate">every Day</option>
 										<option value="Monday" class="translate">Monday</option>
 										<option value="Tuesday" class="translate">Tuesday</option>
 										<option value="Wednesday" class="translate">Wednesday</option>
@@ -936,10 +998,9 @@
 										<option value="Friday" class="translate">Friday</option>
 										<option value="Saturday" class="translate">Saturday</option>
 										<option value="Sunday" class="translate">Sunday</option>
-										<option value="public holiday" class="translate">public holiday</option>
+
 									</select>
 									<label for="DeviceTimerDays" class="translate">DeviceTimerDays</label>
-
 
 								</div>
 							</div>

@@ -25,6 +25,12 @@ Interface to SMA SunnyPortal via SEMP
 
 ## Features
 * add devices from ioBroker in SunnyPortal via SEMP
+* let SunnyPortal control those device (switch on if enough power from PV is available)
+
+## Requirements
+* node v16 or higher
+
+
 
 
 ## known issues

@@ -16,7 +16,7 @@ const Gateway = require("./lib/semp/Gateway").Gateway;
 /* to do
 
 
-* bei restart adapter Status der Geräte holen... okay
+
 * Estimation -> keine Power holen sondern Wert direkt verwenden
 * StatusDetection : SeparateOID;FromPowerValue;AlwaysOn hinzufügen
 
@@ -26,10 +26,7 @@ const Gateway = require("./lib/semp/Gateway").Gateway;
     * BaseID
     * 
  * admin
- *	Seriennummer automatisch vervollständigen
  *	ID nur ändern, wenn sie nicht dem Format entspricht
- *	bei OID ONOff ebenfalls ID prüfen
- *	
  *	
  *	readme bzgl. der einstellbaren Parameter vervollständigen
 
@@ -57,6 +54,7 @@ class Semp extends utils.Adapter {
 		this.gw = null;
 		//this.DummyDeviceUpdateIntervalID = null;
 
+		this.RequestTimerID = null;
 	}
 
 	/**
@@ -99,7 +97,8 @@ class Semp extends utils.Adapter {
 					//=================================
 
 					await this.AddDevices();
-
+					this.checkRequests();
+					this.StartRequstIntervall();
 				}
 			}
 
@@ -122,6 +121,151 @@ class Semp extends utils.Adapter {
 		this.gw.UpdateDummyDevice();
 	}
 	*/
+
+	StartRequstIntervall() {
+
+		this.log.debug("start request intervall");
+
+		this.RequestTimerID = setInterval(this.checkRequests.bind(this), 60*1000);
+    }
+
+	checkRequests() {
+
+		this.log.debug("calculate request times");
+
+		try {
+			for (let d = 0; d < this.config.devices.length; d++) {
+				let device = this.config.devices[d];
+
+				if (device.IsActive && device.TimerActive) {
+
+					let id = device.ID;
+					let earliestStart = 0;
+					let latestEnd = 0;
+					let minRunTime = 0;
+					let maxRunTime = 0;
+					let runDays = device.TimerDays;
+
+					let now = new Date();
+					let dayOfWeek = now.getDay();
+
+					let start = device.TimerStart.split(":");
+					let end = device.TimerEnd.split(":");
+					let minRunTimes = device.TimerMinRunTime.split(":");
+					let maxRunTimes = device.TimerMaxRunTime.split(":");
+
+					let allchecked = true;
+					if (start.length != 2) {
+						this.log.error("unsupported time format " + device.TimerStart + ", should be hh:mm");
+						allchecked = false;
+					}
+					if (end.length != 2) {
+						this.log.error("unsupported time format " + device.TimerEnd + ", should be hh:mm");
+						allchecked = false;
+					}
+					if (minRunTimes.length != 2) {
+						this.log.error("unsupported time format " + device.TimerMinRunTime + ", should be hh:mm");
+						allchecked = false;
+					}
+					if (maxRunTimes.length != 2) {
+						this.log.error("unsupported time format " + device.TimerMaxRunTime + ", should be hh:mm");
+						allchecked = false;
+					}
+
+					//check days
+					this.log.debug("check run today " + runDays + " " + dayOfWeek);
+					let runToday = false;
+					if (runDays.includes("everyDay")) {
+						runToday = true;
+					}
+					else if (runDays.includes("Monday") && dayOfWeek == 1) {
+						runToday = true;
+					}
+					else if (runDays.includes("Tuesday") && dayOfWeek == 2) {
+						runToday = true;
+					}
+					else if (runDays.includes("Wednesday") && dayOfWeek == 3) {
+						runToday = true;
+					}
+					else if (runDays.includes("Thursday") && dayOfWeek == 4) {
+						runToday = true;
+					}
+					else if (runDays.includes("Friday") && dayOfWeek == 5) {
+						runToday = true;
+					}
+					else if (runDays.includes("Saturday") && dayOfWeek == 6) {
+						runToday = true;
+					}
+					else if (runDays.includes("Sunday") && dayOfWeek == 0) {
+						runToday = true;
+					}
+
+					if (allchecked) {
+
+						if (runToday) {
+							//Start < End check fehlt noch
+							//disable TimerActive fehlt noch
+							let StartTime = new Date();
+							StartTime.setHours(start[0]);
+							StartTime.setMinutes(start[1]);
+							StartTime.setSeconds(0);
+
+							let EndTime = new Date();
+							EndTime.setHours(end[0]);
+							EndTime.setMinutes(end[1]);
+							EndTime.setSeconds(0);
+
+							let StartIn = StartTime.getTime() - now.getTime();
+							let EndIn = EndTime.getTime() - now.getTime();
+
+							if (StartIn < 0) {
+								earliestStart = 0;
+							}
+							else {
+								earliestStart = StartIn / 1000;
+							}
+
+							if (EndIn < 0) {
+								latestEnd = 0;
+							}
+							else {
+								latestEnd = EndIn / 1000;
+							}
+
+							minRunTime = (minRunTimes[0] * 60 * 60) + (minRunTimes[1] * 60);
+							maxRunTime = (maxRunTimes[0] * 60 * 60) + (maxRunTimes[1] * 60);
+
+							this.log.debug("Start " + StartTime.toLocaleTimeString() + " End " + EndTime.toLocaleTimeString() + " earliest " + earliestStart + " latest " + latestEnd);
+
+							//later: todo find right request in list, now e use only one
+							if (this.gw.getNoOfPlanningRequests(id) < 1) {
+								this.gw.addPlanningRequest(id, earliestStart, latestEnd, minRunTime, maxRunTime);
+							}
+							else {
+								let reqId = 0; //always the first in list (todo: find the right one if we use more then one)
+								this.gw.updatePlanningRequest(reqId, id, earliestStart, latestEnd, minRunTime, maxRunTime);
+							}
+						}
+						else {
+							//what to do if not run today??? todo
+							this.log.debug("nothing to run today");
+						}
+					}
+					else {
+						this.log.debug("not started due to error on pre-check");
+					}
+				}
+				else {
+					//todo something to do?
+					this.log.debug("not active");
+                }
+			}
+		}
+		catch (e) {
+			this.log.error("exception in checkRequests [" + e + "]");
+		}
+	}
+
 
 	//add all devices which are configured in admin page
 	async AddDevices() {
@@ -163,6 +307,8 @@ class Semp extends utils.Adapter {
 			}
 		}
 
+
+		//todo nochmal prüfen
 		if (device.StatusDetection == "SeparateOID") {
 			if (device.OID_OnOff != null && device.OID_OnOff.length > 5) {
 				this.log.debug("subscribe OID_OnOff " + device.OID_OnOff);
@@ -194,6 +340,10 @@ class Semp extends utils.Adapter {
 				clearInterval(this.DummyDeviceUpdateIntervalID);
 			}
 			*/
+
+			if (this.RequestTimerID != null) {
+				clearInterval(this.RequestTimerID);
+			}
 
 			if (this.gw != null) {
 				this.gw.stop();
