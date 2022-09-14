@@ -365,10 +365,10 @@
 
             
 
-
-			$("#DeviceTimerDays").change(function () {
-				console.log("DeviceTimerDays " + $("#DeviceTimerDays").val());
-			});
+			
+			//$("#DeviceTimerDays").change(function () {
+			//	console.log("DeviceTimerDays " + $("#DeviceTimerDays").val());
+			//});
 
 
             $('#SelectDeviceOIDPower').on('click', function () {
@@ -444,7 +444,18 @@
 				$('#DeviceTimerActive').prop("checked", devices[id].TimerActive);
 				$('#DeviceTimerStart').val(devices[id].TimerStart);
 				$('#DeviceTimerEnd').val(devices[id].TimerEnd);
-				$('#DeviceTimerDays').val(devices[id].TimerDays);
+				//$('#DeviceTimerDays').val(devices[id].TimerDays);
+
+                $('#DeviceTimerEveryDay').prop("checked", devices[id].TimerEveryDay);
+                $('#DeviceTimerMonday').prop("checked", devices[id].TimerMonday);
+                $('#DeviceTimerTuesday').prop("checked", devices[id].TimerTuesday);
+                $('#DeviceTimerWednesday').prop("checked", devices[id].TimerWednesday);
+                $('#DeviceTimerThursday').prop("checked", devices[id].TimerThursday);
+                $('#DeviceTimerFriday').prop("checked", devices[id].TimerFriday);
+                $('#DeviceTimerSaturday').prop("checked", devices[id].TimerSaturday);
+                $('#DeviceTimerSunday').prop("checked", devices[id].TimerSunday);
+
+
 				$('#DeviceTimerMinRunningtime').val(devices[id].TimerMinRunTime);
 				$('#DeviceTimerMaxRunningtime').val(devices[id].TimerMaxRunTime);
 
@@ -507,7 +518,18 @@
                         devices[id].TimerActive = $('#DeviceTimerActive').prop("checked");
                         devices[id].TimerStart = $('#DeviceTimerStart').val();
                         devices[id].TimerEnd = $('#DeviceTimerEnd').val();
-                        devices[id].TimerDays = $('#DeviceTimerDays').val();
+                        //devices[id].TimerDays = $('#DeviceTimerDays').val();
+
+                        devices[id].TimerEveryDay = $('#DeviceTimerEveryDay').prop("checked");
+                        devices[id].TimerMonday = $('#DeviceTimerMonday').prop("checked");
+                        devices[id].TimerTuesday = $('#DeviceTimerTuesday').prop("checked");
+                        devices[id].TimerWednesday = $('#DeviceTimerWednesday').prop("checked");
+                        devices[id].TimerThursday = $('#DeviceTimerThursday').prop("checked");
+                        devices[id].TimerFriday = $('#DeviceTimerFriday').prop("checked");
+                        devices[id].TimerSaturday = $('#DeviceTimerSaturday').prop("checked");
+                        devices[id].TimerSunday = $('#DeviceTimerSunday').prop("checked");
+
+
                         devices[id].TimerMinRunTime = $('#DeviceTimerMinRunningtime').val();
                         devices[id].TimerMaxRunTime = $('#DeviceTimerMaxRunningtime').val();
 
@@ -988,8 +1010,9 @@
 								</div>
 
 								<!--todo multiple select ???-->
+								<!--
 								<div class="input-field col s3">
-									<select id="DeviceTimerDays" class="value">
+									<select multiple id="DeviceTimerDays" class="value">
 										<option value="everyDay" class="translate">every Day</option>
 										<option value="Monday" class="translate">Monday</option>
 										<option value="Tuesday" class="translate">Tuesday</option>
@@ -1003,6 +1026,7 @@
 									<label for="DeviceTimerDays" class="translate">DeviceTimerDays</label>
 
 								</div>
+									-->
 							</div>
 							<div id="divDeviceRunningTime" class="row">
 								<div class="input-field col s3">
