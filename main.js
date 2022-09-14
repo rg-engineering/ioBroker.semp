@@ -144,7 +144,6 @@ class Semp extends utils.Adapter {
 					let latestEnd = 0;
 					let minRunTime = 0;
 					let maxRunTime = 0;
-					let runDays = device.TimerDays;
 
 					let now = new Date();
 					let dayOfWeek = now.getDay();
@@ -173,30 +172,30 @@ class Semp extends utils.Adapter {
 					}
 
 					//check days
-					this.log.debug("check run today " + runDays + " " + dayOfWeek);
+					this.log.debug("check run today " + dayOfWeek + JSON.stringify(device));
 					let runToday = false;
-					if (runDays.includes("everyDay")) {
+					if (device.TimerEveryDay) {
 						runToday = true;
 					}
-					else if (runDays.includes("Monday") && dayOfWeek == 1) {
+					else if (device.TimerMonday && dayOfWeek == 1) {
 						runToday = true;
 					}
-					else if (runDays.includes("Tuesday") && dayOfWeek == 2) {
+					else if (device.TimerTuesday && dayOfWeek == 2) {
 						runToday = true;
 					}
-					else if (runDays.includes("Wednesday") && dayOfWeek == 3) {
+					else if (device.TimerWednesday && dayOfWeek == 3) {
 						runToday = true;
 					}
-					else if (runDays.includes("Thursday") && dayOfWeek == 4) {
+					else if (device.TimerThursday && dayOfWeek == 4) {
 						runToday = true;
 					}
-					else if (runDays.includes("Friday") && dayOfWeek == 5) {
+					else if (device.TimerFriday && dayOfWeek == 5) {
 						runToday = true;
 					}
-					else if (runDays.includes("Saturday") && dayOfWeek == 6) {
+					else if (device.DeviceTimerSaturday && dayOfWeek == 6) {
 						runToday = true;
 					}
-					else if (runDays.includes("Sunday") && dayOfWeek == 0) {
+					else if (device.DeviceTimerSunday && dayOfWeek == 0) {
 						runToday = true;
 					}
 
@@ -222,14 +221,14 @@ class Semp extends utils.Adapter {
 								earliestStart = 0;
 							}
 							else {
-								earliestStart = StartIn / 1000;
+								earliestStart = Math.floor(StartIn / 1000);
 							}
 
 							if (EndIn < 0) {
 								latestEnd = 0;
 							}
 							else {
-								latestEnd = EndIn / 1000;
+								latestEnd = Math.floor(EndIn / 1000);
 							}
 
 							minRunTime = (minRunTimes[0] * 60 * 60) + (minRunTimes[1] * 60);
@@ -293,34 +292,7 @@ class Semp extends utils.Adapter {
 
 	async SubscribeDevice(device) {
 
-		if (device.MeasurementMethod == "Measurement") {
-			if (device.OID_Power != null && device.OID_Power.length > 5) {
-				this.log.debug("subscribe OID_Power " + device.OID_Power);
-				this.subscribeForeignStates(device.OID_Power);
-
-				//and get last value
-				let current = await this.getForeignStateAsync(device.OID_Power);
-				if (current != null && current.val != null) {
-					this.gw.setPowerDevice(device.ID, current.val, device.StatusDetection);
-				}
-
-			}
-		}
-
-
-		//todo nochmal prüfen
-		if (device.StatusDetection == "SeparateOID") {
-			if (device.OID_OnOff != null && device.OID_OnOff.length > 5) {
-				this.log.debug("subscribe OID_OnOff " + device.OID_OnOff);
-				this.subscribeForeignStates(device.OID_OnOff);
-
-				//and get last value
-				let current = await this.getForeignStateAsync(device.OID_OnOff);
-				if (current != null && current.val != null) {
-					this.gw.setOnOffDevice(device.ID, current.val);
-				}
-			}
-		}
+		//is done in device itself
     }
 
 	/**
@@ -384,13 +356,6 @@ class Semp extends utils.Adapter {
 			if (!bRet) {
 				this.log.warn(`state ${id} changed: ${state.val} (ack = ${state.ack}) but not handled`);
             }
-
-			/*
-				state javascript.0.semp.Device1_OnOff changed: true(ack = false)
-				state javascript.0.semp.Device1_Power changed: 73.32042175039992(ack = false)
-				*/
-
-
 		} else {
 			// The state was deleted
 			this.log.info(`state ${id} deleted`);
@@ -405,12 +370,12 @@ class Semp extends utils.Adapter {
 
 			let device = this.config.devices[d];
 			if (device.IsActive) {
-				if (device.OID_Power == id) {
+				if (device.OID_Power === id) {
 					this.gw.setPowerDevice(device.ID, state.val);
 					bRet = true;
 				}
 
-				if (device.OID_OnOff == id) {
+				if (device.OID_Status === id) {
 					this.gw.setOnOffDevice(device.ID, state.val);
 					bRet = true;
 				}
