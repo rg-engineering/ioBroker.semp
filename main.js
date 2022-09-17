@@ -15,11 +15,6 @@ const Gateway = require("./lib/semp/Gateway").Gateway;
 
 /* to do
 
-
-
-* Estimation -> keine Power holen sondern Wert direkt verwenden
-* StatusDetection : SeparateOID;FromPowerValue;AlwaysOn hinzufügen
-
 * Hinweise im admin:
 	* DeviceID Format
     * UUID
@@ -29,7 +24,6 @@ const Gateway = require("./lib/semp/Gateway").Gateway;
  *	ID nur ändern, wenn sie nicht dem Format entspricht
  *	
  *	readme bzgl. der einstellbaren Parameter vervollständigen
-
 
 */
 

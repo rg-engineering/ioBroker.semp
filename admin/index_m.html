@@ -438,7 +438,7 @@
 
 				$('#DeviceOIDStatus').val(devices[id].OID_Status);
 
-				$('#DeviceHasOIDSwitch').val(devices[id].HasOIDSwitch);
+                $('#DeviceHasOIDSwitch').prop("checked", devices[id].HasOIDSwitch);
 				$('#DeviceOIDSwitch').val(devices[id].OID_Switch);
 
 				$('#DeviceTimerActive').prop("checked", devices[id].TimerActive);
@@ -512,7 +512,7 @@
 						devices[id].OID_Power = $('#DeviceOIDPower').val();
 						devices[id].StatusDetection = $('#DeviceStatusDetectionType').val();
 						devices[id].OID_Status = $('#DeviceOIDStatus').val();
-						devices[id].HasOIDSwitch = $('#DeviceHasOIDSwitch').val();
+                        devices[id].HasOIDSwitch = $('#DeviceHasOIDSwitch').prop("checked");
 						devices[id].OID_Switch = $('#DeviceOIDSwitch').val();
 
                         devices[id].TimerActive = $('#DeviceTimerActive').prop("checked");
