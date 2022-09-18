@@ -34,8 +34,8 @@
 
 #### Device Switch
 
-![Devices](admin/docs/Settings_Switch_Counter_de.PNG)
+![Devices](admin/docs/Settings_Device_Switch_de.PNG)
 
 #### Device Timer
 
-![Devices](admin/docs/Settings_Switch_Time_de.PNG)
+![Devices](admin/docs/Settings_Device_Time_de.PNG)
