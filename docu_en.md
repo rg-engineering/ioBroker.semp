@@ -38,4 +38,4 @@
 
 #### Device Timer
 
-![Devices](admin/docs/Settings_Device_Time_de.PNG)
+![Devices](admin/docs/Settings_Device_Timer_de.PNG)
