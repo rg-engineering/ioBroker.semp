@@ -23,6 +23,11 @@ For more details and for information how to disable the error reporting see [Sen
 
 Interface to SMA SunnyPortal via SEMP
 
+## user documentation
+
+see [docu](docu_en.md)
+
+
 ## Features
 * add devices from ioBroker in SunnyPortal via SEMP
 * let SunnyPortal control those device (switch on if enough power from PV is available)
