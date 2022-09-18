@@ -24,3 +24,5 @@ admin/i18n/*/flat.txt
 /main.test.js
 /semp.njsproj
 /semp.njsproj.user
+/obj/Debug/
+/bin/
