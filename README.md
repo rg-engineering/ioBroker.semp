@@ -25,7 +25,7 @@ Interface to SMA SunnyPortal via SEMP
 
 ## user documentation
 
-see [docu](docu_en.md)
+see [docu](docu/docu_en.md)
 
 
 ## Features
