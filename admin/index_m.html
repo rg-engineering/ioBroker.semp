@@ -88,7 +88,8 @@
 
             if ($('#DeviceStatusDetectionType').val() == "SeparateOID") {
                 console.log("show DeviceStatusDetectionType");
-                $('#divDeviceOIDStatus').show();
+				$('#divDeviceOIDStatus').show();
+                
 
             }
             else {
@@ -106,6 +107,23 @@
                 console.log("hide DeviceHasOIDSwitch");
                 $('#divDeviceOIDSwitch').hide();
 			}
+
+            if ($('#DeviceStatusDetectionType').val() == "FromPowerValue" ) {
+                $('#divDeviceStatusDetectionLimit').show();
+            }
+            else {
+                $('#divDeviceStatusDetectionLimit').hide();
+            }
+
+			/*
+			 * only if detection from power value, otherwise we believe what we get
+            if ($('#DeviceStatusDetectionType').val() == "FromPowerValue" || $('#DeviceStatusDetectionType').val() == "SeparateOID") {
+				$('#divDeviceStatusDetectionLimit').show();
+			}
+			else {
+                $('#divDeviceStatusDetectionLimit').hide();
+            }
+			*/
 
             if ($('#DeviceTimerActive').prop("checked")) {
                 console.log("show DeviceTimerActive");
@@ -362,14 +380,10 @@
             $("#DeviceTimerEveryDay").change(function () {
                 showHideSettings();
             });
-
-            
-
 			
 			//$("#DeviceTimerDays").change(function () {
 			//	console.log("DeviceTimerDays " + $("#DeviceTimerDays").val());
 			//});
-
 
             $('#SelectDeviceOIDPower').on('click', function () {
                 initSelectId(function (sid) {
@@ -435,6 +449,8 @@
 
 				$('#DeviceStatusDetectionType').val(devices[id].StatusDetection);
 				$('#DeviceStatusDetectionType').select();
+                $('#DeviceStatusDetectionLimit').val(devices[id].StatusDetectionLimit);
+                $('#DeviceStatusDetectionLimitTime').val(devices[id].StatusDetectionLimitTime);
 
 				$('#DeviceOIDStatus').val(devices[id].OID_Status);
 
@@ -470,13 +486,7 @@
 
 
 		function tableDevicesOnReady() {
-
 			console.log('tableDevicesOnReady');
-
-
-			
-
-
 			$('#devices .table-values-div .table-values .values-buttons[data-command="edit"]').on('click', function () {
 
 				let id = $(this).data('index');
@@ -511,7 +521,11 @@
 						devices[id].MeasurementMethod = $('#DeviceMeasurementMethod').val();
 						devices[id].OID_Power = $('#DeviceOIDPower').val();
 						devices[id].StatusDetection = $('#DeviceStatusDetectionType').val();
+                        devices[id].StatusDetectionLimit = $('#DeviceStatusDetectionLimit').val();
+						devices[id].StatusDetectionLimitTime = $('#DeviceStatusDetectionLimitTime').val();
+
 						devices[id].OID_Status = $('#DeviceOIDStatus').val();
+
                         devices[id].HasOIDSwitch = $('#DeviceHasOIDSwitch').prop("checked");
 						devices[id].OID_Switch = $('#DeviceOIDSwitch').val();
 
@@ -529,20 +543,30 @@
                         devices[id].TimerSaturday = $('#DeviceTimerSaturday').prop("checked");
                         devices[id].TimerSunday = $('#DeviceTimerSunday').prop("checked");
 
-
                         devices[id].TimerMinRunTime = $('#DeviceTimerMinRunningtime').val();
                         devices[id].TimerMaxRunTime = $('#DeviceTimerMaxRunningtime').val();
 
-
+						CheckDeviceData(id);
 						//tabelle updaten nicht notwendig, da hier keine Daten aus der Tabelle geändert werden
 
 					})
 				}, 20);
 			});
+		}
 
-			
-			
+		function CheckDeviceData(id) {
+			console.log("CheckDeviceData " + id);
 
+			console.log(id + " " + typeof devices[id].StatusDetectionLimit + " " + devices[id].StatusDetectionLimit);
+			if (typeof devices[id].StatusDetectionLimit == undefined || devices[id].StatusDetectionLimit == null || devices[id].StatusDetectionLimit == "") {
+				console.log("set StatusDetectionLimit=0 ");
+				devices[id].StatusDetectionLimit = 0;
+			}
+			console.log(id + " " + typeof devices[id].StatusDetectionLimitTime + " " + devices[id].StatusDetectionLimitTime);
+			if (typeof devices[id].StatusDetectionLimitTime == undefined || devices[id].StatusDetectionLimitTime == null || devices[id].StatusDetectionLimitTime == "") {
+				console.log("set StatusDetectionLimitTime=0 ");
+				devices[id].StatusDetectionLimitTime = 0;
+			}
 		}
 
 		var selectId;
@@ -922,6 +946,18 @@
 								</div>
 								<div class="col s1 m2 l1">
 									<a id="SelectDeviceOIDStatus" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
+								</div>
+							</div>
+
+
+							<div id="divDeviceStatusDetectionLimit" class="row">
+								<div class="input-field col s3">
+									<input type="number" id="DeviceStatusDetectionLimit" class="value" min="0" />
+									<label for="DeviceStatusDetectionLimit" class="translate">DeviceStatusDetectionLimit</label>
+								</div>
+								<div class="input-field col s3">
+									<input type="number" id="DeviceStatusDetectionLimitTime" class="value" min="0" />
+									<label for="DeviceStatusDetectionLimitTime" class="translate">DeviceStatusDetectionLimitTime</label>
 								</div>
 							</div>
 
