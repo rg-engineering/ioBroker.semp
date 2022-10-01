@@ -27,9 +27,9 @@ const Gateway = require("./lib/semp/Gateway").Gateway;
  *	
  *	
  *	
- *	Geräte nach Ende der max Laufzeit ausschalten, damit sie beim nächsten Start wieder angeschaltet werden können?
+ *	Geräte nach Ende der max Laufzeit ausschalten, damit sie beim nächsten Start wieder angeschaltet werden können? -> max. als Option laut Doku
  *	warum schickt shm manchmal alle Minute ein On:true, und manchmal nicht? -> wenn nicht von false auf true wechselt
- *	Anlauferkennung?
+ *	Anlauferkennung? -> in Arbeit, Zeit fehlt noch
  *	max. Leistung: wie/wann kommt das?
 
 */

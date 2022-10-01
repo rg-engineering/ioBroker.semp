@@ -19,9 +19,18 @@ For more details and for information how to disable the error reporting see [Sen
 [![paypal](https://www.paypalobjects.com/en_US/DK/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YBAZTEBT9SYC2&source=url) 
 
 
-## semp adapter for ioBroker
+## SMA SEMP adapter for ioBroker
 
-Interface to SMA SunnyPortal via SEMP
+Interface to SMA SunnyPortal via SunnyHomeManger and SEMP
+
+Add your devices from ioBroker in SunnyPortal. 
+SunnyPortal can then better estimate your energy consumption and thus make better predictions and recommendations. But 
+you can also have your devices controlled by SunnyPortal. If there is enough solar energy, the SunnyPortal can switch your 
+devices on or, if there is not enough solar energy, switch them off again. In this way you optimize your own consumption, 
+but you are not dependent on the few devices supported in SunnyPortal. With the adapter, any device from the ioBroker can 
+be integrated into the SunnyPortal.
+It is not even necessary for the consumption of a single device to be measured. Even estimated values are sufficient.
+
 
 ## user documentation
 
@@ -29,8 +38,9 @@ see [docu](docu/docu_en.md)
 
 
 ## Features
-* add devices from ioBroker in SunnyPortal via SEMP
-* let SunnyPortal control those device (switch on if enough power from PV is available)
+* add devices from ioBroker in SunnyPortal via SMA SEMP
+* informs the SunnyPortal about the current consumption
+* let SunnyPortal control these devices (switch on when there is enough PV power and switch off when there is not enough solar energy)
 
 ## Requirements
 * node v16 or higher
@@ -44,7 +54,11 @@ see [docu](docu/docu_en.md)
 
 ## Changelog
 
-### 0.0.1 (in progress)
+### 0.0.2 (in progress)
+* (René) threshold for status detection with timer
+
+
+### 0.0.1 (2022-10-01)
 * (René) initial release
 
 ## License
