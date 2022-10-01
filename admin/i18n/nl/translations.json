@@ -18,6 +18,8 @@
     "DeviceOIDStatus": "object-ID-status",
     "DeviceOIDSwitch": "object-ID-schakelaar",
     "DeviceSerialnumber": "serienummer",
+    "DeviceStatusDetectionLimit": "Statusdetectiedrempel [W]",
+    "DeviceStatusDetectionLimitTime": "minimale tijd voor nieuwe status [minuten]",
     "DeviceStatusDetectionType": "statusdetectietype:",
     "DeviceTimerActive": "Timer actief",
     "DeviceTimerDays": "dagen",

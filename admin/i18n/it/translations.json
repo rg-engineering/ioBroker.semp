@@ -18,6 +18,8 @@
     "DeviceOIDStatus": "Stato ID oggetto",
     "DeviceOIDSwitch": "interruttore ID oggetto",
     "DeviceSerialnumber": "numero di serie",
+    "DeviceStatusDetectionLimit": "Soglia rilevamento stato [W]",
+    "DeviceStatusDetectionLimitTime": "tempo minimo per il nuovo stato [minuti]",
     "DeviceStatusDetectionType": "tipo di rilevamento dello stato",
     "DeviceTimerActive": "Timer attivo",
     "DeviceTimerDays": "Giorni",

@@ -18,6 +18,8 @@
     "DeviceOIDStatus": "Status identyfikatora obiektu",
     "DeviceOIDSwitch": "Przełącznik identyfikatora obiektu",
     "DeviceSerialnumber": "numer seryjny",
+    "DeviceStatusDetectionLimit": "Próg wykrywania stanu [W]",
+    "DeviceStatusDetectionLimitTime": "minimalny czas na nowy status [minuty]",
     "DeviceStatusDetectionType": "typ wykrywania stanu",
     "DeviceTimerActive": "Aktywny timer",
     "DeviceTimerDays": "Dni",

@@ -18,6 +18,8 @@
     "DeviceOIDStatus": "Estado de ID de objeto",
     "DeviceOIDSwitch": "Conmutador de ID de objeto",
     "DeviceSerialnumber": "número de serie",
+    "DeviceStatusDetectionLimit": "Umbral de detección de estado [W]",
+    "DeviceStatusDetectionLimitTime": "tiempo mínimo para el nuevo estado [minutos]",
     "DeviceStatusDetectionType": "tipo de detección de estado",
     "DeviceTimerActive": "Temporizador activo",
     "DeviceTimerDays": "Días",

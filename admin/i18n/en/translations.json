@@ -18,6 +18,8 @@
     "DeviceOIDStatus": "object-ID Status",
     "DeviceOIDSwitch": "object-ID Switch",
     "DeviceSerialnumber": "serial number",
+    "DeviceStatusDetectionLimit": "Status Detection Threshold [W]",
+    "DeviceStatusDetectionLimitTime": "minimum time for new status [minutes]",
     "DeviceStatusDetectionType": "status detection type",
     "DeviceTimerActive": "Timer Active",
     "DeviceTimerDays": "Days",

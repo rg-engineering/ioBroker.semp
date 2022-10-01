@@ -18,6 +18,8 @@
     "DeviceOIDStatus": "Статус идентификатора объекта",
     "DeviceOIDSwitch": "Переключатель идентификатора объекта",
     "DeviceSerialnumber": "серийный номер",
+    "DeviceStatusDetectionLimit": "Порог обнаружения состояния [W]",
+    "DeviceStatusDetectionLimitTime": "минимальное время для нового статуса [минуты]",
     "DeviceStatusDetectionType": "тип определения состояния",
     "DeviceTimerActive": "Таймер активен",
     "DeviceTimerDays": "Дни",

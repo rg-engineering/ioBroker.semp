@@ -18,6 +18,8 @@
     "DeviceOIDStatus": "État de l'ID d'objet",
     "DeviceOIDSwitch": "Commutateur d'ID d'objet",
     "DeviceSerialnumber": "numéro de série",
+    "DeviceStatusDetectionLimit": "Seuil de détection d'état [W]",
+    "DeviceStatusDetectionLimitTime": "temps minimum pour le nouveau statut [minutes]",
     "DeviceStatusDetectionType": "type de détection d'état",
     "DeviceTimerActive": "Minuterie active",
     "DeviceTimerDays": "Journées",
