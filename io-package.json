@@ -2,38 +2,63 @@
     "common": {
         "name": "semp",
         "version": "0.0.2",
-      "news": {
-        "0.0.2": {
-          "en": "threshold for status detection with timer"
-        },
-          "0.0.1": {
-            "en": "initial release",
-            "de": "Erstveröffentlichung",
-            "ru": "Начальная версия",
-            "pt": "lançamento inicial",
-            "nl": "Eerste uitgave",
-            "fr": "Première version",
-            "it": "Versione iniziale",
-            "es": "Versión inicial",
-            "pl": "Pierwsze wydanie",
-            "zh-cn": "首次出版"
-          }
+        "news": {
+            "0.0.2": {
+                "en": "threshold for status detection with timer",
+                "de": "Schwellwert für Zustandserkennung mit Timer",
+                "ru": "порог обнаружения состояния с таймером",
+                "pt": "limite para detecção de status com temporizador",
+                "nl": "drempel voor statusdetectie met timer",
+                "fr": "seuil de détection d'état avec minuterie",
+                "it": "soglia per il rilevamento dello stato con timer",
+                "es": "umbral para detección de estado con temporizador",
+                "pl": "próg wykrywania stanu z timerem",
+                "zh-cn": "带定时器的状态检测阈值"
+            },
+            "0.0.1": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "zh-cn": "首次出版"
+            }
         },
         "titleLang": {
-          "en": "SMA SEMP gateway"
-
+            "en": "SMA SEMP gateway",
+            "de": "SMA SEMP-Gateway",
+            "ru": "Шлюз SMA SEMP",
+            "pt": "Gateway SMA SEMP",
+            "nl": "SMA SEMP-gateway",
+            "fr": "Passerelle SMA SEMP",
+            "it": "Gateway SMA SEMP",
+            "es": "Puerta de enlace SMA SEMP",
+            "pl": "Bramka SMA SEMP",
+            "zh-cn": "SMA SEMP 网关"
         },
         "desc": {
-          "en": "interface to SMA SunnyPortal via SunnyHomeManager and SEMP"
-
+            "en": "interface to SMA SunnyPortal via SunnyHomeManager and SEMP",
+            "de": "Schnittstelle zu SMA SunnyPortal über SunnyHomeManager und SEMP",
+            "ru": "интерфейс к SMA SunnyPortal через SunnyHomeManager и SEMP",
+            "pt": "interface para SMA SunnyPortal via SunnyHomeManager e SEMP",
+            "nl": "interface naar SMA SunnyPortal via SunnyHomeManager en SEMP",
+            "fr": "interface avec SMA SunnyPortal via SunnyHomeManager et SEMP",
+            "it": "interfaccia a SMA SunnyPortal tramite SunnyHomeManager e SEMP",
+            "es": "interfaz con SMA SunnyPortal a través de SunnyHomeManager y SEMP",
+            "pl": "interfejs do SMA SunnyPortal przez SunnyHomeManager i SEMP",
+            "zh-cn": "通过 SunnyHomeManager 和 SEMP 连接到 SMA SunnyPortal"
         },
         "authors": [
-          "René G. <info@rg-engineering.eu>"
+            "René G. <info@rg-engineering.eu>"
         ],
         "keywords": [
-          "SMA",
-          "SunnyPortal",
-          "SEMP"
+            "SMA",
+            "SunnyPortal",
+            "SEMP"
         ],
         "license": "MIT",
         "platform": "Javascript/Node.js",
@@ -51,16 +76,16 @@
         "dataSource": "push",
         "materialize": true,
         "dependencies": [
-          {
-            "js-controller": ">=2.0.0"
-          }
+            {
+                "js-controller": ">=2.0.0"
+            }
         ],
         "plugins": {
-          "sentry": {
-            "dsn": "https://5799cf9f70cb43c7a761192a5f35d419@o390433.ingest.sentry.io/5434781"
-          }
+            "sentry": {
+                "dsn": "https://5799cf9f70cb43c7a761192a5f35d419@o390433.ingest.sentry.io/5434781"
+            }
         }
-      },
+    },
     "native": {
         "IPAddress": "",
         "UUID": "",

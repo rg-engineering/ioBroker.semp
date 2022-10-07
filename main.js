@@ -29,8 +29,24 @@ const Gateway = require("./lib/semp/Gateway").Gateway;
  *	
  *	Geräte nach Ende der max Laufzeit ausschalten, damit sie beim nächsten Start wieder angeschaltet werden können? -> max. als Option laut Doku
  *	warum schickt shm manchmal alle Minute ein On:true, und manchmal nicht? -> wenn nicht von false auf true wechselt
- *	Anlauferkennung? -> in Arbeit, Zeit fehlt noch
+ *	Anlauferkennung? -> erledigt
  *	max. Leistung: wie/wann kommt das?
+ *	
+ *	EnergieAnforderung zurückziehen, wenn Gerät nicht einschaltet, Zeit einstellbar
+ *	Energieanforderung abbrechen, wenn Gerät ausschaltet, Zeit einstellbar
+ *	Time umbenenenn in "Zeit für EnergieAnforderung"
+ *	Feiertag / Urlaub zu hause für Timer hinzufügen
+
+Admin umbennenen oder Übersetzung:
+ * Basis-ID der Geräte
+ * Hinweis bei Zähler-tab
+ * Objekt-ID Power
+ * Einschätzung -> Schätzung
+ * Hinweis im Schalter-tab
+ * immer auf -> immer ein
+ * hat Objekt-ID-Schalter ???
+ * Timer-tab -> Zeitsteuerung für Energieanforderung
+
 
 */
 

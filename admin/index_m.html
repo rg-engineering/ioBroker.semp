@@ -453,12 +453,16 @@
 				$('#DeviceStatusDetectionType').val(devices[id].StatusDetection);
 				$('#DeviceStatusDetectionType').select();
                 $('#DeviceStatusDetectionLimit').val(devices[id].StatusDetectionLimit);
-                $('#DeviceStatusDetectionLimitTime').val(devices[id].StatusDetectionLimitTime);
+				$('#DeviceStatusDetectionLimitTimeOn').val(devices[id].StatusDetectionLimitTimeOn);
+				$('#DeviceStatusDetectionLimitTimeOff').val(devices[id].StatusDetectionLimitTimeOff);
+                $('#DeviceStatusDetectionMinRunTime').val(devices[id].StatusDetectionMinRunTime);
 
 				$('#DeviceOIDStatus').val(devices[id].OID_Status);
 
                 $('#DeviceHasOIDSwitch').prop("checked", devices[id].HasOIDSwitch);
 				$('#DeviceOIDSwitch').val(devices[id].OID_Switch);
+                $('#DeviceSwitchOffAtEndOfTimer').prop("checked", devices[id].SwitchOffAtEndOfTimer);
+                
 
 				$('#DeviceTimerActive').prop("checked", devices[id].TimerActive);
 				$('#DeviceTimerStart').val(devices[id].TimerStart);
@@ -525,12 +529,15 @@
 						devices[id].OID_Power = $('#DeviceOIDPower').val();
 						devices[id].StatusDetection = $('#DeviceStatusDetectionType').val();
                         devices[id].StatusDetectionLimit = $('#DeviceStatusDetectionLimit').val();
-						devices[id].StatusDetectionLimitTime = $('#DeviceStatusDetectionLimitTime').val();
+						devices[id].StatusDetectionLimitTimeOn = $('#DeviceStatusDetectionLimitTimeOn').val();
+						devices[id].StatusDetectionLimitTimeOff = $('#DeviceStatusDetectionLimitTimeOff').val();
+                        devices[id].StatusDetectionMinRunTime = $('#DeviceStatusDetectionMinRunTime').val();
 
 						devices[id].OID_Status = $('#DeviceOIDStatus').val();
 
                         devices[id].HasOIDSwitch = $('#DeviceHasOIDSwitch').prop("checked");
 						devices[id].OID_Switch = $('#DeviceOIDSwitch').val();
+                        devices[id].SwitchOffAtEndOfTimer= $('#DeviceSwitchOffAtEndOfTimer').prop("checked" );
 
                         devices[id].TimerActive = $('#DeviceTimerActive').prop("checked");
                         devices[id].TimerStart = $('#DeviceTimerStart').val();
@@ -565,11 +572,21 @@
 				console.log("set StatusDetectionLimit=0 ");
 				devices[id].StatusDetectionLimit = 0;
 			}
-			console.log(id + " " + typeof devices[id].StatusDetectionLimitTime + " " + devices[id].StatusDetectionLimitTime);
-			if (typeof devices[id].StatusDetectionLimitTime == undefined || devices[id].StatusDetectionLimitTime == null || devices[id].StatusDetectionLimitTime == "") {
-				console.log("set StatusDetectionLimitTime=0 ");
-				devices[id].StatusDetectionLimitTime = 0;
+			console.log(id + " " + typeof devices[id].StatusDetectionLimitTimeOn + " " + devices[id].StatusDetectionLimitTimeOn);
+			if (typeof devices[id].StatusDetectionLimitTimeOn == undefined || devices[id].StatusDetectionLimitTimeOn == null || devices[id].StatusDetectionLimitTimeOn == "") {
+				console.log("set StatusDetectionLimitTimeOn=0 ");
+				devices[id].StatusDetectionLimitTimeOn = 0;
 			}
+            console.log(id + " " + typeof devices[id].StatusDetectionLimitTimeOff + " " + devices[id].StatusDetectionLimitTimeOff);
+            if (typeof devices[id].StatusDetectionLimitTimeOff == undefined || devices[id].StatusDetectionLimitTimeOff == null || devices[id].StatusDetectionLimitTimeOff == "") {
+                console.log("set StatusDetectionLimitTimeOff=0 ");
+                devices[id].StatusDetectionLimitTimeOff = 0;
+			}
+            console.log(id + " " + typeof devices[id].StatusDetectionMinRunTime + " " + devices[id].StatusDetectionMinRunTime);
+            if (typeof devices[id].StatusDetectionMinRunTime == undefined || devices[id].StatusDetectionMinRunTime == null || devices[id].StatusDetectionMinRunTime == "") {
+                console.log("set StatusDetectionMinRunTime=0 ");
+                devices[id].StatusDetectionMinRunTime = 0;
+            }
 		}
 
 		var selectId;
@@ -840,9 +857,10 @@
 										<option value="Dryer" class="translate">Dryer</option>
 										<option value="ElectricVehicle" class="translate">ElectricVehicle</option>
 										<option value="EVCharger" class="translate">EVCharger</option>
+										<option value="Freezer" class="translate">Freezer</option>
 										<option value="Fridge" class="translate">Fridge</option>
-										<option value="HeatPump" class="translate">HeatPump</option>
 										<option value="Heater" class="translate">Heater</option>
+										<option value="HeatPump" class="translate">HeatPump</option>
 										<option value="Motor" class="translate">Motor</option>
 										<option value="Pump" class="translate">Pump</option>
 										<option value="WashingMachine" class="translate">WashingMachine</option>
@@ -954,13 +972,21 @@
 
 
 							<div id="divDeviceStatusDetectionLimit" class="row">
-								<div class="input-field col s3">
+								<div class="input-field col s2">
 									<input type="number" id="DeviceStatusDetectionLimit" class="value" min="0" />
 									<label for="DeviceStatusDetectionLimit" class="translate">DeviceStatusDetectionLimit</label>
 								</div>
-								<div class="input-field col s3">
-									<input type="number" id="DeviceStatusDetectionLimitTime" class="value" min="0" />
-									<label for="DeviceStatusDetectionLimitTime" class="translate">DeviceStatusDetectionLimitTime</label>
+								<div class="input-field col s2">
+									<input type="number" id="DeviceStatusDetectionLimitTimeOn" class="value" min="0" />
+									<label for="DeviceStatusDetectionLimitTimeOn" class="translate">DeviceStatusDetectionLimitTimeOn</label>
+								</div>
+								<div class="input-field col s2">
+									<input type="number" id="DeviceStatusDetectionLimitTimeOff" class="value" min="0" />
+									<label for="DeviceStatusDetectionLimitTimeOff" class="translate">DeviceStatusDetectionLimitTimeOff</label>
+								</div>
+								<div class="input-field col s2">
+									<input type="number" id="DeviceStatusDetectionMinRunTime" class="value" min="0" />
+									<label for="DeviceStatusDetectionMinRunTime" class="translate">DeviceStatusDetectionMinRunTime</label>
 								</div>
 							</div>
 
@@ -979,6 +1005,12 @@
 								<div class="col s1 m2 l1">
 									<a id="SelectDeviceOIDSwitch" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
 								</div>
+
+								<div class="input-field col s3">
+									<input type="checkbox" id="DeviceSwitchOffAtEndOfTimer" class="value" />
+									<label for="DeviceSwitchOffAtEndOfTimer" class="translate">DeviceSwitchOffAtEndOfTimer</label>
+								</div>
+
 							</div>
 
 						</div>
