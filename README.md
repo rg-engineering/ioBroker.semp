@@ -56,6 +56,7 @@ see [docu](docu/docu_en.md)
 
 ### 0.0.2 (in progress)
 * (René) threshold for status detection with timer
+* (René) csv logger for data to be sent to SHM (for debugging)
 
 
 ### 0.0.1 (2022-10-01)
