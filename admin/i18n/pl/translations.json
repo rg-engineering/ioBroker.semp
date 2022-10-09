@@ -54,6 +54,8 @@
     "Heater": "Podgrzewacz",
     "IPAddress": "Adres IP",
     "IsActive": "Aktywny",
+    "LogToCSV": "włącz rejestrowanie csv",
+    "LogToCSVPath": "ścieżka do pliku dziennika csv",
     "Main settings": "Ustawienia główne",
     "Measurement": "Pomiar",
     "Monday": "Poniedziałek",

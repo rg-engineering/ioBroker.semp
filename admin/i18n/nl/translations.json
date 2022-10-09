@@ -54,6 +54,8 @@
     "Heater": "Verwarming",
     "IPAddress": "IP adres",
     "IsActive": "Actief",
+    "LogToCSV": "CSV-logboekregistratie inschakelen",
+    "LogToCSVPath": "pad naar csv-logbestand",
     "Main settings": "Belangrijkste instellingen",
     "Measurement": "Meting",
     "Monday": "Maandag",

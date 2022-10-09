@@ -54,6 +54,8 @@
     "Heater": "Heizung",
     "IPAddress": "IP Adresse",
     "IsActive": "Aktiv",
+    "LogToCSV": "CSV-Protokollierung aktivieren",
+    "LogToCSVPath": "Pfad zur CSV-Protokolldatei",
     "Main settings": "Haupteinstellungen",
     "Measurement": "Messung",
     "Monday": "Montag",

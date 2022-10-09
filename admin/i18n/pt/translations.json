@@ -54,6 +54,8 @@
     "Heater": "Aquecedor",
     "IPAddress": "Endereço de IP",
     "IsActive": "Ativo",
+    "LogToCSV": "habilitar registro csv",
+    "LogToCSVPath": "caminho para o arquivo de log csv",
     "Main settings": "Configurações principais",
     "Measurement": "Medição",
     "Monday": "Segunda-feira",

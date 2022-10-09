@@ -54,6 +54,8 @@
     "Heater": "Обогреватель",
     "IPAddress": "Айпи адрес",
     "IsActive": "Активный",
+    "LogToCSV": "включить журнал csv",
+    "LogToCSVPath": "путь к файлу журнала csv",
     "Main settings": "Основные параметры",
     "Measurement": "Измерение",
     "Monday": "Понедельник",

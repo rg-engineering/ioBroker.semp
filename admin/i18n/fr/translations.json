@@ -54,6 +54,8 @@
     "Heater": "Chauffage",
     "IPAddress": "Adresse IP",
     "IsActive": "Actif",
+    "LogToCSV": "activer la journalisation csv",
+    "LogToCSVPath": "chemin vers le fichier journal csv",
     "Main settings": "Réglages principaux",
     "Measurement": "La mesure",
     "Monday": "Lundi",

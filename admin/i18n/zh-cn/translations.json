@@ -54,6 +54,8 @@
     "Heater": "加热器",
     "IPAddress": "IP地址",
     "IsActive": "积极的",
+    "LogToCSV": "启用 csv 日志记录",
+    "LogToCSVPath": "csv 日志文件的路径",
     "Main settings": "主要设置",
     "Measurement": "测量",
     "Monday": "周一",

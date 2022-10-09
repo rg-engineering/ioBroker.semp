@@ -54,6 +54,8 @@
     "Heater": "Stufa",
     "IPAddress": "Indirizzo IP",
     "IsActive": "Attivo",
+    "LogToCSV": "abilita la registrazione csv",
+    "LogToCSVPath": "percorso del file di registro csv",
     "Main settings": "Impostazioni principali",
     "Measurement": "Misurazione",
     "Monday": "Lunedi",
