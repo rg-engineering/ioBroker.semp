@@ -1042,7 +1042,7 @@
 								</div>
 							</div>
 
-							
+
 							<div class="row">
 								<div id="divDeviceTimerEveryDay" class="input-field col s1">
 									<input type="checkbox" id="DeviceTimerEveryDay" class="value" />
@@ -1094,22 +1094,25 @@
 
 								<!--todo multiple select ???-->
 								<!--
-		<div class="input-field col s3">
-			<select multiple id="DeviceTimerDays" class="value">
-				<option value="everyDay" class="translate">every Day</option>
-				<option value="Monday" class="translate">Monday</option>
-				<option value="Tuesday" class="translate">Tuesday</option>
-				<option value="Wednesday" class="translate">Wednesday</option>
-				<option value="Thursday" class="translate">Thursday</option>
-				<option value="Friday" class="translate">Friday</option>
-				<option value="Saturday" class="translate">Saturday</option>
-				<option value="Sunday" class="translate">Sunday</option>
+	<div class="input-field col s3">
+		<select multiple id="DeviceTimerDays" class="value">
+			<option value="everyDay" class="translate">every Day</option>
+			<option value="Monday" class="translate">Monday</option>
+			<option value="Tuesday" class="translate">Tuesday</option>
+			<option value="Wednesday" class="translate">Wednesday</option>
+			<option value="Thursday" class="translate">Thursday</option>
+			<option value="Friday" class="translate">Friday</option>
+			<option value="Saturday" class="translate">Saturday</option>
+			<option value="Sunday" class="translate">Sunday</option>
 
-			</select>
-			<label for="DeviceTimerDays" class="translate">DeviceTimerDays</label>
+		</select>
+		<label for="DeviceTimerDays" class="translate">DeviceTimerDays</label>
 
-		</div>
-			-->
+	</div>
+		-->
+
+								
+
 							</div>
 							<div id="divDeviceRunningTime" class="row">
 								<div class="input-field col s3">
@@ -1121,7 +1124,40 @@
 									<label for="DeviceTimerMaxRunningtime" class="translate">DeviceTimerMaxRunningtime</label>
 								</div>
 							</div>
+
+							<div id="divDeviceEnergyRequestsTable">
+								<a id="addNewRequestPeriod" class="btn-floating waves-effect waves-light blue table-button-add" title="add request period"><i class="material-icons">add</i></a>
+
+								<div class="table-energyrequests-div">
+									<table id="table-energyrequests" class="table-values" style="width: 100%;">
+										<thead>
+											<tr>
+												<th id="tableRequests_col1" data-name="ID" data-type="number" style="background: #64b5f6 " class="header translate">ID</th>
+												<th id="tableRequests_col2" data-name="Days" data-type="select multiple" data-options="everyDay/Monday/Tuesday/Wednesday/Thursday/Friday/Saturday/Sunday" style="background: #64b5f6 " class="header translate">Days</th>
+												<th id="tableRequests_col3" data-name="EarliestStartTime" data-type="string" style="background: #64b5f6 " class="header translate">EarliestStartTime</th>
+												<th id="tableRequests_col4" data-name="LatestEndTime" data-type="string" style="background: #64b5f6 " class="header translate">LatestEndTime</th>
+												<th id="tableRequests_col5" data-name="MinRunTime" data-type="string" style="background: #64b5f6 " class="header translate">MinRunTime</th>
+												<th id="tableRequests_col6" data-name="MaxRunTime" data-type="string" style="background: #64b5f6 " class="header translate">MaxRunTime</th>
+												<th id="tableRequests_col7" data-name="CancelRequestNotOn" data-type="checkbox" style="background: #64b5f6 " class="header translate">CancelRequestNotOn</th>
+												<th id="tableRequests_col8" data-name="MaxTimeToOn" data-type="string" style="background: #64b5f6 " class="header translate">MaxTimeToOn</th>
+												<th id="tableRequests_col9" data-name="CancelRequestAfterOff" data-type="checkbox" style="background: #64b5f6 " class="header translate">CancelRequestAfterOff</th>
+												<th id="tableRequests_col10" data-name="MinTimeAfterOff" data-type="string" style="background: #64b5f6 " class="header translate">MinTimeAfterOff</th>
+
+												<th data-buttons="up down delete" style="width: 100px; background: #64b5f6"></th>
+											</tr>
+										</thead>
+									</table>
+								</div>
+
+
+							</div>
+
+
 						</div>
+
+
+
+
 					</div>
 				</div>
 
