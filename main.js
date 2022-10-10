@@ -36,6 +36,7 @@ const Gateway = require("./lib/semp/Gateway").Gateway;
  *	Energieanforderung abbrechen, wenn Gerät ausschaltet, Zeit einstellbar
  *	Time umbenenenn in "Zeit für EnergieAnforderung"
  *	Feiertag / Urlaub zu hause für Timer hinzufügen
+ *	mehrere Anforderungen pro Tag
 
 Admin umbennenen oder Übersetzung:
  * Basis-ID der Geräte
