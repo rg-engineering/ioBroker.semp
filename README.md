@@ -36,6 +36,9 @@ It is not even necessary for the consumption of a single device to be measured. 
 
 see [docu](docu/docu_en.md)
 
+For details about protocol and usage check [SMA docu](docu/SMA/SEMP-11ZE3315-Specification-1.0.6.pdf).
+
+An description about general usage of energy requests see [SMA docu](docu/SMA/SSH_KANN-Zeitfenster-TI-de-10.pdf). (german only)
 
 ## Features
 * add devices from ioBroker in SunnyPortal via SMA SEMP
@@ -45,12 +48,8 @@ see [docu](docu/docu_en.md)
 ## Requirements
 * node v16 or higher
 
-
-
-
 ## known issues
 * please create issues at [github](https://github.com/rg-engineering/ioBroker.semp/issues) if you find bugs or whish new features
-
 
 ## Changelog
 
