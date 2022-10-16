@@ -53,7 +53,10 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 
 ## Changelog
 
-### 0.0.2 (in progress)
+### 0.0.3 (in progress)
+
+
+### 0.0.2 (2022-10-16)
 * (René) threshold for status detection with timer
 * (René) csv logger for data to be sent to SHM (for debugging)
 * (René) see issue #14: cancel request if device does not turn on
