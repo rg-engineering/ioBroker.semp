@@ -57,6 +57,8 @@ see [docu](docu/docu_en.md)
 ### 0.0.2 (in progress)
 * (René) threshold for status detection with timer
 * (René) csv logger for data to be sent to SHM (for debugging)
+* (René) see issue #14: cancel request if device does not turn on
+* (René) bug fix issue #19: turn off device at the end of maximum operation time
 
 
 ### 0.0.1 (2022-10-01)

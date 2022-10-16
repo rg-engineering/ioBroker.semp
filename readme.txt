@@ -142,3 +142,112 @@ http://192.168.3.10:9765/semp
         </Timeframe>
     </PlanningRequest>
 </Device2EM>
+
+
+
+<?xml version="1.0" encoding="utf-8"?>
+    <Device2EM xmlns="http://www.sma.de/communication/schema/SEMP/v1"> 
+        <DeviceInfo> 
+            <Identification> 
+                <DeviceId>F-53088660-100000000001-00</DeviceId> 
+                <DeviceName>Spülie</DeviceName> 
+                <DeviceType>DishWasher</DeviceType> 
+                <DeviceSerial>B12345678ABCD</DeviceSerial> 
+                <DeviceVendor>BoschSiemens</DeviceVendor> 
+            </Identification> 
+            <Characteristics> 
+                <MaxPowerConsumption>124</MaxPowerConsumption> 
+                <MinOnTime>2400</MinOnTime> 
+                <MaxOnTime>5001</MaxOnTime> 
+                <MinOffTime>2300</MinOffTime> 
+                <MaxOffTime>4000</MaxOffTime> 
+            </Characteristics> 
+            <Capabilities> 
+                <CurrentPower> 
+                    <Method>Measurement</Method> 
+                </CurrentPower> 
+                <Timestamps> 
+                    <AbsoluteTimestamps>false</AbsoluteTimestamps> 
+                </Timestamps> 
+                <Interruptions> 
+                    <InterruptionsAllowed>true</InterruptionsAllowed> 
+                </Interruptions> 
+                <Requests> 
+                    <OptionalEnergy>true</OptionalEnergy> 
+                </Requests> 
+            </Capabilities> 
+        </DeviceInfo> 
+        <DeviceInfo> 
+            <Identification> 
+                <DeviceId>F-53088660-000000000002-00</DeviceId> 
+                <DeviceName>newDevice1</DeviceName> 
+                <DeviceType>Other</DeviceType> 
+                <DeviceSerial>ABCDEFGE</DeviceSerial> 
+                <DeviceVendor>noName</DeviceVendor> 
+            </Identification> 
+            <Characteristics> 
+                <MaxPowerConsumption>500</MaxPowerConsumption> 
+                <MinOnTime>2400</MinOnTime> 
+                <MaxOnTime>7000</MaxOnTime> 
+                <MinOffTime>2300</MinOffTime> 
+                <MaxOffTime>4000</MaxOffTime> 
+            </Characteristics> 
+            <Capabilities> 
+                <CurrentPower> 
+                    <Method>Measurement</Method> 
+                </CurrentPower> 
+                <Timestamps> 
+                    <AbsoluteTimestamps>false</AbsoluteTimestamps> 
+                </Timestamps> 
+                <Interruptions> 
+                    <InterruptionsAllowed>true</InterruptionsAllowed> 
+                </Interruptions> 
+                <Requests> 
+                    <OptionalEnergy>true</OptionalEnergy> 
+                </Requests> 
+            </Capabilities> 
+        </DeviceInfo> 
+        <DeviceStatus> 
+            <DeviceId>F-53088660-100000000001-00</DeviceId> 
+            <EMSignalsAccepted>true</EMSignalsAccepted> 
+            <Status>On</Status> 
+            <PowerConsumption> 
+                <PowerInfo> 
+                    <AveragePower>51</AveragePower> 
+                    <Timestamp>0</Timestamp> 
+                    <AveragingInterval>60</AveragingInterval> 
+                </PowerInfo> 
+            </PowerConsumption> 
+        </DeviceStatus> 
+        <DeviceStatus> 
+            <DeviceId>F-53088660-000000000002-00</DeviceId> 
+            <EMSignalsAccepted>true</EMSignalsAccepted> 
+            <Status>Off</Status> 
+            <PowerConsumption> 
+                <PowerInfo> 
+                    <AveragePower>0</AveragePower> 
+                    <Timestamp>0</Timestamp> 
+                    <AveragingInterval>60</AveragingInterval> 
+                </PowerInfo> 
+            </PowerConsumption> 
+        </DeviceStatus>
+    </Device2EM>
+
+
+
+write to csv 
+
+[
+    [
+        {"Time":"10/9/2022, 10:56:56 AM","DeviceId":"F-53088660-100000000001-00","Status":"Off","EarliestStart":-1,"LatestEnd":-1,"MinRunningTime":-1,"MaxRunningTime":-1}
+    ],
+    [
+        {"Time":"10/9/2022, 10:56:56 AM","DeviceId":"F-53088660-000000000002-00","Status":"Off","EarliestStart":19092,"LatestEnd":27192,"MinRunningTime":1800,"MaxRunningTime":6300}
+    ]
+]
+
+
+response xml <?xml version="1.0" encoding="utf-8"?> <Device2EM xmlns="http://www.sma.de/communication/schema/SEMP/v1"> <DeviceInfo> <Identification> <DeviceId>F-53088660-100000000001-00</DeviceId> <DeviceName>Spülie</DeviceName> <DeviceType>DishWasher</DeviceType> <DeviceSerial>B12345678ABCD</DeviceSerial> <DeviceVendor>BoschSiemens</DeviceVendor> </Identification> <Characteristics> <MaxPowerConsumption>124</MaxPowerConsumption> <MinOnTime>2400</MinOnTime> <MaxOnTime>5001</MaxOnTime> <MinOffTime>2300</MinOffTime> <MaxOffTime>4000</MaxOffTime> </Characteristics> <Capabilities> <CurrentPower> <Method>Measurement</Method> </CurrentPower> <Timestamps> <AbsoluteTimestamps>false</AbsoluteTimestamps> </Timestamps> <Interruptions> <InterruptionsAllowed>true</InterruptionsAllowed> </Interruptions> <Requests> <OptionalEnergy>true</OptionalEnergy> </Requests> </Capabilities> </DeviceInfo> <DeviceInfo> <Identification> <DeviceId>F-53088660-000000000002-00</DeviceId> <DeviceName>newDevice1</DeviceName> <DeviceType>Other</DeviceType> <DeviceSerial>ABCDEFGE</DeviceSerial> <DeviceVendor>noName</DeviceVendor> </Identification> <Characteristics> <MaxPowerConsumption>500</MaxPowerConsumption> <MinOnTime>2400</MinOnTime> <MaxOnTime>7000</MaxOnTime> <MinOffTime>2300</MinOffTime> <MaxOffTime>4000</MaxOffTime> </Characteristics> <Capabilities> <CurrentPower> <Method>Measurement</Method> </CurrentPower> <Timestamps> <AbsoluteTimestamps>false</AbsoluteTimestamps> </Timestamps> <Interruptions> <InterruptionsAllowed>true</InterruptionsAllowed> </Interruptions> <Requests> <OptionalEnergy>true</OptionalEnergy> </Requests> </Capabilities> </DeviceInfo> <DeviceStatus> <DeviceId>F-53088660-100000000001-00</DeviceId> <EMSignalsAccepted>true</EMSignalsAccepted> <Status>Off</Status> <PowerConsumption> <PowerInfo> <AveragePower>0</AveragePower> <Timestamp>0</Timestamp> <AveragingInterval>60</AveragingInterval> </PowerInfo> </PowerConsumption> </DeviceStatus> <DeviceStatus> <DeviceId>F-53088660-000000000002-00</DeviceId> <EMSignalsAccepted>true</EMSignalsAccepted> <Status>Off</Status> <PowerConsumption> <PowerInfo> <AveragePower>0</AveragePower> <Timestamp>0</Timestamp> <AveragingInterval>60</AveragingInterval> </PowerInfo> </PowerConsumption> </DeviceStatus> 
+
+
+<PlanningRequest> <Timeframe> <DeviceId>F-53088660-000000000002-00</DeviceId> <EarliestStart>18793</EarliestStart> <LatestEnd>26893</LatestEnd> <MinRunningTime>1800</MinRunningTime> <MaxRunningTime>6300</MaxRunningTime> </Timeframe> </PlanningRequest> </Device2EM>
