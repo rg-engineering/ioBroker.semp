@@ -607,6 +607,19 @@
             if (typeof devices[id].StatusDetectionMinRunTime == undefined || devices[id].StatusDetectionMinRunTime == null || devices[id].StatusDetectionMinRunTime == "") {
                 console.log("set StatusDetectionMinRunTime=0 ");
                 devices[id].StatusDetectionMinRunTime = 0;
+			}
+
+            console.log(id + " " + typeof devices[id].TimerCancelIfNotOnTime + " " + devices[id].TimerCancelIfNotOnTime + " " + devices[id].TimerCancelIfNotOn);
+            if (typeof devices[id].TimerCancelIfNotOnTime == undefined || devices[id].TimerCancelIfNotOnTime == null || devices[id].TimerCancelIfNotOnTime == "" || Number( devices[id].TimerCancelIfNotOnTime) == 0) {
+
+				if (typeof devices[id].TimerCancelIfNotOn == undefined || devices[id].TimerCancelIfNotOn == null || devices[id].TimerCancelIfNotOn == false) {
+					console.log("set TimerCancelIfNotOnTime=0 ");
+					devices[id].TimerCancelIfNotOnTime = 0;
+				}
+				else {
+                    console.log("set TimerCancelIfNotOnTime=5 ");
+                    devices[id].TimerCancelIfNotOnTime = 5;
+                }
             }
 		}
 
