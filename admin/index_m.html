@@ -131,6 +131,7 @@
 				$('#divDeviceRunningTime').show();
 				$('#divDeviceTimerEveryDay').show();
 				$('#divDeviceTimerDays').show();
+                $('#divDeviceCancelRequests').show();
 			}
 			else {
 				console.log("hide DeviceTimerActive");
@@ -138,9 +139,18 @@
 				$('#divDeviceRunningTime').hide();
 				$('#divDeviceTimerEveryDay').hide();
 				$('#divDeviceTimerDays').hide();
+                $('#divDeviceCancelRequests').hide();
 			}
+			
+            if ($('#DeviceTimerCancelIfNotOn').prop("checked")) {
+                console.log("show DeviceTimerCancelIfNotOn");
+                $('#divDeviceTimerCancelIfNotOnTime').show();
+			}
+			else {
+                console.log("hide DeviceTimerCancelIfNotOn");
+                $('#divDeviceTimerCancelIfNotOnTime').hide();
+            }
 
-            divDeviceTimerMonday
 			if ($('#DeviceTimerEveryDay').prop("checked")) {
                 console.log("show DeviceTimerEveryDay");
                 $('#divDeviceTimerMonday').hide();
@@ -383,7 +393,10 @@
             $("#DeviceTimerEveryDay").change(function () {
                 showHideSettings();
             });
-			
+            $("#DeviceTimerCancelIfNotOn").change(function () {
+                showHideSettings();
+            });
+
 			//$("#DeviceTimerDays").change(function () {
 			//	console.log("DeviceTimerDays " + $("#DeviceTimerDays").val());
 			//});
@@ -482,6 +495,10 @@
 				$('#DeviceTimerMinRunningtime').val(devices[id].TimerMinRunTime);
 				$('#DeviceTimerMaxRunningtime').val(devices[id].TimerMaxRunTime);
 
+                $('#DeviceTimerCancelIfNotOn').prop("checked", devices[id].TimerCancelIfNotOn);
+                $('#DeviceTimerCancelIfNotOnTime').val(devices[id].TimerCancelIfNotOnTime);
+
+
 				showHideSettings();
 
 				if (M) M.updateTextFields();
@@ -528,33 +545,37 @@
 						devices[id].MeasurementMethod = $('#DeviceMeasurementMethod').val();
 						devices[id].OID_Power = $('#DeviceOIDPower').val();
 						devices[id].StatusDetection = $('#DeviceStatusDetectionType').val();
-                        devices[id].StatusDetectionLimit = $('#DeviceStatusDetectionLimit').val();
+						devices[id].StatusDetectionLimit = $('#DeviceStatusDetectionLimit').val();
 						devices[id].StatusDetectionLimitTimeOn = $('#DeviceStatusDetectionLimitTimeOn').val();
 						devices[id].StatusDetectionLimitTimeOff = $('#DeviceStatusDetectionLimitTimeOff').val();
-                        devices[id].StatusDetectionMinRunTime = $('#DeviceStatusDetectionMinRunTime').val();
+						devices[id].StatusDetectionMinRunTime = $('#DeviceStatusDetectionMinRunTime').val();
 
 						devices[id].OID_Status = $('#DeviceOIDStatus').val();
 
-                        devices[id].HasOIDSwitch = $('#DeviceHasOIDSwitch').prop("checked");
+						devices[id].HasOIDSwitch = $('#DeviceHasOIDSwitch').prop("checked");
 						devices[id].OID_Switch = $('#DeviceOIDSwitch').val();
-                        devices[id].SwitchOffAtEndOfTimer= $('#DeviceSwitchOffAtEndOfTimer').prop("checked" );
+						devices[id].SwitchOffAtEndOfTimer = $('#DeviceSwitchOffAtEndOfTimer').prop("checked");
 
-                        devices[id].TimerActive = $('#DeviceTimerActive').prop("checked");
-                        devices[id].TimerStart = $('#DeviceTimerStart').val();
-                        devices[id].TimerEnd = $('#DeviceTimerEnd').val();
-                        //devices[id].TimerDays = $('#DeviceTimerDays').val();
+						devices[id].TimerActive = $('#DeviceTimerActive').prop("checked");
+						devices[id].TimerStart = $('#DeviceTimerStart').val();
+						devices[id].TimerEnd = $('#DeviceTimerEnd').val();
+						//devices[id].TimerDays = $('#DeviceTimerDays').val();
 
-                        devices[id].TimerEveryDay = $('#DeviceTimerEveryDay').prop("checked");
-                        devices[id].TimerMonday = $('#DeviceTimerMonday').prop("checked");
-                        devices[id].TimerTuesday = $('#DeviceTimerTuesday').prop("checked");
-                        devices[id].TimerWednesday = $('#DeviceTimerWednesday').prop("checked");
-                        devices[id].TimerThursday = $('#DeviceTimerThursday').prop("checked");
-                        devices[id].TimerFriday = $('#DeviceTimerFriday').prop("checked");
-                        devices[id].TimerSaturday = $('#DeviceTimerSaturday').prop("checked");
-                        devices[id].TimerSunday = $('#DeviceTimerSunday').prop("checked");
+						devices[id].TimerEveryDay = $('#DeviceTimerEveryDay').prop("checked");
+						devices[id].TimerMonday = $('#DeviceTimerMonday').prop("checked");
+						devices[id].TimerTuesday = $('#DeviceTimerTuesday').prop("checked");
+						devices[id].TimerWednesday = $('#DeviceTimerWednesday').prop("checked");
+						devices[id].TimerThursday = $('#DeviceTimerThursday').prop("checked");
+						devices[id].TimerFriday = $('#DeviceTimerFriday').prop("checked");
+						devices[id].TimerSaturday = $('#DeviceTimerSaturday').prop("checked");
+						devices[id].TimerSunday = $('#DeviceTimerSunday').prop("checked");
 
-                        devices[id].TimerMinRunTime = $('#DeviceTimerMinRunningtime').val();
-                        devices[id].TimerMaxRunTime = $('#DeviceTimerMaxRunningtime').val();
+						devices[id].TimerMinRunTime = $('#DeviceTimerMinRunningtime').val();
+						devices[id].TimerMaxRunTime = $('#DeviceTimerMaxRunningtime').val();
+
+						devices[id].TimerCancelIfNotOn = $('#DeviceTimerCancelIfNotOn').prop("checked");
+						devices[id].TimerCancelIfNotOnTime = $('#DeviceTimerCancelIfNotOnTime').val();
+
 
 						CheckDeviceData(id);
 						//tabelle updaten nicht notwendig, da hier keine Daten aus der Tabelle geändert werden
@@ -586,6 +607,19 @@
             if (typeof devices[id].StatusDetectionMinRunTime == undefined || devices[id].StatusDetectionMinRunTime == null || devices[id].StatusDetectionMinRunTime == "") {
                 console.log("set StatusDetectionMinRunTime=0 ");
                 devices[id].StatusDetectionMinRunTime = 0;
+			}
+
+            console.log(id + " " + typeof devices[id].TimerCancelIfNotOnTime + " " + devices[id].TimerCancelIfNotOnTime + " " + devices[id].TimerCancelIfNotOn);
+            if (typeof devices[id].TimerCancelIfNotOnTime == undefined || devices[id].TimerCancelIfNotOnTime == null || devices[id].TimerCancelIfNotOnTime == "" || Number( devices[id].TimerCancelIfNotOnTime) == 0) {
+
+				if (typeof devices[id].TimerCancelIfNotOn == undefined || devices[id].TimerCancelIfNotOn == null || devices[id].TimerCancelIfNotOn == false) {
+					console.log("set TimerCancelIfNotOnTime=0 ");
+					devices[id].TimerCancelIfNotOnTime = 0;
+				}
+				else {
+                    console.log("set TimerCancelIfNotOnTime=5 ");
+                    devices[id].TimerCancelIfNotOnTime = 5;
+                }
             }
 		}
 
@@ -814,7 +848,7 @@
 								<li id="page-device-main" class="tab col s3"><a href="#tab-popup_device_main" class="translate" active>main settings</a></li>
 								<li id="page-device-counter" class="tab col s3"><a href="#tab-popup_device_counter" class="translate">counter</a></li>
 								<li id="page-device-switch" class="tab col s3"><a href="#tab-popup_device_switch" class="translate">switch</a></li>
-								<li id="page-device-timers" class="tab col s3"><a href="#tab-popup_device_timers" class="translate">timers</a></li>
+								<li id="page-device-timers" class="tab col s3"><a href="#tab-popup_device_timers" class="translate">EnergyRequests</a></li>
 							</ul>
 						</div>
 
@@ -1027,7 +1061,7 @@
 						</div>
 
 
-						<!-- tab timer-->
+						<!-- tab energy requests-->
 						<div id="tab-popup_device_timers" class="col s12 page">
 							<div class="row">
 								<div class="col s12 ">
@@ -1125,7 +1159,20 @@
 								</div>
 							</div>
 
-							<div id="divDeviceEnergyRequestsTable">
+							
+
+							<div id="divDeviceCancelRequests" class="row">
+								<div class="input-field col s3">
+									<input type="checkbox" id="DeviceTimerCancelIfNotOn" class="value" />
+									<label for="DeviceTimerCancelIfNotOn" class="translate">DeviceTimerCancelIfNotOn</label>
+								</div>
+								<div id="divDeviceTimerCancelIfNotOnTime" class="input-field col s3">
+									<input type="number" id="DeviceTimerCancelIfNotOnTime" class="value" />
+									<label for="DeviceTimerCancelIfNotOnTime" class="translate">DeviceTimerCancelIfNotOnTime</label>
+								</div>
+							</div>
+
+<div id="divDeviceEnergyRequestsTable">
 								<a id="addNewRequestPeriod" class="btn-floating waves-effect waves-light blue table-button-add" title="add request period"><i class="material-icons">add</i></a>
 
 								<div class="table-energyrequests-div">
@@ -1139,6 +1186,7 @@
 												<th id="tableRequests_col5" data-name="MinRunTime" data-type="string" style="background: #64b5f6 " class="header translate">MinRunTime</th>
 												<th id="tableRequests_col6" data-name="MaxRunTime" data-type="string" style="background: #64b5f6 " class="header translate">MaxRunTime</th>
 												<th id="tableRequests_col7" data-name="CancelRequestNotOn" data-type="checkbox" style="background: #64b5f6 " class="header translate">CancelRequestNotOn</th>
+					
 												<th id="tableRequests_col8" data-name="MaxTimeToOn" data-type="string" style="background: #64b5f6 " class="header translate">MaxTimeToOn</th>
 												<th id="tableRequests_col9" data-name="CancelRequestAfterOff" data-type="checkbox" style="background: #64b5f6 " class="header translate">CancelRequestAfterOff</th>
 												<th id="tableRequests_col10" data-name="MinTimeAfterOff" data-type="string" style="background: #64b5f6 " class="header translate">MinTimeAfterOff</th>

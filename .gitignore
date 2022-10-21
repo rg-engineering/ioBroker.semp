@@ -26,3 +26,4 @@ admin/i18n/*/flat.txt
 /semp.njsproj.user
 /obj/Debug/
 /bin/
+*.orig

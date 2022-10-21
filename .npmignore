@@ -45,4 +45,6 @@ bin/
 obj/
 .github/
 .vscode/
-
+.eslintignore
+readme.txt
+iob_npm.done
