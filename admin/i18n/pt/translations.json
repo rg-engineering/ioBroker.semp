@@ -89,6 +89,7 @@
     "Wednesday": "Quarta-feira",
     "counter": "contador",
     "devices": "dispositivos",
+    "everyDay": "todo dia",
     "extendedLog": "Registro estendido",
     "hint_counter": "se a estimativa for usada, a potência máxima do dispositivo será usada, caso contrário, um ponto de dados ajustável separado pode ser usado",
     "hint_main": "nome do dispositivo e ID são somente leitura, altere-o na tabela de visão geral, se necessário.",

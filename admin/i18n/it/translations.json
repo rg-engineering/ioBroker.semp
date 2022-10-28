@@ -89,6 +89,7 @@
     "Wednesday": "Mercoledì",
     "counter": "contatore",
     "devices": "dispositivi",
+    "everyDay": "ogni giorno",
     "extendedLog": "registrazione estesa",
     "hint_counter": "se viene utilizzata la stima, viene utilizzata la potenza massima del dispositivo, altrimenti è possibile utilizzare un punto dati regolabile separato",
     "hint_main": "il nome e l'ID del dispositivo sono di sola lettura, se necessario modificarli nella tabella riepilogativa.",

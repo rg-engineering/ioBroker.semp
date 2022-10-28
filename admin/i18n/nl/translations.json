@@ -89,6 +89,7 @@
     "Wednesday": "Woensdag",
     "counter": "balie",
     "devices": "apparaten",
+    "everyDay": "elke dag",
     "extendedLog": "uitgebreide logboekregistratie",
     "hint_counter": "als schatting wordt gebruikt, wordt het maximale vermogen van het apparaat gebruikt, anders kan een apart instelbaar datapunt worden gebruikt",
     "hint_main": "apparaatnaam en ID zijn alleen-lezen, wijzig deze indien nodig in de overzichtstabel.",

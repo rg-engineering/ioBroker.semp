@@ -89,6 +89,7 @@
     "Wednesday": "Środa",
     "counter": "licznik",
     "devices": "urządzenia",
+    "everyDay": "codzienny",
     "extendedLog": "rozszerzone rejestrowanie",
     "hint_counter": "w przypadku estymacji używana jest maksymalna moc urządzenia, w przeciwnym razie można użyć oddzielnego regulowanego punktu danych",
     "hint_main": "nazwa urządzenia i identyfikator są tylko do odczytu, w razie potrzeby zmień je w tabeli przeglądowej.",

@@ -89,6 +89,7 @@
     "Wednesday": "Mercredi",
     "counter": "compteur",
     "devices": "dispositifs",
+    "everyDay": "tous les jours",
     "extendedLog": "journalisation étendue",
     "hint_counter": "si l'estimation est utilisée, alors la puissance maximale de l'appareil est utilisée, sinon un point de données réglable séparé peut être utilisé",
     "hint_main": "le nom et l'ID de l'appareil sont en lecture seule, modifiez-les dans le tableau récapitulatif si nécessaire.",

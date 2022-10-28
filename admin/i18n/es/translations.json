@@ -89,6 +89,7 @@
     "Wednesday": "miércoles",
     "counter": "encimera",
     "devices": "dispositivos",
+    "everyDay": "todos los días",
     "extendedLog": "Registro extendido",
     "hint_counter": "si se usa la estimación, entonces se usa la potencia máxima del dispositivo; de lo contrario, se puede usar un punto de datos ajustable por separado",
     "hint_main": "el nombre del dispositivo y la ID son de solo lectura, cámbielos en la tabla de resumen si es necesario.",

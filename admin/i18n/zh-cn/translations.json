@@ -89,6 +89,7 @@
     "Wednesday": "周三",
     "counter": "柜台",
     "devices": "设备",
+    "everyDay": "每天",
     "extendedLog": "扩展日志",
     "hint_counter": "如果使用估计，则使用设备的最大功率，否则可以使用单独的可调数据点",
     "hint_main": "设备名称和 ID 为只读，如有必要，请在概览表中更改。",
