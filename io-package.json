@@ -1,10 +1,19 @@
 {
     "common": {
         "name": "semp",
-        "version": "0.0.3",
+        "version": "0.0.4",
         "news": {
-            "0.0.3": {
-                "en": ""
+            "0.0.4": {
+                "en": "support of more then one time periods for energy requests",
+                "de": "Unterstützung von mehr als einem Zeitraum für Energieanfragen",
+                "ru": "поддержка более одного периода времени для запросов энергии",
+                "pt": "suporte de mais de um período de tempo para solicitações de energia",
+                "nl": "ondersteuning van meer dan één tijdsperiode voor energieverzoeken",
+                "fr": "prise en charge de plusieurs périodes de temps pour les demandes d'énergie",
+                "it": "supporto di più periodi di tempo per richieste di energia",
+                "es": "soporte de más de un período de tiempo para solicitudes de energía",
+                "pl": "obsługa więcej niż jednego przedziału czasowego dla wniosków o energię",
+                "zh-cn": "支持多个时间段的能源请求"
             },
             "0.0.2": {
                 "en": "threshold for status detection with timer",

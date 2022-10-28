@@ -1,6 +1,6 @@
 {
   "name": "iobroker.semp",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Interface to SMA SunnyPortal via SEMP",
   "author": {
     "name": "René G.",

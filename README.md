@@ -53,8 +53,9 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 
 ## Changelog
 
-### 0.0.3 (in progress)
-
+### 0.0.4 (in progress)
+* (René) see issue #15: support of more then one time periods for energy requests
+* (René) some bug fixes (0.0.3)
 
 ### 0.0.2 (2022-10-16)
 * (René) threshold for status detection with timer
