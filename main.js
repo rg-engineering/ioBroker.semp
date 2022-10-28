@@ -117,6 +117,8 @@ class Semp extends utils.Adapter {
 					await this.AddDevices();
 					//this.checkRequests();
 					//this.StartRequstIntervall();
+
+					this.UpdateData();
 				}
 			}
 
@@ -132,6 +134,71 @@ class Semp extends utils.Adapter {
 			this.log.error("exception in onReady [" + e + "]");
 		}
 	}
+
+	UpdateData() {
+		this.log.debug("UpdateData");
+		try {
+			for (let d = 0; d < this.config.devices.length; d++) {
+
+				this.log.debug("device " + JSON.stringify(this.config.devices[d]));
+
+				/*
+				exception in UpdateData[TypeError: this.config.devices[d].push is not a function]
+				2022 - 10 - 24 15: 48: 50.637	warn	use old energy request data with new data structure, please save it in admin
+				2022 - 10 - 24 15: 48: 50.636	debug	device { "IsActive": true, "ID": "F-53088660-100000000001-00", "Name": "Spülie", "Type": "DishWasher", "MeasurementMethod": "Measurement", "InterruptionsAllowed": true, "MaxPower": "124", "Vendor": "BoschSiemens", "SerialNr": "B12345678ABCD", "OptionalEnergy": true, "OID_Power": "javascript.0.semp.Device1_Power", "StatusDetection": "SeparateOID", "OID_OnOff": "javascript.0.semp.Device1_OnOff", "MinOnTime": "2400", "MaxOnTime": "5001", "MinOffTime": "2300", "MaxOffTime": "4000", "OID_Status": "javascript.0.semp.Device1_OnOff", "HasOIDSwitch": true, "OID_Switch": "javascript.0.semp.Device1_OnOff", "TimerActive": true, "TimerStart": "09:30", "TimerEnd": "12:00", "TimerMinRunTime": "00:30", "TimerMaxRunTime": "00:45", "TimerEveryDay": true, "TimerMonday": false, "TimerTuesday": false, "TimerWednesday": false, "TimerThursday": false, "TimerFriday": false, "TimerSaturday": false, "TimerSunday": false, "StatusDetectionLimit": "0", "StatusDetectionLimitTime": "0", "StatusDetectionLimitTimeOn": "0", "StatusDetectionLimitTimeOff": "0", "StatusDetectionMinRunTime": "0", "SwitchOffAtEndOfTimer": false, "TimerCancelIfNotOn": true, "TimerCancelIfNotOnTime": "5" }
+				2022 - 10 - 24 15: 48: 50.636	debug	UpdateData
+				
+				
+				
+				result [{"IsActive":true,"ID":"F-53088660-100000000001-00","Name":"Spülie","Type":"DishWasher","MeasurementMethod":"Measurement","InterruptionsAllowed":true,"MaxPower":"124","Vendor":"BoschSiemens","SerialNr":"B12345678ABCD","OptionalEnergy":true,"OID_Power":"javascript.0.semp.Device1_Power","StatusDetection":"SeparateOID","OID_OnOff":"javascript.0.semp.Device1_OnOff","MinOnTime":"2400","MaxOnTime":"5001","MinOffTime":"2300","MaxOffTime":"4000","OID_Status":"javascript.0.semp.Device1_OnOff","HasOIDSwitch":true,"OID_Switch":"javascript.0.semp.Device1_OnOff","TimerActive":true,"TimerStart":"09:30","TimerEnd":"12:00","TimerMinRunTime":"00:30","TimerMaxRunTime":"00:45","TimerEveryDay":true,"TimerMonday":false,"TimerTuesday":false,"TimerWednesday":false,"TimerThursday":false,"TimerFriday":false,"TimerSaturday":false,"TimerSunday":false,"StatusDetectionLimit":"0","StatusDetectionLimitTime":"0","StatusDetectionLimitTimeOn":"0","StatusDetectionLimitTimeOff":"0","StatusDetectionMinRunTime":"0","SwitchOffAtEndOfTimer":false,"TimerCancelIfNotOn":true,"TimerCancelIfNotOnTime":"5","EnergyRequestPeriods":[{"ID":1,"EarliestStartTime":"09:30","LatestEndTime":"12:00","MinRunTime":"00:30","MaxRunTime":"00:45","CancelRequestNotOn":true,"MaxTimeToOn":"5","CancelRequestAfterOff":false,"MinTimeAfterOff":"00:00"}]},{"IsActive":true,"ID":"F-53088660-000000000002-00","Name":"newDevice1","Vendor":"noName","Type":"Other","SerialNr":"ABCDEFGE","MaxPower":"500","InterruptionsAllowed":false,"MinOnTime":"","MaxOnTime":"","MinOffTime":"","MaxOffTime":"","MeasurementMethod":"Measurement","OID_Power":"javascript.0.semp.Device2_Power","StatusDetection":"FromPowerValue","OID_Status":"javascript.0.semp.Device2_OnOff","HasOIDSwitch":true,"OID_Switch":"javascript.0.semp.Device2_OnOff","TimerActive":true,"TimerStart":"08:00","TimerEnd":"18:00","TimerEveryDay":true,"TimerMonday":false,"TimerTuesday":false,"TimerWednesday":false,"TimerThursday":false,"TimerFriday":false,"TimerSaturday":false,"TimerSunday":false,"TimerMinRunTime":"00:00","TimerMaxRunTime":"02:30","StatusDetectionLimit":"10","StatusDetectionLimitTime":0,"StatusDetectionLimitTimeOn":"3","StatusDetectionLimitTimeOff":"6","StatusDetectionMinRunTime":"5","SwitchOffAtEndOfTimer":false,"TimerCancelIfNotOn":false,"TimerCancelIfNotOnTime":"10","OptionalEnergy":true,"EnergyRequestPeriods":[{"ID":1,"EarliestStartTime":"08:00","LatestEndTime":"18:00","MinRunTime":"00:00","MaxRunTime":"02:30","CancelRequestNotOn":false,"MaxTimeToOn":"10","CancelRequestAfterOff":false,"MinTimeAfterOff":"00:00"}]}]
+				2022-10-24 16:04:16.952	debug	result [{"ID":1,"EarliestStartTime":"08:00","LatestEndTime":"18:00","MinRunTime":"00:00","MaxRunTime":"02:30","CancelRequestNotOn":false,"MaxTimeToOn":"10","CancelRequestAfterOff":false,"MinTimeAfterOff":"00:00"}]
+				2022-10-24 16:04:16.951	warn	use old energy request data with new data structure, please save it in admin
+				
+				
+				*/
+
+
+
+				if (this.config.devices[d].IsActive && this.config.devices[d].TimerActive) {
+					if (this.config.devices[d].EnergyRequestPeriods == null || this.config.devices[d].EnergyRequestPeriods.length == 0) {
+						this.log.warn("use old energy request data with new data structure, please save it in admin");
+
+
+						//is this necessary here???
+						//just make it backwards compatible 0.0.4 -> 0.0.3
+						let EnergyRequestPeriods = [];
+						let energyRequest = {
+							ID: 1,
+							Days: this.config.devices[d].TimerDays,
+							EarliestStartTime: this.config.devices[d].TimerStart,
+							LatestEndTime: this.config.devices[d].TimerEnd,
+							MinRunTime: this.config.devices[d].TimerMinRunTime,
+							MaxRunTime: this.config.devices[d].TimerMaxRunTime,
+							CancelRequestNotOn: this.config.devices[d].TimerCancelIfNotOn,
+							MaxTimeToOn: this.config.devices[d].TimerCancelIfNotOnTime,
+							CancelRequestAfterOff: false,
+							MinTimeAfterOff: "10"
+						}
+
+						EnergyRequestPeriods.push(energyRequest);
+
+						this.config.devices[d]["EnergyRequestPeriods"] = EnergyRequestPeriods;
+
+					}
+				}
+
+				this.log.debug("result " + JSON.stringify(this.config.devices[d].EnergyRequestPeriods));
+			}
+
+
+		} catch (e) {
+			this.log.error("exception in UpdateData [" + e + "]");
+		}
+
+		this.log.debug("result " + JSON.stringify(this.config.devices));
+
+	}
+
 
 	/*
 	UpdateDummyDevice() {
