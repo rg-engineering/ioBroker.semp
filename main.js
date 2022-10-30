@@ -49,6 +49,11 @@ Admin umbennenen oder Übersetzung:
  * Timer-tab -> Zeitsteuerung für Energieanforderung
 
 
+* nach Umbau auf MultiRequest
+ * Remaining on Time passt nicht
+ * abbruch nach wenigen minuten?
+
+
 */
 
 class Semp extends utils.Adapter {
