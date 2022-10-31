@@ -4,8 +4,6 @@
  * Created with @iobroker/create-adapter v2.1.1
  */
 
-// The adapter-core module gives you access to the core ioBroker functions
-// you need to create an adapter
 const utils = require("@iobroker/adapter-core");
 const networkInterfaces = require('os').networkInterfaces;
 const { v4: uuidv4 } = require('uuid');
@@ -32,11 +30,11 @@ const Gateway = require("./lib/semp/Gateway").Gateway;
  *	Anlauferkennung? -> erledigt
  *	max. Leistung: wie/wann kommt das?
  *	
- *	EnergieAnforderung zurückziehen, wenn Gerät nicht einschaltet, Zeit einstellbar
+ *	EnergieAnforderung zurückziehen, wenn Gerät nicht einschaltet, Zeit einstellbar -> erledigt
  *	Energieanforderung abbrechen, wenn Gerät ausschaltet, Zeit einstellbar
- *	Time umbenenenn in "Zeit für EnergieAnforderung"
+ *	Time umbenenenn in "Zeit für EnergieAnforderung" -> erledigz
  *	Feiertag / Urlaub zu hause für Timer hinzufügen
- *	mehrere Anforderungen pro Tag
+ *	mehrere Anforderungen pro Tag -> in Arbeit
 
 Admin umbennenen oder Übersetzung:
  * Basis-ID der Geräte
@@ -49,9 +47,7 @@ Admin umbennenen oder Übersetzung:
  * Timer-tab -> Zeitsteuerung für Energieanforderung
 
 
-* nach Umbau auf MultiRequest
- * Remaining on Time passt nicht
- * abbruch nach wenigen minuten?
+* Geräte aus gateway hinzufügen
 
 
 */
@@ -147,27 +143,9 @@ class Semp extends utils.Adapter {
 
 				this.log.debug("device " + JSON.stringify(this.config.devices[d]));
 
-				/*
-				exception in UpdateData[TypeError: this.config.devices[d].push is not a function]
-				2022 - 10 - 24 15: 48: 50.637	warn	use old energy request data with new data structure, please save it in admin
-				2022 - 10 - 24 15: 48: 50.636	debug	device { "IsActive": true, "ID": "F-53088660-100000000001-00", "Name": "Spülie", "Type": "DishWasher", "MeasurementMethod": "Measurement", "InterruptionsAllowed": true, "MaxPower": "124", "Vendor": "BoschSiemens", "SerialNr": "B12345678ABCD", "OptionalEnergy": true, "OID_Power": "javascript.0.semp.Device1_Power", "StatusDetection": "SeparateOID", "OID_OnOff": "javascript.0.semp.Device1_OnOff", "MinOnTime": "2400", "MaxOnTime": "5001", "MinOffTime": "2300", "MaxOffTime": "4000", "OID_Status": "javascript.0.semp.Device1_OnOff", "HasOIDSwitch": true, "OID_Switch": "javascript.0.semp.Device1_OnOff", "TimerActive": true, "TimerStart": "09:30", "TimerEnd": "12:00", "TimerMinRunTime": "00:30", "TimerMaxRunTime": "00:45", "TimerEveryDay": true, "TimerMonday": false, "TimerTuesday": false, "TimerWednesday": false, "TimerThursday": false, "TimerFriday": false, "TimerSaturday": false, "TimerSunday": false, "StatusDetectionLimit": "0", "StatusDetectionLimitTime": "0", "StatusDetectionLimitTimeOn": "0", "StatusDetectionLimitTimeOff": "0", "StatusDetectionMinRunTime": "0", "SwitchOffAtEndOfTimer": false, "TimerCancelIfNotOn": true, "TimerCancelIfNotOnTime": "5" }
-				2022 - 10 - 24 15: 48: 50.636	debug	UpdateData
-				
-				
-				
-				result [{"IsActive":true,"ID":"F-53088660-100000000001-00","Name":"Spülie","Type":"DishWasher","MeasurementMethod":"Measurement","InterruptionsAllowed":true,"MaxPower":"124","Vendor":"BoschSiemens","SerialNr":"B12345678ABCD","OptionalEnergy":true,"OID_Power":"javascript.0.semp.Device1_Power","StatusDetection":"SeparateOID","OID_OnOff":"javascript.0.semp.Device1_OnOff","MinOnTime":"2400","MaxOnTime":"5001","MinOffTime":"2300","MaxOffTime":"4000","OID_Status":"javascript.0.semp.Device1_OnOff","HasOIDSwitch":true,"OID_Switch":"javascript.0.semp.Device1_OnOff","TimerActive":true,"TimerStart":"09:30","TimerEnd":"12:00","TimerMinRunTime":"00:30","TimerMaxRunTime":"00:45","TimerEveryDay":true,"TimerMonday":false,"TimerTuesday":false,"TimerWednesday":false,"TimerThursday":false,"TimerFriday":false,"TimerSaturday":false,"TimerSunday":false,"StatusDetectionLimit":"0","StatusDetectionLimitTime":"0","StatusDetectionLimitTimeOn":"0","StatusDetectionLimitTimeOff":"0","StatusDetectionMinRunTime":"0","SwitchOffAtEndOfTimer":false,"TimerCancelIfNotOn":true,"TimerCancelIfNotOnTime":"5","EnergyRequestPeriods":[{"ID":1,"EarliestStartTime":"09:30","LatestEndTime":"12:00","MinRunTime":"00:30","MaxRunTime":"00:45","CancelRequestNotOn":true,"MaxTimeToOn":"5","CancelRequestAfterOff":false,"MinTimeAfterOff":"00:00"}]},{"IsActive":true,"ID":"F-53088660-000000000002-00","Name":"newDevice1","Vendor":"noName","Type":"Other","SerialNr":"ABCDEFGE","MaxPower":"500","InterruptionsAllowed":false,"MinOnTime":"","MaxOnTime":"","MinOffTime":"","MaxOffTime":"","MeasurementMethod":"Measurement","OID_Power":"javascript.0.semp.Device2_Power","StatusDetection":"FromPowerValue","OID_Status":"javascript.0.semp.Device2_OnOff","HasOIDSwitch":true,"OID_Switch":"javascript.0.semp.Device2_OnOff","TimerActive":true,"TimerStart":"08:00","TimerEnd":"18:00","TimerEveryDay":true,"TimerMonday":false,"TimerTuesday":false,"TimerWednesday":false,"TimerThursday":false,"TimerFriday":false,"TimerSaturday":false,"TimerSunday":false,"TimerMinRunTime":"00:00","TimerMaxRunTime":"02:30","StatusDetectionLimit":"10","StatusDetectionLimitTime":0,"StatusDetectionLimitTimeOn":"3","StatusDetectionLimitTimeOff":"6","StatusDetectionMinRunTime":"5","SwitchOffAtEndOfTimer":false,"TimerCancelIfNotOn":false,"TimerCancelIfNotOnTime":"10","OptionalEnergy":true,"EnergyRequestPeriods":[{"ID":1,"EarliestStartTime":"08:00","LatestEndTime":"18:00","MinRunTime":"00:00","MaxRunTime":"02:30","CancelRequestNotOn":false,"MaxTimeToOn":"10","CancelRequestAfterOff":false,"MinTimeAfterOff":"00:00"}]}]
-				2022-10-24 16:04:16.952	debug	result [{"ID":1,"EarliestStartTime":"08:00","LatestEndTime":"18:00","MinRunTime":"00:00","MaxRunTime":"02:30","CancelRequestNotOn":false,"MaxTimeToOn":"10","CancelRequestAfterOff":false,"MinTimeAfterOff":"00:00"}]
-				2022-10-24 16:04:16.951	warn	use old energy request data with new data structure, please save it in admin
-				
-				
-				*/
-
-
-
 				if (this.config.devices[d].IsActive && this.config.devices[d].TimerActive) {
 					if (this.config.devices[d].EnergyRequestPeriods == null || this.config.devices[d].EnergyRequestPeriods.length == 0) {
 						this.log.warn("use old energy request data with new data structure, please save it in admin");
-
 
 						//is this necessary here???
 						//just make it backwards compatible 0.0.4 -> 0.0.3
@@ -204,25 +182,6 @@ class Semp extends utils.Adapter {
 
 	}
 
-
-	/*
-	UpdateDummyDevice() {
-		this.log.debug("UpdateDummyDevice");
-		this.gw.UpdateDummyDevice();
-	}
-	*/
-
-	/*
-	StartRequstIntervall() {
-
-		this.log.debug("start request intervall");
-
-		this.RequestTimerID = setInterval(this.checkRequests.bind(this), 60*1000);
-    }
-	*/
-	
-
-
 	//add all devices which are configured in admin page
 	async AddDevices() {
 
@@ -242,7 +201,6 @@ class Semp extends utils.Adapter {
 				if (device.StatusDetection == "AlwaysOn") {
 					this.gw.setOnOffDevice(device.ID, true);
                 }
-
 			}
         }
     }
@@ -258,21 +216,6 @@ class Semp extends utils.Adapter {
 	 */
 	onUnload(callback) {
 		try {
-			// Here you must clear all timeouts or intervals that may still be active
-			// clearTimeout(timeout1);
-			// clearTimeout(timeout2);
-			// ...
-			// clearInterval(interval1);
-
-			/*
-			if (this.DummyDeviceUpdateIntervalID != null) {
-				clearInterval(this.DummyDeviceUpdateIntervalID);
-			}
-			*/
-
-			//if (this.RequestTimerID != null) {
-			//	clearInterval(this.RequestTimerID);
-			//}
 
 			if (this.gw != null) {
 				this.gw.stop();
@@ -283,28 +226,6 @@ class Semp extends utils.Adapter {
 		}
 	}
 
-	// If you need to react to object changes, uncomment the following block and the corresponding line in the constructor.
-	// You also need to subscribe to the objects with `this.subscribeObjects`, similar to `this.subscribeStates`.
-	// /**
-	//  * Is called if a subscribed object changes
-	//  * @param {string} id
-	//  * @param {ioBroker.Object | null | undefined} obj
-	//  */
-	// onObjectChange(id, obj) {
-	// 	if (obj) {
-	// 		// The object was changed
-	// 		this.log.info(`object ${id} changed: ${JSON.stringify(obj)}`);
-	// 	} else {
-	// 		// The object was deleted
-	// 		this.log.info(`object ${id} deleted`);
-	// 	}
-	// }
-
-	/**
-	 * Is called if a subscribed state changes
-	 * @param {string} id
-	 * @param {ioBroker.State | null | undefined} state
-	 */
 	async onStateChange(id, state) {
 		if (state) {
 			// The state was changed
@@ -342,13 +263,6 @@ class Semp extends utils.Adapter {
 		return bRet;
     }
 
-
-
-	/**
-	 * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
-	 * Using this method requires "common.messagebox" property to be set to true in io-package.json
-	* @param {ioBroker.Message} obj
-	 */
 	async onMessage(obj) {
 		this.log.info("on message " + JSON.stringify(obj));
 		if (typeof obj === "object" && obj.command) {
