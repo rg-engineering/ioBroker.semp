@@ -128,18 +128,18 @@
 			if ($('#DeviceTimerActive').prop("checked")) {
 				//console.log("show DeviceTimerActive");
 				$('#divDeviceTimer').show();
-				$('#divDeviceRunningTime').show();
-				$('#divDeviceTimerEveryDay').show();
-				$('#divDeviceTimerDays').show();
+				//$('#divDeviceRunningTime').show();
+				//$('#divDeviceTimerEveryDay').show();
+				//$('#divDeviceTimerDays').show();
 				$('#divDeviceCancelRequests').show();
                 $('#DeviceEnergyRequests').show();
 			}
 			else {
 				//console.log("hide DeviceTimerActive");
 				$('#divDeviceTimer').hide();
-				$('#divDeviceRunningTime').hide();
-				$('#divDeviceTimerEveryDay').hide();
-				$('#divDeviceTimerDays').hide();
+				//$('#divDeviceRunningTime').hide();
+				//$('#divDeviceTimerEveryDay').hide();
+				//$('#divDeviceTimerDays').hide();
 				$('#divDeviceCancelRequests').hide();
                 $('#DeviceEnergyRequests').hide();
 			}
@@ -152,7 +152,7 @@
                 //console.log("hide DeviceTimerCancelIfNotOn");
                 $('#divDeviceTimerCancelIfNotOnTime').hide();
             }
-
+			/*
 			if ($('#DeviceTimerEveryDay').prop("checked")) {
                 //console.log("show DeviceTimerEveryDay");
                 $('#divDeviceTimerMonday').hide();
@@ -173,7 +173,7 @@
                 $('#divDeviceTimerSaturday').show();
                 $('#divDeviceTimerSunday').show();
             }
-
+			*/
 
 		}
 
@@ -396,9 +396,11 @@
             $("#DeviceTimerActive").change(function () {
                 showHideSettings();
 			});
+			/*
             $("#DeviceTimerEveryDay").change(function () {
                 showHideSettings();
             });
+			*/
             $("#DeviceTimerCancelIfNotOn").change(function () {
                 showHideSettings();
             });
@@ -485,12 +487,14 @@
 				$('#DeviceOIDSwitch').val(devices[id].OID_Switch);
 				$('#DeviceSwitchOffAtEndOfTimer').prop("checked", devices[id].SwitchOffAtEndOfTimer);
 
-
+				
 				$('#DeviceTimerActive').prop("checked", devices[id].TimerActive);
+				/*
 				$('#DeviceTimerStart').val(devices[id].TimerStart);
 				$('#DeviceTimerEnd').val(devices[id].TimerEnd);
 				//$('#DeviceTimerDays').val(devices[id].TimerDays);
 
+				
 				$('#DeviceTimerEveryDay').prop("checked", devices[id].TimerEveryDay);
 				$('#DeviceTimerMonday').prop("checked", devices[id].TimerMonday);
 				$('#DeviceTimerTuesday').prop("checked", devices[id].TimerTuesday);
@@ -503,6 +507,7 @@
 
 				$('#DeviceTimerMinRunningtime').val(devices[id].TimerMinRunTime);
 				$('#DeviceTimerMaxRunningtime').val(devices[id].TimerMaxRunTime);
+				*/
 
 				$('#DeviceTimerCancelIfNotOn').prop("checked", devices[id].TimerCancelIfNotOn);
 				$('#DeviceTimerCancelIfNotOnTime').val(devices[id].TimerCancelIfNotOnTime);
@@ -653,6 +658,7 @@
 						devices[id].SwitchOffAtEndOfTimer = $('#DeviceSwitchOffAtEndOfTimer').prop("checked");
 
 						devices[id].TimerActive = $('#DeviceTimerActive').prop("checked");
+						/*
 						devices[id].TimerStart = $('#DeviceTimerStart').val();
 						devices[id].TimerEnd = $('#DeviceTimerEnd').val();
 						//devices[id].TimerDays = $('#DeviceTimerDays').val();
@@ -668,7 +674,7 @@
 
 						devices[id].TimerMinRunTime = $('#DeviceTimerMinRunningtime').val();
 						devices[id].TimerMaxRunTime = $('#DeviceTimerMaxRunningtime').val();
-
+						*/
 						devices[id].TimerCancelIfNotOn = $('#DeviceTimerCancelIfNotOn').prop("checked");
 						devices[id].TimerCancelIfNotOnTime = $('#DeviceTimerCancelIfNotOnTime').val();
 
@@ -1275,20 +1281,20 @@
 			</div>
 		</div>
 			-->
-							<!--
-		<div class="row">
-			<div id="divDeviceCancelRequests" class="row">
-				<div class="input-field col s3">
-					<input type="checkbox" id="DeviceTimerCancelIfNotOn" class="value" />
-					<label for="DeviceTimerCancelIfNotOn" class="translate">DeviceTimerCancelIfNotOn</label>
-				</div>
-				<div id="divDeviceTimerCancelIfNotOnTime" class="input-field col s3">
-					<input type="number" id="DeviceTimerCancelIfNotOnTime" class="value" />
-					<label for="DeviceTimerCancelIfNotOnTime" class="translate">DeviceTimerCancelIfNotOnTime</label>
-				</div>
-			</div>
-		</div>
-			-->
+							
+							<div class="row">
+								<div id="divDeviceCancelRequests" class="row">
+									<div class="input-field col s3">
+										<input type="checkbox" id="DeviceTimerCancelIfNotOn" class="value" />
+										<label for="DeviceTimerCancelIfNotOn" class="translate">DeviceTimerCancelIfNotOn</label>
+									</div>
+									<div id="divDeviceTimerCancelIfNotOnTime" class="input-field col s3">
+										<input type="number" id="DeviceTimerCancelIfNotOnTime" class="value" />
+										<label for="DeviceTimerCancelIfNotOnTime" class="translate">DeviceTimerCancelIfNotOnTime</label>
+									</div>
+								</div>
+							</div>
+			
 							<div class="row">
 								<div class="col s12" id="DeviceEnergyRequests">
 									<a id="addNewRequestPeriod" class="btn-floating waves-effect waves-light blue table-button-add" title="add request period"><i class="material-icons">add</i></a>
@@ -1304,12 +1310,7 @@
 													<th id="tableRequests_col4" data-name="LatestEndTime" data-type="text" style="background: #64b5f6 " class="header translate">LatestEndTime</th>
 													<th id="tableRequests_col5" data-name="MinRunTime" data-type="text" style="background: #64b5f6 " class="header translate">MinRunTime</th>
 													<th id="tableRequests_col6" data-name="MaxRunTime" data-type="text" style="background: #64b5f6 " class="header translate">MaxRunTime</th>
-													<th id="tableRequests_col7" data-name="CancelRequestNotOn" data-type="checkbox" style="background: #64b5f6 " class="header translate">CancelRequestNotOn</th>
-
-													<th id="tableRequests_col8" data-name="MaxTimeToOn" data-type="number" style="background: #64b5f6 " class="header translate">MaxTimeToOn</th>
-													<th id="tableRequests_col9" data-name="CancelRequestAfterOff" data-type="checkbox" style="background: #64b5f6 " class="header translate">CancelRequestAfterOff</th>
-													<th id="tableRequests_col10" data-name="MinTimeAfterOff" data-type="number" style="background: #64b5f6 " class="header translate">MinTimeAfterOff</th>
-
+													
 													<th data-buttons="up down delete" style="width: 100px; background: #64b5f6"></th>
 												</tr>
 											</thead>
