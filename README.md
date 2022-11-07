@@ -53,7 +53,10 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 
 ## Changelog
 
-### 0.0.4 (in progress)
+### 0.0.5 (in progress)
+
+
+### 0.0.4 (2022-11-07)
 * (René) see issue #15: support of more then one time periods for energy requests
 * (René) some bug fixes (0.0.3)
 
