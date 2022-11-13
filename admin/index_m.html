@@ -9,7 +9,7 @@
 
 	<script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
 	<script type="text/javascript" src="../../socket.io/socket.io.js"></script>
-
+	
 	<script type="text/javascript" src="../../lib/js/materialize.js"></script>
 	<script type="text/javascript" src="../../lib/js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="../../lib/js/jquery.fancytree-all.min.js"></script>
@@ -174,6 +174,14 @@
                 $('#divDeviceTimerSunday').show();
             }
 			*/
+
+			if ($('#DeviceType').val() == "EVCharger") {
+				$('#page-device-wallbox').show();
+			}
+			else {
+                $('#page-device-wallbox').hide();
+            }
+
 
 		}
 
@@ -403,7 +411,12 @@
 			*/
             $("#DeviceTimerCancelIfNotOn").change(function () {
                 showHideSettings();
+			});
+            $("#DeviceType").change(function () {
+                showHideSettings();
             });
+
+
 
 			//$("#DeviceTimerDays").change(function () {
 			//	console.log("DeviceTimerDays " + $("#DeviceTimerDays").val());
@@ -436,7 +449,60 @@
                     });
                 });
             });
-
+            $('#SelectDeviceOIDPlugConnected').on('click', function () {
+                initSelectId(function (sid) {
+                    sid.selectId('show', $('#DeviceOIDPlugConnected').val(), function (newId) {
+                        if (newId) {
+                            $('#DeviceOIDPlugConnected').val(newId).trigger('change');
+                        }
+                    });
+                });
+			});
+            $('#SelectDeviceOIDIsCharging').on('click', function () {
+                initSelectId(function (sid) {
+                    sid.selectId('show', $('#DeviceOIDIsCharging').val(), function (newId) {
+                        if (newId) {
+                            $('#DeviceOIDIsCharging').val(newId).trigger('change');
+                        }
+                    });
+                });
+			});
+            $('#SelectDeviceOIDIsError').on('click', function () {
+                initSelectId(function (sid) {
+                    sid.selectId('show', $('#DeviceOIDIsError').val(), function (newId) {
+                        if (newId) {
+                            $('#DeviceOIDIsError').val(newId).trigger('change');
+                        }
+                    });
+                });
+            });
+            $('#SelectDeviceOIDChargePower').on('click', function () {
+                initSelectId(function (sid) {
+                    sid.selectId('show', $('#DeviceOIDChargePower').val(), function (newId) {
+                        if (newId) {
+                            $('#DeviceOIDChargePower').val(newId).trigger('change');
+                        }
+                    });
+                });
+			});
+            $('#SelectDeviceOIDStartCharge').on('click', function () {
+                initSelectId(function (sid) {
+                    sid.selectId('show', $('#DeviceOIDStartCharge').val(), function (newId) {
+                        if (newId) {
+                            $('#DeviceOIDStartCharge').val(newId).trigger('change');
+                        }
+                    });
+                });
+			});
+            $('#SelectDeviceOIDStopCharge').on('click', function () {
+                initSelectId(function (sid) {
+                    sid.selectId('show', $('#DeviceOIDStopCharge').val(), function (newId) {
+                        if (newId) {
+                            $('#DeviceOIDStopCharge').val(newId).trigger('change');
+                        }
+                    });
+                });
+            });
 
 			//fill input elements a bit later
 			setTimeout(function () {
@@ -462,6 +528,7 @@
 
 				$('#DeviceSerialnumber').val(devices[id].SerialNr);
 				$('#DeviceMaxPower').val(devices[id].MaxPower);
+                $('#DeviceMinPower').val(devices[id].MinPower);
 				$('#DeviceInterruptionAllowed').prop("checked", devices[id].InterruptionsAllowed);
 
 				$('#DeviceMinOnTime').val(devices[id].MinOnTime);
@@ -473,6 +540,14 @@
 				$('#DeviceMeasurementMethod').select();
 
 				$('#DeviceOIDPower').val(devices[id].OID_Power);
+                $('#DeviceMeasurementUnit').val(devices[id].MeasurementUnit);
+
+				$('#DeviceOIDPlugConnected').val(devices[id].OID_PlugConnected);
+				$('#DeviceOIDIsCharging').val(devices[id].OID_IsCharging);
+				$('#DeviceOIDIsError').val(devices[id].OID_IsError);
+				$('#DeviceOIDChargePower').val(devices[id].OID_ChargePower);
+				$('#DeviceOIDStartCharge').val(devices[id].OID_StartCharge);
+				$('#DeviceOIDStopCharge').val(devices[id].OID_StopCharge);
 
 				$('#DeviceStatusDetectionType').val(devices[id].StatusDetection);
 				$('#DeviceStatusDetectionType').select();
@@ -638,6 +713,7 @@
 						devices[id].Type = $('#DeviceType').val();
 						devices[id].SerialNr = $('#DeviceSerialnumber').val();
 						devices[id].MaxPower = $('#DeviceMaxPower').val();
+                        devices[id].MinPower = $('#DeviceMinPower').val();
 						devices[id].InterruptionsAllowed = $('#DeviceInterruptionAllowed').prop("checked");
 						devices[id].MinOnTime = $('#DeviceMinOnTime').val();
 						devices[id].MaxOnTime = $('#DeviceMaxOnTime').val();
@@ -645,6 +721,14 @@
 						devices[id].MaxOffTime = $('#DeviceMaxOffTime').val();
 						devices[id].MeasurementMethod = $('#DeviceMeasurementMethod').val();
 						devices[id].OID_Power = $('#DeviceOIDPower').val();
+                        devices[id].MeasurementUnit=$('#DeviceMeasurementUnit').val();
+                        devices[id].OID_PlugConnected=$('#DeviceOIDPlugConnected').val();
+                        devices[id].OID_IsCharging=$('#DeviceOIDIsCharging').val();
+                        devices[id].OID_IsError=$('#DeviceOIDIsError').val();
+                        devices[id].OID_ChargePower=$('#DeviceOIDChargePower').val();
+                        devices[id].OID_StartCharge=$('#DeviceOIDStartCharge').val();
+                        devices[id].OID_StopCharge=$('#DeviceOIDStopCharge').val();
+
 						devices[id].StatusDetection = $('#DeviceStatusDetectionType').val();
 						devices[id].StatusDetectionLimit = $('#DeviceStatusDetectionLimit').val();
 						devices[id].StatusDetectionLimitTimeOn = $('#DeviceStatusDetectionLimitTimeOn').val();
@@ -731,7 +815,17 @@
                     console.log("set TimerCancelIfNotOnTime=5 ");
                     devices[id].TimerCancelIfNotOnTime = 5;
                 }
+			}
+
+            console.log(id + " " + typeof devices[id].MeasurementUnit + " " + devices[id].MeasurementUnit );
+            if (typeof devices[id].MeasurementUnit == undefined || devices[id].MeasurementUnit == null || devices[id].MeasurementUnit == "" ) {
+
+                console.log("set MeasurementUnit=W ");
+                devices[id].MeasurementUnit = "W";
+                
             }
+
+            
 		}
 
 		var selectId;
@@ -960,6 +1054,8 @@
 								<li id="page-device-counter" class="tab col s2"><a href="#tab-popup_device_counter" class="translate">counter</a></li>
 								<li id="page-device-switch" class="tab col s2"><a href="#tab-popup_device_switch" class="translate">switch</a></li>
 								<li id="page-device-timers" class="tab col s2"><a href="#tab-popup_device_timers" class="translate">EnergyRequests</a></li>
+								<li id="page-device-wallbox" class="tab col s2"><a href="#tab-popup_device_wallbox" class="translate">wallbox</a></li>
+
 								<!--
 				<li id="page-device-test" class="tab col s2"><a href="#tab-popup_device_test" class="translate">Test</a></li>
 			-->
@@ -967,12 +1063,7 @@
 						</div>
 
 
-						<!-- todo
-	add:
-		optionalEnergy
-		url
-
-	-->
+						
 						<!-- tab main-->
 						<div id="tab-popup_device_main" class="col s12 page">
 							<div class="row">
@@ -982,13 +1073,7 @@
 							</div>
 
 							<div class="row">
-								<!-- these values are changeable in main overview table and not here in details-->
-								<!--
-			<div class="input-field col s3">
-				<input type="checkbox" id="DeviceIsActive" class="value" />
-				<label for="DeviceIsActive" class="translate">DeviceIsActive</label>
-			</div>
-				-->
+								
 								<div class="input-field col s3">
 									<input type="text" id="DeviceID" class="value" readonly />
 									<label for="DeviceID" class="translate">DeviceID</label>
@@ -1034,6 +1119,10 @@
 
 
 							<div class="row">
+								<div class="input-field col s3">
+									<input type="number" id="DeviceMinPower" class="value" />
+									<label for="DeviceMinPower" class="translate">DeviceMinPower</label>
+								</div>
 								<div class="input-field col s3">
 									<input type="number" id="DeviceMaxPower" class="value" />
 									<label for="DeviceMaxPower" class="translate">DeviceMaxPower</label>
@@ -1093,6 +1182,14 @@
 
 								<div class="col s1 m2 l1">
 									<a id="SelectDeviceOIDPower" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
+								</div>
+
+								<div class="input-field col s3">
+									<select id="DeviceMeasurementUnit" class="value">
+										<option value="W" >W</option>
+										<option value="kW" >kW</option>
+									</select>
+									<label for="DeviceMeasurementUnit" class="translate">DeviceMeasurementUnit</label>
 								</div>
 
 							</div>
@@ -1281,7 +1378,7 @@
 			</div>
 		</div>
 			-->
-							
+
 							<div class="row">
 								<div id="divDeviceCancelRequests" class="row">
 									<div class="input-field col s3">
@@ -1294,7 +1391,7 @@
 									</div>
 								</div>
 							</div>
-			
+
 							<div class="row">
 								<div class="col s12" id="DeviceEnergyRequests">
 									<a id="addNewRequestPeriod" class="btn-floating waves-effect waves-light blue table-button-add" title="add request period"><i class="material-icons">add</i></a>
@@ -1310,7 +1407,7 @@
 													<th id="tableRequests_col4" data-name="LatestEndTime" data-type="text" style="background: #64b5f6 " class="header translate">LatestEndTime</th>
 													<th id="tableRequests_col5" data-name="MinRunTime" data-type="text" style="background: #64b5f6 " class="header translate">MinRunTime</th>
 													<th id="tableRequests_col6" data-name="MaxRunTime" data-type="text" style="background: #64b5f6 " class="header translate">MaxRunTime</th>
-													
+
 													<th data-buttons="up down delete" style="width: 100px; background: #64b5f6"></th>
 												</tr>
 											</thead>
@@ -1321,8 +1418,77 @@
 						</div>
 
 
-						<!-- tab energy requests-->
-						<!--
+
+						<!-- tab wallbox-->
+						
+						<div id="tab-popup_device_wallbox" class="col s12 page">
+							<div class="row">
+								<div>
+									<div class="input-field col s3">
+										<input type="text" id="DeviceOIDPlugConnected" class="value" />
+										<label for="DeviceOIDPlugConnected" class="translate">DeviceOIDPlugConnected</label>
+									</div>
+									<div class="col s1 m2 l1">
+										<a id="SelectDeviceOIDPlugConnected" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
+									</div>
+								</div>
+
+								<div>
+									<div class="input-field col s3">
+										<input type="text" id="DeviceOIDIsCharging" class="value" />
+										<label for="DeviceOIDIsCharging" class="translate">DeviceOIDIsCharging</label>
+									</div>
+									<div class="col s1 m2 l1">
+										<a id="SelectDeviceOIDIsCharging" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
+									</div>
+								</div>
+
+								<div>
+									<div class="input-field col s3">
+										<input type="text" id="DeviceOIDIsError" class="value" />
+										<label for="DeviceOIDIsError" class="translate">DeviceOIDIsError</label>
+									</div>
+									<div class="col s1 m2 l1">
+										<a id="SelectDeviceOIDIsError" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div>
+									<div class="input-field col s3">
+										<input type="text" id="DeviceOIDChargePower" class="value" />
+										<label for="DeviceOIDChargePower" class="translate">DeviceOIDChargePower</label>
+									</div>
+									<div class="col s1 m2 l1">
+										<a id="SelectDeviceOIDChargePower" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
+									</div>
+								</div>
+
+								<div>
+									<div class="input-field col s3">
+										<input type="text" id="DeviceOIDStartCharge" class="value" />
+										<label for="DeviceOIDStartCharge" class="translate">DeviceOIDStartCharge</label>
+									</div>
+									<div class="col s1 m2 l1">
+										<a id="SelectDeviceOIDStartCharge" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
+									</div>
+								</div>
+
+								<div>
+									<div class="input-field col s3">
+										<input type="text" id="DeviceOIDStopCharge" class="value" />
+										<label for="DeviceOIDStopCharge" class="translate">DeviceOIDStopCharge</label>
+									</div>
+									<div class="col s1 m2 l1">
+										<a id="SelectDeviceOIDStopCharge" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+							<!-- tab energy requests-->
+							<!--
 	<div id="tab-popup_device_test" class="col s12 page">
 		<div class="row">
 			<div class="col s12" id="test">
@@ -1343,7 +1509,7 @@
 	</div>
 
 		-->
-					</div>
+						</div>
 				</div>
 
 				<div class="modal-footer">
