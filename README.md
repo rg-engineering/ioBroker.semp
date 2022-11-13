@@ -54,7 +54,8 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 ## Changelog
 
 ### 0.0.5 (in progress)
-
+* (René) MinPowerConsumption added
+* (René) see issue #20: support of wallboxes
 
 ### 0.0.4 (2022-11-07)
 * (René) see issue #15: support of more then one time periods for energy requests
