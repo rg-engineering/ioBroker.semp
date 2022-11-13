@@ -2,78 +2,83 @@
     "common": {
         "name": "semp",
         "version": "0.0.5",
-      "news": {
-        "0.0.5": {
-          "en": ""
-        },
-          "0.0.4": {
-            "en": "support of more then one time periods for energy requests",
-            "de": "Unterstützung von mehr als einem Zeitraum für Energieanfragen",
-            "ru": "поддержка более одного периода времени для запросов энергии",
-            "pt": "suporte de mais de um período de tempo para solicitações de energia",
-            "nl": "ondersteuning van meer dan één tijdsperiode voor energieverzoeken",
-            "fr": "prise en charge de plusieurs périodes de temps pour les demandes d'énergie",
-            "it": "supporto di più periodi di tempo per richieste di energia",
-            "es": "soporte de más de un período de tiempo para solicitudes de energía",
-            "pl": "obsługa więcej niż jednego przedziału czasowego dla wniosków o energię",
-            "zh-cn": "支持多个时间段的能源请求"
-          },
-          "0.0.2": {
-            "en": "threshold for status detection with timer",
-            "de": "Schwellwert für Zustandserkennung mit Timer",
-            "ru": "порог обнаружения состояния с таймером",
-            "pt": "limite para detecção de status com temporizador",
-            "nl": "drempel voor statusdetectie met timer",
-            "fr": "seuil de détection d'état avec minuterie",
-            "it": "soglia per il rilevamento dello stato con timer",
-            "es": "umbral para detección de estado con temporizador",
-            "pl": "próg wykrywania stanu z timerem",
-            "zh-cn": "带定时器的状态检测阈值"
-          },
-          "0.0.1": {
-            "en": "initial release",
-            "de": "Erstveröffentlichung",
-            "ru": "Начальная версия",
-            "pt": "lançamento inicial",
-            "nl": "Eerste uitgave",
-            "fr": "Première version",
-            "it": "Versione iniziale",
-            "es": "Versión inicial",
-            "pl": "Pierwsze wydanie",
-            "zh-cn": "首次出版"
-          }
+        "news": {
+            "0.0.5": {
+                "en": ""
+            },
+            "0.0.4": {
+                "en": "support of more then one time periods for energy requests",
+                "de": "Unterstützung von mehr als einem Zeitraum für Energieanfragen",
+                "ru": "поддержка более одного периода времени для запросов энергии",
+                "pt": "suporte de mais de um período de tempo para solicitações de energia",
+                "nl": "ondersteuning van meer dan één tijdsperiode voor energieverzoeken",
+                "fr": "prise en charge de plusieurs périodes de temps pour les demandes d'énergie",
+                "it": "supporto di più periodi di tempo per richieste di energia",
+                "es": "soporte de más de un período de tiempo para solicitudes de energía",
+                "pl": "obsługa więcej niż jednego przedziału czasowego dla wniosków o energię",
+                "zh-cn": "支持多个时间段的能源请求",
+                "uk": "підтримка більш ніж одного періоду часу для запитів на енергію"
+            },
+            "0.0.2": {
+                "en": "threshold for status detection with timer",
+                "de": "Schwellwert für Zustandserkennung mit Timer",
+                "ru": "порог обнаружения состояния с таймером",
+                "pt": "limite para detecção de status com temporizador",
+                "nl": "drempel voor statusdetectie met timer",
+                "fr": "seuil de détection d'état avec minuterie",
+                "it": "soglia per il rilevamento dello stato con timer",
+                "es": "umbral para detección de estado con temporizador",
+                "pl": "próg wykrywania stanu z timerem",
+                "zh-cn": "带定时器的状态检测阈值",
+                "uk": "поріг для виявлення стану за допомогою таймера"
+            },
+            "0.0.1": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "zh-cn": "首次出版",
+                "uk": "початковий випуск"
+            }
         },
         "titleLang": {
-          "en": "SMA SEMP gateway",
-          "de": "SMA SEMP-Gateway",
-          "ru": "Шлюз SMA SEMP",
-          "pt": "Gateway SMA SEMP",
-          "nl": "SMA SEMP-gateway",
-          "fr": "Passerelle SMA SEMP",
-          "it": "Gateway SMA SEMP",
-          "es": "Puerta de enlace SMA SEMP",
-          "pl": "Bramka SMA SEMP",
-          "zh-cn": "SMA SEMP 网关"
+            "en": "SMA SEMP gateway",
+            "de": "SMA SEMP-Gateway",
+            "ru": "Шлюз SMA SEMP",
+            "pt": "Gateway SMA SEMP",
+            "nl": "SMA SEMP-gateway",
+            "fr": "Passerelle SMA SEMP",
+            "it": "Gateway SMA SEMP",
+            "es": "Puerta de enlace SMA SEMP",
+            "pl": "Bramka SMA SEMP",
+            "zh-cn": "SMA SEMP 网关",
+            "uk": "Шлюз SMA SEMP"
         },
         "desc": {
-          "en": "interface to SMA SunnyPortal via SunnyHomeManager and SEMP",
-          "de": "Schnittstelle zu SMA SunnyPortal über SunnyHomeManager und SEMP",
-          "ru": "интерфейс к SMA SunnyPortal через SunnyHomeManager и SEMP",
-          "pt": "interface para SMA SunnyPortal via SunnyHomeManager e SEMP",
-          "nl": "interface naar SMA SunnyPortal via SunnyHomeManager en SEMP",
-          "fr": "interface avec SMA SunnyPortal via SunnyHomeManager et SEMP",
-          "it": "interfaccia a SMA SunnyPortal tramite SunnyHomeManager e SEMP",
-          "es": "interfaz con SMA SunnyPortal a través de SunnyHomeManager y SEMP",
-          "pl": "interfejs do SMA SunnyPortal przez SunnyHomeManager i SEMP",
-          "zh-cn": "通过 SunnyHomeManager 和 SEMP 连接到 SMA SunnyPortal"
+            "en": "interface to SMA SunnyPortal via SunnyHomeManager and SEMP",
+            "de": "Schnittstelle zu SMA SunnyPortal über SunnyHomeManager und SEMP",
+            "ru": "интерфейс к SMA SunnyPortal через SunnyHomeManager и SEMP",
+            "pt": "interface para SMA SunnyPortal via SunnyHomeManager e SEMP",
+            "nl": "interface naar SMA SunnyPortal via SunnyHomeManager en SEMP",
+            "fr": "interface avec SMA SunnyPortal via SunnyHomeManager et SEMP",
+            "it": "interfaccia a SMA SunnyPortal tramite SunnyHomeManager e SEMP",
+            "es": "interfaz con SMA SunnyPortal a través de SunnyHomeManager y SEMP",
+            "pl": "interfejs do SMA SunnyPortal przez SunnyHomeManager i SEMP",
+            "zh-cn": "通过 SunnyHomeManager 和 SEMP 连接到 SMA SunnyPortal",
+            "uk": "інтерфейс до SMA SunnyPortal через SunnyHomeManager і SEMP"
         },
         "authors": [
-          "René G. <info@rg-engineering.eu>"
+            "René G. <info@rg-engineering.eu>"
         ],
         "keywords": [
-          "SMA",
-          "SunnyPortal",
-          "SEMP"
+            "SMA",
+            "SunnyPortal",
+            "SEMP"
         ],
         "license": "MIT",
         "platform": "Javascript/Node.js",
@@ -91,16 +96,16 @@
         "dataSource": "push",
         "materialize": true,
         "dependencies": [
-          {
-            "js-controller": ">=2.0.0"
-          }
+            {
+                "js-controller": ">=2.0.0"
+            }
         ],
         "plugins": {
-          "sentry": {
-            "dsn": "https://84efb82607d94201a8d1d3b180f10024@o390433.ingest.sentry.io/4503953214275584"
-          }
+            "sentry": {
+                "dsn": "https://84efb82607d94201a8d1d3b180f10024@o390433.ingest.sentry.io/4503953214275584"
+            }
         }
-      },
+    },
     "native": {
         "IPAddress": "",
         "UUID": "",
