@@ -541,7 +541,7 @@
 
 				$('#DeviceOIDPower').val(devices[id].OID_Power);
                 $('#DeviceMeasurementUnit').val(devices[id].MeasurementUnit);
-
+                $('#DeviceMeasurementUnit').select();
 				$('#DeviceOIDPlugConnected').val(devices[id].OID_PlugConnected);
 				$('#DeviceOIDIsCharging').val(devices[id].OID_IsCharging);
 				$('#DeviceOIDIsError').val(devices[id].OID_IsError);
@@ -820,7 +820,7 @@
             console.log(id + " " + typeof devices[id].MeasurementUnit + " " + devices[id].MeasurementUnit );
             if (typeof devices[id].MeasurementUnit == undefined || devices[id].MeasurementUnit == null || devices[id].MeasurementUnit == "" ) {
 
-                console.log("set MeasurementUnit=W ");
+                console.log("set MeasurementUnit= W");
                 devices[id].MeasurementUnit = "W";
                 
             }
@@ -1184,7 +1184,7 @@
 									<a id="SelectDeviceOIDPower" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
 								</div>
 
-								<div class="input-field col s3">
+								<div class="input-field col s2">
 									<select id="DeviceMeasurementUnit" class="value">
 										<option value="W" >W</option>
 										<option value="kW" >kW</option>
