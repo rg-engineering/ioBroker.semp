@@ -6,6 +6,8 @@
     "Charger": "Oplader",
     "Days": "dagen",
     "DeviceBaseID": "Apparaatbasis-ID",
+    "DeviceBatteryCapacity": "Batterijcapaciteit [Wh]",
+    "DeviceBatteryCapacity ": "Batterijcapaciteit [Wh]",
     "DeviceHasOIDSwitch": "Heeft object-ID-schakelaar",
     "DeviceID": "apparaat ID",
     "DeviceInterruptionAllowed": "Onderbrekingen toegestaan",

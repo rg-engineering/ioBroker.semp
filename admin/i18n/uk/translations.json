@@ -6,6 +6,8 @@
     "Charger": "Зарядний пристрій",
     "Days": "днів",
     "DeviceBaseID": "Ідентифікатор бази пристрою",
+    "DeviceBatteryCapacity": "Ємність батареї [Вт·год]",
+    "DeviceBatteryCapacity ": "Ємність батареї [Вт·год]",
     "DeviceHasOIDSwitch": "Має перемикач ID об'єкта",
     "DeviceID": "ID пристрою",
     "DeviceInterruptionAllowed": "Переривання дозволено",

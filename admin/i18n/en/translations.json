@@ -6,6 +6,8 @@
     "Charger": "Charger",
     "Days": "Days",
     "DeviceBaseID": "Device Base ID",
+    "DeviceBatteryCapacity": "Battery Capacity [Wh]",
+    "DeviceBatteryCapacity ": "",
     "DeviceHasOIDSwitch": "Has object-ID Switch",
     "DeviceID": "device ID",
     "DeviceInterruptionAllowed": "Interruptions Allowed",

@@ -6,6 +6,8 @@
     "Charger": "充电器",
     "Days": "天",
     "DeviceBaseID": "设备基础 ID",
+    "DeviceBatteryCapacity": "电池容量 [Wh]",
+    "DeviceBatteryCapacity ": "电池容量 [Wh]",
     "DeviceHasOIDSwitch": "具有对象 ID 开关",
     "DeviceID": "设备ID",
     "DeviceInterruptionAllowed": "允许中断",

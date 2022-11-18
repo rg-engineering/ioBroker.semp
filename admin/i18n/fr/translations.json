@@ -6,6 +6,8 @@
     "Charger": "Chargeur",
     "Days": "Journées",
     "DeviceBaseID": "ID de base de l'appareil",
+    "DeviceBatteryCapacity": "Capacité de la batterie [Wh]",
+    "DeviceBatteryCapacity ": "Capacité de la batterie [Wh]",
     "DeviceHasOIDSwitch": "Commutateur d'ID d'objet",
     "DeviceID": "Reference de l'appareil",
     "DeviceInterruptionAllowed": "Interruptions autorisées",

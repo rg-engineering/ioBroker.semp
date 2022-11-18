@@ -6,6 +6,8 @@
     "Charger": "Caricabatterie",
     "Days": "Giorni",
     "DeviceBaseID": "ID base del dispositivo",
+    "DeviceBatteryCapacity": "Capacità della batteria [Wh]",
+    "DeviceBatteryCapacity ": "Capacità della batteria [Wh]",
     "DeviceHasOIDSwitch": "Ha un interruttore ID oggetto",
     "DeviceID": "ID del dispositivo",
     "DeviceInterruptionAllowed": "Interruzioni consentite",

@@ -6,6 +6,8 @@
     "Charger": "Ładowarka",
     "Days": "Dni",
     "DeviceBaseID": "Identyfikator podstawowy urządzenia",
+    "DeviceBatteryCapacity": "Pojemność baterii [Wh]",
+    "DeviceBatteryCapacity ": "Pojemność baterii [Wh]",
     "DeviceHasOIDSwitch": "Ma przełącznik identyfikatora obiektu",
     "DeviceID": "identyfikator urzadzenia",
     "DeviceInterruptionAllowed": "Przerwy dozwolone",
