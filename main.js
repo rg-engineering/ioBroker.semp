@@ -252,11 +252,24 @@ class Semp extends utils.Adapter {
 					this.gw.setPowerDevice(device.ID, state.val);
 					bRet = true;
 				}
-
 				if (device.OID_Status === id) {
 					this.gw.setOnOffDevice(device.ID, state.val);
 					bRet = true;
 				}
+				//wallbox
+				if (device.OID_PlugConnected === id) {
+					this.gw.setWallboxPlugConnected(device.ID, state.val);
+					bRet = true;
+				}
+				if (device.OID_IsCharging === id) {
+					this.gw.setWallboxIsCharging(device.ID, state.val);
+					bRet = true;
+				}
+				if (device.OID_IsError === id) {
+					this.gw.setWallboxIsError(device.ID, state.val);
+					bRet = true;
+				}
+
 			}
 		}
 

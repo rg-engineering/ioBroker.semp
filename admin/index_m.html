@@ -541,7 +541,9 @@
 
 				$('#DeviceOIDPower').val(devices[id].OID_Power);
                 $('#DeviceMeasurementUnit').val(devices[id].MeasurementUnit);
-                $('#DeviceMeasurementUnit').select();
+				$('#DeviceMeasurementUnit').select();
+
+                $('#DeviceBatteryCapacity').val(devices[id].BatteryCapacity);
 				$('#DeviceOIDPlugConnected').val(devices[id].OID_PlugConnected);
 				$('#DeviceOIDIsCharging').val(devices[id].OID_IsCharging);
 				$('#DeviceOIDIsError').val(devices[id].OID_IsError);
@@ -721,7 +723,8 @@
 						devices[id].MaxOffTime = $('#DeviceMaxOffTime').val();
 						devices[id].MeasurementMethod = $('#DeviceMeasurementMethod').val();
 						devices[id].OID_Power = $('#DeviceOIDPower').val();
-                        devices[id].MeasurementUnit=$('#DeviceMeasurementUnit').val();
+						devices[id].MeasurementUnit = $('#DeviceMeasurementUnit').val();
+                        devices[id].BatteryCapacity=$('#DeviceBatteryCapacity').val();
                         devices[id].OID_PlugConnected=$('#DeviceOIDPlugConnected').val();
                         devices[id].OID_IsCharging=$('#DeviceOIDIsCharging').val();
                         devices[id].OID_IsError=$('#DeviceOIDIsError').val();
@@ -1063,7 +1066,7 @@
 						</div>
 
 
-						
+
 						<!-- tab main-->
 						<div id="tab-popup_device_main" class="col s12 page">
 							<div class="row">
@@ -1073,7 +1076,7 @@
 							</div>
 
 							<div class="row">
-								
+
 								<div class="input-field col s3">
 									<input type="text" id="DeviceID" class="value" readonly />
 									<label for="DeviceID" class="translate">DeviceID</label>
@@ -1127,13 +1130,15 @@
 									<input type="number" id="DeviceMaxPower" class="value" />
 									<label for="DeviceMaxPower" class="translate">DeviceMaxPower</label>
 								</div>
+							</div>
 
+							<div class="row">
 								<div class="input-field col s3">
 									<input type="checkbox" id="DeviceInterruptionAllowed" class="value" />
 									<label for="DeviceInterruptionAllowed" class="translate">DeviceInterruptionAllowed</label>
 								</div>
-
 							</div>
+
 							<div class="row">
 								<div id="divDeviceMinOnTime" class="input-field col s3">
 									<input type="number" id="DeviceMinOnTime" class="value" />
@@ -1186,8 +1191,8 @@
 
 								<div class="input-field col s2">
 									<select id="DeviceMeasurementUnit" class="value">
-										<option value="W" >W</option>
-										<option value="kW" >kW</option>
+										<option value="W">W</option>
+										<option value="kW">kW</option>
 									</select>
 									<label for="DeviceMeasurementUnit" class="translate">DeviceMeasurementUnit</label>
 								</div>
@@ -1420,8 +1425,19 @@
 
 
 						<!-- tab wallbox-->
-						
+
 						<div id="tab-popup_device_wallbox" class="col s12 page">
+
+							<div class="row">
+
+							</div>
+							<div class="row">
+								<div class="input-field col s3">
+									<input type="number" id="DeviceBatteryCapacity" class="value" min="0"/>
+									<label for="DeviceBatteryCapacity" class="translate">DeviceBatteryCapacity</label>
+								</div>
+							</div>
+
 							<div class="row">
 								<div>
 									<div class="input-field col s3">
