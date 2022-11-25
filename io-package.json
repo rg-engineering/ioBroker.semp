@@ -4,7 +4,17 @@
         "version": "0.0.5",
         "news": {
             "0.0.5": {
-                "en": ""
+                "en": "support of wallboxes",
+                "de": "Unterstützung von Wallboxen",
+                "ru": "поддержка настенных ящиков",
+                "pt": "suporte de caixas de embutir",
+                "nl": "ondersteuning van wallboxen",
+                "fr": "prise en charge des boîtiers muraux",
+                "it": "supporto di wallbox",
+                "es": "soporte de cajas de empotrar",
+                "pl": "obsługa wallboxów",
+                "uk": "опори wallbox",
+                "zh-cn": "墙盒的支持"
             },
             "0.0.4": {
                 "en": "support of more then one time periods for energy requests",
