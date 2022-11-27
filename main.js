@@ -71,9 +71,7 @@ class Semp extends utils.Adapter {
 		this.on("unload", this.onUnload.bind(this));
 
 		this.gw = null;
-		//this.DummyDeviceUpdateIntervalID = null;
 
-		//this.RequestTimerID = null;
 	}
 
 	/**
@@ -108,17 +106,8 @@ class Semp extends utils.Adapter {
 					await this.gw.start();
 					this.log.debug("Started all!");
 
-					//=================================
-					//just for test:
-					//this.gw.addDummyDevice();
-
-					//this.DummyDeviceUpdateIntervalID = setInterval(this.UpdateDummyDevice.bind(this), 1 * 60 * 1000);
-					//=================================
-
 					await this.AddDevices();
-					//this.checkRequests();
-					//this.StartRequstIntervall();
-
+					
 					this.UpdateData();
 				}
 			}
