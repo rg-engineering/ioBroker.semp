@@ -60,7 +60,19 @@
 
 		function showHideSettings() {
             console.log("showHideSettings");
- 
+
+            if ($('#DeviceType').val() == "EVCharger") {
+                $('#page-device-wallbox').show();
+
+                $('#DeviceTimerActive').prop("checked", false);
+                $('#DeviceTimerActive').prop('disabled', true);
+            }
+            else {
+                $('#page-device-wallbox').hide();
+                $('#DeviceTimerActive').prop('disabled', false);
+            }
+
+
 			if ($('#DeviceInterruptionAllowed').prop("checked")) {
                 //console.log("show DeviceInterruptionAllowed");
 				$('#divDeviceMinOnTime').show();
@@ -175,12 +187,7 @@
             }
 			*/
 
-			if ($('#DeviceType').val() == "EVCharger") {
-				$('#page-device-wallbox').show();
-			}
-			else {
-                $('#page-device-wallbox').hide();
-            }
+			
 
 
 		}
