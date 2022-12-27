@@ -27,3 +27,4 @@ admin/i18n/*/flat.txt
 /obj/Debug/
 /bin/
 *.orig
+/readme.txt
