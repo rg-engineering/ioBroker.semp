@@ -11,6 +11,7 @@ const { v4: uuidv4 } = require('uuid');
 const Gateway = require("./lib/semp/Gateway").Gateway;
 
 
+
 /* to do
 
 * Hinweise im admin:
@@ -19,35 +20,35 @@ const Gateway = require("./lib/semp/Gateway").Gateway;
     * BaseID
     * 
  * admin
- *	ID nur ändern, wenn sie nicht dem Format entspricht
+ *	ID nur Ã¤ndern, wenn sie nicht dem Format entspricht
  *	
- *	readme bzgl. der einstellbaren Parameter vervollständigen
+ *	readme bzgl. der einstellbaren Parameter vervollstÃ¤ndigen
  *	
  *	
  *	
- *	Geräte nach Ende der max Laufzeit ausschalten, damit sie beim nächsten Start wieder angeschaltet werden können? -> max. als Option laut Doku
+ *	GerÃ¤te nach Ende der max Laufzeit ausschalten, damit sie beim nÃ¤chsten Start wieder angeschaltet werden kÃ¶nnen? -> max. als Option laut Doku
  *	warum schickt shm manchmal alle Minute ein On:true, und manchmal nicht? -> wenn nicht von false auf true wechselt
  *	Anlauferkennung? -> erledigt
  *	max. Leistung: wie/wann kommt das?
  *	
- *	EnergieAnforderung zurückziehen, wenn Gerät nicht einschaltet, Zeit einstellbar -> erledigt
- *	Energieanforderung abbrechen, wenn Gerät ausschaltet, Zeit einstellbar
- *	Time umbenenenn in "Zeit für EnergieAnforderung" -> erledigz
- *	Feiertag / Urlaub zu hause für Timer hinzufügen
+ *	EnergieAnforderung zurÃ¼ckziehen, wenn GerÃ¤t nicht einschaltet, Zeit einstellbar -> erledigt
+ *	Energieanforderung abbrechen, wenn GerÃ¤t ausschaltet, Zeit einstellbar
+ *	Time umbenenenn in "Zeit fÃ¼r EnergieAnforderung" -> erledigz
+ *	Feiertag / Urlaub zu hause fÃ¼r Timer hinzufÃ¼gen
  *	mehrere Anforderungen pro Tag -> in Arbeit
 
-Admin umbennenen oder Übersetzung:
- * Basis-ID der Geräte
- * Hinweis bei Zähler-tab
+Admin umbennenen oder Ãœbersetzung:
+ * Basis-ID der GerÃ¤te
+ * Hinweis bei ZÃ¤hler-tab
  * Objekt-ID Power
- * Einschätzung -> Schätzung
+ * EinschÃ¤tzung -> SchÃ¤tzung
  * Hinweis im Schalter-tab
  * immer auf -> immer ein
  * hat Objekt-ID-Schalter ???
- * Timer-tab -> Zeitsteuerung für Energieanforderung
+ * Timer-tab -> Zeitsteuerung fÃ¼r Energieanforderung
 
 
-* Geräte aus gateway hinzufügen
+* GerÃ¤te aus gateway hinzufÃ¼gen
 
 
 */
