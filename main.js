@@ -219,11 +219,21 @@ class Semp extends utils.Adapter {
 	async onStateChange(id, state) {
 		if (state) {
 			// The state was changed
-			let bRet = this.UpdateDevice(id, state);
+			const ids = id.split(".");
 
-			if (!bRet) {
-				this.log.warn(`state ${id} changed: ${state.val} (ack = ${state.ack}) but not handled`);
-            }
+			if (!state.ack || ids[0] != "semp") {
+
+				let bRet = this.UpdateDevice(id, state);
+
+				if (!bRet) {
+					this.log.warn(`state ${id} changed: ${state.val} (ack = ${state.ack}) but not handled`);
+				}
+				else {
+					if (ids[0] == "semp") {
+						this.setForeignState(id, { ack: true });
+					}
+				}
+			}
 		} else {
 			// The state was deleted
 			this.log.info(`state ${id} deleted`);
@@ -260,6 +270,18 @@ class Semp extends utils.Adapter {
 					bRet = true;
 				}
 
+				//state semp.0.Devices.newDevice2.MaxEnergy changed: 1102(ack = false) but not handled
+				const ids = id.split(".");
+				if (ids.length > 3 && ids[3] == device.Name) {
+					if (ids[4] == "MinEnergy") {
+						this.gw.setMinEnergy(device.ID, state.val);
+						bRet = true;
+					}
+					if (ids[4] == "MaxEnergy") {
+						this.gw.setMaxEnergy(device.ID, state.val);
+						bRet = true;
+					}
+				}
 			}
 		}
 

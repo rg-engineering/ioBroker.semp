@@ -21,7 +21,7 @@ For more details and for information how to disable the error reporting see [Sen
 
 ## SMA SEMP adapter for ioBroker
 
-Interface to SMA SunnyPortal via SunnyHomeManger and SEMP
+Interface to SMA SunnyPortal via SunnyHomeManager and SEMP
 
 Add your devices from ioBroker in SunnyPortal. 
 SunnyPortal can then better estimate your energy consumption and thus make better predictions and recommendations. But 
@@ -53,7 +53,10 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 
 ## Changelog
 
-### 0.0.5 (in progress)
+### 0.0.6 (in progress)
+* (René) wallboxes: minimum and maximum energy for charging is adjustable by datapoint, default: battery capacity (10% and 100%)
+
+### 0.0.5 (2022-12-27)
 * (René) MinPowerConsumption added
 * (René) see issue #20: support of wallboxes
 
