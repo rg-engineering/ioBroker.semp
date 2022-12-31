@@ -77,7 +77,7 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 ## License
 MIT License
 
-Copyright (c) 2022 rg-engineering <info@rg-engineering.eu>
+Copyright (c) 2022-2023 rg-engineering <info@rg-engineering.eu>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
