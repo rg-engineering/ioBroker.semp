@@ -42,8 +42,6 @@ Admin umbennenen oder Übersetzung:
  * hat Objekt-ID-Schalter ???
 
 
-* Geräte aus gateway hinzufügen
-
 
 */
 
