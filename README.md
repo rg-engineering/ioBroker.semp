@@ -53,7 +53,7 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 
 ## Changelog
 
-### 0.0.6 (in progress)
+### 0.0.7 (in progress)
 * (René) wallboxes: minimum and maximum energy for charging is adjustable by datapoint, default: battery capacity (10% and 100%)
 
 ### 0.0.5 (2022-12-27)
