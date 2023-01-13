@@ -535,7 +535,7 @@
 
 				$('#DeviceSerialnumber').val(devices[id].SerialNr);
 				$('#DeviceMaxPower').val(devices[id].MaxPower);
-                $('#DeviceMinPower').val(devices[id].MinPower);
+				$('#DeviceMinPower').val(devices[id].MinPower);
 				$('#DeviceInterruptionAllowed').prop("checked", devices[id].InterruptionsAllowed);
 
 				$('#DeviceMinOnTime').val(devices[id].MinOnTime);
@@ -547,10 +547,10 @@
 				$('#DeviceMeasurementMethod').select();
 
 				$('#DeviceOIDPower').val(devices[id].OID_Power);
-                $('#DeviceMeasurementUnit').val(devices[id].MeasurementUnit);
+				$('#DeviceMeasurementUnit').val(devices[id].MeasurementUnit);
 				$('#DeviceMeasurementUnit').select();
 
-                $('#DeviceBatteryCapacity').val(devices[id].BatteryCapacity);
+				$('#DeviceBatteryCapacity').val(devices[id].BatteryCapacity);
 				$('#DeviceOIDPlugConnected').val(devices[id].OID_PlugConnected);
 				$('#DeviceOIDIsCharging').val(devices[id].OID_IsCharging);
 				$('#DeviceOIDIsError').val(devices[id].OID_IsError);
@@ -571,7 +571,7 @@
 				$('#DeviceOIDSwitch').val(devices[id].OID_Switch);
 				$('#DeviceSwitchOffAtEndOfTimer').prop("checked", devices[id].SwitchOffAtEndOfTimer);
 
-				
+
 				$('#DeviceTimerActive').prop("checked", devices[id].TimerActive);
 				/*
 				$('#DeviceTimerStart').val(devices[id].TimerStart);
@@ -641,9 +641,145 @@
 					}
 				}
 
-                console.log("DeviceEnergyRequests " + JSON.stringify(tempEnergyRequestPeriods));
+				console.log("DeviceEnergyRequests " + JSON.stringify(tempEnergyRequestPeriods));
 
 				values2table('DeviceEnergyRequests', tempEnergyRequestPeriods, myonChange, tableEnergyRequestOnReady);
+
+				//=====================================================================================================
+				// wallbox OID
+
+				//just make it backwards compatible 0.1.0 -> 0.2.0
+				tempWallboxOIDs = []; //clear it
+
+				if (devices[id].WallboxOIDs != null) {
+					tempWallboxOIDs = devices[id].WallboxOIDs;
+
+					todo
+
+					must provided -> setzen
+
+
+				}
+				else {
+					let tempOID = "";
+					let tempActive = false;
+
+					if (devices[id].OID_PlugConnected != null && devices[id].OID_PlugConnected.length > 5) {
+						tempOID = devices[id].OID_PlugConnected;
+						tempActive = true;
+					}
+					else {
+						tempOID = "";
+                        tempActive = true;
+					}
+					wallboxOID = {
+                        active: tempActive,
+						must: true,
+						Name: "DeviceOIDPlugConnected",
+						OID: tempOID,
+						Type: "Boolean",
+						SetValue: "true"
+					}
+					tempWallboxOIDs.push(wallboxOID);
+
+					if (devices[id].OID_IsCharging != null && devices[id].OID_IsCharging.length > 5) {
+						tempOID = devices[id].OID_IsCharging;
+                        tempActive = true;
+					}
+					else {
+						tempOID = "";
+						tempActive = false;
+					}
+					wallboxOID = {
+                        active: tempActive,
+						must: false,
+						Name: "DeviceOIDIsCharging",
+						OID: tempOID,
+						Type: "Boolean",
+						SetValue: "true"
+					}
+					tempWallboxOIDs.push(wallboxOID);
+
+					if (devices[id].OID_IsError != null && devices[id].OID_IsError.length > 5) {
+						tempOID = devices[id].OID_IsError;
+                        tempActive = true;
+					}
+					else {
+						tempOID = "";
+						tempActive = false;
+					}
+					wallboxOID = {
+                        active: tempActive,
+						must: false,
+						Name: "DeviceOIDIsError",
+						OID: tempOID,
+						Type: "Boolean",
+						SetValue: "true"
+					}
+					tempWallboxOIDs.push(wallboxOID);
+
+					if (devices[id].OID_ChargePower != null && devices[id].OID_ChargePower.length > 5) {
+						tempOID = devices[id].OID_ChargePower;
+                        tempActive = true;
+					}
+					else {
+						tempOID = "";
+                        tempActive = true;
+					}
+					wallboxOID = {
+                        active: tempActive,
+						must: true,
+						Name: "DeviceOIDChargePower",
+						OID: tempOID,
+						Type: "Number",
+						SetValue: "0"
+					}
+					tempWallboxOIDs.push(wallboxOID);
+
+					if (devices[id].OID_StartCharge != null && devices[id].OID_StartCharge.length > 5) {
+						tempOID = devices[id].OID_StartCharge;
+                        tempActive = true;
+					}
+					else {
+						tempOID = "";
+						tempActive = false;
+					}
+					wallboxOID = {
+                        active: tempActive,
+						must: false,
+						Name: "DeviceOIDStartCharge",
+						OID: tempOID,
+						Type: "Boolean",
+						SetValue: "true"
+					}
+					tempWallboxOIDs.push(wallboxOID);
+
+					if (devices[id].OID_StopCharge != null && devices[id].OID_StopCharge.length > 5) {
+						tempOID = devices[id].OID_StopCharge;
+                        tempActive = true;
+					}
+					else {
+						tempOID = "";
+						tempActive = false;
+					}
+					wallboxOID = {
+                        active: tempActive,
+						must: false,
+						Name: "DeviceOIDStopCharge",
+						OID: tempOID,
+						Type: "Boolean",
+						SetValue: "true"
+					}
+					tempWallboxOIDs.push(wallboxOID);
+
+				}
+			
+
+                console.log("Wallbox OID " + JSON.stringify(tempWallboxOIDs));
+
+                values2table('WallboxOid', tempWallboxOIDs, myonChange, tableWallboxOIDOnReady);
+
+				//xxx
 
 				//=========================================================================================================
 
@@ -687,12 +823,21 @@
 
                 }, 150);
             });
-			
+
+            
+
+
+
 		}
 
         function tableEnergyRequestOnReady() {
             console.log('tableEnergyRequestOnReady, do nothing');
 		}
+
+        function tableWallboxOIDOnReady() {
+            console.log('tableWallboxOIDOnReady, do nothing');
+        }
+
 
 		function tableDevicesOnReady() {
 			console.log('tableDevicesOnReady');
@@ -777,10 +922,12 @@
 						
 						let temp_energyrequests=table2values('DeviceEnergyRequests');
 						devices[id].EnergyRequestPeriods = temp_energyrequests;
-                        console.log("result " + JSON.stringify(temp_energyrequests));
+                        console.log("result EnergyRequestPeriods " + JSON.stringify(devices[id].EnergyRequestPeriods));
 						//====================================================================================
 
-
+                        let tempWallboxOIDs = table2values('WallboxOid');
+                        devices[id].WallboxOIDs = tempWallboxOIDs;
+                        console.log("result wallbox oids " + JSON.stringify(devices[id].WallboxOIDs));
 
 						CheckDeviceData(id);
 						//tabelle updaten nicht notwendig, da hier keine Daten aus der Tabelle geändert werden
@@ -1440,100 +1587,123 @@
 							</div>
 							<div class="row">
 								<div class="input-field col s3">
-									<input type="number" id="DeviceBatteryCapacity" class="value" min="0"/>
+									<input type="number" id="DeviceBatteryCapacity" class="value" min="0" />
 									<label for="DeviceBatteryCapacity" class="translate">DeviceBatteryCapacity</label>
 								</div>
 							</div>
 
-							<div class="row">
-								<div>
-									<div class="input-field col s3">
-										<input type="text" id="DeviceOIDPlugConnected" class="value" />
-										<label for="DeviceOIDPlugConnected" class="translate">DeviceOIDPlugConnected</label>
-									</div>
-									<div class="col s1 m2 l1">
-										<a id="SelectDeviceOIDPlugConnected" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
-									</div>
-								</div>
-
-								<div>
-									<div class="input-field col s3">
-										<input type="text" id="DeviceOIDIsCharging" class="value" />
-										<label for="DeviceOIDIsCharging" class="translate">DeviceOIDIsCharging</label>
-									</div>
-									<div class="col s1 m2 l1">
-										<a id="SelectDeviceOIDIsCharging" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
-									</div>
-								</div>
-
-								<div>
-									<div class="input-field col s3">
-										<input type="text" id="DeviceOIDIsError" class="value" />
-										<label for="DeviceOIDIsError" class="translate">DeviceOIDIsError</label>
-									</div>
-									<div class="col s1 m2 l1">
-										<a id="SelectDeviceOIDIsError" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div>
-									<div class="input-field col s3">
-										<input type="text" id="DeviceOIDChargePower" class="value" />
-										<label for="DeviceOIDChargePower" class="translate">DeviceOIDChargePower</label>
-									</div>
-									<div class="col s1 m2 l1">
-										<a id="SelectDeviceOIDChargePower" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
-									</div>
-								</div>
-
-								<div>
-									<div class="input-field col s3">
-										<input type="text" id="DeviceOIDStartCharge" class="value" />
-										<label for="DeviceOIDStartCharge" class="translate">DeviceOIDStartCharge</label>
-									</div>
-									<div class="col s1 m2 l1">
-										<a id="SelectDeviceOIDStartCharge" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
-									</div>
-								</div>
-
-								<div>
-									<div class="input-field col s3">
-										<input type="text" id="DeviceOIDStopCharge" class="value" />
-										<label for="DeviceOIDStopCharge" class="translate">DeviceOIDStopCharge</label>
-									</div>
-									<div class="col s1 m2 l1">
-										<a id="SelectDeviceOIDStopCharge" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
-									</div>
-								</div>
-							</div>
-						</div>
-
-
-							<!-- tab energy requests-->
 							<!--
-	<div id="tab-popup_device_test" class="col s12 page">
-		<div class="row">
-			<div class="col s12" id="test">
-				<a class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">add</i></a>
-				<div class="table-test-div">
-					<table id="table_test" class="table-values" style="width: 100%;">
-						<thead>
-							<tr>
-								<th id="test_col_0" data-name="id" style="background: #64b5f6;" class="translate">id</th>
+	<div class="row">
+		<div>
+			<div class="input-field col s3">
+				<input type="text" id="DeviceOIDPlugConnected" class="value" />
+				<label for="DeviceOIDPlugConnected" class="translate">DeviceOIDPlugConnected</label>
+			</div>
+			<div class="col s1 m2 l1">
+				<a id="SelectDeviceOIDPlugConnected" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
+			</div>
+		</div>
 
-								<th data-buttons="delete" style="width: 100px; background: #64b5f6"></th>
-							</tr>
-						</thead>
-					</table>
-				</div>
+		<div>
+			<div class="input-field col s3">
+				<input type="text" id="DeviceOIDIsCharging" class="value" />
+				<label for="DeviceOIDIsCharging" class="translate">DeviceOIDIsCharging</label>
+			</div>
+			<div class="col s1 m2 l1">
+				<a id="SelectDeviceOIDIsCharging" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
+			</div>
+		</div>
+
+		<div>
+			<div class="input-field col s3">
+				<input type="text" id="DeviceOIDIsError" class="value" />
+				<label for="DeviceOIDIsError" class="translate">DeviceOIDIsError</label>
+			</div>
+			<div class="col s1 m2 l1">
+				<a id="SelectDeviceOIDIsError" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
 			</div>
 		</div>
 	</div>
+	<div class="row">
+		<div>
+			<div class="input-field col s3">
+				<input type="text" id="DeviceOIDChargePower" class="value" />
+				<label for="DeviceOIDChargePower" class="translate">DeviceOIDChargePower</label>
+			</div>
+			<div class="col s1 m2 l1">
+				<a id="SelectDeviceOIDChargePower" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
+			</div>
+		</div>
 
+		<div>
+			<div class="input-field col s3">
+				<input type="text" id="DeviceOIDStartCharge" class="value" />
+				<label for="DeviceOIDStartCharge" class="translate">DeviceOIDStartCharge</label>
+			</div>
+			<div class="col s1 m2 l1">
+				<a id="SelectDeviceOIDStartCharge" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
+			</div>
+		</div>
+
+		<div>
+			<div class="input-field col s3">
+				<input type="text" id="DeviceOIDStopCharge" class="value" />
+				<label for="DeviceOIDStopCharge" class="translate">DeviceOIDStopCharge</label>
+			</div>
+			<div class="col s1 m2 l1">
+				<a id="SelectDeviceOIDStopCharge" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
+			</div>
+		</div>
+	</div>
 		-->
+
+							<div class="row">
+								<div class="col s12" id="WallboxOid">
+
+									<div class="table-wallbox_oid-div">
+										<table id="table-wallbox_oid" class="table-values" style="width: 100%;">
+											<thead>
+												<tr>
+													<th id="tableWallboxOID_col1" data-name="active" data-type="checkbox" style="background: #64b5f6 " class="header translate">active</th>
+													<th id="tableWallboxOID_col2" data-name="must" data-type="checkbox"  style="background: #64b5f6 " class="header translate">must provided</th>
+													<th id="tableWallboxOID_col3" data-name="Name" data-type="select" data-options="DeviceOIDPlugConnected/DeviceOIDPlugConnected;DeviceOIDIsCharging/DeviceOIDIsCharging;DeviceOIDIsError/DeviceOIDIsError;DeviceOIDChargePower/DeviceOIDChargePower;DeviceOIDStartCharge/DeviceOIDStartCharge;DeviceOIDStopCharge/DeviceOIDStopCharge" style="background: #64b5f6 " class="header translate">Name</th>
+													<th id="tableWallboxOID_col4" data-name="OID" data-type="text" style="background: #64b5f6 " class="header translate">OID</th>
+													<th id="tableWallboxOID_col5" data-buttons="edit" style="width: 100px; background: #64b5f6"></th>
+													<th id="tableWallboxOID_col6" data-name="Type" data-type="select" data-options="Boolean/Boolean;Number/Number;" style="background: #64b5f6 " class="header translate">Type</th>
+													<th id="tableWallboxOID_col7" data-name="SetValue" data-type="text" style="background: #64b5f6 " class="header translate">Set/CheckValue</th>
+												</tr>
+											</thead>
+										</table>
+									</div>
+								</div>
+							</div>
 						</div>
+
+
+								<!-- tab energy requests-->
+								<!--
+		<div id="tab-popup_device_test" class="col s12 page">
+			<div class="row">
+				<div class="col s12" id="test">
+					<a class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">add</i></a>
+					<div class="table-test-div">
+						<table id="table_test" class="table-values" style="width: 100%;">
+							<thead>
+								<tr>
+									<th id="test_col_0" data-name="id" style="background: #64b5f6;" class="translate">id</th>
+
+									<th data-buttons="delete" style="width: 100px; background: #64b5f6"></th>
+								</tr>
+							</thead>
+						</table>
+					</div>
 				</div>
+			</div>
+		</div>
+
+			-->
+							</div>
+						</div>
 
 				<div class="modal-footer">
 					<a class="modal-action modal-close waves-effect waves-green btn btn-set"><i class="large material-icons left">check</i><span class="translate">Ok</span></a>

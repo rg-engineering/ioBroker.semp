@@ -247,19 +247,40 @@ class Semp extends utils.Adapter {
 					bRet = true;
 				}
 				//wallbox
-				if (device.OID_PlugConnected === id) {
-					this.gw.setWallboxPlugConnected(device.ID, state.val);
-					bRet = true;
-				}
-				if (device.OID_IsCharging === id) {
-					this.gw.setWallboxIsCharging(device.ID, state.val);
-					bRet = true;
-				}
-				if (device.OID_IsError === id) {
-					this.gw.setWallboxIsError(device.ID, state.val);
-					bRet = true;
-				}
+				
 
+				if (device.Type == "EVCharger" && device.WallboxOIDs != null) {
+					let OID_PlugConnected = "";
+					let OID_IsCharging = "";
+					let OID_IsError = "";
+
+					for (let o = 0; o < device.WallboxOIDs.length; o++) {
+						if (device.WallboxOIDs[o].active) {
+							if (device.WallboxOIDs[o].Name == "DeviceOIDPlugConnected") {
+								OID_PlugConnected = device.WallboxOIDs[o].OID;
+							}
+							else if (device.WallboxOIDs[o].Name == "DeviceOIDIsCharging") {
+								OID_IsCharging = device.WallboxOIDs[o].OID;
+							}
+							else if (device.WallboxOIDs[o].Name == "DeviceOIDIsError") {
+								OID_IsError = device.WallboxOIDs[o].OID;
+							}
+						}
+					}
+
+					if (OID_PlugConnected === id) {
+						this.gw.setWallboxPlugConnected(device.ID, state.val);
+						bRet = true;
+					}
+					if (OID_IsCharging === id) {
+						this.gw.setWallboxIsCharging(device.ID, state.val);
+						bRet = true;
+					}
+					if (OID_IsError === id) {
+						this.gw.setWallboxIsError(device.ID, state.val);
+						bRet = true;
+					}
+				}
 				//state semp.0.Devices.newDevice2.MaxEnergy changed: 1102(ack = false) but not handled
 				const ids = id.split(".");
 				if (ids.length > 3 && ids[3] == device.Name) {
