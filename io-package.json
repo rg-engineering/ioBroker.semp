@@ -61,7 +61,7 @@
         "readme": "https://github.com/rg-engineering/ioBroker.semp/blob/master/README.md",
         "loglevel": "info",
         "mode": "daemon",
-        "type": "protocols",
+        "type": "energy",
         "compact": true,
         "connectionType": "local",
         "dataSource": "push",
