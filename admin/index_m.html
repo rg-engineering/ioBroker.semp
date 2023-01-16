@@ -840,17 +840,13 @@
             $('#WallboxOid .table-wallbox_oid-div .table-values .values-buttons[data-command="edit"]').on('click', function () {
                 let id = $(this).data('index');
 
-                console.log('edit wallbox OID clicked ID=' + id);
+                console.log('edit wallbox OID clicked ID=' + id + " " + $('#WallboxOid .values-input[data-name="Name"][data-index="' + id + '"]').val());
 
                 initSelectId(function (sid) {
-                    sid.selectId('show', $('#actors .values-input[data-name="name"][data-index="' + id + '"]').val(), function (newId) {
+                    sid.selectId('show', $('#WallboxOid .values-input[data-name="OID"][data-index="' + id + '"]').val(), function (newId) {
                         if (newId) {
-                            $('#WallboxOid .values-input[data-name="Name"][data-index="' + id + '"]').val(newId).trigger('change');
                             socket.emit('getObject', newId, function (err, obj) {
-                                
-								
                                 var OID = getOID(obj);
-                                
                                 $('#WallboxOid .values-input[data-name="OID"][data-index="' + id + '"]').val(OID).trigger('change');
                             });
                         }
