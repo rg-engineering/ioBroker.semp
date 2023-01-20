@@ -56,7 +56,68 @@
 
 	<script type="text/javascript">
 
+		function show_hide_column(table_name, col_name, col_no, do_show) {
 
+			//this is only for header
+			var element = document.getElementById(col_name);
+
+			if (element != null) {
+				if (do_show) {
+					element.classList.remove("hide");
+				}
+				else {
+					element.classList.add("hide");
+				}
+
+				//here we have all other rows
+				var tbl = document.getElementById(table_name);
+				var rows = tbl.getElementsByTagName('tr');
+
+				for (var row = 0; row < rows.length; row++) {
+					var cols = rows[row].children;
+					if (col_no >= 0 && col_no < cols.length) {
+						var cell = cols[col_no];
+						if (cell.tagName == 'TD' || cell.tagName == 'TH') {
+							if (do_show) {
+								cell.classList.remove("hide");
+							}
+							else {
+								cell.classList.add("hide");
+							}
+						}
+					}
+				}
+			}
+		}
+
+        function set_column_readonly(table_name, col_name, col_no) {
+
+            //this is only for header
+            var element = document.getElementById(col_name);
+
+            if (element != null) {
+               
+
+                //here we have all other rows
+                var tbl = document.getElementById(table_name);
+                var rows = tbl.getElementsByTagName('tr');
+
+                for (var row = 0; row < rows.length; row++) {
+                    var cols = rows[row].children;
+                    if (col_no >= 0 && col_no < cols.length) {
+                        var cell = cols[col_no];
+						if (cell.tagName == 'TD' || cell.tagName == 'TH') {
+
+							if (cell.children[0]) {
+								//set input element to read only
+								cell.children[0].readOnly = true;
+							}
+							
+                        }
+                    }
+                }
+            }
+        }
 
 		function showHideSettings() {
             console.log("showHideSettings");
@@ -187,10 +248,13 @@
             }
 			*/
 
+            set_column_readonly("table-wallbox_oid", "tableWallboxOID_col2", 1);
 			
-
+           
 
 		}
+
+        
 
 
 		function CheckIP(onChange, instance) {
@@ -651,14 +715,24 @@
 				//just make it backwards compatible 0.1.0 -> 0.2.0
 				tempWallboxOIDs = []; //clear it
 
+                let wordMandatory = translateWord("mandatory");
+                let wordOptionally = translateWord("optionally");
+
+
 				if (devices[id].WallboxOIDs != null) {
+
+
+					for (let d = 0; d < devices[id].WallboxOIDs.length; d++) {
+						if (devices[id].WallboxOIDs[d].Name == "DeviceOIDPlugConnected"
+							|| devices[id].WallboxOIDs[d].Name == "DeviceOIDChargePower") {
+                            devices[id].WallboxOIDs[d].must = wordMandatory;
+						}
+						else {
+                            devices[id].WallboxOIDs[d].must = wordOptionally;
+						}
+					}
+
 					tempWallboxOIDs = devices[id].WallboxOIDs;
-
-					//todo
-
-					//must provided -> setzen
-
-
 				}
 				else {
 					let tempOID = "";
@@ -674,7 +748,7 @@
 					}
 					wallboxOID = {
                         active: tempActive,
-						must: true,
+                        must: wordMandatory,
 						Name: "DeviceOIDPlugConnected",
 						OID: tempOID,
 						Type: "Boolean",
@@ -692,7 +766,7 @@
 					}
 					wallboxOID = {
                         active: tempActive,
-						must: false,
+                        must: wordOptionally,
 						Name: "DeviceOIDIsCharging",
 						OID: tempOID,
 						Type: "Boolean",
@@ -710,7 +784,7 @@
 					}
 					wallboxOID = {
                         active: tempActive,
-						must: false,
+                        must: wordOptionally,
 						Name: "DeviceOIDIsError",
 						OID: tempOID,
 						Type: "Boolean",
@@ -728,7 +802,7 @@
 					}
 					wallboxOID = {
                         active: tempActive,
-						must: true,
+                        must: wordMandatory,
 						Name: "DeviceOIDChargePower",
 						OID: tempOID,
 						Type: "Number",
@@ -746,7 +820,7 @@
 					}
 					wallboxOID = {
                         active: tempActive,
-						must: false,
+                        must: wordOptionally,
 						Name: "DeviceOIDStartCharge",
 						OID: tempOID,
 						Type: "Boolean",
@@ -764,7 +838,7 @@
 					}
 					wallboxOID = {
                         active: tempActive,
-						must: false,
+                        must: wordOptionally,
 						Name: "DeviceOIDStopCharge",
 						OID: tempOID,
 						Type: "Boolean",
@@ -852,10 +926,7 @@
                         }
                     });
                 });
-
-
 			});
-
         }
 
 
@@ -1695,12 +1766,14 @@
 											<thead>
 												<tr>
 													<th id="tableWallboxOID_col1" data-name="active" data-type="checkbox" style="background: #64b5f6 " class="header translate">active</th>
-													<th id="tableWallboxOID_col2" data-name="must" data-type="checkbox"  style="background: #64b5f6 " class="header translate">must provided</th>
+													
+													<th id="tableWallboxOID_col2" data-name="must" data-type="text" style="background: #64b5f6 " class="header"></th>
+
 													<th id="tableWallboxOID_col3" data-name="Name" data-type="select" data-options="DeviceOIDPlugConnected/DeviceOIDPlugConnected;DeviceOIDIsCharging/DeviceOIDIsCharging;DeviceOIDIsError/DeviceOIDIsError;DeviceOIDChargePower/DeviceOIDChargePower;DeviceOIDStartCharge/DeviceOIDStartCharge;DeviceOIDStopCharge/DeviceOIDStopCharge" style="background: #64b5f6 " class="header translate">Name</th>
 													<th id="tableWallboxOID_col4" data-name="OID" data-type="text" style="background: #64b5f6 " class="header translate">OID</th>
 													<th id="tableWallboxOID_col5" data-buttons="edit" style="width: 100px; background: #64b5f6"></th>
 													<th id="tableWallboxOID_col6" data-name="Type" data-type="select" data-options="Boolean/Boolean;Number/Number;" style="background: #64b5f6 " class="header translate">Type</th>
-													<th id="tableWallboxOID_col7" data-name="SetValue" data-type="text" style="background: #64b5f6 " class="header translate">Set/CheckValue</th>
+													<th id="tableWallboxOID_col7" data-name="SetValue" data-type="text" style="background: #64b5f6 " class="header translate">Set_CheckValue</th>
 												</tr>
 											</thead>
 										</table>

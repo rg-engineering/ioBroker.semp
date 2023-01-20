@@ -53,8 +53,10 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 
 ## Changelog
 
-### 0.1.0 (in progress)
+### 0.1.0 (2023-01-20)
+* (René) wallboxes: see issue #23: wallbox OID can be configured (DP type and set or check value)
 * (René) wallboxes: minimum and maximum energy for charging is adjustable by datapoint, default: battery capacity (10% and 100%)
+* (René) see issue #24: delete csv logs if older then three days
 
 ### 0.0.5 (2022-12-27)
 * (René) MinPowerConsumption added
