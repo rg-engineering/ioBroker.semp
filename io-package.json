@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "semp",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "news": {
+            "0.1.1": {
+                "en": "bug fixes for wallbox",
+                "de": "Fehlerbehebungen für Wallbox",
+                "ru": "исправлены ошибки для Wallbox",
+                "pt": "correções de bugs para wallbox",
+                "nl": "bugfixes voor wallbox",
+                "fr": "corrections de bugs pour la wallbox",
+                "it": "correzioni di bug per wallbox",
+                "es": "correcciones de errores para wallbox",
+                "pl": "poprawki błędów w wallboksie",
+                "uk": "виправлення помилок для wallbox",
+                "zh-cn": "墙盒的错误修复"
+            },
             "0.1.0": {
                 "en": "support of wallboxes",
                 "de": "Unterstützung von Wallboxen",
