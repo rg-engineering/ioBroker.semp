@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "semp",
-        "version": "0.1.1",
+        "version": "0.2.0",
         "news": {
+            "0.2.0": {
+                "en": "switch to enable 3phase charge added",
+                "de": "Schalter zum Aktivieren der 3-Phasen-Ladung hinzugefügt",
+                "ru": "добавлен переключатель для включения трехфазной зарядки",
+                "pt": "interruptor para habilitar carga trifásica adicionada",
+                "nl": "schakelaar om 3-fase opladen toegevoegd in te schakelen",
+                "fr": "commutateur pour activer la charge triphasée ajoutée",
+                "it": "interruttore per abilitare la carica trifase aggiunto",
+                "es": "interruptor para habilitar la carga trifásica añadida",
+                "pl": "przełącznik, aby włączyć ładowanie 3-fazowe dodane",
+                "uk": "додано перемикач, щоб увімкнути трифазний заряд",
+                "zh-cn": "切换以启用添加的三相充电"
+            },
             "0.1.1": {
                 "en": "bug fixes for wallbox",
                 "de": "Fehlerbehebungen für Wallbox",

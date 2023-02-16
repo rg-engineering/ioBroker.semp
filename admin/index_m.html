@@ -188,6 +188,9 @@
                 $('#divDeviceStatusDetectionLimit').hide();
             }
 
+
+
+
 			/*
 			 * only if detection from power value, otherwise we believe what we get
             if ($('#DeviceStatusDetectionType').val() == "FromPowerValue" || $('#DeviceStatusDetectionType').val() == "SeparateOID") {
@@ -615,6 +618,7 @@
 				$('#DeviceMeasurementUnit').select();
 
 				$('#DeviceBatteryCapacity').val(devices[id].BatteryCapacity);
+                $('#DeviceWallboxHas3phaseEnabler').prop("checked", devices[id].WallboxHas3phaseEnabler);
 				$('#DeviceOIDPlugConnected').val(devices[id].OID_PlugConnected);
 				$('#DeviceOIDIsCharging').val(devices[id].OID_IsCharging);
 				$('#DeviceOIDIsError').val(devices[id].OID_IsError);
@@ -977,7 +981,8 @@
 						devices[id].MeasurementMethod = $('#DeviceMeasurementMethod').val();
 						devices[id].OID_Power = $('#DeviceOIDPower').val();
 						devices[id].MeasurementUnit = $('#DeviceMeasurementUnit').val();
-                        devices[id].BatteryCapacity=$('#DeviceBatteryCapacity').val();
+						devices[id].BatteryCapacity = $('#DeviceBatteryCapacity').val();
+                        devices[id].WallboxHas3phaseEnabler = $('#DeviceWallboxHas3phaseEnabler').prop("checked");
                         devices[id].OID_PlugConnected=$('#DeviceOIDPlugConnected').val();
                         devices[id].OID_IsCharging=$('#DeviceOIDIsCharging').val();
                         devices[id].OID_IsError=$('#DeviceOIDIsError').val();
@@ -1315,8 +1320,8 @@
 								<li id="page-device-wallbox" class="tab col s2"><a href="#tab-popup_device_wallbox" class="translate">wallbox</a></li>
 
 								<!--
-				<li id="page-device-test" class="tab col s2"><a href="#tab-popup_device_test" class="translate">Test</a></li>
-			-->
+									<li id="page-device-test" class="tab col s2"><a href="#tab-popup_device_test" class="translate">Test</a></li>
+								-->
 							</ul>
 						</div>
 
@@ -1548,96 +1553,96 @@
 							</div>
 
 							<!--
-		<div class="row">
-			<div id="divDeviceTimerEveryDay" class="input-field col s1">
-				<input type="checkbox" id="DeviceTimerEveryDay" class="value" />
-				<label for="DeviceTimerEveryDay" class="translate">DeviceTimerEveryDay</label>
-			</div>
-		</div>
-			-->
+							<div class="row">
+								<div id="divDeviceTimerEveryDay" class="input-field col s1">
+									<input type="checkbox" id="DeviceTimerEveryDay" class="value" />
+									<label for="DeviceTimerEveryDay" class="translate">DeviceTimerEveryDay</label>
+								</div>
+							</div>
+								-->
 							<!--
-		<div class="row">
-			<div id="divDeviceTimerDays" class="row">
-				<div id="divDeviceTimerMonday" class="input-field col s2">
-					<input type="checkbox" id="DeviceTimerMonday" class="value" />
-					<label for="DeviceTimerMonday" class="translate">DeviceTimerMonday</label>
-				</div>
-				<div id="divDeviceTimerTuesday" class="input-field col s2">
-					<input type="checkbox" id="DeviceTimerTuesday" class="value" />
-					<label for="DeviceTimerTuesday" class="translate">DeviceTimerTuesday</label>
-				</div>
-				<div id="divDeviceTimerWednesday" class="input-field col s2">
-					<input type="checkbox" id="DeviceTimerWednesday" class="value" />
-					<label for="DeviceTimerWednesday" class="translate">DeviceTimerWednesday</label>
-				</div>
-				<div id="divDeviceTimerThursday" class="input-field col s2">
-					<input type="checkbox" id="DeviceTimerThursday" class="value" />
-					<label for="DeviceTimerThursday" class="translate">DeviceTimerThursday</label>
-				</div>
-				<div id="divDeviceTimerFriday" class="input-field col s2">
-					<input type="checkbox" id="DeviceTimerFriday" class="value" />
-					<label for="DeviceTimerFriday" class="translate">DeviceTimerFriday</label>
-				</div>
-				<div id="divDeviceTimerSaturday" class="input-field col s2">
-					<input type="checkbox" id="DeviceTimerSaturday" class="value" />
-					<label for="DeviceTimerSaturday" class="translate">DeviceTimerSaturday</label>
-				</div>
-				<div id="divDeviceTimerSunday" class="input-field col s2">
-					<input type="checkbox" id="DeviceTimerSunday" class="value" />
-					<label for="DeviceTimerSunday" class="translate">DeviceTimerSunday</label>
-				</div>
-			</div>
-		</div>
-			-->
+							<div class="row">
+								<div id="divDeviceTimerDays" class="row">
+									<div id="divDeviceTimerMonday" class="input-field col s2">
+										<input type="checkbox" id="DeviceTimerMonday" class="value" />
+										<label for="DeviceTimerMonday" class="translate">DeviceTimerMonday</label>
+									</div>
+									<div id="divDeviceTimerTuesday" class="input-field col s2">
+										<input type="checkbox" id="DeviceTimerTuesday" class="value" />
+										<label for="DeviceTimerTuesday" class="translate">DeviceTimerTuesday</label>
+									</div>
+									<div id="divDeviceTimerWednesday" class="input-field col s2">
+										<input type="checkbox" id="DeviceTimerWednesday" class="value" />
+										<label for="DeviceTimerWednesday" class="translate">DeviceTimerWednesday</label>
+									</div>
+									<div id="divDeviceTimerThursday" class="input-field col s2">
+										<input type="checkbox" id="DeviceTimerThursday" class="value" />
+										<label for="DeviceTimerThursday" class="translate">DeviceTimerThursday</label>
+									</div>
+									<div id="divDeviceTimerFriday" class="input-field col s2">
+										<input type="checkbox" id="DeviceTimerFriday" class="value" />
+										<label for="DeviceTimerFriday" class="translate">DeviceTimerFriday</label>
+									</div>
+									<div id="divDeviceTimerSaturday" class="input-field col s2">
+										<input type="checkbox" id="DeviceTimerSaturday" class="value" />
+										<label for="DeviceTimerSaturday" class="translate">DeviceTimerSaturday</label>
+									</div>
+									<div id="divDeviceTimerSunday" class="input-field col s2">
+										<input type="checkbox" id="DeviceTimerSunday" class="value" />
+										<label for="DeviceTimerSunday" class="translate">DeviceTimerSunday</label>
+									</div>
+								</div>
+							</div>
+								-->
 							<!--
-				<div class="row">
-					<div id="divDeviceTimer" class="row">
-						<div class="input-field col s3">
-							<input type="text" id="DeviceTimerStart" class="value" />
-							<label for="DeviceTimerStart" class="translate">DeviceTimerStart</label>
-						</div>
+									<div class="row">
+										<div id="divDeviceTimer" class="row">
+											<div class="input-field col s3">
+												<input type="text" id="DeviceTimerStart" class="value" />
+												<label for="DeviceTimerStart" class="translate">DeviceTimerStart</label>
+											</div>
 
-						<div class="input-field col s3">
-							<input type="text" id="DeviceTimerEnd" class="value" />
-							<label for="DeviceTimerEnd" class="translate">DeviceTimerEnd</label>
-						</div>
-					</div>
-		-->
+											<div class="input-field col s3">
+												<input type="text" id="DeviceTimerEnd" class="value" />
+												<label for="DeviceTimerEnd" class="translate">DeviceTimerEnd</label>
+											</div>
+										</div>
+							-->
 							<!--todo multiple select ???-->
 							<!--
-		<div class="input-field col s3">
-			<select multiple id="DeviceTimerDays" class="value">
-				<option value="everyDay" class="translate">every Day</option>
-				<option value="Monday" class="translate">Monday</option>
-				<option value="Tuesday" class="translate">Tuesday</option>
-				<option value="Wednesday" class="translate">Wednesday</option>
-				<option value="Thursday" class="translate">Thursday</option>
-				<option value="Friday" class="translate">Friday</option>
-				<option value="Saturday" class="translate">Saturday</option>
-				<option value="Sunday" class="translate">Sunday</option>
+							<div class="input-field col s3">
+								<select multiple id="DeviceTimerDays" class="value">
+									<option value="everyDay" class="translate">every Day</option>
+									<option value="Monday" class="translate">Monday</option>
+									<option value="Tuesday" class="translate">Tuesday</option>
+									<option value="Wednesday" class="translate">Wednesday</option>
+									<option value="Thursday" class="translate">Thursday</option>
+									<option value="Friday" class="translate">Friday</option>
+									<option value="Saturday" class="translate">Saturday</option>
+									<option value="Sunday" class="translate">Sunday</option>
 
-			</select>
-			<label for="DeviceTimerDays" class="translate">DeviceTimerDays</label>
+								</select>
+								<label for="DeviceTimerDays" class="translate">DeviceTimerDays</label>
 
-		</div>
-			-->
+							</div>
+								-->
 							<!--
-		</div>
-		-->
+							</div>
+							-->
 							<!--
-		<div class="row">
-			<div id="divDeviceRunningTime" class="row">
-				<div class="input-field col s3">
-					<input type="text" id="DeviceTimerMinRunningtime" class="value" />
-					<label for="DeviceTimerMinRunningtime" class="translate">DeviceTimerMinRunningtime</label>
-				</div>
-				<div class="input-field col s3">
-					<input type="text" id="DeviceTimerMaxRunningtime" class="value" />
-					<label for="DeviceTimerMaxRunningtime" class="translate">DeviceTimerMaxRunningtime</label>
-				</div>
-			</div>
-		</div>
-			-->
+							<div class="row">
+								<div id="divDeviceRunningTime" class="row">
+									<div class="input-field col s3">
+										<input type="text" id="DeviceTimerMinRunningtime" class="value" />
+										<label for="DeviceTimerMinRunningtime" class="translate">DeviceTimerMinRunningtime</label>
+									</div>
+									<div class="input-field col s3">
+										<input type="text" id="DeviceTimerMaxRunningtime" class="value" />
+										<label for="DeviceTimerMaxRunningtime" class="translate">DeviceTimerMaxRunningtime</label>
+									</div>
+								</div>
+							</div>
+								-->
 
 							<div class="row">
 								<div id="divDeviceCancelRequests" class="row">
@@ -1693,70 +1698,12 @@
 								</div>
 							</div>
 
-							<!--
-	<div class="row">
-		<div>
-			<div class="input-field col s3">
-				<input type="text" id="DeviceOIDPlugConnected" class="value" />
-				<label for="DeviceOIDPlugConnected" class="translate">DeviceOIDPlugConnected</label>
-			</div>
-			<div class="col s1 m2 l1">
-				<a id="SelectDeviceOIDPlugConnected" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
-			</div>
-		</div>
-
-		<div>
-			<div class="input-field col s3">
-				<input type="text" id="DeviceOIDIsCharging" class="value" />
-				<label for="DeviceOIDIsCharging" class="translate">DeviceOIDIsCharging</label>
-			</div>
-			<div class="col s1 m2 l1">
-				<a id="SelectDeviceOIDIsCharging" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
-			</div>
-		</div>
-
-		<div>
-			<div class="input-field col s3">
-				<input type="text" id="DeviceOIDIsError" class="value" />
-				<label for="DeviceOIDIsError" class="translate">DeviceOIDIsError</label>
-			</div>
-			<div class="col s1 m2 l1">
-				<a id="SelectDeviceOIDIsError" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
-			</div>
-		</div>
-	</div>
-	<div class="row">
-		<div>
-			<div class="input-field col s3">
-				<input type="text" id="DeviceOIDChargePower" class="value" />
-				<label for="DeviceOIDChargePower" class="translate">DeviceOIDChargePower</label>
-			</div>
-			<div class="col s1 m2 l1">
-				<a id="SelectDeviceOIDChargePower" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
-			</div>
-		</div>
-
-		<div>
-			<div class="input-field col s3">
-				<input type="text" id="DeviceOIDStartCharge" class="value" />
-				<label for="DeviceOIDStartCharge" class="translate">DeviceOIDStartCharge</label>
-			</div>
-			<div class="col s1 m2 l1">
-				<a id="SelectDeviceOIDStartCharge" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
-			</div>
-		</div>
-
-		<div>
-			<div class="input-field col s3">
-				<input type="text" id="DeviceOIDStopCharge" class="value" />
-				<label for="DeviceOIDStopCharge" class="translate">DeviceOIDStopCharge</label>
-			</div>
-			<div class="col s1 m2 l1">
-				<a id="SelectDeviceOIDStopCharge" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
-			</div>
-		</div>
-	</div>
-		-->
+							<div class="row">
+								<div class="input-field col s3">
+									<input type="checkbox" id="DeviceWallboxHas3phaseEnabler" class="value" min="0" />
+									<label for="DeviceWallboxHas3phaseEnabler" class="translate">DeviceWallboxHas3phaseEnabler</label>
+								</div>
+							</div>
 
 							<div class="row">
 								<div class="col s12" id="WallboxOid">
@@ -1766,7 +1713,7 @@
 											<thead>
 												<tr>
 													<th id="tableWallboxOID_col1" data-name="active" data-type="checkbox" style="background: #64b5f6 " class="header translate">active</th>
-													
+
 													<th id="tableWallboxOID_col2" data-name="must" data-type="text" style="background: #64b5f6 " class="header"></th>
 
 													<th id="tableWallboxOID_col3" data-name="Name" data-type="select" data-options="DeviceOIDPlugConnected/DeviceOIDPlugConnected;DeviceOIDIsCharging/DeviceOIDIsCharging;DeviceOIDIsError/DeviceOIDIsError;DeviceOIDChargePower/DeviceOIDChargePower;DeviceOIDStartCharge/DeviceOIDStartCharge;DeviceOIDStopCharge/DeviceOIDStopCharge" style="background: #64b5f6 " class="header translate">Name</th>
@@ -1783,30 +1730,9 @@
 						</div>
 
 
-								<!-- tab energy requests-->
-								<!--
-		<div id="tab-popup_device_test" class="col s12 page">
-			<div class="row">
-				<div class="col s12" id="test">
-					<a class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">add</i></a>
-					<div class="table-test-div">
-						<table id="table_test" class="table-values" style="width: 100%;">
-							<thead>
-								<tr>
-									<th id="test_col_0" data-name="id" style="background: #64b5f6;" class="translate">id</th>
 
-									<th data-buttons="delete" style="width: 100px; background: #64b5f6"></th>
-								</tr>
-							</thead>
-						</table>
 					</div>
 				</div>
-			</div>
-		</div>
-
-			-->
-							</div>
-						</div>
 
 				<div class="modal-footer">
 					<a class="modal-action modal-close waves-effect waves-green btn btn-set"><i class="large material-icons left">check</i><span class="translate">Ok</span></a>

@@ -54,6 +54,7 @@
     "DeviceTimerWednesday": "Среда",
     "DeviceType": "Тип устройства",
     "DeviceVendor": "Производитель",
+    "DeviceWallboxHas3phaseEnabler": "имеет переключатель для включения 3-фазной зарядки",
     "DishWasher": "Посудомоечная машина",
     "Dryer": "Сушилка",
     "EVCharger": "Зарядное устройство для электромобиля",

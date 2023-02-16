@@ -54,6 +54,7 @@
     "DeviceTimerWednesday": "miércoles",
     "DeviceType": "Tipo de dispositivo",
     "DeviceVendor": "Fabricante",
+    "DeviceWallboxHas3phaseEnabler": "tiene interruptor para habilitar la carga trifásica",
     "DishWasher": "Lavavajillas",
     "Dryer": "Secadora",
     "EVCharger": "Cargador para vehículos eléctricos",

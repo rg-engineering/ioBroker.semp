@@ -53,7 +53,10 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 
 ## Changelog
 
-### 0.1.1 (in progress)
+### 0.2.0 (2023-02-17)
+* (René) wallboxes: add switch to enable 3phase charge
+
+### 0.1.1 ()
 * (René) wallboxes: some bug fixes
 
 ### 0.1.0 (2023-01-20)

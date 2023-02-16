@@ -54,6 +54,7 @@
     "DeviceTimerWednesday": "Mittwoch",
     "DeviceType": "Gerätetyp",
     "DeviceVendor": "Hersteller",
+    "DeviceWallboxHas3phaseEnabler": "hat einen Schalter zum Aktivieren des 3-Phasen-Ladens",
     "DishWasher": "Geschirrspülmaschine",
     "Dryer": "Trockner",
     "EVCharger": "Elektroauto-Ladegerät",

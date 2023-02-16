@@ -54,6 +54,7 @@
     "DeviceTimerWednesday": "Wednesday",
     "DeviceType": "Device Type",
     "DeviceVendor": "Manufacturer",
+    "DeviceWallboxHas3phaseEnabler": "has switch to enable 3phase charging",
     "DishWasher": "Dish Washer",
     "Dryer": "Dryer",
     "EVCharger": "EV Charger",
