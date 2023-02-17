@@ -53,7 +53,10 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 
 ## Changelog
 
-### 0.2.0 (2023-02-17)
+### 0.2.1 (2023-02-17)
+* (René) wallboxes: bug fix MinEnergy set to 0
+
+### 0.2.0 (2023-02-16)
 * (René) wallboxes: add switch to enable 3phase charge
 
 ### 0.1.1 ()

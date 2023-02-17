@@ -14,35 +14,18 @@ const Gateway = require("./lib/semp/Gateway").Gateway;
 
 /* to do
 
-* Hinweise im admin:
-	* DeviceID Format
-    * UUID
-    * BaseID
-    * 
  * admin
  *	ID nur ändern, wenn sie nicht dem Format entspricht
- *	
  *	readme bzgl. der einstellbaren Parameter vervollständigen
  *	
  *	
  *	
- *	Geräte nach Ende der max Laufzeit ausschalten, damit sie beim nächsten Start wieder angeschaltet werden können? -> max. als Option laut Doku
+ 
 
  *	Energieanforderung abbrechen, wenn Gerät ausschaltet, Zeit einstellbar
  *	Feiertag / Urlaub zu hause für Timer hinzufügen
 
-
-Admin umbennenen oder Übersetzung:
- * Basis-ID der Geräte
- * Hinweis bei Zähler-tab
- * Objekt-ID Power
- * Einschätzung -> Schätzung
- * Hinweis im Schalter-tab
- * immer auf -> immer ein
- * hat Objekt-ID-Schalter ???
-
-
-
+* timeout für dicovery (wenn description nicht innerhalb 2 Minuten abgefrgat)
 */
 
 class Semp extends utils.Adapter {
@@ -247,7 +230,7 @@ class Semp extends utils.Adapter {
 					bRet = true;
 				}
 				//wallbox
-				
+
 
 				if (device.Type == "EVCharger" && device.WallboxOIDs != null) {
 					let OID_PlugConnected = "";
@@ -285,6 +268,7 @@ class Semp extends utils.Adapter {
 				const ids = id.split(".");
 				if (ids.length > 3 && ids[3] == device.Name) {
 					if (ids[4] == "MinEnergy") {
+						this.log.info("main: got minEnergy " + state.val);
 						this.gw.setMinEnergy(device.ID, state.val);
 						bRet = true;
 					}

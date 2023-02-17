@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "semp",
-        "version": "0.2.0",
+        "version": "0.2.1",
         "news": {
-            "0.2.0": {
+            "0.2.1": {
                 "en": "switch to enable 3phase charge added",
                 "de": "Schalter zum Aktivieren der 3-Phasen-Ladung hinzugefügt",
                 "ru": "добавлен переключатель для включения трехфазной зарядки",
