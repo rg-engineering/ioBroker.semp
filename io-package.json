@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "semp",
-        "version": "0.2.1",
+        "version": "0.3.0",
         "news": {
+            "0.3.0": {
+                "en": "wallbox fast charging added",
+                "de": "Wallbox-Schnellladung hinzugefügt",
+                "ru": "добавлена ​​быстрая зарядка от настенного бокса",
+                "pt": "carregamento rápido da caixa de parede adicionado",
+                "nl": "wallbox snel opladen toegevoegd",
+                "fr": "charge rapide de la wallbox ajoutée",
+                "it": "ricarica rapida wallbox aggiunta",
+                "es": "Wallbox carga rápida agregada",
+                "pl": "dodano szybkie ładowanie ładowarki ściennej",
+                "uk": "додано швидку зарядку wallbox",
+                "zh-cn": "添加壁箱快速充电"
+            },
             "0.2.1": {
                 "en": "switch to enable 3phase charge added",
                 "de": "Schalter zum Aktivieren der 3-Phasen-Ladung hinzugefügt",
@@ -17,19 +30,6 @@
                 "zh-cn": "切换以启用添加的三相充电"
             },
             "0.1.1": {
-                "en": "bug fixes for wallbox",
-                "de": "Fehlerbehebungen für Wallbox",
-                "ru": "исправлены ошибки для Wallbox",
-                "pt": "correções de bugs para wallbox",
-                "nl": "bugfixes voor wallbox",
-                "fr": "corrections de bugs pour la wallbox",
-                "it": "correzioni di bug per wallbox",
-                "es": "correcciones de errores para wallbox",
-                "pl": "poprawki błędów w wallboksie",
-                "uk": "виправлення помилок для wallbox",
-                "zh-cn": "墙盒的错误修复"
-            },
-            "0.1.0": {
                 "en": "support of wallboxes",
                 "de": "Unterstützung von Wallboxen",
                 "ru": "поддержка настенных ящиков",

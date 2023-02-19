@@ -272,8 +272,12 @@ class Semp extends utils.Adapter {
 						this.gw.setMinEnergy(device.ID, state.val);
 						bRet = true;
 					}
-					if (ids[4] == "MaxEnergy") {
+					else if (ids[4] == "MaxEnergy") {
 						this.gw.setMaxEnergy(device.ID, state.val);
+						bRet = true;
+					}
+					else if (ids[4] == "StartFastCharging") {
+						this.gw.StartFastCharging(device.ID);
 						bRet = true;
 					}
 				}
