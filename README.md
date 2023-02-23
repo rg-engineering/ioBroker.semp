@@ -53,7 +53,7 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 
 ## Changelog
 
-### 0.3.0 (2023-02-19)
+### 0.3.1 (2023-02-19)
 * (René) issue #27: wallbox fast charging added
 
 ### 0.2.1 (2023-02-17)

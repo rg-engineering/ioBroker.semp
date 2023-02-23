@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "semp",
-        "version": "0.3.0",
+        "version": "0.3.1",
         "news": {
-            "0.3.0": {
+            "0.3.1": {
                 "en": "wallbox fast charging added",
                 "de": "Wallbox-Schnellladung hinzugefügt",
                 "ru": "добавлена ​​быстрая зарядка от настенного бокса",
