@@ -9,7 +9,7 @@
 
 	<script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
 	<script type="text/javascript" src="../../socket.io/socket.io.js"></script>
-	
+
 	<script type="text/javascript" src="../../lib/js/materialize.js"></script>
 	<script type="text/javascript" src="../../lib/js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="../../lib/js/jquery.fancytree-all.min.js"></script>
@@ -25,14 +25,14 @@
 
 	<style>
 
-        #dialog-device-edit {
-            max-height: 95% !important;
-            max-width: 85% !important;
-            width: 80% !important;
-            height: 90% !important;
-            overflow: visible !important;
-            top: 10px !important;
-        }
+		#dialog-device-edit {
+			max-height: 95% !important;
+			max-width: 85% !important;
+			width: 80% !important;
+			height: 90% !important;
+			overflow: visible !important;
+			top: 10px !important;
+		}
 
 		#dialog-select-member {
 			max-height: 95% !important;
@@ -90,115 +90,115 @@
 			}
 		}
 
-        function set_column_readonly(table_name, col_name, col_no) {
+		function set_column_readonly(table_name, col_name, col_no) {
 
-            //this is only for header
-            var element = document.getElementById(col_name);
+			//this is only for header
+			var element = document.getElementById(col_name);
 
-            if (element != null) {
-               
+			if (element != null) {
 
-                //here we have all other rows
-                var tbl = document.getElementById(table_name);
-                var rows = tbl.getElementsByTagName('tr');
 
-                for (var row = 0; row < rows.length; row++) {
-                    var cols = rows[row].children;
-                    if (col_no >= 0 && col_no < cols.length) {
-                        var cell = cols[col_no];
+				//here we have all other rows
+				var tbl = document.getElementById(table_name);
+				var rows = tbl.getElementsByTagName('tr');
+
+				for (var row = 0; row < rows.length; row++) {
+					var cols = rows[row].children;
+					if (col_no >= 0 && col_no < cols.length) {
+						var cell = cols[col_no];
 						if (cell.tagName == 'TD' || cell.tagName == 'TH') {
 
 							if (cell.children[0]) {
 								//set input element to read only
 								cell.children[0].readOnly = true;
 							}
-							
-                        }
-                    }
-                }
-            }
-        }
+
+						}
+					}
+				}
+			}
+		}
 
 		function showHideSettings() {
-            console.log("showHideSettings");
+			console.log("showHideSettings");
 
-            if ($('#DeviceType').val() == "EVCharger") {
-                $('#page-device-wallbox').show();
+			if ($('#DeviceType').val() == "EVCharger") {
+				$('#page-device-wallbox').show();
 
-                $('#DeviceTimerActive').prop("checked", false);
-                $('#DeviceTimerActive').prop('disabled', true);
-            }
-            else {
-                $('#page-device-wallbox').hide();
-                $('#DeviceTimerActive').prop('disabled', false);
-            }
+				$('#DeviceTimerActive').prop("checked", false);
+				$('#DeviceTimerActive').prop('disabled', true);
+			}
+			else {
+				$('#page-device-wallbox').hide();
+				$('#DeviceTimerActive').prop('disabled', false);
+			}
 
 
 			if ($('#DeviceInterruptionAllowed').prop("checked")) {
-                //console.log("show DeviceInterruptionAllowed");
+				//console.log("show DeviceInterruptionAllowed");
 				$('#divDeviceMinOnTime').show();
 				$('#divDeviceMaxOnTime').show();
 				$('#divDeviceMinOffTime').show();
 				$('#divDeviceMaxOffTime').show();
 			}
 			else {
-                //console.log("hide DeviceInterruptionAllowed");
-                $('#divDeviceMinOnTime').hide();
-                $('#divDeviceMaxOnTime').hide();
-                $('#divDeviceMinOffTime').hide();
-                $('#divDeviceMaxOffTime').hide();
-            }
+				//console.log("hide DeviceInterruptionAllowed");
+				$('#divDeviceMinOnTime').hide();
+				$('#divDeviceMaxOnTime').hide();
+				$('#divDeviceMinOffTime').hide();
+				$('#divDeviceMaxOffTime').hide();
+			}
 
 			if ($('#DeviceMeasurementMethod').val() == "Measurement") {
-                //console.log("show DeviceMeasurementMethod");
+				//console.log("show DeviceMeasurementMethod");
 				$('#divDeviceOIDPower').show();
 
 			}
 			else {
-                //console.log("hide DeviceMeasurementMethod");
-                $('#divDeviceOIDPower').hide();
-            }
-
-            if ($('#DeviceStatusDetectionType').val() == "SeparateOID") {
-                //console.log("show DeviceStatusDetectionType");
-				$('#divDeviceOIDStatus').show();
-                
-
-            }
-            else {
-                //console.log("hide DeviceStatusDetectionType");
-                $('#divDeviceOIDStatus').hide();
-            }
-
-			
-            if ($('#DeviceHasOIDSwitch').prop("checked")) {
-                //console.log("show DeviceHasOIDSwitch");
-                $('#divDeviceOIDSwitch').show();
-
-            }
-            else {
-                //console.log("hide DeviceHasOIDSwitch");
-                $('#divDeviceOIDSwitch').hide();
+				//console.log("hide DeviceMeasurementMethod");
+				$('#divDeviceOIDPower').hide();
 			}
 
-            if ($('#DeviceStatusDetectionType').val() == "FromPowerValue" ) {
-                $('#divDeviceStatusDetectionLimit').show();
-            }
-            else {
-                $('#divDeviceStatusDetectionLimit').hide();
-            }
+			if ($('#DeviceStatusDetectionType').val() == "SeparateOID") {
+				//console.log("show DeviceStatusDetectionType");
+				$('#divDeviceOIDStatus').show();
+
+
+			}
+			else {
+				//console.log("hide DeviceStatusDetectionType");
+				$('#divDeviceOIDStatus').hide();
+			}
+
+
+			if ($('#DeviceHasOIDSwitch').prop("checked")) {
+				//console.log("show DeviceHasOIDSwitch");
+				$('#divDeviceOIDSwitch').show();
+
+			}
+			else {
+				//console.log("hide DeviceHasOIDSwitch");
+				$('#divDeviceOIDSwitch').hide();
+			}
+
+			if ($('#DeviceStatusDetectionType').val() == "FromPowerValue") {
+				$('#divDeviceStatusDetectionLimit').show();
+			}
+			else {
+				$('#divDeviceStatusDetectionLimit').hide();
+			}
 
 
 
 
 			/*
 			 * only if detection from power value, otherwise we believe what we get
-            if ($('#DeviceStatusDetectionType').val() == "FromPowerValue" || $('#DeviceStatusDetectionType').val() == "SeparateOID") {
+			if ($('#DeviceStatusDetectionType').val() == "FromPowerValue" || $('#DeviceStatusDetectionType').val() == "SeparateOID") {
 				$('#divDeviceStatusDetectionLimit').show();
 			}
 			else {
-                $('#divDeviceStatusDetectionLimit').hide();
-            }
+				$('#divDeviceStatusDetectionLimit').hide();
+			}
 			*/
 
 			if ($('#DeviceTimerActive').prop("checked")) {
@@ -208,7 +208,7 @@
 				//$('#divDeviceTimerEveryDay').show();
 				//$('#divDeviceTimerDays').show();
 				$('#divDeviceCancelRequests').show();
-                $('#DeviceEnergyRequests').show();
+				$('#DeviceEnergyRequests').show();
 			}
 			else {
 				//console.log("hide DeviceTimerActive");
@@ -217,47 +217,47 @@
 				//$('#divDeviceTimerEveryDay').hide();
 				//$('#divDeviceTimerDays').hide();
 				$('#divDeviceCancelRequests').hide();
-                $('#DeviceEnergyRequests').hide();
+				$('#DeviceEnergyRequests').hide();
 			}
-			
-            if ($('#DeviceTimerCancelIfNotOn').prop("checked")) {
-                //console.log("show DeviceTimerCancelIfNotOn");
-                $('#divDeviceTimerCancelIfNotOnTime').show();
+
+			if ($('#DeviceTimerCancelIfNotOn').prop("checked")) {
+				//console.log("show DeviceTimerCancelIfNotOn");
+				$('#divDeviceTimerCancelIfNotOnTime').show();
 			}
 			else {
-                //console.log("hide DeviceTimerCancelIfNotOn");
-                $('#divDeviceTimerCancelIfNotOnTime').hide();
-            }
+				//console.log("hide DeviceTimerCancelIfNotOn");
+				$('#divDeviceTimerCancelIfNotOnTime').hide();
+			}
 			/*
 			if ($('#DeviceTimerEveryDay').prop("checked")) {
-                //console.log("show DeviceTimerEveryDay");
-                $('#divDeviceTimerMonday').hide();
+				//console.log("show DeviceTimerEveryDay");
+				$('#divDeviceTimerMonday').hide();
 				$('#divDeviceTimerTuesday').hide();
 				$('#divDeviceTimerWednesday').hide();
 				$('#divDeviceTimerThursday').hide();
 				$('#divDeviceTimerFriday').hide();
 				$('#divDeviceTimerSaturday').hide();
-                $('#divDeviceTimerSunday').hide();
+				$('#divDeviceTimerSunday').hide();
 			}
 			else {
-                //console.log("hide DeviceTimerEveryDay");
-                $('#divDeviceTimerMonday').show();
-                $('#divDeviceTimerTuesday').show();
-                $('#divDeviceTimerWednesday').show();
-                $('#divDeviceTimerThursday').show();
-                $('#divDeviceTimerFriday').show();
-                $('#divDeviceTimerSaturday').show();
-                $('#divDeviceTimerSunday').show();
-            }
+				//console.log("hide DeviceTimerEveryDay");
+				$('#divDeviceTimerMonday').show();
+				$('#divDeviceTimerTuesday').show();
+				$('#divDeviceTimerWednesday').show();
+				$('#divDeviceTimerThursday').show();
+				$('#divDeviceTimerFriday').show();
+				$('#divDeviceTimerSaturday').show();
+				$('#divDeviceTimerSunday').show();
+			}
 			*/
 
-            set_column_readonly("table-wallbox_oid", "tableWallboxOID_col2", 1);
-			
-           
+			set_column_readonly("table-wallbox_oid", "tableWallboxOID_col2", 1);
+
+
 
 		}
 
-        
+
 
 
 		function CheckIP(onChange, instance) {
@@ -406,18 +406,18 @@
 			values2table('devices', settings.devices, onChange, tableDevicesOnReady);
 
 			$('#addNewDevice').on('click', function () {
-				
+
 				let temp_devices = table2values('devices');
 				id = temp_devices.length;
 
-                console.log("new device add " + id);
+				console.log("new device add " + id);
 				setTimeout(function () {
 					//define ID F-11223344-112233445566-00
 					var $devicebaseid = $('#DeviceBaseID');
 					var deviceid = "F-" + $devicebaseid.val() + "-" + ("000000000000" + (id + 1)).slice(-12) + "-00";
 
 					$('#devices .values-input[data-name="Name"][data-index="' + id + '"]').val("newDevice" + id).change();
-                    $('#devices .values-input[data-name="IsActive"][data-index="' + id + '"]').prop('checked', true).change();
+					$('#devices .values-input[data-name="IsActive"][data-index="' + id + '"]').prop('checked', true).change();
 					$('#devices .values-input[data-name="ID"][data-index="' + id + '"]').val(deviceid).change();
 				}, 150);
 			});
@@ -431,12 +431,12 @@
 				getUUID(onChange, _id);
 			});
 
-			
-            
+
+
 
 		}
 
-        let tempEnergyRequestPeriods = [];
+		let tempEnergyRequestPeriods = [];
 
 		function initDialogDevice(id, device, callback) {
 
@@ -460,35 +460,35 @@
 				});
 			}
 
-            $editDialog.data('callback', callback);
+			$editDialog.data('callback', callback);
 			$editDialog.modal('open');
 
-            $("#DeviceInterruptionAllowed").change( function () {
-                showHideSettings();
+			$("#DeviceInterruptionAllowed").change(function () {
+				showHideSettings();
 			});
-            $("#DeviceMeasurementMethod").change(function () {
-                showHideSettings();
+			$("#DeviceMeasurementMethod").change(function () {
+				showHideSettings();
 			});
-            $("#DeviceHasOIDSwitch").change(function () {
-                showHideSettings();
-            });
-            $("#DeviceStatusDetectionType").change(function () {
-                showHideSettings();
-            });
-            $("#DeviceTimerActive").change(function () {
-                showHideSettings();
+			$("#DeviceHasOIDSwitch").change(function () {
+				showHideSettings();
+			});
+			$("#DeviceStatusDetectionType").change(function () {
+				showHideSettings();
+			});
+			$("#DeviceTimerActive").change(function () {
+				showHideSettings();
 			});
 			/*
-            $("#DeviceTimerEveryDay").change(function () {
-                showHideSettings();
-            });
-			*/
-            $("#DeviceTimerCancelIfNotOn").change(function () {
-                showHideSettings();
+			$("#DeviceTimerEveryDay").change(function () {
+				showHideSettings();
 			});
-            $("#DeviceType").change(function () {
-                showHideSettings();
-            });
+			*/
+			$("#DeviceTimerCancelIfNotOn").change(function () {
+				showHideSettings();
+			});
+			$("#DeviceType").change(function () {
+				showHideSettings();
+			});
 
 
 
@@ -496,87 +496,87 @@
 			//	console.log("DeviceTimerDays " + $("#DeviceTimerDays").val());
 			//});
 
-            $('#SelectDeviceOIDPower').on('click', function () {
-                initSelectId(function (sid) {
-                    sid.selectId('show', $('#DeviceOIDPower').val(), function (newId) {
-                        if (newId) {
-                            $('#DeviceOIDPower').val(newId).trigger('change');
-                        }
-                    });
-                });
-            });
-            $('#SelectDeviceOIDSwitch').on('click', function () {
-                initSelectId(function (sid) {
-                    sid.selectId('show', $('#DeviceOIDSwitch').val(), function (newId) {
-                        if (newId) {
-                            $('#DeviceOIDSwitch').val(newId).trigger('change');
-                        }
-                    });
-                });
+			$('#SelectDeviceOIDPower').on('click', function () {
+				initSelectId(function (sid) {
+					sid.selectId('show', $('#DeviceOIDPower').val(), function (newId) {
+						if (newId) {
+							$('#DeviceOIDPower').val(newId).trigger('change');
+						}
+					});
+				});
 			});
-            $('#SelectDeviceOIDStatus').on('click', function () {
-                initSelectId(function (sid) {
-                    sid.selectId('show', $('#DeviceOIDStatus').val(), function (newId) {
-                        if (newId) {
-                            $('#DeviceOIDStatus').val(newId).trigger('change');
-                        }
-                    });
-                });
-            });
-            $('#SelectDeviceOIDPlugConnected').on('click', function () {
-                initSelectId(function (sid) {
-                    sid.selectId('show', $('#DeviceOIDPlugConnected').val(), function (newId) {
-                        if (newId) {
-                            $('#DeviceOIDPlugConnected').val(newId).trigger('change');
-                        }
-                    });
-                });
+			$('#SelectDeviceOIDSwitch').on('click', function () {
+				initSelectId(function (sid) {
+					sid.selectId('show', $('#DeviceOIDSwitch').val(), function (newId) {
+						if (newId) {
+							$('#DeviceOIDSwitch').val(newId).trigger('change');
+						}
+					});
+				});
 			});
-            $('#SelectDeviceOIDIsCharging').on('click', function () {
-                initSelectId(function (sid) {
-                    sid.selectId('show', $('#DeviceOIDIsCharging').val(), function (newId) {
-                        if (newId) {
-                            $('#DeviceOIDIsCharging').val(newId).trigger('change');
-                        }
-                    });
-                });
+			$('#SelectDeviceOIDStatus').on('click', function () {
+				initSelectId(function (sid) {
+					sid.selectId('show', $('#DeviceOIDStatus').val(), function (newId) {
+						if (newId) {
+							$('#DeviceOIDStatus').val(newId).trigger('change');
+						}
+					});
+				});
 			});
-            $('#SelectDeviceOIDIsError').on('click', function () {
-                initSelectId(function (sid) {
-                    sid.selectId('show', $('#DeviceOIDIsError').val(), function (newId) {
-                        if (newId) {
-                            $('#DeviceOIDIsError').val(newId).trigger('change');
-                        }
-                    });
-                });
-            });
-            $('#SelectDeviceOIDChargePower').on('click', function () {
-                initSelectId(function (sid) {
-                    sid.selectId('show', $('#DeviceOIDChargePower').val(), function (newId) {
-                        if (newId) {
-                            $('#DeviceOIDChargePower').val(newId).trigger('change');
-                        }
-                    });
-                });
+			$('#SelectDeviceOIDPlugConnected').on('click', function () {
+				initSelectId(function (sid) {
+					sid.selectId('show', $('#DeviceOIDPlugConnected').val(), function (newId) {
+						if (newId) {
+							$('#DeviceOIDPlugConnected').val(newId).trigger('change');
+						}
+					});
+				});
 			});
-            $('#SelectDeviceOIDStartCharge').on('click', function () {
-                initSelectId(function (sid) {
-                    sid.selectId('show', $('#DeviceOIDStartCharge').val(), function (newId) {
-                        if (newId) {
-                            $('#DeviceOIDStartCharge').val(newId).trigger('change');
-                        }
-                    });
-                });
+			$('#SelectDeviceOIDIsCharging').on('click', function () {
+				initSelectId(function (sid) {
+					sid.selectId('show', $('#DeviceOIDIsCharging').val(), function (newId) {
+						if (newId) {
+							$('#DeviceOIDIsCharging').val(newId).trigger('change');
+						}
+					});
+				});
 			});
-            $('#SelectDeviceOIDStopCharge').on('click', function () {
-                initSelectId(function (sid) {
-                    sid.selectId('show', $('#DeviceOIDStopCharge').val(), function (newId) {
-                        if (newId) {
-                            $('#DeviceOIDStopCharge').val(newId).trigger('change');
-                        }
-                    });
-                });
-            });
+			$('#SelectDeviceOIDIsError').on('click', function () {
+				initSelectId(function (sid) {
+					sid.selectId('show', $('#DeviceOIDIsError').val(), function (newId) {
+						if (newId) {
+							$('#DeviceOIDIsError').val(newId).trigger('change');
+						}
+					});
+				});
+			});
+			$('#SelectDeviceOIDChargePower').on('click', function () {
+				initSelectId(function (sid) {
+					sid.selectId('show', $('#DeviceOIDChargePower').val(), function (newId) {
+						if (newId) {
+							$('#DeviceOIDChargePower').val(newId).trigger('change');
+						}
+					});
+				});
+			});
+			$('#SelectDeviceOIDStartCharge').on('click', function () {
+				initSelectId(function (sid) {
+					sid.selectId('show', $('#DeviceOIDStartCharge').val(), function (newId) {
+						if (newId) {
+							$('#DeviceOIDStartCharge').val(newId).trigger('change');
+						}
+					});
+				});
+			});
+			$('#SelectDeviceOIDStopCharge').on('click', function () {
+				initSelectId(function (sid) {
+					sid.selectId('show', $('#DeviceOIDStopCharge').val(), function (newId) {
+						if (newId) {
+							$('#DeviceOIDStopCharge').val(newId).trigger('change');
+						}
+					});
+				});
+			});
 
 			//fill input elements a bit later
 			setTimeout(function () {
@@ -618,7 +618,7 @@
 				$('#DeviceMeasurementUnit').select();
 
 				$('#DeviceBatteryCapacity').val(devices[id].BatteryCapacity);
-                $('#DeviceWallboxHas3phaseEnabler').prop("checked", devices[id].WallboxHas3phaseEnabler);
+				$('#DeviceWallboxHas3phaseEnabler').prop("checked", devices[id].WallboxHas3phaseEnabler);
 				$('#DeviceOIDPlugConnected').val(devices[id].OID_PlugConnected);
 				$('#DeviceOIDIsCharging').val(devices[id].OID_IsCharging);
 				$('#DeviceOIDIsError').val(devices[id].OID_IsError);
@@ -646,7 +646,7 @@
 				$('#DeviceTimerEnd').val(devices[id].TimerEnd);
 				//$('#DeviceTimerDays').val(devices[id].TimerDays);
 
-				
+
 				$('#DeviceTimerEveryDay').prop("checked", devices[id].TimerEveryDay);
 				$('#DeviceTimerMonday').prop("checked", devices[id].TimerMonday);
 				$('#DeviceTimerTuesday').prop("checked", devices[id].TimerTuesday);
@@ -691,7 +691,7 @@
 					tempEnergyRequestPeriods.push(energyRequest);
 				}
 				else {
-					//bestehende noch kopieren... 
+					//bestehende noch kopieren...
 					for (let d = 0; d < devices[id].EnergyRequestPeriods.length; d++) {
 						let energyRequest = {
 							ID: devices[id].EnergyRequestPeriods[d].ID,
@@ -719,8 +719,8 @@
 				//just make it backwards compatible 0.1.0 -> 0.2.0
 				tempWallboxOIDs = []; //clear it
 
-                let wordMandatory = translateWord("mandatory");
-                let wordOptionally = translateWord("optionally");
+				let wordMandatory = translateWord("mandatory");
+				let wordOptionally = translateWord("optionally");
 
 
 				if (devices[id].WallboxOIDs != null) {
@@ -729,10 +729,10 @@
 					for (let d = 0; d < devices[id].WallboxOIDs.length; d++) {
 						if (devices[id].WallboxOIDs[d].Name == "DeviceOIDPlugConnected"
 							|| devices[id].WallboxOIDs[d].Name == "DeviceOIDChargePower") {
-                            devices[id].WallboxOIDs[d].must = wordMandatory;
+							devices[id].WallboxOIDs[d].must = wordMandatory;
 						}
 						else {
-                            devices[id].WallboxOIDs[d].must = wordOptionally;
+							devices[id].WallboxOIDs[d].must = wordOptionally;
 						}
 					}
 
@@ -748,11 +748,11 @@
 					}
 					else {
 						tempOID = "";
-                        tempActive = true;
+						tempActive = true;
 					}
 					wallboxOID = {
-                        active: tempActive,
-                        must: wordMandatory,
+						active: tempActive,
+						must: wordMandatory,
 						Name: "DeviceOIDPlugConnected",
 						OID: tempOID,
 						Type: "Boolean",
@@ -762,15 +762,15 @@
 
 					if (devices[id].OID_IsCharging != null && devices[id].OID_IsCharging.length > 5) {
 						tempOID = devices[id].OID_IsCharging;
-                        tempActive = true;
+						tempActive = true;
 					}
 					else {
 						tempOID = "";
 						tempActive = false;
 					}
 					wallboxOID = {
-                        active: tempActive,
-                        must: wordOptionally,
+						active: tempActive,
+						must: wordOptionally,
 						Name: "DeviceOIDIsCharging",
 						OID: tempOID,
 						Type: "Boolean",
@@ -780,15 +780,15 @@
 
 					if (devices[id].OID_IsError != null && devices[id].OID_IsError.length > 5) {
 						tempOID = devices[id].OID_IsError;
-                        tempActive = true;
+						tempActive = true;
 					}
 					else {
 						tempOID = "";
 						tempActive = false;
 					}
 					wallboxOID = {
-                        active: tempActive,
-                        must: wordOptionally,
+						active: tempActive,
+						must: wordOptionally,
 						Name: "DeviceOIDIsError",
 						OID: tempOID,
 						Type: "Boolean",
@@ -798,15 +798,15 @@
 
 					if (devices[id].OID_ChargePower != null && devices[id].OID_ChargePower.length > 5) {
 						tempOID = devices[id].OID_ChargePower;
-                        tempActive = true;
+						tempActive = true;
 					}
 					else {
 						tempOID = "";
-                        tempActive = true;
+						tempActive = true;
 					}
 					wallboxOID = {
-                        active: tempActive,
-                        must: wordMandatory,
+						active: tempActive,
+						must: wordMandatory,
 						Name: "DeviceOIDChargePower",
 						OID: tempOID,
 						Type: "Number",
@@ -816,15 +816,15 @@
 
 					if (devices[id].OID_StartCharge != null && devices[id].OID_StartCharge.length > 5) {
 						tempOID = devices[id].OID_StartCharge;
-                        tempActive = true;
+						tempActive = true;
 					}
 					else {
 						tempOID = "";
 						tempActive = false;
 					}
 					wallboxOID = {
-                        active: tempActive,
-                        must: wordOptionally,
+						active: tempActive,
+						must: wordOptionally,
 						Name: "DeviceOIDStartCharge",
 						OID: tempOID,
 						Type: "Boolean",
@@ -834,15 +834,15 @@
 
 					if (devices[id].OID_StopCharge != null && devices[id].OID_StopCharge.length > 5) {
 						tempOID = devices[id].OID_StopCharge;
-                        tempActive = true;
+						tempActive = true;
 					}
 					else {
 						tempOID = "";
 						tempActive = false;
 					}
 					wallboxOID = {
-                        active: tempActive,
-                        must: wordOptionally,
+						active: tempActive,
+						must: wordOptionally,
 						Name: "DeviceOIDStopCharge",
 						OID: tempOID,
 						Type: "Boolean",
@@ -851,11 +851,11 @@
 					tempWallboxOIDs.push(wallboxOID);
 
 				}
-			
 
-                console.log("Wallbox OID " + JSON.stringify(tempWallboxOIDs));
 
-                values2table('WallboxOid', tempWallboxOIDs, myonChange, tableWallboxOIDOnReady);
+				console.log("Wallbox OID " + JSON.stringify(tempWallboxOIDs));
+
+				values2table('WallboxOid', tempWallboxOIDs, myonChange, tableWallboxOIDOnReady);
 
 				//xxx
 
@@ -875,74 +875,74 @@
 			}, 100);
 
 
-            
-			
+
+
 			//multiple energy requests
-			
-            $('#addNewRequestPeriod').on('click', function () {
 
-                let temp_requestperiods = table2values('DeviceEnergyRequests');
-                let id = temp_requestperiods.length;
+			$('#addNewRequestPeriod').on('click', function () {
+
+				let temp_requestperiods = table2values('DeviceEnergyRequests');
+				let id = temp_requestperiods.length;
 				let nextId = (Number(id) + 1);
-                console.log("new requst period add " + nextId);
-                setTimeout(function () {
-					
-                    $('#DeviceEnergyRequests .values-input[data-name="ID"][data-index="' + id + '"]').val(nextId).change();
-                    $('#DeviceEnergyRequests .values-input[data-name="Days"][data-index="' + id + '"]').val("everyDay").change();
-                    $('#DeviceEnergyRequests .values-input[data-name="EarliestStartTime"][data-index="' + id + '"]').val("08:00").change();
-                    $('#DeviceEnergyRequests .values-input[data-name="LatestEndTime"][data-index="' + id + '"]').val("13:00").change();
-                    $('#DeviceEnergyRequests .values-input[data-name="MinRunTime"][data-index="' + id + '"]').val("00:30").change();
-                    $('#DeviceEnergyRequests .values-input[data-name="MaxRunTime"][data-index="' + id + '"]').val("02:30").change();
-                    $('#DeviceEnergyRequests .values-input[data-name="MaxTimeToOn"][data-index="' + id + '"]').val(10).change();
-                    $('#DeviceEnergyRequests .values-input[data-name="MinTimeAfterOff"][data-index="' + id + '"]').val(15).change();
+				console.log("new requst period add " + nextId);
+				setTimeout(function () {
 
-
-                    
-
-                }, 150);
-            });
-
-            
+					$('#DeviceEnergyRequests .values-input[data-name="ID"][data-index="' + id + '"]').val(nextId).change();
+					$('#DeviceEnergyRequests .values-input[data-name="Days"][data-index="' + id + '"]').val("everyDay").change();
+					$('#DeviceEnergyRequests .values-input[data-name="EarliestStartTime"][data-index="' + id + '"]').val("08:00").change();
+					$('#DeviceEnergyRequests .values-input[data-name="LatestEndTime"][data-index="' + id + '"]').val("13:00").change();
+					$('#DeviceEnergyRequests .values-input[data-name="MinRunTime"][data-index="' + id + '"]').val("00:30").change();
+					$('#DeviceEnergyRequests .values-input[data-name="MaxRunTime"][data-index="' + id + '"]').val("02:30").change();
+					$('#DeviceEnergyRequests .values-input[data-name="MaxTimeToOn"][data-index="' + id + '"]').val(10).change();
+					$('#DeviceEnergyRequests .values-input[data-name="MinTimeAfterOff"][data-index="' + id + '"]').val(15).change();
 
 
 
-		}
 
-        function tableEnergyRequestOnReady() {
-            console.log('tableEnergyRequestOnReady, do nothing');
-		}
-
-        function tableWallboxOIDOnReady() {
-			console.log('tableWallboxOIDOnReady');
-			
-            $('#WallboxOid .table-wallbox_oid-div .table-values .values-buttons[data-command="edit"]').on('click', function () {
-                let id = $(this).data('index');
-
-                console.log('edit wallbox OID clicked ID=' + id + " " + $('#WallboxOid .values-input[data-name="Name"][data-index="' + id + '"]').val());
-
-                initSelectId(function (sid) {
-                    sid.selectId('show', $('#WallboxOid .values-input[data-name="OID"][data-index="' + id + '"]').val(), function (newId) {
-                        if (newId) {
-                            socket.emit('getObject', newId, function (err, obj) {
-                                var OID = getOID(obj);
-                                $('#WallboxOid .values-input[data-name="OID"][data-index="' + id + '"]').val(OID).trigger('change');
-                            });
-                        }
-                    });
-                });
+				}, 150);
 			});
-        }
 
 
-        function getOID(obj) {
-            let OID = "unknown";
-            if (obj && obj._id) {
-                OID = obj._id;
-            }
 
-            return OID;
 
-        }
+
+		}
+
+		function tableEnergyRequestOnReady() {
+			console.log('tableEnergyRequestOnReady, do nothing');
+		}
+
+		function tableWallboxOIDOnReady() {
+			console.log('tableWallboxOIDOnReady');
+
+			$('#WallboxOid .table-wallbox_oid-div .table-values .values-buttons[data-command="edit"]').on('click', function () {
+				let id = $(this).data('index');
+
+				console.log('edit wallbox OID clicked ID=' + id + " " + $('#WallboxOid .values-input[data-name="Name"][data-index="' + id + '"]').val());
+
+				initSelectId(function (sid) {
+					sid.selectId('show', $('#WallboxOid .values-input[data-name="OID"][data-index="' + id + '"]').val(), function (newId) {
+						if (newId) {
+							socket.emit('getObject', newId, function (err, obj) {
+								var OID = getOID(obj);
+								$('#WallboxOid .values-input[data-name="OID"][data-index="' + id + '"]').val(OID).trigger('change');
+							});
+						}
+					});
+				});
+			});
+		}
+
+
+		function getOID(obj) {
+			let OID = "unknown";
+			if (obj && obj._id) {
+				OID = obj._id;
+			}
+
+			return OID;
+
+		}
 
 		function tableDevicesOnReady() {
 			console.log('tableDevicesOnReady');
@@ -972,7 +972,7 @@
 						devices[id].Type = $('#DeviceType').val();
 						devices[id].SerialNr = $('#DeviceSerialnumber').val();
 						devices[id].MaxPower = $('#DeviceMaxPower').val();
-                        devices[id].MinPower = $('#DeviceMinPower').val();
+						devices[id].MinPower = $('#DeviceMinPower').val();
 						devices[id].InterruptionsAllowed = $('#DeviceInterruptionAllowed').prop("checked");
 						devices[id].MinOnTime = $('#DeviceMinOnTime').val();
 						devices[id].MaxOnTime = $('#DeviceMaxOnTime').val();
@@ -982,13 +982,13 @@
 						devices[id].OID_Power = $('#DeviceOIDPower').val();
 						devices[id].MeasurementUnit = $('#DeviceMeasurementUnit').val();
 						devices[id].BatteryCapacity = $('#DeviceBatteryCapacity').val();
-                        devices[id].WallboxHas3phaseEnabler = $('#DeviceWallboxHas3phaseEnabler').prop("checked");
-                        devices[id].OID_PlugConnected=$('#DeviceOIDPlugConnected').val();
-                        devices[id].OID_IsCharging=$('#DeviceOIDIsCharging').val();
-                        devices[id].OID_IsError=$('#DeviceOIDIsError').val();
-                        devices[id].OID_ChargePower=$('#DeviceOIDChargePower').val();
-                        devices[id].OID_StartCharge=$('#DeviceOIDStartCharge').val();
-                        devices[id].OID_StopCharge=$('#DeviceOIDStopCharge').val();
+						devices[id].WallboxHas3phaseEnabler = $('#DeviceWallboxHas3phaseEnabler').prop("checked");
+						devices[id].OID_PlugConnected = $('#DeviceOIDPlugConnected').val();
+						devices[id].OID_IsCharging = $('#DeviceOIDIsCharging').val();
+						devices[id].OID_IsError = $('#DeviceOIDIsError').val();
+						devices[id].OID_ChargePower = $('#DeviceOIDChargePower').val();
+						devices[id].OID_StartCharge = $('#DeviceOIDStartCharge').val();
+						devices[id].OID_StopCharge = $('#DeviceOIDStopCharge').val();
 
 						devices[id].StatusDetection = $('#DeviceStatusDetectionType').val();
 						devices[id].StatusDetectionLimit = $('#DeviceStatusDetectionLimit').val();
@@ -1025,15 +1025,15 @@
 
 						//====================================================================================
 
-						
-						let temp_energyrequests=table2values('DeviceEnergyRequests');
+
+						let temp_energyrequests = table2values('DeviceEnergyRequests');
 						devices[id].EnergyRequestPeriods = temp_energyrequests;
-                        console.log("result EnergyRequestPeriods " + JSON.stringify(devices[id].EnergyRequestPeriods));
+						console.log("result EnergyRequestPeriods " + JSON.stringify(devices[id].EnergyRequestPeriods));
 						//====================================================================================
 
-                        let tempWallboxOIDs = table2values('WallboxOid');
-                        devices[id].WallboxOIDs = tempWallboxOIDs;
-                        console.log("result wallbox oids " + JSON.stringify(devices[id].WallboxOIDs));
+						let tempWallboxOIDs = table2values('WallboxOid');
+						devices[id].WallboxOIDs = tempWallboxOIDs;
+						console.log("result wallbox oids " + JSON.stringify(devices[id].WallboxOIDs));
 
 						CheckDeviceData(id);
 						//tabelle updaten nicht notwendig, da hier keine Daten aus der Tabelle geändert werden
@@ -1056,39 +1056,39 @@
 				console.log("set StatusDetectionLimitTimeOn=0 ");
 				devices[id].StatusDetectionLimitTimeOn = 0;
 			}
-            console.log(id + " " + typeof devices[id].StatusDetectionLimitTimeOff + " " + devices[id].StatusDetectionLimitTimeOff);
-            if (typeof devices[id].StatusDetectionLimitTimeOff == undefined || devices[id].StatusDetectionLimitTimeOff == null || devices[id].StatusDetectionLimitTimeOff == "") {
-                console.log("set StatusDetectionLimitTimeOff=0 ");
-                devices[id].StatusDetectionLimitTimeOff = 0;
+			console.log(id + " " + typeof devices[id].StatusDetectionLimitTimeOff + " " + devices[id].StatusDetectionLimitTimeOff);
+			if (typeof devices[id].StatusDetectionLimitTimeOff == undefined || devices[id].StatusDetectionLimitTimeOff == null || devices[id].StatusDetectionLimitTimeOff == "") {
+				console.log("set StatusDetectionLimitTimeOff=0 ");
+				devices[id].StatusDetectionLimitTimeOff = 0;
 			}
-            console.log(id + " " + typeof devices[id].StatusDetectionMinRunTime + " " + devices[id].StatusDetectionMinRunTime);
-            if (typeof devices[id].StatusDetectionMinRunTime == undefined || devices[id].StatusDetectionMinRunTime == null || devices[id].StatusDetectionMinRunTime == "") {
-                console.log("set StatusDetectionMinRunTime=0 ");
-                devices[id].StatusDetectionMinRunTime = 0;
+			console.log(id + " " + typeof devices[id].StatusDetectionMinRunTime + " " + devices[id].StatusDetectionMinRunTime);
+			if (typeof devices[id].StatusDetectionMinRunTime == undefined || devices[id].StatusDetectionMinRunTime == null || devices[id].StatusDetectionMinRunTime == "") {
+				console.log("set StatusDetectionMinRunTime=0 ");
+				devices[id].StatusDetectionMinRunTime = 0;
 			}
 
-            console.log(id + " " + typeof devices[id].TimerCancelIfNotOnTime + " " + devices[id].TimerCancelIfNotOnTime + " " + devices[id].TimerCancelIfNotOn);
-            if (typeof devices[id].TimerCancelIfNotOnTime == undefined || devices[id].TimerCancelIfNotOnTime == null || devices[id].TimerCancelIfNotOnTime == "" || Number( devices[id].TimerCancelIfNotOnTime) == 0) {
+			console.log(id + " " + typeof devices[id].TimerCancelIfNotOnTime + " " + devices[id].TimerCancelIfNotOnTime + " " + devices[id].TimerCancelIfNotOn);
+			if (typeof devices[id].TimerCancelIfNotOnTime == undefined || devices[id].TimerCancelIfNotOnTime == null || devices[id].TimerCancelIfNotOnTime == "" || Number(devices[id].TimerCancelIfNotOnTime) == 0) {
 
 				if (typeof devices[id].TimerCancelIfNotOn == undefined || devices[id].TimerCancelIfNotOn == null || devices[id].TimerCancelIfNotOn == false) {
 					console.log("set TimerCancelIfNotOnTime=0 ");
 					devices[id].TimerCancelIfNotOnTime = 0;
 				}
 				else {
-                    console.log("set TimerCancelIfNotOnTime=5 ");
-                    devices[id].TimerCancelIfNotOnTime = 5;
-                }
+					console.log("set TimerCancelIfNotOnTime=5 ");
+					devices[id].TimerCancelIfNotOnTime = 5;
+				}
 			}
 
-            console.log(id + " " + typeof devices[id].MeasurementUnit + " " + devices[id].MeasurementUnit );
-            if (typeof devices[id].MeasurementUnit == undefined || devices[id].MeasurementUnit == null || devices[id].MeasurementUnit == "" ) {
+			console.log(id + " " + typeof devices[id].MeasurementUnit + " " + devices[id].MeasurementUnit);
+			if (typeof devices[id].MeasurementUnit == undefined || devices[id].MeasurementUnit == null || devices[id].MeasurementUnit == "") {
 
-                console.log("set MeasurementUnit= W");
-                devices[id].MeasurementUnit = "W";
-                
-            }
+				console.log("set MeasurementUnit= W");
+				devices[id].MeasurementUnit = "W";
 
-            
+			}
+
+
 		}
 
 		var selectId;
@@ -1147,12 +1147,12 @@
 			});
 
 			//use devices data instead table and update from table
-            let temp_devices = table2values('devices');
+			let temp_devices = table2values('devices');
 			for (let d = 0; d < temp_devices.length; d++) {
-                devices[d].IsActive = temp_devices[d].IsActive;
-                devices[d].ID = temp_devices[d].ID;
-                devices[d].Name = temp_devices[d].Name;
-            }
+				devices[d].IsActive = temp_devices[d].IsActive;
+				devices[d].ID = temp_devices[d].ID;
+				devices[d].Name = temp_devices[d].Name;
+			}
 
 			obj.devices = devices;
 
@@ -1229,17 +1229,8 @@
 						<input type="text" id="LogToCSVPath" class="value" />
 						<label for="LogToCSVPath" class="translate">LogToCSVPath</label>
 					</div>
-
-
 				</div>
-
-
-
 			</div>
-
-
-
-
 
 			<!--  settings for devices -->
 			<div id="tab-devices" class="col s12 page">
@@ -1374,12 +1365,8 @@
 										<option value="Other" class="translate">Other</option>
 									</select>
 									<label for="DeviceType" class="translate">DeviceType</label>
-
-
 								</div>
-
 							</div>
-
 
 							<div class="row">
 								<div class="input-field col s3">
@@ -1458,7 +1445,6 @@
 								</div>
 
 							</div>
-
 						</div>
 
 						<!-- tab switch-->
@@ -1468,7 +1454,6 @@
 									<span class="translate">hint_switch</span>
 								</div>
 							</div>
-
 
 							<div class="row">
 								<div class="input-field col s3">
@@ -1490,7 +1475,6 @@
 									<a id="SelectDeviceOIDStatus" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
 								</div>
 							</div>
-
 
 							<div id="divDeviceStatusDetectionLimit" class="row">
 								<div class="input-field col s2">
@@ -1536,7 +1520,6 @@
 
 						</div>
 
-
 						<!-- tab energy requests-->
 						<div id="tab-popup_device_timers" class="col s12 page">
 							<div class="row">
@@ -1552,97 +1535,6 @@
 								</div>
 							</div>
 
-							<!--
-							<div class="row">
-								<div id="divDeviceTimerEveryDay" class="input-field col s1">
-									<input type="checkbox" id="DeviceTimerEveryDay" class="value" />
-									<label for="DeviceTimerEveryDay" class="translate">DeviceTimerEveryDay</label>
-								</div>
-							</div>
-								-->
-							<!--
-							<div class="row">
-								<div id="divDeviceTimerDays" class="row">
-									<div id="divDeviceTimerMonday" class="input-field col s2">
-										<input type="checkbox" id="DeviceTimerMonday" class="value" />
-										<label for="DeviceTimerMonday" class="translate">DeviceTimerMonday</label>
-									</div>
-									<div id="divDeviceTimerTuesday" class="input-field col s2">
-										<input type="checkbox" id="DeviceTimerTuesday" class="value" />
-										<label for="DeviceTimerTuesday" class="translate">DeviceTimerTuesday</label>
-									</div>
-									<div id="divDeviceTimerWednesday" class="input-field col s2">
-										<input type="checkbox" id="DeviceTimerWednesday" class="value" />
-										<label for="DeviceTimerWednesday" class="translate">DeviceTimerWednesday</label>
-									</div>
-									<div id="divDeviceTimerThursday" class="input-field col s2">
-										<input type="checkbox" id="DeviceTimerThursday" class="value" />
-										<label for="DeviceTimerThursday" class="translate">DeviceTimerThursday</label>
-									</div>
-									<div id="divDeviceTimerFriday" class="input-field col s2">
-										<input type="checkbox" id="DeviceTimerFriday" class="value" />
-										<label for="DeviceTimerFriday" class="translate">DeviceTimerFriday</label>
-									</div>
-									<div id="divDeviceTimerSaturday" class="input-field col s2">
-										<input type="checkbox" id="DeviceTimerSaturday" class="value" />
-										<label for="DeviceTimerSaturday" class="translate">DeviceTimerSaturday</label>
-									</div>
-									<div id="divDeviceTimerSunday" class="input-field col s2">
-										<input type="checkbox" id="DeviceTimerSunday" class="value" />
-										<label for="DeviceTimerSunday" class="translate">DeviceTimerSunday</label>
-									</div>
-								</div>
-							</div>
-								-->
-							<!--
-									<div class="row">
-										<div id="divDeviceTimer" class="row">
-											<div class="input-field col s3">
-												<input type="text" id="DeviceTimerStart" class="value" />
-												<label for="DeviceTimerStart" class="translate">DeviceTimerStart</label>
-											</div>
-
-											<div class="input-field col s3">
-												<input type="text" id="DeviceTimerEnd" class="value" />
-												<label for="DeviceTimerEnd" class="translate">DeviceTimerEnd</label>
-											</div>
-										</div>
-							-->
-							<!--todo multiple select ???-->
-							<!--
-							<div class="input-field col s3">
-								<select multiple id="DeviceTimerDays" class="value">
-									<option value="everyDay" class="translate">every Day</option>
-									<option value="Monday" class="translate">Monday</option>
-									<option value="Tuesday" class="translate">Tuesday</option>
-									<option value="Wednesday" class="translate">Wednesday</option>
-									<option value="Thursday" class="translate">Thursday</option>
-									<option value="Friday" class="translate">Friday</option>
-									<option value="Saturday" class="translate">Saturday</option>
-									<option value="Sunday" class="translate">Sunday</option>
-
-								</select>
-								<label for="DeviceTimerDays" class="translate">DeviceTimerDays</label>
-
-							</div>
-								-->
-							<!--
-							</div>
-							-->
-							<!--
-							<div class="row">
-								<div id="divDeviceRunningTime" class="row">
-									<div class="input-field col s3">
-										<input type="text" id="DeviceTimerMinRunningtime" class="value" />
-										<label for="DeviceTimerMinRunningtime" class="translate">DeviceTimerMinRunningtime</label>
-									</div>
-									<div class="input-field col s3">
-										<input type="text" id="DeviceTimerMaxRunningtime" class="value" />
-										<label for="DeviceTimerMaxRunningtime" class="translate">DeviceTimerMaxRunningtime</label>
-									</div>
-								</div>
-							</div>
-								-->
 
 							<div class="row">
 								<div id="divDeviceCancelRequests" class="row">
@@ -1682,10 +1574,7 @@
 							</div>
 						</div>
 
-
-
 						<!-- tab wallbox-->
-
 						<div id="tab-popup_device_wallbox" class="col s12 page">
 
 							<div class="row">
@@ -1728,9 +1617,6 @@
 								</div>
 							</div>
 						</div>
-
-
-
 					</div>
 				</div>
 
