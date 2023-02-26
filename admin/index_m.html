@@ -1047,30 +1047,30 @@
 			console.log("CheckDeviceData " + id);
 
 			console.log(id + " " + typeof devices[id].StatusDetectionLimit + " " + devices[id].StatusDetectionLimit);
-			if (typeof devices[id].StatusDetectionLimit == undefined || devices[id].StatusDetectionLimit == null || devices[id].StatusDetectionLimit == "") {
+			if (devices[id].StatusDetectionLimit === undefined || devices[id].StatusDetectionLimit == null || devices[id].StatusDetectionLimit == "") {
 				console.log("set StatusDetectionLimit=0 ");
 				devices[id].StatusDetectionLimit = 0;
 			}
 			console.log(id + " " + typeof devices[id].StatusDetectionLimitTimeOn + " " + devices[id].StatusDetectionLimitTimeOn);
-			if (typeof devices[id].StatusDetectionLimitTimeOn == undefined || devices[id].StatusDetectionLimitTimeOn == null || devices[id].StatusDetectionLimitTimeOn == "") {
+			if (devices[id].StatusDetectionLimitTimeOn === undefined || devices[id].StatusDetectionLimitTimeOn == null || devices[id].StatusDetectionLimitTimeOn == "") {
 				console.log("set StatusDetectionLimitTimeOn=0 ");
 				devices[id].StatusDetectionLimitTimeOn = 0;
 			}
 			console.log(id + " " + typeof devices[id].StatusDetectionLimitTimeOff + " " + devices[id].StatusDetectionLimitTimeOff);
-			if (typeof devices[id].StatusDetectionLimitTimeOff == undefined || devices[id].StatusDetectionLimitTimeOff == null || devices[id].StatusDetectionLimitTimeOff == "") {
+			if (devices[id].StatusDetectionLimitTimeOff === undefined || devices[id].StatusDetectionLimitTimeOff == null || devices[id].StatusDetectionLimitTimeOff == "") {
 				console.log("set StatusDetectionLimitTimeOff=0 ");
 				devices[id].StatusDetectionLimitTimeOff = 0;
 			}
 			console.log(id + " " + typeof devices[id].StatusDetectionMinRunTime + " " + devices[id].StatusDetectionMinRunTime);
-			if (typeof devices[id].StatusDetectionMinRunTime == undefined || devices[id].StatusDetectionMinRunTime == null || devices[id].StatusDetectionMinRunTime == "") {
+			if (devices[id].StatusDetectionMinRunTime === undefined || devices[id].StatusDetectionMinRunTime == null || devices[id].StatusDetectionMinRunTime == "") {
 				console.log("set StatusDetectionMinRunTime=0 ");
 				devices[id].StatusDetectionMinRunTime = 0;
 			}
 
 			console.log(id + " " + typeof devices[id].TimerCancelIfNotOnTime + " " + devices[id].TimerCancelIfNotOnTime + " " + devices[id].TimerCancelIfNotOn);
-			if (typeof devices[id].TimerCancelIfNotOnTime == undefined || devices[id].TimerCancelIfNotOnTime == null || devices[id].TimerCancelIfNotOnTime == "" || Number(devices[id].TimerCancelIfNotOnTime) == 0) {
+			if (devices[id].TimerCancelIfNotOnTime === undefined || devices[id].TimerCancelIfNotOnTime == null || devices[id].TimerCancelIfNotOnTime == "" || Number(devices[id].TimerCancelIfNotOnTime) == 0) {
 
-				if (typeof devices[id].TimerCancelIfNotOn == undefined || devices[id].TimerCancelIfNotOn == null || devices[id].TimerCancelIfNotOn == false) {
+				if (devices[id].TimerCancelIfNotOn === undefined || devices[id].TimerCancelIfNotOn == null || devices[id].TimerCancelIfNotOn == false) {
 					console.log("set TimerCancelIfNotOnTime=0 ");
 					devices[id].TimerCancelIfNotOnTime = 0;
 				}
@@ -1081,7 +1081,7 @@
 			}
 
 			console.log(id + " " + typeof devices[id].MeasurementUnit + " " + devices[id].MeasurementUnit);
-			if (typeof devices[id].MeasurementUnit == undefined || devices[id].MeasurementUnit == null || devices[id].MeasurementUnit == "") {
+			if (devices[id].MeasurementUnit === undefined || devices[id].MeasurementUnit == null || devices[id].MeasurementUnit == "") {
 
 				console.log("set MeasurementUnit= W");
 				devices[id].MeasurementUnit = "W";
