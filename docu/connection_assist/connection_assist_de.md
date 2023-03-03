@@ -17,16 +17,16 @@ connection-assist.jar -discoverHoman
 ```
 
 aufrufen.
-![Bild1](connection_assist_1.png)
+![Bild1](connection_assist_1.PNG)
 * das öffnet ein Browser-Fenster
 * die SMA Geräte werden gesucht
-![Bild2](connection_assist_2.png)
+![Bild2](connection_assist_2.PNG)
 * den SHM auswählen und verbinden
 * als Passwort den RID eingeben (SHM2)
-![Bild3](connection_assist_3.png)
+![Bild3](connection_assist_3.PNG)
 * Systemstatus auslesen
-![Bild4](connection_assist_4.png)
-![Bild4_1](connection_assist_4_1.png)
+![Bild4](connection_assist_4.PNG)
+![Bild4_1](connection_assist_4_1.PNG)
 * als smasl Datei speichern und nach zip umbenenennen (Achtung! Pfad merken, wohin gespeichert wurde)
-![Bild5](connection_assist_5.png)
+![Bild5](connection_assist_5.PNG)
 * SEMPLog.tgz entpacken
