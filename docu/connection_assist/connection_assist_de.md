@@ -24,9 +24,10 @@ aufrufen.
 * den SHM auswählen und verbinden
 * als Passwort den RID eingeben (SHM2)
 ![Bild3](connection_assist_3.PNG)
-* Systemstatus auslesen
+* Systemstatus speichern
 ![Bild4](connection_assist_4.PNG)
 ![Bild4_1](connection_assist_4_1.PNG)
 * als smasl Datei speichern und nach zip umbenenennen (Achtung! Pfad merken, wohin gespeichert wurde)
 ![Bild5](connection_assist_5.PNG)
 * SEMPLog.tgz entpacken
+* es sind 5 logs der letzten 5 Stunden enthalten
