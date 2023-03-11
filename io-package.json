@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "semp",
-        "version": "0.3.1",
+        "version": "0.4.0",
         "news": {
+            "0.4.0": {
+                "en": "wallbox redesign",
+                "de": "Neugestaltung der Wallbox",
+                "ru": "редизайн настенной коробки",
+                "pt": "redesenho da caixa de embutir",
+                "nl": "herontwerp van de wallbox",
+                "fr": "refonte de la boîte murale",
+                "it": "riprogettazione della scatola a muro",
+                "es": "rediseño de la caja de empotrar",
+                "pl": "przeprojektowanie skrzynki ściennej",
+                "uk": "редизайну Wallbox",
+                "zh-cn": "墙盒重新设计"
+            },
             "0.3.1": {
                 "en": "wallbox fast charging added",
                 "de": "Wallbox-Schnellladung hinzugefügt",
