@@ -55,6 +55,7 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 
 ### 0.4.0 (in progress)
 * (René) redesign wallbox feature
+* (René) add status ExcessEnergy in timeframes to show when excess energy is used
 
 ### 0.3.1 (2023-02-26)
 * (René) issue #27: wallbox fast charging added
