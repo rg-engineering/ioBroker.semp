@@ -53,9 +53,10 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 
 ## Changelog
 
-### 0.4.0 (in progress)
+### 0.4.0 (2023-03-15)
 * (René) redesign wallbox feature
 * (René) add status ExcessEnergy in timeframes to show when excess energy is used
+* (René) bug fix for "cannot read data undefined" when new device was created
 
 ### 0.3.1 (2023-02-26)
 * (René) issue #27: wallbox fast charging added

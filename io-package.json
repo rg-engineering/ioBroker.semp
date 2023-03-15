@@ -4,17 +4,17 @@
         "version": "0.4.0",
         "news": {
             "0.4.0": {
-                "en": "wallbox redesign",
-                "de": "Neugestaltung der Wallbox",
-                "ru": "редизайн настенной коробки",
-                "pt": "redesenho da caixa de embutir",
-                "nl": "herontwerp van de wallbox",
-                "fr": "refonte de la boîte murale",
-                "it": "riprogettazione della scatola a muro",
-                "es": "rediseño de la caja de empotrar",
-                "pl": "przeprojektowanie skrzynki ściennej",
-                "uk": "редизайну Wallbox",
-                "zh-cn": "墙盒重新设计"
+                "en": "wallbox redesign and some bug fixes",
+                "de": "Neugestaltung der Wallbox und einige Fehlerbehebungen",
+                "ru": "редизайн Wallbox и исправление некоторых ошибок",
+                "pt": "reformulação do wallbox e algumas correções de bugs",
+                "nl": "herontwerp van wallbox en enkele bugfixes",
+                "fr": "refonte de la wallbox et quelques corrections de bugs",
+                "it": "riprogettazione della wallbox e alcune correzioni di bug",
+                "es": "rediseño de wallbox y algunas correcciones de errores",
+                "pl": "przeprojektowanie stacji ładowania i kilka poprawek błędów",
+                "uk": "оновлений дизайн wallbox і деякі виправлення помилок",
+                "zh-cn": "wallbox 重新设计和一些错误修复"
             },
             "0.3.1": {
                 "en": "wallbox fast charging added",
