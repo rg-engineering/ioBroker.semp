@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "semp",
-        "version": "0.4.0",
+        "version": "0.4.1",
         "news": {
+            "0.4.1": {
+                "en": "avoid exception when no switch is defined for wallbox",
+                "de": "Ausnahme vermeiden, wenn kein Schalter für Wallbox definiert ist",
+                "ru": "избежать исключения, когда для настенного ящика не определен переключатель",
+                "pt": "evitar exceção quando nenhum interruptor é definido para a caixa de embutir",
+                "nl": "uitzondering vermijden wanneer er geen schakelaar is gedefinieerd voor wallbox",
+                "fr": "éviter l'exception lorsqu'aucun interrupteur n'est défini pour la wallbox",
+                "it": "evitare l'eccezione quando non è definito alcun interruttore per la wallbox",
+                "es": "evitar excepciones cuando no se define ningún interruptor para wallbox",
+                "pl": "uniknąć wyjątku, gdy nie zdefiniowano przełącznika dla stacji ładowania",
+                "uk": "уникнути винятку, якщо для Wallbox не визначено перемикач",
+                "zh-cn": "当没有为 wallbox 定义开关时避免异常"
+            },
             "0.4.0": {
                 "en": "wallbox redesign and some bug fixes",
                 "de": "Neugestaltung der Wallbox und einige Fehlerbehebungen",

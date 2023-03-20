@@ -53,6 +53,9 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 
 ## Changelog
 
+### 0.4.1 (2023-03-21)
+* (René) bug fix: avoid exception when no switch is defined for wallbox
+
 ### 0.4.0 (2023-03-15)
 * (René) redesign wallbox feature
 * (René) add status ExcessEnergy in timeframes to show when excess energy is used
