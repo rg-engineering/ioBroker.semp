@@ -54,6 +54,7 @@
     "DeviceTimerWednesday": "miércoles",
     "DeviceType": "Tipo de dispositivo",
     "DeviceVendor": "Fabricante",
+    "DeviceWallbox3phaseSwitchLimit": "límite para cambiar a carga trifásica [W]",
     "DeviceWallboxHas3phaseEnabler": "tiene interruptor para habilitar la carga trifásica",
     "DishWasher": "Lavavajillas",
     "Dryer": "Secadora",

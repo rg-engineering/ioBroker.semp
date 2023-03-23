@@ -54,6 +54,7 @@
     "DeviceTimerWednesday": "Woensdag",
     "DeviceType": "Soort apparaat",
     "DeviceVendor": "Fabrikant",
+    "DeviceWallbox3phaseSwitchLimit": "limiet om over te schakelen naar 3-fasen laden [W]",
     "DeviceWallboxHas3phaseEnabler": "heeft een schakelaar om 3-fasen opladen mogelijk te maken",
     "DishWasher": "Afwasmachine",
     "Dryer": "Droger",

@@ -4,17 +4,17 @@
         "version": "0.4.1",
         "news": {
             "0.4.1": {
-                "en": "avoid exception when no switch is defined for wallbox",
-                "de": "Ausnahme vermeiden, wenn kein Schalter für Wallbox definiert ist",
-                "ru": "избежать исключения, когда для настенного ящика не определен переключатель",
-                "pt": "evitar exceção quando nenhum interruptor é definido para a caixa de embutir",
-                "nl": "uitzondering vermijden wanneer er geen schakelaar is gedefinieerd voor wallbox",
-                "fr": "éviter l'exception lorsqu'aucun interrupteur n'est défini pour la wallbox",
-                "it": "evitare l'eccezione quando non è definito alcun interruttore per la wallbox",
-                "es": "evitar excepciones cuando no se define ningún interruptor para wallbox",
-                "pl": "uniknąć wyjątku, gdy nie zdefiniowano przełącznika dla stacji ładowania",
-                "uk": "уникнути винятку, якщо для Wallbox не визначено перемикач",
-                "zh-cn": "当没有为 wallbox 定义开关时避免异常"
+                "en": "avoid exception when no switch is defined for wallbox \n limit to switch to 3phase charging adjustable \n timout before disconnect status of wallbox",
+                "de": "Ausnahme vermeiden, wenn kein Schalter für Wallbox definiert ist\n Grenze zum Umschalten auf 3-phasiges Laden einstellbar\n Timeout vor Trennstatus der Wallbox",
+                "ru": "избежать исключения, когда для настенного ящика не определен переключатель\n предел переключения на 3-фазную зарядку регулируемый\n тайм-аут перед отключением состояния настенного ящика",
+                "pt": "evitar exceção quando nenhum interruptor é definido para a caixa de embutir\n limite para mudar para carregamento trifásico ajustável\n tempo limite antes do status de desconexão da caixa de embutir",
+                "nl": "uitzondering vermijden wanneer er geen schakelaar is gedefinieerd voor wallbox\n limiet om over te schakelen naar 3-fasen opladen instelbaar\n timeout voordat de status van de wallbox wordt verbroken",
+                "fr": "éviter l'exception lorsqu'aucun interrupteur n'est défini pour la wallbox\n limite pour passer en charge triphasée réglable\n délai d'attente avant déconnexion de l'état de la wallbox",
+                "it": "evitare l'eccezione quando non è definito alcun interruttore per la wallbox\n limite per passare alla ricarica trifase regolabile\n timeout prima della disconnessione dello stato della wallbox",
+                "es": "evitar excepciones cuando no se define ningún interruptor para wallbox\n límite para cambiar a carga trifásica ajustable\n timout antes del estado de desconexión del wallbox",
+                "pl": "uniknąć wyjątku, gdy nie zdefiniowano przełącznika dla stacji ładowania\n ograniczenie przełączania na ładowanie 3-fazowe regulowane\n timeout przed stanem rozłączenia stacji ładowania",
+                "uk": "уникнути винятку, якщо для Wallbox не визначено перемикач\n обмеження для переходу на 3-фазне заряджання регулюється\n тайм-аут до стану відключення Wallbox",
+                "zh-cn": "当没有为 wallbox 定义开关时避免异常\n 限制切换到 3phase 充电可调\n 断开 wallbox 状态前超时"
             },
             "0.4.0": {
                 "en": "wallbox redesign and some bug fixes",

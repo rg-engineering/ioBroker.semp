@@ -188,34 +188,15 @@
 				$('#divDeviceStatusDetectionLimit').hide();
 			}
 
-
-
-
-			/*
-			 * only if detection from power value, otherwise we believe what we get
-			if ($('#DeviceStatusDetectionType').val() == "FromPowerValue" || $('#DeviceStatusDetectionType').val() == "SeparateOID") {
-				$('#divDeviceStatusDetectionLimit').show();
-			}
-			else {
-				$('#divDeviceStatusDetectionLimit').hide();
-			}
-			*/
-
 			if ($('#DeviceTimerActive').prop("checked")) {
 				//console.log("show DeviceTimerActive");
 				$('#divDeviceTimer').show();
-				//$('#divDeviceRunningTime').show();
-				//$('#divDeviceTimerEveryDay').show();
-				//$('#divDeviceTimerDays').show();
 				$('#divDeviceCancelRequests').show();
 				$('#DeviceEnergyRequests').show();
 			}
 			else {
 				//console.log("hide DeviceTimerActive");
 				$('#divDeviceTimer').hide();
-				//$('#divDeviceRunningTime').hide();
-				//$('#divDeviceTimerEveryDay').hide();
-				//$('#divDeviceTimerDays').hide();
 				$('#divDeviceCancelRequests').hide();
 				$('#DeviceEnergyRequests').hide();
 			}
@@ -228,32 +209,15 @@
 				//console.log("hide DeviceTimerCancelIfNotOn");
 				$('#divDeviceTimerCancelIfNotOnTime').hide();
 			}
-			/*
-			if ($('#DeviceTimerEveryDay').prop("checked")) {
-				//console.log("show DeviceTimerEveryDay");
-				$('#divDeviceTimerMonday').hide();
-				$('#divDeviceTimerTuesday').hide();
-				$('#divDeviceTimerWednesday').hide();
-				$('#divDeviceTimerThursday').hide();
-				$('#divDeviceTimerFriday').hide();
-				$('#divDeviceTimerSaturday').hide();
-				$('#divDeviceTimerSunday').hide();
-			}
-			else {
-				//console.log("hide DeviceTimerEveryDay");
-				$('#divDeviceTimerMonday').show();
-				$('#divDeviceTimerTuesday').show();
-				$('#divDeviceTimerWednesday').show();
-				$('#divDeviceTimerThursday').show();
-				$('#divDeviceTimerFriday').show();
-				$('#divDeviceTimerSaturday').show();
-				$('#divDeviceTimerSunday').show();
-			}
-			*/
 
-			set_column_readonly("table-wallbox_oid", "tableWallboxOID_col2", 1);
+            if ($('#DeviceWallboxHas3phaseEnabler').prop("checked")) {
+                $('#3phaseLimit').show();
+            }
+            else {
+                $('#3phaseLimit').hide();
+            }
 
-
+            set_column_readonly("table-wallbox_oid", "tableWallboxOID_col2", 1);
 
 		}
 
@@ -478,23 +442,17 @@
 			$("#DeviceTimerActive").change(function () {
 				showHideSettings();
 			});
-			/*
-			$("#DeviceTimerEveryDay").change(function () {
-				showHideSettings();
-			});
-			*/
 			$("#DeviceTimerCancelIfNotOn").change(function () {
 				showHideSettings();
 			});
+
+            $("#DeviceWallboxHas3phaseEnabler").change(function () {
+                showHideSettings();
+            });
+
 			$("#DeviceType").change(function () {
 				showHideSettings();
 			});
-
-
-
-			//$("#DeviceTimerDays").change(function () {
-			//	console.log("DeviceTimerDays " + $("#DeviceTimerDays").val());
-			//});
 
 			$('#SelectDeviceOIDPower').on('click', function () {
 				initSelectId(function (sid) {
@@ -619,6 +577,8 @@
 
 				$('#DeviceBatteryCapacity').val(devices[id].BatteryCapacity);
 				$('#DeviceWallboxHas3phaseEnabler').prop("checked", devices[id].WallboxHas3phaseEnabler);
+                $('#DeviceWallbox3phaseSwitchLimit').val(devices[id].Wallbox3phaseSwitchLimit);
+
 				$('#DeviceOIDPlugConnected').val(devices[id].OID_PlugConnected);
 				$('#DeviceOIDIsCharging').val(devices[id].OID_IsCharging);
 				$('#DeviceOIDIsError').val(devices[id].OID_IsError);
@@ -983,6 +943,8 @@
 						devices[id].MeasurementUnit = $('#DeviceMeasurementUnit').val();
 						devices[id].BatteryCapacity = $('#DeviceBatteryCapacity').val();
 						devices[id].WallboxHas3phaseEnabler = $('#DeviceWallboxHas3phaseEnabler').prop("checked");
+                        devices[id].Wallbox3phaseSwitchLimit = $('#DeviceWallbox3phaseSwitchLimit').val();
+
 						devices[id].OID_PlugConnected = $('#DeviceOIDPlugConnected').val();
 						devices[id].OID_IsCharging = $('#DeviceOIDIsCharging').val();
 						devices[id].OID_IsError = $('#DeviceOIDIsError').val();
@@ -1045,26 +1007,31 @@
 
 		function CheckDeviceData(id) {
 			console.log("CheckDeviceData " + id);
+			let changed = false;
 
 			console.log(id + " " + typeof devices[id].StatusDetectionLimit + " " + devices[id].StatusDetectionLimit);
 			if (devices[id].StatusDetectionLimit === undefined || devices[id].StatusDetectionLimit == null || devices[id].StatusDetectionLimit == "") {
 				console.log("set StatusDetectionLimit=0 ");
 				devices[id].StatusDetectionLimit = 0;
+                changed = true;
 			}
 			console.log(id + " " + typeof devices[id].StatusDetectionLimitTimeOn + " " + devices[id].StatusDetectionLimitTimeOn);
 			if (devices[id].StatusDetectionLimitTimeOn === undefined || devices[id].StatusDetectionLimitTimeOn == null || devices[id].StatusDetectionLimitTimeOn == "") {
 				console.log("set StatusDetectionLimitTimeOn=0 ");
 				devices[id].StatusDetectionLimitTimeOn = 0;
+                changed = true;
 			}
 			console.log(id + " " + typeof devices[id].StatusDetectionLimitTimeOff + " " + devices[id].StatusDetectionLimitTimeOff);
 			if (devices[id].StatusDetectionLimitTimeOff === undefined || devices[id].StatusDetectionLimitTimeOff == null || devices[id].StatusDetectionLimitTimeOff == "") {
 				console.log("set StatusDetectionLimitTimeOff=0 ");
 				devices[id].StatusDetectionLimitTimeOff = 0;
+                changed = true;
 			}
 			console.log(id + " " + typeof devices[id].StatusDetectionMinRunTime + " " + devices[id].StatusDetectionMinRunTime);
 			if (devices[id].StatusDetectionMinRunTime === undefined || devices[id].StatusDetectionMinRunTime == null || devices[id].StatusDetectionMinRunTime == "") {
 				console.log("set StatusDetectionMinRunTime=0 ");
 				devices[id].StatusDetectionMinRunTime = 0;
+                changed = true;
 			}
 
 			console.log(id + " " + typeof devices[id].TimerCancelIfNotOnTime + " " + devices[id].TimerCancelIfNotOnTime + " " + devices[id].TimerCancelIfNotOn);
@@ -1073,10 +1040,12 @@
 				if (devices[id].TimerCancelIfNotOn === undefined || devices[id].TimerCancelIfNotOn == null || devices[id].TimerCancelIfNotOn == false) {
 					console.log("set TimerCancelIfNotOnTime=0 ");
 					devices[id].TimerCancelIfNotOnTime = 0;
+                    changed = true;
 				}
 				else {
 					console.log("set TimerCancelIfNotOnTime=5 ");
 					devices[id].TimerCancelIfNotOnTime = 5;
+                    changed = true;
 				}
 			}
 
@@ -1085,9 +1054,22 @@
 
 				console.log("set MeasurementUnit= W");
 				devices[id].MeasurementUnit = "W";
+                changed = true;
 
 			}
 
+            if(devices[id].Wallbox3phaseSwitchLimit === undefined || devices[id].Wallbox3phaseSwitchLimit == null || devices[id].Wallbox3phaseSwitchLimit < 4200) {
+
+                console.log("set Wallbox3phaseSwitchLimit= 4200");
+				devices[id].Wallbox3phaseSwitchLimit = 4200;
+				changed = true;
+
+            }
+
+
+			if (changed && myonChange != null) {
+				myonChange(true);
+			}
 
 		}
 
@@ -1591,6 +1573,10 @@
 								<div class="input-field col s3">
 									<input type="checkbox" id="DeviceWallboxHas3phaseEnabler" class="value" min="0" />
 									<label for="DeviceWallboxHas3phaseEnabler" class="translate">DeviceWallboxHas3phaseEnabler</label>
+								</div>
+								<div class="input-field col s3" id="3phaseLimit">
+									<input type="number" id="DeviceWallbox3phaseSwitchLimit" class="value" min="4200" step="100" />
+									<label for="DeviceWallbox3phaseSwitchLimit" class="translate">DeviceWallbox3phaseSwitchLimit</label>
 								</div>
 							</div>
 

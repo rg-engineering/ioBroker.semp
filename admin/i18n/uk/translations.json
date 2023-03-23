@@ -54,6 +54,7 @@
     "DeviceTimerWednesday": "Середа",
     "DeviceType": "Тип пристрою",
     "DeviceVendor": "Виробник",
+    "DeviceWallbox3phaseSwitchLimit": "обмеження для переходу на 3-фазну зарядку [Вт]",
     "DeviceWallboxHas3phaseEnabler": "має перемикач для ввімкнення 3-фазної зарядки",
     "DishWasher": "Посудомийна машина",
     "Dryer": "Сушарка",

@@ -54,6 +54,7 @@
     "DeviceTimerWednesday": "Mercredi",
     "DeviceType": "Type d'appareil",
     "DeviceVendor": "Fabricant",
+    "DeviceWallbox3phaseSwitchLimit": "limite pour passer en charge triphasée [W]",
     "DeviceWallboxHas3phaseEnabler": "a un interrupteur pour activer la charge triphasée",
     "DishWasher": "Lave-vaisselle",
     "Dryer": "Séchoir",

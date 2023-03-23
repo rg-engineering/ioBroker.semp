@@ -54,6 +54,7 @@
     "DeviceTimerWednesday": "Środa",
     "DeviceType": "Rodzaj urządzenia",
     "DeviceVendor": "Producent",
+    "DeviceWallbox3phaseSwitchLimit": "limit przełączenia na ładowanie 3-fazowe [W]",
     "DeviceWallboxHas3phaseEnabler": "posiada przełącznik umożliwiający ładowanie 3-fazowe",
     "DishWasher": "Zmywarka",
     "Dryer": "Suszarka",
