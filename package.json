@@ -1,6 +1,6 @@
 {
   "name": "iobroker.semp",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Interface to SMA SunnyPortal via SEMP",
   "author": {
     "name": "René G.",
@@ -18,7 +18,7 @@
     "url": "https://github.com/rg-engineering/ioBroker.semp"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.6.7",
+    "@iobroker/adapter-core": "^2.6.8",
     "csv-writer": "1.6.0",
     "express": "5.0.0-beta.1",
     "node-ssdp": "4.0.1",

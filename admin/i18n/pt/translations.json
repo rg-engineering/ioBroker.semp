@@ -1,4 +1,6 @@
 {
+    "12h": "12h",
+    "24h": "24h",
     "AirConditioning": "Ar condicionado",
     "AlwaysOn": "Sempre",
     "CancelRequestAfterOff": "Cancelar solicitação após desligar",
@@ -55,6 +57,7 @@
     "DeviceType": "Tipo de dispositivo",
     "DeviceVendor": "Fabricante",
     "DeviceWallbox3phaseSwitchLimit": "limite para mudar para carregamento trifásico [W]",
+    "DeviceWallboxChargeTime": "tempo máximo de carga após o plugue conectado",
     "DeviceWallboxHas3phaseEnabler": "tem interruptor para permitir o carregamento trifásico",
     "DishWasher": "Lava-louças",
     "Dryer": "Secador",
@@ -103,6 +106,7 @@
     "active": "ativo",
     "counter": "contador",
     "devices": "dispositivos",
+    "endless": "sem fim",
     "everyDay": "todo dia",
     "extendedLog": "Registro estendido",
     "hint_counter": "se a estimativa for usada, a potência máxima do dispositivo será usada, caso contrário, um ponto de dados ajustável separado pode ser usado",
@@ -124,5 +128,6 @@
     "serialNr": "número de série",
     "switch": "trocar",
     "timers": "cronômetro",
+    "user defined": "usuário definido",
     "vendor": "Fabricante"
 }

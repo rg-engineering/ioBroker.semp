@@ -1,4 +1,6 @@
 {
+    "12h": "12h",
+    "24h": "24h",
     "AirConditioning": "Air Conditioning",
     "AlwaysOn": "Always On",
     "CancelRequestAfterOff": "Cancel Request After Off",
@@ -55,6 +57,7 @@
     "DeviceType": "Device Type",
     "DeviceVendor": "Manufacturer",
     "DeviceWallbox3phaseSwitchLimit": "limit to switch to 3phase charging [W]",
+    "DeviceWallboxChargeTime": "maximum charge time after plug connected",
     "DeviceWallboxHas3phaseEnabler": "has switch to enable 3phase charging",
     "DishWasher": "Dish Washer",
     "Dryer": "Dryer",
@@ -103,6 +106,7 @@
     "active": "active",
     "counter": "counter",
     "devices": "devices",
+    "endless": "endless",
     "everyDay": "every Day",
     "extendedLog": "extended Logging",
     "hint_counter": "if estimation is used, then maximum power of device is used, otherwise a separete adjustable datapoint can be used ",
@@ -124,5 +128,6 @@
     "serialNr": "serial Nr",
     "switch": "switch",
     "timers": "timer",
+    "user defined": "user defined",
     "vendor": "Manufacturer"
 }

@@ -276,10 +276,16 @@ class Semp extends utils.Adapter {
 						this.gw.setMaxEnergy(device.ID, state.val);
 						bRet = true;
 					}
-					else if (ids[4] == "StartFastCharging") {
-						this.gw.StartFastCharging(device.ID);
+					else if (ids[4] == "EnableFastCharging") {
+						this.gw.EnableFastCharging(device.ID, state.val);
 						bRet = true;
 					}
+					//semp.0.Devices.Wallbox1.MaxChargeTime
+					else if (ids[4] == "MaxChargeTime") {
+						this.gw.SetMaxChargeTime(device.ID, state.val);
+						bRet = true;
+					}
+
 				}
 			}
 		}

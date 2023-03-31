@@ -1,4 +1,6 @@
 {
+    "12h": "12h",
+    "24h": "24h",
     "AirConditioning": "Climatisation",
     "AlwaysOn": "Toujours activé",
     "CancelRequestAfterOff": "Annuler la demande après la désactivation",
@@ -55,6 +57,7 @@
     "DeviceType": "Type d'appareil",
     "DeviceVendor": "Fabricant",
     "DeviceWallbox3phaseSwitchLimit": "limite pour passer en charge triphasée [W]",
+    "DeviceWallboxChargeTime": "temps de charge maximum après la connexion de la prise",
     "DeviceWallboxHas3phaseEnabler": "a un interrupteur pour activer la charge triphasée",
     "DishWasher": "Lave-vaisselle",
     "Dryer": "Séchoir",
@@ -103,6 +106,7 @@
     "active": "actif",
     "counter": "compteur",
     "devices": "dispositifs",
+    "endless": "sans fin",
     "everyDay": "tous les jours",
     "extendedLog": "journalisation étendue",
     "hint_counter": "si l'estimation est utilisée, alors la puissance maximale de l'appareil est utilisée, sinon un point de données réglable séparé peut être utilisé",
@@ -124,5 +128,6 @@
     "serialNr": "numéro de série",
     "switch": "changer",
     "timers": "minuteur",
+    "user defined": "défini par l'utilisateur",
     "vendor": "Fabricant"
 }

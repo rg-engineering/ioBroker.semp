@@ -1,4 +1,6 @@
 {
+    "12h": "12h",
+    "24h": "24 ore",
     "AirConditioning": "Aria condizionata",
     "AlwaysOn": "Sempre acceso",
     "CancelRequestAfterOff": "Annulla richiesta dopo lo spegnimento",
@@ -55,6 +57,7 @@
     "DeviceType": "Tipo di dispositivo",
     "DeviceVendor": "Produttore",
     "DeviceWallbox3phaseSwitchLimit": "limite per passare alla carica trifase [W]",
+    "DeviceWallboxChargeTime": "tempo massimo di ricarica dopo il collegamento della spina",
     "DeviceWallboxHas3phaseEnabler": "ha un interruttore per abilitare la ricarica trifase",
     "DishWasher": "Lavastoviglie",
     "Dryer": "Asciugatrice",
@@ -103,6 +106,7 @@
     "active": "attivo",
     "counter": "contatore",
     "devices": "dispositivi",
+    "endless": "infinito",
     "everyDay": "ogni giorno",
     "extendedLog": "registrazione estesa",
     "hint_counter": "se viene utilizzata la stima, viene utilizzata la potenza massima del dispositivo, altrimenti è possibile utilizzare un punto dati regolabile separato",
@@ -124,5 +128,6 @@
     "serialNr": "seriale n",
     "switch": "interruttore",
     "timers": "Timer",
+    "user defined": "definito dall'utente",
     "vendor": "Produttore"
 }

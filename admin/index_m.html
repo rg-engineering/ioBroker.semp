@@ -576,6 +576,9 @@
 				$('#DeviceMeasurementUnit').select();
 
 				$('#DeviceBatteryCapacity').val(devices[id].BatteryCapacity);
+                $('#DeviceWallboxChargeTime').val(devices[id].WallboxChargeTime);
+
+
 				$('#DeviceWallboxHas3phaseEnabler').prop("checked", devices[id].WallboxHas3phaseEnabler);
                 $('#DeviceWallbox3phaseSwitchLimit').val(devices[id].Wallbox3phaseSwitchLimit);
 
@@ -942,6 +945,8 @@
 						devices[id].OID_Power = $('#DeviceOIDPower').val();
 						devices[id].MeasurementUnit = $('#DeviceMeasurementUnit').val();
 						devices[id].BatteryCapacity = $('#DeviceBatteryCapacity').val();
+						devices[id].WallboxChargeTime = $('#DeviceWallboxChargeTime').val();
+
 						devices[id].WallboxHas3phaseEnabler = $('#DeviceWallboxHas3phaseEnabler').prop("checked");
                         devices[id].Wallbox3phaseSwitchLimit = $('#DeviceWallbox3phaseSwitchLimit').val();
 
@@ -1567,6 +1572,17 @@
 									<input type="number" id="DeviceBatteryCapacity" class="value" min="0" />
 									<label for="DeviceBatteryCapacity" class="translate">DeviceBatteryCapacity</label>
 								</div>
+
+								<div class="input-field col s3">
+									<select id="DeviceWallboxChargeTime" class="value">
+										<option value="1" class="translate">12h</option>
+										<option value="2" class="translate">24h</option>
+										<option value="3" class="translate">endless</option>
+										<option value="4" class="translate">user defined</option>
+									</select>
+									<label for="DeviceWallboxChargeTime" class="translate">DeviceWallboxChargeTime</label>
+								</div>
+
 							</div>
 
 							<div class="row">

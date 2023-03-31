@@ -1,4 +1,6 @@
 {
+    "12h": "12h",
+    "24h": "24h",
     "AirConditioning": "Klimaanlage",
     "AlwaysOn": "immer an",
     "CancelRequestAfterOff": "Anforderung nach Aus abbrechen",
@@ -55,6 +57,7 @@
     "DeviceType": "Gerätetyp",
     "DeviceVendor": "Hersteller",
     "DeviceWallbox3phaseSwitchLimit": "Grenze zum Umschalten auf 3-Phasen-Ladung [W]",
+    "DeviceWallboxChargeTime": "Maximale Ladezeit nach angeschlossenem Stecker",
     "DeviceWallboxHas3phaseEnabler": "hat einen Schalter zum Aktivieren des 3-Phasen-Ladens",
     "DishWasher": "Geschirrspülmaschine",
     "Dryer": "Trockner",
@@ -103,6 +106,7 @@
     "active": "aktiv",
     "counter": "Zähler",
     "devices": "Geräte",
+    "endless": "endlos",
     "everyDay": "jeden Tag",
     "extendedLog": "Erweiterte Protokollierung",
     "hint_counter": "Wenn 'Schätzung' verwendet wird, wird die maximale Leistung des Geräts verwendet, andernfalls kann ein separater einstellbarer Datenpunkt verwendet werden.",
@@ -124,5 +128,6 @@
     "serialNr": "Serien-Nr",
     "switch": "Schalter",
     "timers": "Timer",
+    "user defined": "benutzerdefinierte",
     "vendor": "Hersteller"
 }

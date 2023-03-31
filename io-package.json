@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "semp",
-        "version": "0.4.1",
+        "version": "0.4.2",
         "news": {
+            "0.4.2": {
+                "en": "fast charge is now a boolean and can be enabled/disabled \n wallbox charge time can be defined as 12h, 24h, endles or userdefined",
+                "de": "Fast Charge ist jetzt ein boolescher Wert und kann aktiviert/deaktiviert werden\n Die Ladezeit der Wallbox kann als 12h, 24h, endlos oder benutzerdefiniert definiert werden",
+                "ru": "быстрая зарядка теперь является логическим значением и может быть включена/отключена\n Время зарядки настенной коробки может быть определено как 12 часов, 24 часа, бесконечное или заданное пользователем",
+                "pt": "carga rápida agora é um booleano e pode ser ativado/desativado\n o tempo de carregamento da caixa de parede pode ser definido como 12h, 24h, sem fim ou definido pelo usuário",
+                "nl": "snel opladen is nu een Booleaanse waarde en kan worden in- of uitgeschakeld\n De oplaadtijd van de wallbox kan worden gedefinieerd als 12 uur, 24 uur, eindeloos of door de gebruiker gedefinieerd",
+                "fr": "la charge rapide est maintenant un booléen et peut être activée/désactivée\n le temps de charge de la wallbox peut être défini comme 12h, 24h, fin ou défini par l'utilisateur",
+                "it": "fast charge ora è un valore booleano e può essere abilitato/disabilitato\n il tempo di ricarica della wallbox può essere definito come 12h, 24h, endles o definito dall'utente",
+                "es": "la carga rápida ahora es un valor booleano y se puede habilitar/deshabilitar\n El tiempo de carga de la caja de pared se puede definir como 12 h, 24 h, sin fin o definido por el usuario",
+                "pl": "szybkie ładowanie jest teraz wartością logiczną i można je włączyć/wyłączyć\n czas ładowania wallboxa może być zdefiniowany jako 12h, 24h, nieskończony lub zdefiniowany przez użytkownika",
+                "uk": "швидка зарядка тепер є логічним і її можна ввімкнути/вимкнути\n Час заряджання wallbox може бути визначений як 12 годин, 24 години, закінчується або визначається користувачем",
+                "zh-cn": "快速充电现在是一个布尔值，可以启用/禁用\n wallbox 充电时间可以定义为 12 小时、24 小时、无限或用户定义"
+            },
             "0.4.1": {
                 "en": "avoid exception when no switch is defined for wallbox \n limit to switch to 3phase charging adjustable \n timout before disconnect status of wallbox",
                 "de": "Ausnahme vermeiden, wenn kein Schalter für Wallbox definiert ist\n Grenze zum Umschalten auf 3-phasiges Laden einstellbar\n Timeout vor Trennstatus der Wallbox",
