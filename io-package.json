@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "semp",
-        "version": "0.4.2",
+        "version": "1.0.0",
         "news": {
+            "1.0.0": {
+                "en": "dependencies updated",
+                "de": "Abhängigkeiten aktualisiert",
+                "ru": "зависимости обновлены",
+                "pt": "dependências atualizadas",
+                "nl": "afhankelijkheden bijgewerkt",
+                "fr": "dépendances mises à jour",
+                "it": "dipendenze aggiornate",
+                "es": "dependencias actualizadas",
+                "pl": "zaktualizowane zależności",
+                "uk": "залежності оновлено",
+                "zh-cn": "依赖更新"
+            },
             "0.4.2": {
                 "en": "fast charge is now a boolean and can be enabled/disabled \n wallbox charge time can be defined as 12h, 24h, endles or userdefined",
                 "de": "Fast Charge ist jetzt ein boolescher Wert und kann aktiviert/deaktiviert werden\n Die Ladezeit der Wallbox kann als 12h, 24h, endlos oder benutzerdefiniert definiert werden",

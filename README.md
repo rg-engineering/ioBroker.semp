@@ -53,6 +53,9 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 
 ## Changelog
 
+### 1.0.0 (2023-04-07)
+* (René) dependencies updated
+
 ### 0.4.2 (2023-04-02)
 * (René) fast charge is now a boolean and can be enabled/disabled
 * (René) wallbox charge time can be defined as 12h, 24h, endles or userdefined
