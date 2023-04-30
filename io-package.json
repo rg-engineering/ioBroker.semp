@@ -150,9 +150,9 @@
             }
         ],
         "plugins": {
-            "sentry": {
-                "dsn": "https://84efb82607d94201a8d1d3b180f10024@o390433.ingest.sentry.io/4503953214275584"
-            }
+          "sentry": {
+            "dsn": "https://84efb82607d94201a8d1d3b180f10024@o390433.ingest.sentry.io/4503953214275584"
+          }
         }
     },
     "native": {
