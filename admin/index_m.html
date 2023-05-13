@@ -600,7 +600,7 @@
 
 				$('#DeviceHasOIDSwitch').prop("checked", devices[id].HasOIDSwitch);
 				$('#DeviceOIDSwitch').val(devices[id].OID_Switch);
-				$('#DeviceSwitchOffAtEndOfTimer').prop("checked", devices[id].SwitchOffAtEndOfTimer);
+				
 
 
 				$('#DeviceTimerActive').prop("checked", devices[id].TimerActive);
@@ -967,7 +967,7 @@
 
 						devices[id].HasOIDSwitch = $('#DeviceHasOIDSwitch').prop("checked");
 						devices[id].OID_Switch = $('#DeviceOIDSwitch').val();
-						devices[id].SwitchOffAtEndOfTimer = $('#DeviceSwitchOffAtEndOfTimer').prop("checked");
+						
 
 						devices[id].TimerActive = $('#DeviceTimerActive').prop("checked");
 						/*
@@ -1498,10 +1498,7 @@
 									<a id="SelectDeviceOIDSwitch" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">edit</i></a>
 								</div>
 
-								<div class="input-field col s3">
-									<input type="checkbox" id="DeviceSwitchOffAtEndOfTimer" class="value" />
-									<label for="DeviceSwitchOffAtEndOfTimer" class="translate">DeviceSwitchOffAtEndOfTimer</label>
-								</div>
+								
 
 							</div>
 

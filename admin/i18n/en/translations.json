@@ -37,7 +37,7 @@
     "DeviceStatusDetectionLimitTimeOn": "minimum time for new ON status [minutes]",
     "DeviceStatusDetectionMinRunTime": "minimum running time [minutes]",
     "DeviceStatusDetectionType": "status detection type",
-    "DeviceSwitchOffAtEndOfTimer": "Switch Off At End Of Timer",
+    "DeviceSwitchOffAtEndOfTimer": "",
     "DeviceTimerActive": "Timer Active",
     "DeviceTimerCancelIfNotOn": "cancel request if device does not switch on ",
     "DeviceTimerCancelIfNotOnTime": "maximum time to switch on after recommendation [minutes]",

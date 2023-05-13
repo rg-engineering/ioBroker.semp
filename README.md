@@ -53,7 +53,11 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 
 ## Changelog
 
-### 1.1.0 (in progress)
+### 1.2.0 (in progress)
+* (René) device off at end of maximum running time and latest end overworked; option "Switch Off At End Of Timer" removed
+
+
+### 1.1.0 (never released)
 * (René) issue #30: URL as another option for configuring the wallboy interface
 
 ### 1.0.0 (2023-04-07)

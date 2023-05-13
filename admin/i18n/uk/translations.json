@@ -37,7 +37,7 @@
     "DeviceStatusDetectionLimitTimeOn": "мінімальний час для нового статусу ON [хвилини]",
     "DeviceStatusDetectionMinRunTime": "мінімальний час роботи [хв]",
     "DeviceStatusDetectionType": "тип визначення стану",
-    "DeviceSwitchOffAtEndOfTimer": "Вимкніть після закінчення таймера",
+    "DeviceSwitchOffAtEndOfTimer": "",
     "DeviceTimerActive": "Таймер активний",
     "DeviceTimerCancelIfNotOn": "скасувати запит, якщо пристрій не вмикається",
     "DeviceTimerCancelIfNotOnTime": "максимальний час увімкнення після рекомендації [хвилин]",
