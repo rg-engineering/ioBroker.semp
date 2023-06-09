@@ -5,6 +5,7 @@
  */
 
 const utils = require("@iobroker/adapter-core");
+const { type } = require("os");
 const networkInterfaces = require('os').networkInterfaces;
 const { v4: uuidv4 } = require('uuid');
 
@@ -54,6 +55,11 @@ class Semp extends utils.Adapter {
 	async onReady() {
 
 		try {
+
+			this.log.debug(JSON.stringify(this.config));
+
+
+
 			//"290B3891-0311-4854-4333-7C70BC802C2D"
 			let uuid = this.config.UUID;
 			let ip = this.config.IPAddress;
@@ -63,6 +69,12 @@ class Semp extends utils.Adapter {
 			let name = this.config.SempName;
 			//"ioBroker"
 			let manufacturer = this.config.SempManufacturer;
+
+			this.log.debug("check BaseID " + this.config.DeviceBaseID + " type " + typeof this.config.DeviceBaseID);
+			let BaseId = this.config.DeviceBaseID;
+			this.CheckBaseId(BaseId);
+
+			
 
 			if (!ip) {
 				this.log.error("IP not specified!");
@@ -356,10 +368,40 @@ class Semp extends utils.Adapter {
 
 			let latidude = ret.common.latitude;
 
-			devicebaseid = ("00000000" + latidude * 100000000).slice(-8);
+			devicebaseid = ("00000000" + math.round(latidude * 100000000)).slice(-8);
+
+			this.CheckBaseId(devicebaseid);
+
+			this.log.debug("new created BaseID " + devicebaseid + " type " + typeof devicebaseid);
+
+
 		}
 		return devicebaseid;
     }
+
+	CheckBaseId(id) {
+
+		/*
+		base id muss nummer, 8 ziffern und kein punkt
+		*/
+
+		let ret = false;
+		this.log.debug("check BaseID " + id + " type " + typeof id);
+
+		//only numbers
+		if (typeof id === 'number' && Number.isInteger(id)) {
+
+			this.log.debug("BaseID: is integer number"); 
+		}
+		else {
+			this.log.error("BaseID: wrong type or not integer" + typeof id + " " + JSON.stringify(id) + Number.isInteger(id))
+		}
+
+		
+
+		return ret;
+	}
+
 
 }
 

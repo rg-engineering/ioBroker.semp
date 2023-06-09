@@ -53,7 +53,13 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 
 ## Changelog
 
-### 1.2.0 (in progress)
+### 1.3.0 (in progress)
+* baseID -> ohne Sonderzeichen, immer 8 Zeichen
+* DeviceID -> baseID prüfen
+* anlegen einer csv, wenn name bereits vorhanden
+* TimeFrame als DP
+
+### 1.2.0 (2023-05-29)
 * (René) device off at end of maximum running time and latest end overworked; option "Switch Off At End Of Timer" removed
 
 
