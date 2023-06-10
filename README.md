@@ -54,9 +54,10 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 ## Changelog
 
 ### 1.3.0 (in progress)
-* baseID -> ohne Sonderzeichen, immer 8 Zeichen
-* DeviceID -> baseID prüfen
-* anlegen einer csv, wenn name bereits vorhanden
+* (René) see #17: additional checks for BaseID
+* (René) check BaseId of every DeviceId when adapter starts
+* (René) bug fix csv-logging: create file if not exist and complete filename is provided, was working with path name only before
+
 * TimeFrame als DP
 
 ### 1.2.0 (2023-05-29)
