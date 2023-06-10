@@ -57,8 +57,8 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 * (René) see #17: additional checks for BaseID
 * (René) check BaseId of every DeviceId when adapter starts
 * (René) bug fix csv-logging: create file if not exist and complete filename is provided, was working with path name only before
+* (René) additional debug: show last timeframe sent to SHM as datapoint for every timeframe 
 
-* TimeFrame als DP
 
 ### 1.2.0 (2023-05-29)
 * (René) device off at end of maximum running time and latest end overworked; option "Switch Off At End Of Timer" removed
