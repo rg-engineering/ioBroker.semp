@@ -368,7 +368,7 @@ class Semp extends utils.Adapter {
 
 			let latidude = ret.common.latitude;
 
-			devicebaseid = ("00000000" + math.round(latidude * 100000000)).slice(-8);
+			devicebaseid = ("00000000" + Math.round(latidude * 100000000)).slice(-8);
 
 			this.CheckBaseId(devicebaseid);
 
