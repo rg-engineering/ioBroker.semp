@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "semp",
-        "version": "1.3.2",
+        "version": "1.3.3",
         "news": {
+            "1.3.3": {
+                "en": "dependencies updated",
+                "de": "Abhängigkeiten aktualisiert",
+                "ru": "зависимости обновлены",
+                "pt": "dependências atualizadas",
+                "nl": "afhankelijkheden bijgewerkt",
+                "fr": "dépendances mises à jour",
+                "it": "dipendenze aggiornate",
+                "es": "dependencias actualizadas",
+                "pl": "zaktualizowane zależności",
+                "uk": "залежності оновлено",
+                "zh-cn": "依赖项已更新"
+            },
             "1.3.2": {
                 "en": "sentry reported exceptions fixed",
                 "de": "Sentry meldete Ausnahmen behoben",
