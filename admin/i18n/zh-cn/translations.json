@@ -37,7 +37,6 @@
     "DeviceStatusDetectionLimitTimeOn": "新 ON 状态的最短时间 [分钟]",
     "DeviceStatusDetectionMinRunTime": "最短运行时间 [分钟]",
     "DeviceStatusDetectionType": "状态检测类型",
-    "DeviceSwitchOffAtEndOfTimer": "",
     "DeviceTimerActive": "定时器激活",
     "DeviceTimerCancelIfNotOn": "如果设备没有打开则取消请求",
     "DeviceTimerCancelIfNotOnTime": "建议后开启的最长时间 [分钟]",

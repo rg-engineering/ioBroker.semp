@@ -37,7 +37,6 @@
     "DeviceStatusDetectionLimitTimeOn": "Mindestzeit für neuen EIN-Status [Minuten]",
     "DeviceStatusDetectionMinRunTime": "Mindestlaufzeit [Minuten]",
     "DeviceStatusDetectionType": "Statuserkennungstyp",
-    "DeviceSwitchOffAtEndOfTimer": "",
     "DeviceTimerActive": "Timer aktiv",
     "DeviceTimerCancelIfNotOn": "Anfrage abbrechen, wenn sich das Gerät nicht einschaltet",
     "DeviceTimerCancelIfNotOnTime": "maximale Einschaltzeit nach Empfehlung [Minuten]",

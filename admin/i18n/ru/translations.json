@@ -37,7 +37,6 @@
     "DeviceStatusDetectionLimitTimeOn": "минимальное время для нового состояния ON [минуты]",
     "DeviceStatusDetectionMinRunTime": "минимальное время работы [минуты]",
     "DeviceStatusDetectionType": "тип определения состояния",
-    "DeviceSwitchOffAtEndOfTimer": "",
     "DeviceTimerActive": "Таймер активен",
     "DeviceTimerCancelIfNotOn": "отменить запрос, если устройство не включается",
     "DeviceTimerCancelIfNotOnTime": "максимальное время включения после рекомендации [минуты]",

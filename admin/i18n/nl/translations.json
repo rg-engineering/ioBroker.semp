@@ -37,7 +37,6 @@
     "DeviceStatusDetectionLimitTimeOn": "minimale tijd voor nieuwe AAN-status [minuten]",
     "DeviceStatusDetectionMinRunTime": "minimale looptijd [minuten]",
     "DeviceStatusDetectionType": "type statusdetectie",
-    "DeviceSwitchOffAtEndOfTimer": "",
     "DeviceTimerActive": "Timer Actief",
     "DeviceTimerCancelIfNotOn": "verzoek annuleren als het apparaat niet wordt ingeschakeld",
     "DeviceTimerCancelIfNotOnTime": "maximale inschakeltijd na aanbeveling [minuten]",

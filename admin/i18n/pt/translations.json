@@ -37,7 +37,6 @@
     "DeviceStatusDetectionLimitTimeOn": "tempo mínimo para novo estado ON [minutos]",
     "DeviceStatusDetectionMinRunTime": "tempo mínimo de funcionamento [minutos]",
     "DeviceStatusDetectionType": "tipo de detecção de status",
-    "DeviceSwitchOffAtEndOfTimer": "",
     "DeviceTimerActive": "Temporizador ativo",
     "DeviceTimerCancelIfNotOn": "Cancele a solicitação se o dispositivo não ligar",
     "DeviceTimerCancelIfNotOnTime": "tempo máximo para ligar após recomendação [minutos]",

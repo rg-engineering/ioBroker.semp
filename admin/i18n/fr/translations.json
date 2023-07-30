@@ -37,7 +37,6 @@
     "DeviceStatusDetectionLimitTimeOn": "temps minimum pour le nouvel état ON [minutes]",
     "DeviceStatusDetectionMinRunTime": "durée de fonctionnement minimale [minutes]",
     "DeviceStatusDetectionType": "type de détection d'état",
-    "DeviceSwitchOffAtEndOfTimer": "",
     "DeviceTimerActive": "Minuterie active",
     "DeviceTimerCancelIfNotOn": "annuler la demande si l'appareil ne s'allume pas",
     "DeviceTimerCancelIfNotOnTime": "temps maximum pour allumer après recommandation [minutes]",

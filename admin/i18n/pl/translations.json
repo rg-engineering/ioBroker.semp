@@ -37,7 +37,6 @@
     "DeviceStatusDetectionLimitTimeOn": "minimalny czas nowego stanu załączenia [minuty]",
     "DeviceStatusDetectionMinRunTime": "minimalny czas pracy [minuty]",
     "DeviceStatusDetectionType": "typ wykrywania stanu",
-    "DeviceSwitchOffAtEndOfTimer": "",
     "DeviceTimerActive": "Timer aktywny",
     "DeviceTimerCancelIfNotOn": "anuluj żądanie, jeśli urządzenie się nie włącza",
     "DeviceTimerCancelIfNotOnTime": "maksymalny czas włączenia po zaleceniu [minuty]",
