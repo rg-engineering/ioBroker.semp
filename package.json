@@ -18,7 +18,7 @@
     "url": "https://github.com/rg-engineering/ioBroker.semp"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "2.6.8",
+    "@iobroker/adapter-core": "3.0.3",
     "csv-writer": "1.6.0",
     "express": "5.0.0-beta.1",
     "node-ssdp": "4.0.1",
