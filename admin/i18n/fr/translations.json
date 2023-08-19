@@ -55,6 +55,7 @@
     "DeviceTimerWednesday": "Mercredi",
     "DeviceType": "Type d'appareil",
     "DeviceVendor": "Fabricant",
+    "DeviceWallbox3phaseSwitchDelay": "délai pour passer en charge triphasée [min]",
     "DeviceWallbox3phaseSwitchLimit": "limite pour passer en charge triphasée [W]",
     "DeviceWallboxChargeTime": "temps de charge maximum après la connexion de la prise",
     "DeviceWallboxHas3phaseEnabler": "a un interrupteur pour activer la charge triphasée",

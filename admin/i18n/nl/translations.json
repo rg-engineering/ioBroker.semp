@@ -55,6 +55,7 @@
     "DeviceTimerWednesday": "Woensdag",
     "DeviceType": "Soort apparaat",
     "DeviceVendor": "Fabrikant",
+    "DeviceWallbox3phaseSwitchDelay": "vertraging om over te schakelen naar 3-fasen laden [min]",
     "DeviceWallbox3phaseSwitchLimit": "limiet om over te schakelen naar 3-fasen laden [W]",
     "DeviceWallboxChargeTime": "maximale oplaadtijd nadat de stekker is aangesloten",
     "DeviceWallboxHas3phaseEnabler": "heeft een schakelaar om 3-fasen opladen mogelijk te maken",

@@ -55,6 +55,7 @@
     "DeviceTimerWednesday": "Quarta-feira",
     "DeviceType": "Tipo de dispositivo",
     "DeviceVendor": "Fabricante",
+    "DeviceWallbox3phaseSwitchDelay": "atraso para mudar para carregamento trifásico [min]",
     "DeviceWallbox3phaseSwitchLimit": "limite para mudar para carregamento trifásico [W]",
     "DeviceWallboxChargeTime": "tempo máximo de carga após o plugue conectado",
     "DeviceWallboxHas3phaseEnabler": "tem interruptor para permitir o carregamento trifásico",

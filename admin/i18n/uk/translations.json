@@ -55,6 +55,7 @@
     "DeviceTimerWednesday": "Середа",
     "DeviceType": "Тип пристрою",
     "DeviceVendor": "Виробник",
+    "DeviceWallbox3phaseSwitchDelay": "затримка переходу на 3-фазне заряджання [хв.]",
     "DeviceWallbox3phaseSwitchLimit": "обмеження для переходу на 3-фазну зарядку [Вт]",
     "DeviceWallboxChargeTime": "максимальний час заряджання після підключення штекера",
     "DeviceWallboxHas3phaseEnabler": "має перемикач для ввімкнення 3-фазної зарядки",

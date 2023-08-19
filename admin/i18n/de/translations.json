@@ -55,6 +55,7 @@
     "DeviceTimerWednesday": "Mittwoch",
     "DeviceType": "Gerätetyp",
     "DeviceVendor": "Hersteller",
+    "DeviceWallbox3phaseSwitchDelay": "Verzögerung zum Umschalten auf 3-Phasen-Laden [min]",
     "DeviceWallbox3phaseSwitchLimit": "Grenze zum Umschalten auf 3-Phasen-Laden [W]",
     "DeviceWallboxChargeTime": "Maximale Ladezeit nach Anschluss des Steckers",
     "DeviceWallboxHas3phaseEnabler": "verfügt über einen Schalter zum Aktivieren des 3-Phasen-Ladens",

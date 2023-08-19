@@ -55,6 +55,7 @@
     "DeviceTimerWednesday": "周三",
     "DeviceType": "设备类型",
     "DeviceVendor": "制造商",
+    "DeviceWallbox3phaseSwitchDelay": "切换到三相充电的延迟 [分钟]",
     "DeviceWallbox3phaseSwitchLimit": "限制切换到三相充电 [W]",
     "DeviceWallboxChargeTime": "插头连接后的最长充电时间",
     "DeviceWallboxHas3phaseEnabler": "具有启用三相充电的开关",

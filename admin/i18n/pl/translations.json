@@ -55,6 +55,7 @@
     "DeviceTimerWednesday": "Środa",
     "DeviceType": "Rodzaj urządzenia",
     "DeviceVendor": "Producent",
+    "DeviceWallbox3phaseSwitchDelay": "opóźnienie przełączenia na ładowanie 3-fazowe [min]",
     "DeviceWallbox3phaseSwitchLimit": "limit przełączenia na ładowanie 3-fazowe [W]",
     "DeviceWallboxChargeTime": "maksymalny czas ładowania po podłączeniu wtyczki",
     "DeviceWallboxHas3phaseEnabler": "posiada przełącznik umożliwiający ładowanie 3-fazowe",

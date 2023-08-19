@@ -55,6 +55,7 @@
     "DeviceTimerWednesday": "Среда",
     "DeviceType": "Тип устройства",
     "DeviceVendor": "Производитель",
+    "DeviceWallbox3phaseSwitchDelay": "задержка переключения на 3-фазную зарядку [мин]",
     "DeviceWallbox3phaseSwitchLimit": "предел переключения на 3-фазную зарядку [Вт]",
     "DeviceWallboxChargeTime": "максимальное время зарядки после подключения штекера",
     "DeviceWallboxHas3phaseEnabler": "имеет переключатель для включения 3-фазной зарядки",

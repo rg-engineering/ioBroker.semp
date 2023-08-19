@@ -55,6 +55,7 @@
     "DeviceTimerWednesday": "Mercoledì",
     "DeviceType": "Tipo di dispositivo",
     "DeviceVendor": "Produttore",
+    "DeviceWallbox3phaseSwitchDelay": "ritardo per passare alla carica trifase [min]",
     "DeviceWallbox3phaseSwitchLimit": "limite per passare alla carica trifase [W]",
     "DeviceWallboxChargeTime": "tempo massimo di ricarica dopo il collegamento della spina",
     "DeviceWallboxHas3phaseEnabler": "ha un interruttore per abilitare la ricarica trifase",
