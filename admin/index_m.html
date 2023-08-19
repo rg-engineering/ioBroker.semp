@@ -580,7 +580,8 @@
 
 
 				$('#DeviceWallboxHas3phaseEnabler').prop("checked", devices[id].WallboxHas3phaseEnabler);
-                $('#DeviceWallbox3phaseSwitchLimit').val(devices[id].Wallbox3phaseSwitchLimit);
+				$('#DeviceWallbox3phaseSwitchLimit').val(devices[id].Wallbox3phaseSwitchLimit);
+                $('#DeviceWallbox3phaseSwitchDelay').val(devices[id].Wallbox3phaseSwitchDelay);
 
 				$('#DeviceOIDPlugConnected').val(devices[id].OID_PlugConnected);
 				$('#DeviceOIDIsCharging').val(devices[id].OID_IsCharging);
@@ -948,7 +949,8 @@
 						devices[id].WallboxChargeTime = $('#DeviceWallboxChargeTime').val();
 
 						devices[id].WallboxHas3phaseEnabler = $('#DeviceWallboxHas3phaseEnabler').prop("checked");
-                        devices[id].Wallbox3phaseSwitchLimit = $('#DeviceWallbox3phaseSwitchLimit').val();
+						devices[id].Wallbox3phaseSwitchLimit = $('#DeviceWallbox3phaseSwitchLimit').val();
+                        devices[id].Wallbox3phaseSwitchDelay = $('#DeviceWallbox3phaseSwitchDelay').val();
 
 						devices[id].OID_PlugConnected = $('#DeviceOIDPlugConnected').val();
 						devices[id].OID_IsCharging = $('#DeviceOIDIsCharging').val();
@@ -1068,6 +1070,13 @@
                 console.log("set Wallbox3phaseSwitchLimit= 4200");
 				devices[id].Wallbox3phaseSwitchLimit = 4200;
 				changed = true;
+
+			}
+            if (devices[id].Wallbox3phaseSwitchDelay === undefined || devices[id].Wallbox3phaseSwitchDelay == null || devices[id].Wallbox3phaseSwitchDelay < 0) {
+
+                console.log("set Wallbox3phaseSwitchDelay= 3");
+                devices[id].Wallbox3phaseSwitchDelay = 3;
+                changed = true;
 
             }
 
@@ -1590,6 +1599,10 @@
 								<div class="input-field col s3" id="3phaseLimit">
 									<input type="number" id="DeviceWallbox3phaseSwitchLimit" class="value" min="4200" step="100" />
 									<label for="DeviceWallbox3phaseSwitchLimit" class="translate">DeviceWallbox3phaseSwitchLimit</label>
+								</div>
+								<div class="input-field col s3" id="3phaseLimit">
+									<input type="number" id="DeviceWallbox3phaseSwitchDelay" class="value" min="1" min="10" step="1" />
+									<label for="DeviceWallbox3phaseSwitchDelay" class="translate">DeviceWallbox3phaseSwitchDelay</label>
 								</div>
 							</div>
 
