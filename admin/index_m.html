@@ -686,10 +686,20 @@
 				let wordMandatory = translateWord("mandatory");
 				let wordOptionally = translateWord("optionally");
 
+				let missingOID = {
+					"DeviceOIDPlugConnected": true,
+                    "DeviceOIDIsCharging": true,
+                    "DeviceOIDIsError": true,
+                    "DeviceOIDChargePower": true,
+                    "DeviceOIDStartCharge": true,
+                    "DeviceOIDStopCharge": true,
+					"DeviceOID3PhaseChargeEnable": true,
+                    "DeviceOID3PhaseChargeDisable": true
+
+
+				}
 
 				if (devices[id].WallboxOIDs != null) {
-
-
 					for (let d = 0; d < devices[id].WallboxOIDs.length; d++) {
 						if (devices[id].WallboxOIDs[d].Name == "DeviceOIDPlugConnected"
 							|| devices[id].WallboxOIDs[d].Name == "DeviceOIDChargePower") {
@@ -698,14 +708,14 @@
 						else {
 							devices[id].WallboxOIDs[d].must = wordOptionally;
 						}
+						missingOID[devices[id].WallboxOIDs[d].Name] = false;
 					}
-
 					tempWallboxOIDs = devices[id].WallboxOIDs;
 				}
-				else {
-					let tempOID = "";
-					let tempActive = false;
 
+				let tempOID = "";
+				let tempActive = false;
+				if (missingOID["DeviceOIDPlugConnected"]) {
 					if (devices[id].OID_PlugConnected != null && devices[id].OID_PlugConnected.length > 5) {
 						tempOID = devices[id].OID_PlugConnected;
 						tempActive = true;
@@ -723,7 +733,8 @@
 						SetValue: "true"
 					}
 					tempWallboxOIDs.push(wallboxOID);
-
+				}
+				if (missingOID["DeviceOIDIsCharging"]) {
 					if (devices[id].OID_IsCharging != null && devices[id].OID_IsCharging.length > 5) {
 						tempOID = devices[id].OID_IsCharging;
 						tempActive = true;
@@ -741,7 +752,8 @@
 						SetValue: "true"
 					}
 					tempWallboxOIDs.push(wallboxOID);
-
+				}
+				if (missingOID["DeviceOIDIsError"]) {
 					if (devices[id].OID_IsError != null && devices[id].OID_IsError.length > 5) {
 						tempOID = devices[id].OID_IsError;
 						tempActive = true;
@@ -759,7 +771,8 @@
 						SetValue: "true"
 					}
 					tempWallboxOIDs.push(wallboxOID);
-
+				}
+				if (missingOID["DeviceOIDChargePower"]) {
 					if (devices[id].OID_ChargePower != null && devices[id].OID_ChargePower.length > 5) {
 						tempOID = devices[id].OID_ChargePower;
 						tempActive = true;
@@ -777,7 +790,8 @@
 						SetValue: "0"
 					}
 					tempWallboxOIDs.push(wallboxOID);
-
+				}
+				if (missingOID["DeviceOIDStartCharge"]) {
 					if (devices[id].OID_StartCharge != null && devices[id].OID_StartCharge.length > 5) {
 						tempOID = devices[id].OID_StartCharge;
 						tempActive = true;
@@ -795,7 +809,8 @@
 						SetValue: "true"
 					}
 					tempWallboxOIDs.push(wallboxOID);
-
+				}
+				if (missingOID["DeviceOIDStopCharge"]) {
 					if (devices[id].OID_StopCharge != null && devices[id].OID_StopCharge.length > 5) {
 						tempOID = devices[id].OID_StopCharge;
 						tempActive = true;
@@ -813,9 +828,45 @@
 						SetValue: "true"
 					}
 					tempWallboxOIDs.push(wallboxOID);
-
 				}
-
+				if (missingOID["DeviceOID3PhaseChargeEnable"]) {
+					if (devices[id].OID_3PhaseChargeEnable != null && devices[id].OID_3PhaseChargeEnable.length > 5) {
+						tempOID = devices[id].OID_3PhaseChargeEnable;
+						tempActive = true;
+					}
+					else {
+						tempOID = "";
+						tempActive = false;
+					}
+					wallboxOID = {
+						active: tempActive,
+						must: wordOptionally,
+						Name: "DeviceOID3PhaseChargeEnable",
+						OID: tempOID,
+						Type: "URL",
+						SetValue: "true"
+					}
+					tempWallboxOIDs.push(wallboxOID);
+				}
+                if (missingOID["DeviceOID3PhaseChargeDisable"]) {
+                    if (devices[id].DeviceOID3PhaseChargeDisable != null && devices[id].DeviceOID3PhaseChargeDisable.length > 5) {
+                        tempOID = devices[id].DeviceOID3PhaseChargeDisable;
+                        tempActive = true;
+                    }
+                    else {
+                        tempOID = "";
+                        tempActive = false;
+                    }
+                    wallboxOID = {
+                        active: tempActive,
+                        must: wordOptionally,
+                        Name: "DeviceOID3PhaseChargeDisable",
+                        OID: tempOID,
+                        Type: "URL",
+                        SetValue: "true"
+                    }
+                    tempWallboxOIDs.push(wallboxOID);
+                }
 
 				console.log("Wallbox OID " + JSON.stringify(tempWallboxOIDs));
 
@@ -1617,7 +1668,7 @@
 
 													<th id="tableWallboxOID_col2" data-name="must" data-type="text" style="background: #64b5f6 " class="header"></th>
 
-													<th id="tableWallboxOID_col3" data-name="Name" data-type="select" data-options="DeviceOIDPlugConnected/DeviceOIDPlugConnected;DeviceOIDIsCharging/DeviceOIDIsCharging;DeviceOIDIsError/DeviceOIDIsError;DeviceOIDChargePower/DeviceOIDChargePower;DeviceOIDStartCharge/DeviceOIDStartCharge;DeviceOIDStopCharge/DeviceOIDStopCharge" style="background: #64b5f6 " class="header translate">Name</th>
+													<th id="tableWallboxOID_col3" data-name="Name" data-type="select" data-options="DeviceOIDPlugConnected/DeviceOIDPlugConnected;DeviceOIDIsCharging/DeviceOIDIsCharging;DeviceOIDIsError/DeviceOIDIsError;DeviceOIDChargePower/DeviceOIDChargePower;DeviceOIDStartCharge/DeviceOIDStartCharge;DeviceOIDStopCharge/DeviceOIDStopCharge;DeviceOID3PhaseChargeEnable/DeviceOID3PhaseChargeEnable;;DeviceOID3PhaseChargeDisable/DeviceOID3PhaseChargeDisable;" style="background: #64b5f6 " class="header translate">Name</th>
 													<th id="tableWallboxOID_col4" data-name="OID" data-type="text" style="background: #64b5f6 " class="header translate">OID</th>
 													<th id="tableWallboxOID_col5" data-buttons="edit" style="width: 100px; background: #64b5f6"></th>
 													<th id="tableWallboxOID_col6" data-name="Type" data-type="select" data-options="Boolean/Boolean;Number/Number;URL/URL;" style="background: #64b5f6 " class="header translate">Type</th>
