@@ -18,7 +18,12 @@ Unter Protokolle findet man dann die logs. Der Filter hilft, die logs des Adapte
 
 Hier kann man auch das gesamte log als Textdatei herunterladen.
 
- 
+Wenn man noch die erweiterte Protokollierung aktiviert, wird jedes Telegram an den Homemanager zusätzlich im log
+protokolliert. Das führt aber zu extrem umfangreichen logs und sollte nur kurzzeitig zur Fehlersuche aktiviert werden.
+
+![Bild5](ioB_Log_5_de.PNG)
+
+
 ## csv Log
 Da die ioBroker-logs sehr umfangreich sein können, hat dieser Adapter eine weitere Möglichkeit, die Daten,
 die an den Homemanager gesendet wurden, zu loggen.
