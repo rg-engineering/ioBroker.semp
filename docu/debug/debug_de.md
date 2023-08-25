@@ -31,7 +31,8 @@ die an den Homemanager gesendet wurden, zu loggen.
 Dazu muss man das csv-Log aktivieren und einen Pfad angeben, wo das log gespeichert werden soll. Wenn nur ein Pfad 
 angegeben wird, wird eine log-Datei pro Tag im angegebenen Pfad erzeugt. Die Datei wird nach 5 Tagen wieder gelöscht, so dass nur maximal
 5 csv-logs im Pfad liegen. Wenn man einen Dateinamen mit angibt, wird in diese Datei geloggt.
-*Achtung*: der Pfad muss auf dem System lokal erreichbar sein, auf dem die semp-Instanz läuft.
+
+**Achtung**: der Pfad muss auf dem System lokal erreichbar sein, auf dem die semp-Instanz läuft.
 
 ![Bild4](ioB_Log_4_de.PNG)
 
