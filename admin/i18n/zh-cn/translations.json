@@ -22,6 +22,8 @@
     "DeviceMinOnTime": "最短开启时间 [s]",
     "DeviceMinPower": "最小功率 [W]",
     "DeviceName": "设备名称",
+    "DeviceOID3PhaseChargeDisable": "对象 ID：三相充电禁用",
+    "DeviceOID3PhaseChargeEnable": "对象 ID：三相充电启用",
     "DeviceOIDChargePower": "对象 ID 充电功率",
     "DeviceOIDIsCharging": "对象 ID 正在充电",
     "DeviceOIDIsError": "对象 ID 错误",

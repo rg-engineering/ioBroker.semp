@@ -22,6 +22,8 @@
     "DeviceMinOnTime": "tiempo mínimo de encendido [s]",
     "DeviceMinPower": "potencia mínima [W]",
     "DeviceName": "nombre del dispositivo",
+    "DeviceOID3PhaseChargeDisable": "ID de objeto: Desactivación de carga trifásica",
+    "DeviceOID3PhaseChargeEnable": "ID de objeto: habilitación de carga trifásica",
     "DeviceOIDChargePower": "poder de carga de ID de objeto",
     "DeviceOIDIsCharging": "ID de objeto se está cargando",
     "DeviceOIDIsError": "ID de objeto es un error",

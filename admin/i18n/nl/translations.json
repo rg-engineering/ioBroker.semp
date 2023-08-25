@@ -22,6 +22,8 @@
     "DeviceMinOnTime": "minimale inschakeltijd [s]",
     "DeviceMinPower": "minimaal vermogen [W]",
     "DeviceName": "toestelnaam",
+    "DeviceOID3PhaseChargeDisable": "object-ID: 3Phase Charge uitgeschakeld",
+    "DeviceOID3PhaseChargeEnable": "object-ID: 3Phase Charge ingeschakeld",
     "DeviceOIDChargePower": "object-ID laadvermogen",
     "DeviceOIDIsCharging": "object-ID wordt opgeladen",
     "DeviceOIDIsError": "object-ID is een fout",

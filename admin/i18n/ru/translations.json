@@ -22,6 +22,8 @@
     "DeviceMinOnTime": "минимальное время включения [с]",
     "DeviceMinPower": "минимальная мощность [Вт]",
     "DeviceName": "имя устройства",
+    "DeviceOID3PhaseChargeDisable": "идентификатор объекта: отключение 3-фазной зарядки",
+    "DeviceOID3PhaseChargeEnable": "идентификатор объекта: включение трехфазной зарядки",
     "DeviceOIDChargePower": "мощность заряда идентификатора объекта",
     "DeviceOIDIsCharging": "идентификатор объекта заряжается",
     "DeviceOIDIsError": "идентификатор объекта является ошибкой",

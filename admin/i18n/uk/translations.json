@@ -22,6 +22,8 @@
     "DeviceMinOnTime": "мінімальний час увімкнення [с]",
     "DeviceMinPower": "мінімальна потужність [Вт]",
     "DeviceName": "Ім'я пристрою",
+    "DeviceOID3PhaseChargeDisable": "object-ID: 3Phase Charge вимкнено",
+    "DeviceOID3PhaseChargeEnable": "object-ID: 3Phase Charge enable",
     "DeviceOIDChargePower": "Ідентифікатор об'єкта Потужність заряду",
     "DeviceOIDIsCharging": "object-ID заряджається",
     "DeviceOIDIsError": "ID об'єкта є помилкою",

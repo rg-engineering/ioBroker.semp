@@ -709,6 +709,11 @@
 							devices[id].WallboxOIDs[d].must = wordOptionally;
 						}
 						missingOID[devices[id].WallboxOIDs[d].Name] = false;
+
+						if (devices[id].WallboxOIDs[d].Type == "URL") {
+							devices[id].WallboxOIDs[d].SetValue = "not used";
+						}
+
 					}
 					tempWallboxOIDs = devices[id].WallboxOIDs;
 				}

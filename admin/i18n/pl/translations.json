@@ -22,6 +22,8 @@
     "DeviceMinOnTime": "minimalny czas załączenia [s]",
     "DeviceMinPower": "minimalna moc [W]",
     "DeviceName": "Nazwa urządzenia",
+    "DeviceOID3PhaseChargeDisable": "object-ID: Wyłączenie ładowania 3-fazowego",
+    "DeviceOID3PhaseChargeEnable": "Identyfikator obiektu: Włącz ładowanie 3-fazowe",
     "DeviceOIDChargePower": "Moc ładowania identyfikatora obiektu",
     "DeviceOIDIsCharging": "Identyfikator obiektu ładuje się",
     "DeviceOIDIsError": "identyfikator-obiektu jest błędem",
