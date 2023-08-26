@@ -4,7 +4,7 @@
 
 ### Main
 
-![Main](../admin/docs/Settings_Main_de.PNG)
+![Main](settings/Settings_Main_de.PNG)
 
 * IP Address
 
@@ -20,25 +20,25 @@
 
 ### Devices
 
-![Devices](../admin/docs/Settings_Devices_de.PNG)
+![Devices](settings/Settings_Devices_de.PNG)
 
 * Base-ID of devices
 
 ### Device Main
 
-![Devices](../admin/docs/Settings_Device_Main_de.PNG)
+![Devices](settings/Settings_Device_Main_de.PNG)
 
 #### Device Counter
 
-![Devices](../admin/docs/Settings_Device_Counter_de.PNG)
+![Devices](settings/Settings_Device_Counter_de.PNG)
 
 #### Device Switch
 
-![Devices](../admin/docs/Settings_Device_Switch_de.PNG)
+![Devices](settings/Settings_Device_Switch_de.PNG)
 
 #### Device Energy Requests
 
-![Devices](../admin/docs/Settings_Device_Timer_de.PNG)
+![Devices](settings/Settings_Device_Timer_de.PNG)
 
 Timer Active: activates the energy requests from SunnyHomeManager
 
@@ -48,7 +48,7 @@ With that option the energy request can be canceled.
 
 #### Device Wallbox
 
-![Devices](../admin/docs/Settings_Device_Wallbox_de.PNG)
+![Devices](settings/Settings_Device_Wallbox_de.PNG)
 
 Battery Capacity [Wh]: is used for energy requests. If battery is empty the complete capacity is requested for charge sequence.
 
@@ -79,4 +79,4 @@ Sometimes a device does not need the requested energy (e.g. a heat pump). In thi
 * energy request periods must not overlap (better to have minimum five minutes time difference)
 * number of energy request periods are not limited
 
-![Devices](../admin/docs/Portal_Planning.PNG)
+![Devices](settings/Portal_Planning.PNG)
