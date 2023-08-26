@@ -1,10 +1,11 @@
-# Debug-Möglichkeiten
+# Debug-MÃ¶glichkeiten
+
 
 
 ## ioBroker log
 
-Die einfachste Möglichkeit, Fehler und Informationen über den Adapter zu finden, ist das debug log.
-Dazu zunächts die Protokollstufe des Adapters auf debug stellen, den Adapter neu starten.
+Die einfachste MÃ¶glichkeit, Fehler und Informationen Ã¼ber den Adapter zu finden, ist das debug log.
+Dazu zunÃ¤chts die Protokollstufe des Adapters auf debug stellen, den Adapter neu starten.
 
 ![Bild1](ioB_Log_1_de.PNG)
 
@@ -18,21 +19,21 @@ Unter Protokolle findet man dann die logs. Der Filter hilft, die logs des Adapte
 
 Hier kann man auch das gesamte log als Textdatei herunterladen.
 
-Wenn man noch die erweiterte Protokollierung aktiviert, wird jedes Telegram an den Homemanager zusätzlich im log
-protokolliert. Das führt aber zu extrem umfangreichen logs und sollte nur kurzzeitig zur Fehlersuche aktiviert werden.
+Wenn man noch die erweiterte Protokollierung aktiviert, wird jedes Telegram an den Homemanager zusÃ¤tzlich im log
+protokolliert. Das fÃ¼hrt aber zu extrem umfangreichen logs und sollte nur kurzzeitig zur Fehlersuche aktiviert werden.
 
 ![Bild5](ioB_Log_5_de.PNG)
 
 
 ## csv Log
-Da die ioBroker-logs sehr umfangreich sein können, hat dieser Adapter eine weitere Möglichkeit, die Daten,
+Da die ioBroker-logs sehr umfangreich sein kÃ¶nnen, hat dieser Adapter eine weitere MÃ¶glichkeit, die Daten,
 die an den Homemanager gesendet wurden, zu loggen.
 
 Dazu muss man das csv-Log aktivieren und einen Pfad angeben, wo das log gespeichert werden soll. Wenn nur ein Pfad 
-angegeben wird, wird eine log-Datei pro Tag im angegebenen Pfad erzeugt. Die Datei wird nach 5 Tagen wieder gelöscht, so dass nur maximal
+angegeben wird, wird eine log-Datei pro Tag im angegebenen Pfad erzeugt. Die Datei wird nach 5 Tagen wieder gelÃ¶scht, so dass nur maximal
 5 csv-logs im Pfad liegen. Wenn man einen Dateinamen mit angibt, wird in diese Datei geloggt.
 
-**Achtung**: der Pfad muss auf dem System lokal erreichbar sein, auf dem die semp-Instanz läuft.
+**Achtung**: der Pfad muss auf dem System lokal erreichbar sein, auf dem die semp-Instanz lÃ¤uft.
 
 ![Bild4](ioB_Log_4_de.PNG)
 
