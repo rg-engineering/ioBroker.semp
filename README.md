@@ -53,6 +53,11 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 
 ## Changelog
 
+<!--
+  Placeholder for the next version (at the beginning of the line):
+  ### **WORK IN PROGRESS**
+-->
+
 ### 1.3.5 (2023-08-26)
 * (René) see issue #81: wallbox three phase enabler by URL
 * (René) see issue #81: wallbox three phase switch time configurable (default 3 minutes)
