@@ -6,8 +6,8 @@
 
 const utils = require("@iobroker/adapter-core");
 const { type } = require("os");
-const networkInterfaces = require('os').networkInterfaces;
-const { v4: uuidv4 } = require('uuid');
+const networkInterfaces = require("os").networkInterfaces;
+const { v4: uuidv4 } = require("uuid");
 
 const Gateway = require("./lib/semp/Gateway").Gateway;
 
@@ -18,10 +18,9 @@ const Gateway = require("./lib/semp/Gateway").Gateway;
  * admin
  *	ID nur ändern, wenn sie nicht dem Format entspricht
  *	readme bzgl. der einstellbaren Parameter vervollständigen
- *	
- *	
- *	
- 
+ *
+ *
+
 
  *	Energieanforderung abbrechen, wenn Gerät ausschaltet, Zeit einstellbar
  *	Feiertag / Urlaub zu hause für Timer hinzufügen
@@ -61,20 +60,20 @@ class Semp extends utils.Adapter {
 
 
 			//"290B3891-0311-4854-4333-7C70BC802C2D"
-			let uuid = this.config.UUID;
-			let ip = this.config.IPAddress;
+			const uuid = this.config.UUID;
+			const ip = this.config.IPAddress;
 			//9765
-			let sempPort = this.config.SempPort;
+			const sempPort = this.config.SempPort;
 			//"ioBroker Gateway"
-			let name = this.config.SempName;
+			const name = this.config.SempName;
 			//"ioBroker"
-			let manufacturer = this.config.SempManufacturer;
+			const manufacturer = this.config.SempManufacturer;
 
 			this.log.debug("check BaseID " + this.config.DeviceBaseID + " type " + typeof this.config.DeviceBaseID);
-			let BaseId = this.config.DeviceBaseID;
+			const BaseId = this.config.DeviceBaseID;
 			this.CheckBaseId(BaseId);
 
-			
+
 
 			if (!ip) {
 				this.log.error("IP not specified!");
@@ -93,7 +92,7 @@ class Semp extends utils.Adapter {
 					this.log.debug("Started all!");
 
 					await this.AddDevices();
-					
+
 					this.UpdateData();
 				}
 			}
@@ -102,7 +101,7 @@ class Semp extends utils.Adapter {
 			// examples for the checkPassword/checkGroup functions
 			let result = await this.checkPasswordAsync("admin", "iobroker");
 			this.log.info("check user admin pw iobroker: " + result);
-	
+
 			result = await this.checkGroupAsync("admin", "admin");
 			this.log.info("check group user admin group admin: " + result);
 			*/
@@ -124,8 +123,8 @@ class Semp extends utils.Adapter {
 
 						//is this necessary here???
 						//just make it backwards compatible 0.0.4 -> 0.0.3
-						let EnergyRequestPeriods = [];
-						let energyRequest = {
+						const EnergyRequestPeriods = [];
+						const energyRequest = {
 							ID: 1,
 							Days: this.config.devices[d].TimerDays,
 							EarliestStartTime: this.config.devices[d].TimerStart,
@@ -136,7 +135,7 @@ class Semp extends utils.Adapter {
 							MaxTimeToOn: this.config.devices[d].TimerCancelIfNotOnTime,
 							CancelRequestAfterOff: false,
 							MinTimeAfterOff: "10"
-						}
+						};
 
 						EnergyRequestPeriods.push(energyRequest);
 
@@ -162,7 +161,7 @@ class Semp extends utils.Adapter {
 
 		for (let d = 0; d < this.config.devices.length; d++) {
 
-			let device = this.config.devices[d];
+			const device = this.config.devices[d];
 
 			this.log.debug("add device " + JSON.stringify(device));
 
@@ -175,15 +174,15 @@ class Semp extends utils.Adapter {
 				}
 				if (device.StatusDetection == "AlwaysOn") {
 					this.gw.setOnOffDevice(device.ID, true);
-                }
+				}
 			}
-        }
-    }
+		}
+	}
 
 	async SubscribeDevice(device) {
 
 		//is done in device itself
-    }
+	}
 
 	/**
 	 * Is called when adapter shuts down - callback has to be called under any circumstances!
@@ -208,7 +207,7 @@ class Semp extends utils.Adapter {
 
 			if (!state.ack || ids[0] != "semp") {
 
-				let bRet = this.UpdateDevice(id, state);
+				const bRet = this.UpdateDevice(id, state);
 
 				if (!bRet) {
 					this.log.warn(`state ${id} changed: ${state.val} (ack = ${state.ack}) but not handled`);
@@ -231,7 +230,7 @@ class Semp extends utils.Adapter {
 		//find device and OID
 		for (let d = 0; d < this.config.devices.length; d++) {
 
-			let device = this.config.devices[d];
+			const device = this.config.devices[d];
 			if (device.IsActive) {
 				if (device.OID_Power === id) {
 					this.gw.setPowerDevice(device.ID, state.val);
@@ -303,7 +302,7 @@ class Semp extends utils.Adapter {
 		}
 
 		return bRet;
-    }
+	}
 
 	async onMessage(obj) {
 		this.log.info("on message " + JSON.stringify(obj));
@@ -311,21 +310,21 @@ class Semp extends utils.Adapter {
 			if (obj.command === "getIP") {
 				this.log.info("get IP");
 
-				let myIP = this.GetIP();
+				const myIP = this.GetIP();
 				// Send response in callback if required
 				if (obj.callback) this.sendTo(obj.from, obj.command, myIP, obj.callback);
 			}
 			else if (obj.command === "getUUID") {
 				this.log.info("get UUID");
 
-				let uuid = this.GetUUID();
+				const uuid = this.GetUUID();
 				// Send response in callback if required
 				if (obj.callback) this.sendTo(obj.from, obj.command, uuid, obj.callback);
 			}
 			else if (obj.command === "getDeviceBaseID") {
 				this.log.info("get DeviceBaseID");
 
-				let devicebaseid = await this.GetDeviceBaseID();
+				const devicebaseid = await this.GetDeviceBaseID();
 				// Send response in callback if required
 				if (obj.callback) this.sendTo(obj.from, obj.command, devicebaseid, obj.callback);
 			}
@@ -342,13 +341,13 @@ class Semp extends utils.Adapter {
 
 		for (const name of Object.keys(nets)) {
 			for (const net of nets[name]) {
-				if (net.family === 'IPv4' && !net.internal) {
+				if (net.family === "IPv4" && !net.internal) {
 					ip = net.address;
 				}
 			}
 		}
 		return ip;
-    }
+	}
 
 	GetUUID() {
 		let uuid = "000-todo";
@@ -366,7 +365,7 @@ class Semp extends utils.Adapter {
 		if (ret != null) {
 			this.log.debug("system config " + JSON.stringify(ret));
 
-			let latidude = ret.common.latitude;
+			const latidude = ret.common.latitude;
 
 			devicebaseid = ("00000000" + Math.round(latidude * 100000000)).slice(-8);
 
@@ -377,7 +376,7 @@ class Semp extends utils.Adapter {
 
 		}
 		return devicebaseid;
-    }
+	}
 
 	CheckBaseId(id) {
 
@@ -385,19 +384,19 @@ class Semp extends utils.Adapter {
 		base id muss nummer, 8 ziffern und kein punkt
 		*/
 
-		let ret = false;
+		const ret = false;
 		this.log.debug("check BaseID " + id + " type " + typeof id);
 
 		//only numbers
-		if (typeof id === 'number' && Number.isInteger(id)) {
+		if (typeof id === "number" && Number.isInteger(id)) {
 
-			this.log.debug("BaseID: is integer number"); 
+			this.log.debug("BaseID: is integer number");
 		}
 		else {
-			this.log.error("BaseID: wrong type or not integer" + typeof id + " " + JSON.stringify(id) + Number.isInteger(id))
+			this.log.error("BaseID: wrong type or not integer" + typeof id + " " + JSON.stringify(id) + Number.isInteger(id));
 		}
 
-		
+
 
 		return ret;
 	}

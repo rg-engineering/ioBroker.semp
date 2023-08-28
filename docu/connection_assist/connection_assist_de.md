@@ -11,7 +11,7 @@ Für die Fehlersuche können diese log files hilfreich sein
 ## Herunterladen der log Files
 
 * Kopieren des "SMA Connection Assist" von  [connection-assist.jar](https://github.com/rg-engineering/ioBroker.semp/tree/master/docu/SMA/connection-assist.jar) auf den Windows-PC und irgendwohin speichern
-* dann eine Eingabe aufforderung öffnen, ich das Verzeichnis wechseln, wo die jar-Datei gespeichert wurde und 
+* dann eine Eingabe aufforderung öffnen, in das Verzeichnis wechseln, wo die jar-Datei gespeichert wurde und 
 
 ```
 connection-assist.jar -discoverHoman

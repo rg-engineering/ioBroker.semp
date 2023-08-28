@@ -56,6 +56,8 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 <!--
   Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
+
+  (René) see issue #81: smaller bug fixes
 -->
 
 ### 1.3.5 (2023-08-26)
