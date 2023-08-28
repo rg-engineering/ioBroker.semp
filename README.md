@@ -55,7 +55,7 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 
 <!--
   Placeholder for the next version (at the beginning of the line):
-### **WORK IN PROGRESS**
+### 1.3.6 (2023-08-28)
 -->
 
   (René) see issue #81: smaller bug fixes
@@ -79,7 +79,7 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 * (René) see #17: additional checks for BaseID
 * (René) check BaseId of every DeviceId when adapter starts
 * (René) bug fix csv-logging: create file if not exist and complete filename is provided, was working with path name only before
-* (René) additional debug: show last timeframe sent to SHM as datapoint for every timeframe 
+* (René) additional debug: show last timeframe sent to SHM as datapoint for every timeframe
 
 ### 1.2.0 (2023-05-29)
 * (René) device off at end of maximum running time and latest end overworked; option "Switch Off At End Of Timer" removed
@@ -135,7 +135,6 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 * (René) csv logger for data to be sent to SHM (for debugging)
 * (René) see issue #14: cancel request if device does not turn on
 * (René) bug fix issue #19: turn off device at the end of maximum operation time
-
 
 ### 0.0.1 (2022-10-01)
 * (René) initial release
