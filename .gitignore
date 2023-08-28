@@ -28,3 +28,4 @@ admin/i18n/*/flat.txt
 /bin/
 *.orig
 /readme.txt
+/todo.txt
