@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "semp",
-        "version": "1.3.5",
+        "version": "1.3.6",
         "news": {
+            "1.3.6": {
+                "en": "smaller bug fixes",
+                "de": "kleinere Fehlerbehebungen",
+                "ru": "мелкие исправления ошибок",
+                "pt": "correções de bugs menores",
+                "nl": "kleinere bugfixes",
+                "fr": "petites corrections de bugs",
+                "it": "correzioni di bug minori",
+                "es": "correcciones de errores más pequeñas",
+                "pl": "mniejsze poprawki błędów",
+                "uk": "менші виправлення помилок",
+                "zh-cn": "较小的错误修复"
+            },
             "1.3.5": {
                 "en": "check MaxPowerConsumption added",
                 "de": "Überprüfen Sie, ob MaxPowerConsumption hinzugefügt wurde",

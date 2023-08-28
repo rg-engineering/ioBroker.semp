@@ -53,11 +53,10 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 
 ## Changelog
 
-<!--
-  Placeholder for the next version (at the beginning of the line):
-### 1.3.6 (2023-08-28)
--->
 
+###  **WORK IN PROGRESS**
+
+### 1.3.6 (2023-08-28)
   (René) see issue #81: smaller bug fixes
 
 ### 1.3.5 (2023-08-26)
