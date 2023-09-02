@@ -53,8 +53,12 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 
 ## Changelog
 
+<!--
+  Placeholder for the next version (at the beginning of the line):
+### **WORK IN PROGRESS**
+-->
 
-###  **WORK IN PROGRESS**
+
 (René) see issue #30: bug fix for type based status check of wallboxes
 
 ### 1.3.6 (2023-08-28)
