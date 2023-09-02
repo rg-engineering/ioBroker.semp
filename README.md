@@ -55,6 +55,7 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 
 
 ###  **WORK IN PROGRESS**
+(René) see issue #30: bug fix for type based status check of wallboxes
 
 ### 1.3.6 (2023-08-28)
   (René) see issue #81: smaller bug fixes
