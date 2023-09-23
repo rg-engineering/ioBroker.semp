@@ -53,6 +53,8 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 
 ## Changelog
 
+### **WORK IN PROGRESS**
+(René) see issue #30: URL can now be used directly to get status of wallbox (JSON only)
 
 ### 1.3.7 (2023-09-02)
 (René) see issue #30: bug fix for type based status check of wallboxes
