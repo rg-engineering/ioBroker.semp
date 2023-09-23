@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "semp",
-        "version": "1.3.7",
+        "version": "1.3.8",
         "news": {
+            "1.3.8": {
+                "en": "URL can now be used directly to get status of wallbox",
+                "de": "Die URL kann jetzt direkt verwendet werden, um den Status der Wallbox abzurufen",
+                "ru": "URL-адрес теперь можно использовать напрямую для получения статуса настенного ящика.",
+                "pt": "O URL agora pode ser usado diretamente para obter o status do wallbox",
+                "nl": "De URL kan nu rechtstreeks worden gebruikt om de status van de wallbox op te vragen",
+                "fr": "L'URL peut désormais être utilisée directement pour obtenir l'état de la wallbox",
+                "it": "L'URL ora può essere utilizzato direttamente per ottenere lo stato della wallbox",
+                "es": "La URL ahora se puede utilizar directamente para obtener el estado de Wallbox.",
+                "pl": "Adresu URL można teraz używać bezpośrednio do sprawdzania stanu stacji ładowania Wallbox",
+                "uk": "URL-адресу тепер можна використовувати безпосередньо для отримання статусу Wallbox",
+                "zh-cn": "现在可以直接使用 URL 来获取 wallbox 的状态"
+            },
             "1.3.7": {
                 "en": "bug fix for type based status check of wallboxes",
                 "de": "Fehlerbehebung für die typbasierte Statusprüfung von Wallboxen",
