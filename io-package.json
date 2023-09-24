@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "semp",
-        "version": "1.3.8",
+        "version": "1.3.9",
         "news": {
+            "1.3.9": {
+                "en": "bug fix URL as string to be used",
+                "de": "Bugfix-URL als zu verwendende Zeichenfolge",
+                "ru": "URL-адрес исправления ошибки в виде строки, которая будет использоваться",
+                "pt": "URL de correção de bug como string a ser usada",
+                "nl": "bugfix-URL als te gebruiken tekenreeks",
+                "fr": "URL de correction de bug sous forme de chaîne à utiliser",
+                "it": "URL di correzione del bug come stringa da utilizzare",
+                "es": "URL de corrección de errores como cadena a utilizar",
+                "pl": "Adres URL poprawki błędów jako ciąg do użycia",
+                "uk": "URL-адреса виправлення помилок як рядок для використання",
+                "zh-cn": "错误修复 URL 作为要使用的字符串"
+            },
             "1.3.8": {
                 "en": "URL can now be used directly to get status of wallbox",
                 "de": "Die URL kann jetzt direkt verwendet werden, um den Status der Wallbox abzurufen",
