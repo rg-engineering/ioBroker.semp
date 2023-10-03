@@ -56,6 +56,7 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 
 ### **WORK IN PROGRESS**
 (René) bug fix: removed missing Start() call in wallbox (avoid exception)
+(René) see issue #30: URL can be used to set recommended power to wallbox (attention: still only power, not current as needed for go-e)
 
 ### 1.3.9 (2023-09-24)
 (René) see issue #30: bug fix URL as string to be used
