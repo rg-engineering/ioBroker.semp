@@ -52,9 +52,7 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 * please create issues at [github](https://github.com/rg-engineering/ioBroker.semp/issues) if you find bugs or whish new features
 
 ## Changelog
-
-
-### **WORK IN PROGRESS**
+### 1.3.10 (2023-10-03)
 (René) bug fix: removed missing Start() call in wallbox (avoid exception)
 (René) see issue #30: URL can be used to set recommended power to wallbox (attention: still only power, not current as needed for go-e)
 
