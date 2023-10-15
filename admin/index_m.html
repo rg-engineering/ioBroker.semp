@@ -149,7 +149,7 @@
 				$('#divDeviceMaxOffTime').hide();
 			}
 
-			if ($('#DeviceMeasurementMethod').val() == "Measurement") {
+            if ($('#DeviceMeasurementMethod').val() == "Measurement" && $('#DeviceType').val() != "EVCharger" ) {
 				//console.log("show DeviceMeasurementMethod");
 				$('#divDeviceOIDPower').show();
 
@@ -159,7 +159,7 @@
 				$('#divDeviceOIDPower').hide();
 			}
 
-			if ($('#DeviceStatusDetectionType').val() == "SeparateOID") {
+            if ($('#DeviceStatusDetectionType').val() == "SeparateOID" && $('#DeviceType').val() != "EVCharger") {
 				//console.log("show DeviceStatusDetectionType");
 				$('#divDeviceOIDStatus').show();
 
@@ -171,7 +171,7 @@
 			}
 
 
-			if ($('#DeviceHasOIDSwitch').prop("checked")) {
+            if ($('#DeviceHasOIDSwitch').prop("checked") && $('#DeviceType').val() != "EVCharger") {
 				//console.log("show DeviceHasOIDSwitch");
 				$('#divDeviceOIDSwitch').show();
 
@@ -211,10 +211,12 @@
 			}
 
             if ($('#DeviceWallboxHas3phaseEnabler').prop("checked")) {
-                $('#3phaseLimit').show();
+				$('#3phaseLimit').show();
+                $('#3phaseDelay').show();
             }
             else {
-                $('#3phaseLimit').hide();
+				$('#3phaseLimit').hide();
+                $('#3phaseDelay').hide();
 			}
 
 			/*
@@ -542,12 +544,14 @@
 				$('#DeviceWallbox3phaseSwitchLimit').val(devices[id].Wallbox3phaseSwitchLimit);
                 $('#DeviceWallbox3phaseSwitchDelay').val(devices[id].Wallbox3phaseSwitchDelay);
 
+				/*
 				$('#DeviceOIDPlugConnected').val(devices[id].OID_PlugConnected);
 				$('#DeviceOIDIsCharging').val(devices[id].OID_IsCharging);
 				$('#DeviceOIDIsError').val(devices[id].OID_IsError);
 				$('#DeviceOIDChargePower').val(devices[id].OID_ChargePower);
 				$('#DeviceOIDStartCharge').val(devices[id].OID_StartCharge);
 				$('#DeviceOIDStopCharge').val(devices[id].OID_StopCharge);
+				*/
 
 				$('#DeviceStatusDetectionType').val(devices[id].StatusDetection);
 				$('#DeviceStatusDetectionType').select();
@@ -654,36 +658,81 @@
                     "DeviceOIDStartCharge": true,
                     "DeviceOIDStopCharge": true,
 					"DeviceOID3PhaseChargeEnable": true,
-                    "DeviceOID3PhaseChargeDisable": true
+					"DeviceOID3PhaseChargeDisable": true,
+					"DeviceOIDCounter": true,
+                    "DeviceOIDStatus": true,
+                    "DeviceOIDSwitch": true
 				}
 
 				if (devices[id].WallboxOIDs != null) {
 					for (let d = 0; d < devices[id].WallboxOIDs.length; d++) {
+
+                        console.log("counter " + d);
+
 						if (devices[id].WallboxOIDs[d].Name == "DeviceOIDPlugConnected"
-							|| devices[id].WallboxOIDs[d].Name == "DeviceOIDChargePower") {
+							|| devices[id].WallboxOIDs[d].Name == "DeviceOIDChargePower"
+                            || devices[id].WallboxOIDs[d].Name == "DeviceOIDCounter") {
 							devices[id].WallboxOIDs[d].must = wordMandatory;
 						}
 						else {
 							devices[id].WallboxOIDs[d].must = wordOptionally;
 						}
-						missingOID[devices[id].WallboxOIDs[d].Name] = false;
+
+						if (devices[id].WallboxOIDs[d].Name.length > 0) {
+							missingOID[devices[id].WallboxOIDs[d].Name] = false;
+						}
 
 						if (devices[id].WallboxOIDs[d].Name == "DeviceOIDPlugConnected"
-							|| devices[id].WallboxOIDs[d].Name == "DeviceOIDIsCharging" 
-                            || devices[id].WallboxOIDs[d].Name == "DeviceOIDIsError" 
+							|| devices[id].WallboxOIDs[d].Name == "DeviceOIDIsCharging"
+							|| devices[id].WallboxOIDs[d].Name == "DeviceOIDIsError"
+							|| devices[id].WallboxOIDs[d].Name == "DeviceOIDStatus"
+							|| devices[id].WallboxOIDs[d].Name == "DeviceOIDCounter"
 						) {
-							tempWallboxOIDsRead.push(devices[id].WallboxOIDs[d]);
-                            if (devices[id].WallboxOIDs[d].Type != "URL") {
-                                devices[id].WallboxOIDs[d].Path2Check = "not used";
-                            }
+
+							//zähler nur pushen, wenn Messmethode == Messung
+							if (devices[id].WallboxOIDs[d].Name == "DeviceOIDCounter" && $('#DeviceMeasurementMethod').val() != "Measurement") {
+								//do nothing
+								console.log("DeviceOIDCounter not to push");
+							}
+							//Status nur pushen wenn State Detection per separater OID
+                            else if (devices[id].WallboxOIDs[d].Name == "DeviceOIDStatus" && $('#DeviceStatusDetectionType').val() != "SeparateOID") {
+								//do nothing
+								console.log("DeviceOIDStatus not to push");
+							}
+							else {
+								console.log("push " + devices[id].WallboxOIDs[d].Name);
+								tempWallboxOIDsRead.push(devices[id].WallboxOIDs[d]);
+								if (devices[id].WallboxOIDs[d].Type != "URL") {
+									devices[id].WallboxOIDs[d].Path2Check = "not used";
+								}
+							}
 						}
 						else {
-							tempWallboxOIDsWrite.push(devices[id].WallboxOIDs[d]);
+							if (devices[id].WallboxOIDs[d].Name == "DeviceOIDChargePower"
+								|| devices[id].WallboxOIDs[d].Name == "DeviceOIDStartCharge"
+								|| devices[id].WallboxOIDs[d].Name == "DeviceOIDStopCharge"
+								|| devices[id].WallboxOIDs[d].Name == "DeviceOID3PhaseChargeEnable"
+								|| devices[id].WallboxOIDs[d].Name == "DeviceOID3PhaseChargeDisable"
+								|| devices[id].WallboxOIDs[d].Name == "DeviceOIDSwitch"
+							) {
+								//switch nur pushen, wenn separate OID zum schalten
+								if (devices[id].WallboxOIDs[d].Name == "DeviceOIDSwitch" && $('#DeviceHasOIDSwitch').prop("checked") == false) {
+									//do nothing
+                                    console.log("DeviceOIDSwitch not to push");
+								}
+								else {
+                                    console.log("push " + devices[id].WallboxOIDs[d].Name);
+									tempWallboxOIDsWrite.push(devices[id].WallboxOIDs[d]);
 
-							/*if (devices[id].WallboxOIDs[d].Type == "URL") {
-                                devices[id].WallboxOIDs[d].SetValue = "not used";
-                            }
-							*/
+									/*if (devices[id].WallboxOIDs[d].Type == "URL") {
+										devices[id].WallboxOIDs[d].SetValue = "not used";
+									}
+									*/
+								}
+							}
+							else {
+                                console.log("unknown OID " + JSON.stringify(devices[id].WallboxOIDs[d]));
+							}
 						}
 					}
 					//tempWallboxOIDs = devices[id].WallboxOIDs;
@@ -691,6 +740,71 @@
 
 				let tempOID = "";
 				let tempActive = false;
+
+                console.log("missing OID's " + JSON.stringify(missingOID));
+				
+
+                if (missingOID["DeviceOIDCounter"]) {
+                    if (devices[id].OID_Power != null && devices[id].OID_Power.length > 5) {
+                        tempOID = devices[id].OID_Power;
+                        tempActive = true;
+                    }
+                    else {
+                        tempOID = "";
+                        tempActive = true;
+                    }
+                    wallboxOID = {
+                        active: tempActive,
+                        must: wordMandatory,
+                        Name: "DeviceOIDCounter",
+                        OID: tempOID,
+                        Type: "Boolean",
+                        SetValue: "true"
+                    }
+                    tempWallboxOIDsRead.push(wallboxOID);
+                }
+
+                if (missingOID["DeviceOIDStatus"]) {
+                    if (devices[id].OID_Status != null && devices[id].OID_Status.length > 5) {
+                        tempOID = devices[id].OID_Status;
+                        tempActive = true;
+                    }
+                    else {
+                        tempOID = "";
+                        tempActive = true;
+                    }
+                    wallboxOID = {
+                        active: tempActive,
+                        must: wordOptionally,
+                        Name: "DeviceOIDStatus",
+                        OID: tempOID,
+                        Type: "Boolean",
+                        SetValue: "true"
+                    }
+                    tempWallboxOIDsRead.push(wallboxOID);
+				}
+
+                if (missingOID["DeviceOIDSwitch"]) {
+                    if (devices[id].OID_Switch != null && devices[id].OID_Switch.length > 5) {
+                        tempOID = devices[id].OID_Switch;
+                        tempActive = true;
+                    }
+                    else {
+                        tempOID = "";
+                        tempActive = true;
+                    }
+                    wallboxOID = {
+                        active: tempActive,
+                        must: wordOptionally,
+                        Name: "DeviceOIDSwitch",
+                        OID: tempOID,
+                        Type: "Boolean",
+                        SetValue: "true"
+                    }
+                    tempWallboxOIDsWrite.push(wallboxOID);
+                }
+
+
 				if (missingOID["DeviceOIDPlugConnected"]) {
 					if (devices[id].OID_PlugConnected != null && devices[id].OID_PlugConnected.length > 5) {
 						tempOID = devices[id].OID_PlugConnected;
@@ -998,12 +1112,14 @@
 						devices[id].Wallbox3phaseSwitchLimit = $('#DeviceWallbox3phaseSwitchLimit').val();
                         devices[id].Wallbox3phaseSwitchDelay = $('#DeviceWallbox3phaseSwitchDelay').val();
 
+						/*
 						devices[id].OID_PlugConnected = $('#DeviceOIDPlugConnected').val();
 						devices[id].OID_IsCharging = $('#DeviceOIDIsCharging').val();
 						devices[id].OID_IsError = $('#DeviceOIDIsError').val();
 						devices[id].OID_ChargePower = $('#DeviceOIDChargePower').val();
 						devices[id].OID_StartCharge = $('#DeviceOIDStartCharge').val();
 						devices[id].OID_StopCharge = $('#DeviceOIDStopCharge').val();
+						*/
 
 						devices[id].StatusDetection = $('#DeviceStatusDetectionType').val();
 						devices[id].StatusDetectionLimit = $('#DeviceStatusDetectionLimit').val();
@@ -1646,85 +1762,88 @@
 
 							<div class="row">
 								<div class="input-field col s3">
-									<input type="checkbox" id="DeviceWallboxHas3phaseEnabler" class="value" min="0" />
+									<input type="checkbox" id="DeviceWallboxHas3phaseEnabler" class="value"  />
 									<label for="DeviceWallboxHas3phaseEnabler" class="translate">DeviceWallboxHas3phaseEnabler</label>
 								</div>
 								<div class="input-field col s3" id="3phaseLimit">
-									<input type="number" id="DeviceWallbox3phaseSwitchLimit" class="value" min="4200" step="100" />
+									<input type="number" id="DeviceWallbox3phaseSwitchLimit" class="value" min="1000" step="100" />
 									<label for="DeviceWallbox3phaseSwitchLimit" class="translate">DeviceWallbox3phaseSwitchLimit</label>
 								</div>
-								<div class="input-field col s3" id="3phaseLimit">
+								<div class="input-field col s3" id="3phaseDelay">
 									<input type="number" id="DeviceWallbox3phaseSwitchDelay" class="value" min="1" max="10" step="1" />
 									<label for="DeviceWallbox3phaseSwitchDelay" class="translate">DeviceWallbox3phaseSwitchDelay</label>
 								</div>
 							</div>
-
 							<div class="row">
-								<div>
-									<h6>
-										<span class="translate" data-lang="WriteOID">WriteOID</span>
-
-									</h6>
+								<div class="input-field col s3">
+									<input type="checkbox" id="DeviceWallboxNeedCurrentRecommendation" class="value" />
+									<label for="DeviceWallboxNeedCurrentRecommendation" class="translate">DeviceWallboxNeedCurrentRecommendation</label>
 								</div>
+							</div>
+
+								<div class="row">
+									<div>
+										<h6>
+											<span class="translate" data-lang="WriteOID">WriteOID</span>
+
+										</h6>
+									</div>
 									<div class="col s12" id="WallboxOidWrite">
 
-									<div class="table-wallbox_oid_write-div">
-										<table id="table-wallbox_oid_write" class="table-values" style="width: 100%;">
-											<thead>
-												<tr>
-													<th id="tableWallboxOIDWrite_col1" data-name="active" data-type="checkbox" style="background: #64b5f6 " class="header translate">active</th>
-													<th id="tableWallboxOIDWrite_col2" data-name="must" data-type="text" style="background: #64b5f6 " class="header"></th>
-													<th id="tableWallboxOIDWrite_col3" data-name="Name" data-type="select" data-options="DeviceOIDChargePower/DeviceOIDChargePower;DeviceOIDStartCharge/DeviceOIDStartCharge;DeviceOIDStopCharge/DeviceOIDStopCharge;DeviceOID3PhaseChargeEnable/DeviceOID3PhaseChargeEnable;DeviceOID3PhaseChargeDisable/DeviceOID3PhaseChargeDisable;" style="background: #64b5f6 " class="header translate">Name</th>
-													<th id="tableWallboxOIDWrite_col4" data-name="OID" data-type="text" style="background: #64b5f6 " class="header translate">OID/URL</th>
-													<th id="tableWallboxOIDWrite_col5" data-buttons="edit" style="width: 100px; background: #64b5f6"></th>
-													<th id="tableWallboxOIDWrite_col6" data-name="Type" data-type="select" data-options="Boolean/Boolean;Number/Number;URL/URL;" style="background: #64b5f6 " class="header translate">Type</th>
-													<th id="tableWallboxOIDWrite_col7" data-name="SetValue" data-type="text" style="background: #64b5f6 " class="header translate">SetValue</th>
-												</tr>
-											</thead>
-										</table>
+										<div class="table-wallbox_oid_write-div">
+											<table id="table-wallbox_oid_write" class="table-values" style="width: 100%;">
+												<thead>
+													<tr>
+														<th id="tableWallboxOIDWrite_col1" data-name="active" data-type="checkbox" style="background: #64b5f6 " class="header translate">active</th>
+														<th id="tableWallboxOIDWrite_col2" data-name="must" data-type="text" style="background: #64b5f6 " class="header"></th>
+														<th id="tableWallboxOIDWrite_col3" data-name="Name" data-type="select" data-options="DeviceOIDChargePower/DeviceOIDChargePower;DeviceOIDStartCharge/DeviceOIDStartCharge;DeviceOIDStopCharge/DeviceOIDStopCharge;DeviceOID3PhaseChargeEnable/DeviceOID3PhaseChargeEnable;DeviceOID3PhaseChargeDisable/DeviceOID3PhaseChargeDisable;DeviceOIDSwitch/DeviceOIDSwitch;" style="background: #64b5f6 " class="header translate">Name</th>
+														<th id="tableWallboxOIDWrite_col4" data-name="OID" data-type="text" style="background: #64b5f6 " class="header translate">OID/URL</th>
+														<th id="tableWallboxOIDWrite_col5" data-buttons="edit" style="width: 100px; background: #64b5f6"></th>
+														<th id="tableWallboxOIDWrite_col6" data-name="Type" data-type="select" data-options="Boolean/Boolean;Number/Number;URL/URL;" style="background: #64b5f6 " class="header translate">Type</th>
+														<th id="tableWallboxOIDWrite_col7" data-name="SetValue" data-type="text" style="background: #64b5f6 " class="header translate">SetValue</th>
+													</tr>
+												</thead>
+											</table>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div>
+										<h6>
+											<span class="translate" data-lang="ReadOID">ReadOID</span>
+
+										</h6>
+									</div>
+									<div class="col s12" id="WallboxOidRead">
+
+										<div class="input-field col s3">
+											<input type="number" id="DeviceURLReadPollRate" class="value" min="5" max="60" step="1" />
+											<label for="DeviceURLReadPollRate" class="translate">DeviceURLReadPollRate</label>
+										</div>
+
+
+										<div class="table-wallbox_oid_read-div">
+											<table id="table-wallbox_oid_read" class="table-values" style="width: 100%;">
+												<thead>
+													<tr>
+														<th id="tableWallboxOIDRead_col1" data-name="active" data-type="checkbox" style="background: #64b5f6 " class="header translate">active</th>
+														<th id="tableWallboxOIDRead_col2" data-name="must" data-type="text" style="background: #64b5f6 " class="header"></th>
+														<th id="tableWallboxOIDRead_col3" data-name="Name" data-type="select" data-options="DeviceOIDPlugConnected/DeviceOIDPlugConnected;DeviceOIDIsCharging/DeviceOIDIsCharging;DeviceOIDIsError/DeviceOIDIsError;DeviceOIDCounter/DeviceOIDCounter;DeviceOIDStatus/DeviceOIDStatus;" style="background: #64b5f6 " class="header translate">Name</th>
+														<th id="tableWallboxOIDRead_col4" data-name="OID" data-type="text" style="background: #64b5f6 " class="header translate">OID/URL</th>
+														<th id="tableWallboxOIDRead_col5" data-buttons="edit" style="width: 100px; background: #64b5f6"></th>
+														<th id="tableWallboxOIDRead_col6" data-name="Type" data-type="select" data-options="Boolean/Boolean;Number/Number;URL/URL;" style="background: #64b5f6 " class="header translate">Type</th>
+														<th id="tableWallboxOIDRead_col7" data-name="Path2Check" data-type="text" style="background: #64b5f6 " class="header translate">Path2Check</th>
+														<th id="tableWallboxOIDRead_col8" data-name="SetValue" data-type="text" style="background: #64b5f6 " class="header translate">CheckValue/Regex</th>
+													</tr>
+												</thead>
+											</table>
+										</div>
 									</div>
 								</div>
 							</div>
-
-							<div class="row">
-								<div>
-									<h6>
-										<span class="translate" data-lang="ReadOID">ReadOID</span>
-
-									</h6>
-								</div>
-								<div class="col s12" id="WallboxOidRead">
-
-									<div class="input-field col s3">
-										<input type="number" id="DeviceURLReadPollRate" class="value" min="5" max="60" step="1" />
-										<label for="DeviceURLReadPollRate" class="translate">DeviceURLReadPollRate</label>
-									</div>
-
-
-									<div class="table-wallbox_oid_read-div">
-										<table id="table-wallbox_oid_read" class="table-values" style="width: 100%;">
-											<thead>
-												<tr>
-													<th id="tableWallboxOIDRead_col1" data-name="active" data-type="checkbox" style="background: #64b5f6 " class="header translate">active</th>
-													<th id="tableWallboxOIDRead_col2" data-name="must" data-type="text" style="background: #64b5f6 " class="header"></th>
-													<th id="tableWallboxOIDRead_col3" data-name="Name" data-type="select" data-options="DeviceOIDPlugConnected/DeviceOIDPlugConnected;DeviceOIDIsCharging/DeviceOIDIsCharging;DeviceOIDIsError/DeviceOIDIsError;" style="background: #64b5f6 " class="header translate">Name</th>
-													<th id="tableWallboxOIDRead_col4" data-name="OID" data-type="text" style="background: #64b5f6 " class="header translate">OID/URL</th>
-													<th id="tableWallboxOIDRead_col5" data-buttons="edit" style="width: 100px; background: #64b5f6"></th>
-													<th id="tableWallboxOIDRead_col6" data-name="Type" data-type="select" data-options="Boolean/Boolean;Number/Number;URL/URL;" style="background: #64b5f6 " class="header translate">Type</th>
-													<th id="tableWallboxOIDRead_col7" data-name="Path2Check" data-type="text" style="background: #64b5f6 " class="header translate">Path2Check</th>
-													<th id="tableWallboxOIDRead_col8" data-name="SetValue" data-type="text" style="background: #64b5f6 " class="header translate">CheckValue/Regex</th>
-												</tr>
-											</thead>
-										</table>
-									</div>
-								</div>
-							</div>
-
-
 						</div>
-					</div>
 				</div>
-
 				<div class="modal-footer">
 					<a class="modal-action modal-close waves-effect waves-green btn btn-set"><i class="large material-icons left">check</i><span class="translate">Ok</span></a>
 					<a class="modal-action modal-close waves-effect waves-green btn btn-close"><i class="large material-icons left">close</i><span class="translate">Cancel</span></a>
