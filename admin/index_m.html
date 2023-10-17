@@ -542,7 +542,9 @@
 
 				$('#DeviceWallboxHas3phaseEnabler').prop("checked", devices[id].WallboxHas3phaseEnabler);
 				$('#DeviceWallbox3phaseSwitchLimit').val(devices[id].Wallbox3phaseSwitchLimit);
-                $('#DeviceWallbox3phaseSwitchDelay').val(devices[id].Wallbox3phaseSwitchDelay);
+				$('#DeviceWallbox3phaseSwitchDelay').val(devices[id].Wallbox3phaseSwitchDelay);
+
+                $('#DeviceWallboxNeedCurrentRecommendation').prop("checked", devices[id].WallboxNeedCurrentRecommendation);
 
 				/*
 				$('#DeviceOIDPlugConnected').val(devices[id].OID_PlugConnected);
@@ -1110,7 +1112,11 @@
 
 						devices[id].WallboxHas3phaseEnabler = $('#DeviceWallboxHas3phaseEnabler').prop("checked");
 						devices[id].Wallbox3phaseSwitchLimit = $('#DeviceWallbox3phaseSwitchLimit').val();
-                        devices[id].Wallbox3phaseSwitchDelay = $('#DeviceWallbox3phaseSwitchDelay').val();
+						devices[id].Wallbox3phaseSwitchDelay = $('#DeviceWallbox3phaseSwitchDelay').val();
+
+                        devices[id].WallboxNeedCurrentRecommendation = $('#DeviceWallboxNeedCurrentRecommendation').prop("checked");
+
+                        
 
 						/*
 						devices[id].OID_PlugConnected = $('#DeviceOIDPlugConnected').val();
