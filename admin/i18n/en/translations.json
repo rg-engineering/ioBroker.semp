@@ -1,6 +1,9 @@
 {
+    "1 or 3 Phase Switchable": "1 or 3 Phase Switchable",
     "12h": "12h",
+    "1Phase (230V)": "1Phase (230V)",
     "24h": "24h",
+    "3Phase (400)": "3Phase (400)",
     "AirConditioning": "Air Conditioning",
     "AlwaysOn": "Always On",
     "Boolean": "Boolean",

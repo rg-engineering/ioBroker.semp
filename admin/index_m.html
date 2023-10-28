@@ -210,6 +210,16 @@
 				$('#divDeviceTimerCancelIfNotOnTime').hide();
 			}
 
+            if ($('#DeviceWallboxPhases').val() == 3) {
+				$('#3phaseLimit').show();
+				$('#3phaseDelay').show();
+			}
+			else {
+                $('#3phaseLimit').hide();
+                $('#3phaseDelay').hide();
+			}
+
+			/*
             if ($('#DeviceWallboxHas3phaseEnabler').prop("checked")) {
 				$('#3phaseLimit').show();
                 $('#3phaseDelay').show();
@@ -218,6 +228,7 @@
 				$('#3phaseLimit').hide();
                 $('#3phaseDelay').hide();
 			}
+			*/
 
 			/*
             if ($('#DeviceWallboxHasStatusURL').prop("checked")) {
@@ -454,9 +465,8 @@
 			$("#DeviceTimerCancelIfNotOn").change(function () {
 				showHideSettings();
 			});
-
-            $("#DeviceWallboxHas3phaseEnabler").change(function () {
-                showHideSettings();
+			$("#DeviceWallboxPhases").change(function () {
+				showHideSettings();
 			});
 
 			/*
@@ -540,7 +550,20 @@
                 $('#DeviceWallboxChargeTime').val(devices[id].WallboxChargeTime);
 
 
-				$('#DeviceWallboxHas3phaseEnabler').prop("checked", devices[id].WallboxHas3phaseEnabler);
+				if (devices[id].DeviceWallboxPhases == null) {
+					console.log("DeviceWallboxPhases not set");
+                    if (devices[id].WallboxHas3phaseEnabler) {
+						devices[id].DeviceWallboxPhases = 3;
+                        console.log("DeviceWallboxPhases set to switchable");
+					}
+					else {
+						devices[id].DeviceWallboxPhases = 1;
+                        console.log("DeviceWallboxPhases set to 1Phase 230V");
+					}
+				}
+
+				$('#DeviceWallboxPhases').val(devices[id].WallboxPhases);
+                $('#DeviceWallboxPhases').select();
 				$('#DeviceWallbox3phaseSwitchLimit').val(devices[id].Wallbox3phaseSwitchLimit);
 				$('#DeviceWallbox3phaseSwitchDelay').val(devices[id].Wallbox3phaseSwitchDelay);
 
@@ -1110,7 +1133,7 @@
 						devices[id].BatteryCapacity = $('#DeviceBatteryCapacity').val();
 						devices[id].WallboxChargeTime = $('#DeviceWallboxChargeTime').val();
 
-						devices[id].WallboxHas3phaseEnabler = $('#DeviceWallboxHas3phaseEnabler').prop("checked");
+						devices[id].WallboxPhases = $('#DeviceWallboxPhases').val();
 						devices[id].Wallbox3phaseSwitchLimit = $('#DeviceWallbox3phaseSwitchLimit').val();
 						devices[id].Wallbox3phaseSwitchDelay = $('#DeviceWallbox3phaseSwitchDelay').val();
 
@@ -1768,8 +1791,12 @@
 
 							<div class="row">
 								<div class="input-field col s3">
-									<input type="checkbox" id="DeviceWallboxHas3phaseEnabler" class="value"  />
-									<label for="DeviceWallboxHas3phaseEnabler" class="translate">DeviceWallboxHas3phaseEnabler</label>
+									<select id="DeviceWallboxPhases" class="value">
+										<option value="1" class="translate">1Phase (230V)</option>
+										<option value="2" class="translate">3Phase (400)</option>
+										<option value="3" class="translate">1 or 3 Phase Switchable</option>
+									</select>
+									<label for="DeviceWallboxPhases" class="translate">DeviceWallboxPhases</label>
 								</div>
 								<div class="input-field col s3" id="3phaseLimit">
 									<input type="number" id="DeviceWallbox3phaseSwitchLimit" class="value" min="1000" step="100" />

@@ -46,7 +46,7 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 * let SunnyPortal control these devices (switch on when there is enough PV power and switch off when there is not enough solar energy)
 
 ## Requirements
-* node v16 or higher
+
 
 ## known issues
 * please create issues at [github](https://github.com/rg-engineering/ioBroker.semp/issues) if you find bugs or whish new features
@@ -55,7 +55,7 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 
 ### **WORK IN PROGRESS**
 * (René) see issue #30: more OID's can be used with URL for wallbox
-* (René) option to set recommneded current instead of power (useful for go-e)
+* (René) option to set recommnended current instead of power (useful for go-e)
 
 ### 1.3.10 (2023-10-03)
 * (René) bug fix: removed missing Start() call in wallbox (avoid exception)

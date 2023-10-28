@@ -1,6 +1,9 @@
 {
+    "1 or 3 Phase Switchable": "1 相或 3 相可切换",
     "12h": "12小时",
+    "1Phase (230V)": "1相（230V）",
     "24h": "24小时",
+    "3Phase (400)": "三相 (400)",
     "AirConditioning": "空调",
     "AlwaysOn": "永远在线",
     "Boolean": "布尔值",

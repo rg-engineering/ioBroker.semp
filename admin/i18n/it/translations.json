@@ -1,6 +1,9 @@
 {
+    "1 or 3 Phase Switchable": "Commutabile a 1 o 3 fasi",
     "12h": "12h",
+    "1Phase (230V)": "Monofase (230 V)",
     "24h": "24 ore",
+    "3Phase (400)": "Trifase (400)",
     "AirConditioning": "Aria condizionata",
     "AlwaysOn": "Sempre acceso",
     "Boolean": "Booleano",
