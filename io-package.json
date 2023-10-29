@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "semp",
-        "version": "1.3.11",
+        "version": "1.3.12",
         "news": {
-            "1.3.11": {
+            "1.3.12": {
                 "en": " more OID's can be used with URL for wallbox\n option to set recommneded current instead of power, (useful for go-e",
                 "de": "Weitere OIDs können mit der URL für die Wallbox verwendet werden\n Option zum Einstellen des empfohlenen Stroms anstelle der Leistung (nützlich für Go-E",
                 "ru": "с URL-адресом для Wallbox можно использовать больше OID\n возможность установить рекомендуемый ток вместо мощности (полезно для go-e",

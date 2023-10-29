@@ -52,6 +52,10 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 * please create issues at [github](https://github.com/rg-engineering/ioBroker.semp/issues) if you find bugs or whish new features
 
 ## Changelog
+
+### 1.3.12 (2023-10-29)
+* (René) some bug fixes based on changes in 1.3.11
+
 ### 1.3.11 (2023-10-28)
 * (René) see issue #30: more OID's can be used with URL for wallbox
 * (René) option to set recommnended current instead of power (useful for go-e)
