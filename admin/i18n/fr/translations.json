@@ -70,6 +70,7 @@
     "DeviceWallboxChargeTime": "temps de charge maximum après la connexion de la prise",
     "DeviceWallboxHas3phaseEnabler": "a un interrupteur pour activer la charge triphasée",
     "DeviceWallboxNeedCurrentRecommendation": "utiliser le courant et la puissance",
+    "DeviceWallboxPhases": "phases électriques",
     "DishWasher": "Lave-vaisselle",
     "Dryer": "Séchoir",
     "EVCharger": "Chargeur VÉ",

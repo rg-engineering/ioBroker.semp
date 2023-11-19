@@ -70,6 +70,7 @@
     "DeviceWallboxChargeTime": "tempo massimo di ricarica dopo il collegamento della spina",
     "DeviceWallboxHas3phaseEnabler": "ha un interruttore per abilitare la ricarica trifase",
     "DeviceWallboxNeedCurrentRecommendation": "utilizzare corrente e potenza",
+    "DeviceWallboxPhases": "fasi elettriche",
     "DishWasher": "Lavastoviglie",
     "Dryer": "Asciugatrice",
     "EVCharger": "Caricabatterie per veicoli elettrici",

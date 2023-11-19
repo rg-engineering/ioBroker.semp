@@ -70,6 +70,7 @@
     "DeviceWallboxChargeTime": "максимальное время зарядки после подключения штекера",
     "DeviceWallboxHas3phaseEnabler": "имеет переключатель для включения 3-фазной зарядки",
     "DeviceWallboxNeedCurrentRecommendation": "использовать ток и мощность",
+    "DeviceWallboxPhases": "электрические фазы",
     "DishWasher": "Посудомоечная машина",
     "Dryer": "Сушилка",
     "EVCharger": "Зарядное устройство для электромобиля",

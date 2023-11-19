@@ -70,6 +70,7 @@
     "DeviceWallboxChargeTime": "Maximale Ladezeit nach Anschluss des Steckers",
     "DeviceWallboxHas3phaseEnabler": "verfügt über einen Schalter zum Aktivieren des 3-Phasen-Ladens",
     "DeviceWallboxNeedCurrentRecommendation": "Strom und Leistung nutzen",
+    "DeviceWallboxPhases": "elektrische Phasen",
     "DishWasher": "Geschirrspüler",
     "Dryer": "Trockner",
     "EVCharger": "EV-Ladegerät",

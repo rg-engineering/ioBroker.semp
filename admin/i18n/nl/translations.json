@@ -70,6 +70,7 @@
     "DeviceWallboxChargeTime": "maximale oplaadtijd nadat de stekker is aangesloten",
     "DeviceWallboxHas3phaseEnabler": "heeft een schakelaar om 3-fasen opladen mogelijk te maken",
     "DeviceWallboxNeedCurrentRecommendation": "stroom en kracht gebruiken",
+    "DeviceWallboxPhases": "elektrische fasen",
     "DishWasher": "Afwasmachine",
     "Dryer": "Droger",
     "EVCharger": "EV-oplader",

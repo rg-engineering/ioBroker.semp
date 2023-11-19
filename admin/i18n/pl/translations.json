@@ -70,6 +70,7 @@
     "DeviceWallboxChargeTime": "maksymalny czas ładowania po podłączeniu wtyczki",
     "DeviceWallboxHas3phaseEnabler": "posiada przełącznik umożliwiający ładowanie 3-fazowe",
     "DeviceWallboxNeedCurrentRecommendation": "użyj prądu i mocy",
+    "DeviceWallboxPhases": "fazy elektryczne",
     "DishWasher": "Zmywarka",
     "Dryer": "Suszarka",
     "EVCharger": "Ładowarka EV",

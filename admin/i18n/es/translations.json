@@ -70,6 +70,7 @@
     "DeviceWallboxChargeTime": "tiempo máximo de carga después de conectar el enchufe",
     "DeviceWallboxHas3phaseEnabler": "tiene interruptor para habilitar la carga trifásica",
     "DeviceWallboxNeedCurrentRecommendation": "usar corriente y potencia",
+    "DeviceWallboxPhases": "fases electricas",
     "DishWasher": "Lavavajillas",
     "Dryer": "Secadora",
     "EVCharger": "Cargador para vehículos eléctricos",
