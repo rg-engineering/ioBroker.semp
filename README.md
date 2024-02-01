@@ -66,6 +66,10 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
   Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+* (René) bug fix: wallbox counter and status are not handled
+
 ### 1.3.14 (2024-01-12)
 * (René) dependencies updated
 

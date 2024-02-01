@@ -247,6 +247,8 @@ class Semp extends utils.Adapter {
 					let OID_PlugConnected = "";
 					let OID_IsCharging = "";
 					let OID_IsError = "";
+					let OID_Counter = "";
+					let OID_Status = "";
 
 					for (let o = 0; o < device.WallboxOIDs.length; o++) {
 						if (device.WallboxOIDs[o].active) {
@@ -258,6 +260,12 @@ class Semp extends utils.Adapter {
 							}
 							else if (device.WallboxOIDs[o].Name == "DeviceOIDIsError") {
 								OID_IsError = device.WallboxOIDs[o].OID;
+							}
+							else if (device.WallboxOIDs[o].Name == "DeviceOIDCounter") {
+								OID_Counter = device.WallboxOIDs[o].OID;
+							}
+							else if (device.WallboxOIDs[o].Name == "DeviceOIDStatus") {
+								OID_Status = device.WallboxOIDs[o].OID;
 							}
 						}
 					}
@@ -272,6 +280,14 @@ class Semp extends utils.Adapter {
 					}
 					if (OID_IsError === id) {
 						this.gw.setWallboxIsError(device.ID, state.val);
+						bRet = true;
+					}
+					if (OID_Counter === id) {
+						this.gw.setPowerDevice(device.ID, state.val);
+						bRet = true;
+					}
+					if (OID_Status === id) {
+						this.gw.setOnOffDevice(device.ID, state.val);
 						bRet = true;
 					}
 				}
