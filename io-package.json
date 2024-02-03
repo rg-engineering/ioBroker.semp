@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "semp",
-    "version": "1.3.14",
+    "version": "1.3.15",
     "news": {
+      "1.3.15": {
+        "en": "(René) bug fix: wallbox counter and status are not handled",
+        "de": "(René) Bugfix: Wanddosenzähler und Status werden nicht behandelt",
+        "ru": "(René) исправление клопов: счетчик настенного ящика и статус не обрабатываются",
+        "pt": "(René) correção de bugs: contador de caixa de parede e status não são tratados",
+        "nl": "(René) bug fix: wallbox teller en status worden niet behandeld",
+        "fr": "Correction du bug (René) : le compteur et l'état de la boîte murale ne sont pas traités",
+        "it": "(René) bug fix: contatore e stato della scatola da parete non vengono maneggiati",
+        "es": "(René) bug fix: wallbox counter and status are not handled",
+        "pl": "(René) Naprawianie błędów: licznik tapet i status nie są obsługiwane",
+        "uk": "(René) Виправлення помилок: лічильник стінок та статус не обробляються",
+        "zh-cn": "(René) 错误修正: 壁盒计数器和状态未处理"
+      },
       "1.3.14": {
         "en": "(René) dependencies updated",
         "de": "(René)",
@@ -80,19 +93,6 @@
         "pl": "Adresu URL można teraz używać bezpośrednio do sprawdzania stanu stacji ładowania Wallbox",
         "uk": "URL-адресу тепер можна використовувати безпосередньо для отримання статусу Wallbox",
         "zh-cn": "现在可以直接使用 URL 来获取 wallbox 的状态"
-      },
-      "1.3.7": {
-        "en": "bug fix for type based status check of wallboxes",
-        "de": "Fehlerbehebung für die typbasierte Statusprüfung von Wallboxen",
-        "ru": "исправлена ​​ошибка проверки статуса настенных ящиков на основе типа",
-        "pt": "correção de bug para verificação de status baseada em tipo de wallboxes",
-        "nl": "bugfix voor op type gebaseerde statuscontrole van wallboxen",
-        "fr": "correction d'un bug pour la vérification de l'état des wallbox en fonction du type",
-        "it": "correzione di bug per il controllo dello stato in base al tipo delle wallbox",
-        "es": "Corrección de errores para la verificación del estado basada en el tipo de Wallboxes.",
-        "pl": "poprawka błędu dotycząca sprawdzania stanu stacji ładowania na podstawie typu",
-        "uk": "виправлено помилку для перевірки стану Wallbox на основі типу",
-        "zh-cn": "修复了基于类型的墙盒状态检查的错误"
       }
     },
     "titleLang": {
