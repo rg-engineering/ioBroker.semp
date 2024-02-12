@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "semp",
-    "version": "1.3.15",
+    "version": "1.4.0",
     "news": {
+      "1.4.0": {
+        "en": "(René) bug fix: see issue #206 - wallbox OID's selectable\n(René) bug fix: see issue #207 - wallbox maximum charge time adjustable \n(René) see issue #208: timeframe can be disabled by user (optionally)",
+        "de": "(René) Bugfix: siehe Ausgabe #206 - Wandbox OID's selectable\n(René) Bugfix: siehe Ausgabe #207 - Wandbox maximale Ladezeit einstellbar\n(René) siehe Ausgabe #208: Zeitrahmen kann vom Benutzer deaktiviert werden (optional)",
+        "ru": "(René) исправление ошибок: см. вопрос #206 - настенный ящик OID\n(René) исправление ошибок: см. вопрос #207 - настенный ящик максимальное время заряда регулируемое\n(René) см. вопрос #208: временные рамки могут быть отключены пользователем (факультативно)",
+        "pt": "(René) correção de bugs: veja o problema #206 - wallbox OID selecionável\n(René) correção de bugs: veja o problema #207 - wallbox tempo de carga máxima ajustável\n(René) veja o número 208: o prazo pode ser desativado pelo usuário (opcionalmente)",
+        "nl": "(René) bug fix: zie probleem #206 - OID van wallbox selecteren\n(René) bug fix: zie probleem #207 - wandbox maximale laadtijd instelbaar\n(René) zie nummer #208: tijdsinterval kan worden uitgeschakeld door de gebruiker (facultatief)",
+        "fr": "Correction du bug (René) : voir le numéro #206 - wallbox OID sélectionnable\n(René) Correction de bug: voir le numéro #207 - wallbox temps de charge maximum réglable\n(René) voir le numéro 208 : le délai peut être désactivé par l'utilisateur (facultatif)",
+        "it": "(René) bug fix: vedi problema #206 - wallbox OID selezionabile\n(René) bug fix: vedi numero #207 - wallbox tempo di carica massima regolabile\n(René) vedi numero #208: il timeframe può essere disabilitato dall'utente (opzionale)",
+        "es": "(René) corrección de errores: ver número #206 - wallbox OID seleccionable\n(René) corrección de errores: ver número #207 - tiempo de carga máxima de la caja de pared ajustable\n(René) ver número #208: timeframe puede ser deshabilitado por el usuario (opcionalmente)",
+        "pl": "(René) bug fix: patrz numer # 206 - tapeta OID 's selectable\n(René) błąd naprawić: patrz numer # 207 - tapeta maksymalny czas ładowania regulowany\n(René) patrz numer # 208: czas może być wyłączony przez użytkownika (opcjonalnie)",
+        "uk": "(René) Виправлення помилок: див. питання #206 - скринька OID вибіркова\n(René) Виправлення помилок: див. питання #207 - настінна коробка максимальний час заряду\n(René) див. питання #208: часовий кадр може бути вимкнений користувачем (необов'язково)",
+        "zh-cn": "(René) bug fix:参见第206期 - 墙盒 OID 的可选\n(René) bug fix:参见第207期 - 壁盒最大充电时间可调整\n(René)参见第208期:时间框架可以被用户禁用(可选)"
+      },
       "1.3.15": {
         "en": "(René) bug fix: wallbox counter and status are not handled",
         "de": "(René) Bugfix: Wanddosenzähler und Status werden nicht behandelt",
@@ -80,19 +93,6 @@
         "pl": "poprawka błędu: adres URL jako ciąg do użycia",
         "uk": "виправлення помилки: використовувати URL як рядок",
         "zh-cn": "错误修复：URL 作为要使用的字符串"
-      },
-      "1.3.8": {
-        "en": "URL can now be used directly to get status of wallbox",
-        "de": "Die URL kann jetzt direkt verwendet werden, um den Status der Wallbox abzurufen",
-        "ru": "URL-адрес теперь можно использовать напрямую для получения статуса настенного ящика.",
-        "pt": "O URL agora pode ser usado diretamente para obter o status do wallbox",
-        "nl": "De URL kan nu rechtstreeks worden gebruikt om de status van de wallbox op te vragen",
-        "fr": "L'URL peut désormais être utilisée directement pour obtenir l'état de la wallbox",
-        "it": "L'URL ora può essere utilizzato direttamente per ottenere lo stato della wallbox",
-        "es": "La URL ahora se puede utilizar directamente para obtener el estado de Wallbox.",
-        "pl": "Adresu URL można teraz używać bezpośrednio do sprawdzania stanu stacji ładowania Wallbox",
-        "uk": "URL-адресу тепер можна використовувати безпосередньо для отримання статусу Wallbox",
-        "zh-cn": "现在可以直接使用 URL 来获取 wallbox 的状态"
       }
     },
     "titleLang": {
