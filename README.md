@@ -66,6 +66,10 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
   Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+* (René) minor bug fix
+
 ### 1.4.0 (2024-02-12)
 * (René) bug fix: see issue #206 - wallbox OID's selectable
 * (René) bug fix: see issue #207 - wallbox maximum charge time adjustable 

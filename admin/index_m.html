@@ -219,28 +219,7 @@
                 $('#3phaseDelay').hide();
 			}
 
-			/*
-            if ($('#DeviceWallboxHas3phaseEnabler').prop("checked")) {
-				$('#3phaseLimit').show();
-                $('#3phaseDelay').show();
-            }
-            else {
-				$('#3phaseLimit').hide();
-                $('#3phaseDelay').hide();
-			}
-			*/
 
-			/*
-            if ($('#DeviceWallboxHasStatusURL').prop("checked")) {
-                $('#DeviceWallboxStatusURL-div').show();
-                $('#WallboxStatusURLConfig').show();
-
-            }
-            else {
-                $('#DeviceWallboxStatusURL-div').hide();
-                $('#WallboxStatusURLConfig').hide();
-            }
-			*/
 			set_column_readonly("table-wallbox_oid_read", "tableWallboxOIDRead_col2", 1);
             set_column_readonly("table-wallbox_oid_write", "tableWallboxOIDWrite_col2", 1);
 
@@ -261,16 +240,11 @@
 
 		//var timeout1;
 		function getIP(onChange, instance) {
-			//timeout1 = setTimeout(function () {
-			//    getIP(onChange, instance);
-			//}, 4000);
+
 
 			//function sendTo(_adapter_instance, command, message, callback)
 			sendTo(instance, 'getIP', null, function (list) {
-				//if (timeout1) {
-				//    clearTimeout(timeout1);
-				//    timeout1 = null;
-				//}
+
 
 				console.log('got ip ' + JSON.stringify(list));
 
@@ -298,16 +272,11 @@
 
 		//var timeout2;
 		function getUUID(onChange, instance) {
-			//timeout2 = setTimeout(function () {
-			//    getUUID(onChange, instance);
-			//}, 4000);
+
 
 			//function sendTo(_adapter_instance, command, message, callback)
 			sendTo(instance, 'getUUID', null, function (list) {
-				//if (timeout2) {
-				//    clearTimeout(timeout2);
-				//    timeout2 = null;
-				//}
+
 
 				console.log('got uuid ' + JSON.stringify(list));
 
@@ -332,16 +301,11 @@
 
 		//var timeout3;
 		function getDeviceBaseId(onChange, instance) {
-			//timeout3 = setTimeout(function () {
-			//    getDeviceBaseId(onChange, instance);
-			//}, 4000);
+
 
 			//function sendTo(_adapter_instance, command, message, callback)
 			sendTo(instance, 'getDeviceBaseID', null, function (list) {
-				//if (timeout3) {
-				//    clearTimeout(timeout3);
-				//    timeout3 = null;
-				//}
+
 
 				console.log('got DeviceBaseID ' + JSON.stringify(list));
 
@@ -469,11 +433,7 @@
 				showHideSettings();
 			});
 
-			/*
-            $("#DeviceWallboxHasStatusURL").change(function () {
-                showHideSettings();
-            });
-			*/
+
             
 			$("#DeviceType").change(function () {
 				showHideSettings();
@@ -569,14 +529,7 @@
 
                 $('#DeviceWallboxNeedCurrentRecommendation').prop("checked", devices[id].WallboxNeedCurrentRecommendation);
 
-				/*
-				$('#DeviceOIDPlugConnected').val(devices[id].OID_PlugConnected);
-				$('#DeviceOIDIsCharging').val(devices[id].OID_IsCharging);
-				$('#DeviceOIDIsError').val(devices[id].OID_IsError);
-				$('#DeviceOIDChargePower').val(devices[id].OID_ChargePower);
-				$('#DeviceOIDStartCharge').val(devices[id].OID_StartCharge);
-				$('#DeviceOIDStopCharge').val(devices[id].OID_StopCharge);
-				*/
+
 
 				$('#DeviceStatusDetectionType').val(devices[id].StatusDetection);
 				$('#DeviceStatusDetectionType').select();
@@ -593,25 +546,7 @@
                 $('#DeviceURLReadPollRate').val(devices[id].URLReadPollRate);
 
 				$('#DeviceTimerActive').prop("checked", devices[id].TimerActive);
-				/*
-				$('#DeviceTimerStart').val(devices[id].TimerStart);
-				$('#DeviceTimerEnd').val(devices[id].TimerEnd);
-				//$('#DeviceTimerDays').val(devices[id].TimerDays);
 
-
-				$('#DeviceTimerEveryDay').prop("checked", devices[id].TimerEveryDay);
-				$('#DeviceTimerMonday').prop("checked", devices[id].TimerMonday);
-				$('#DeviceTimerTuesday').prop("checked", devices[id].TimerTuesday);
-				$('#DeviceTimerWednesday').prop("checked", devices[id].TimerWednesday);
-				$('#DeviceTimerThursday').prop("checked", devices[id].TimerThursday);
-				$('#DeviceTimerFriday').prop("checked", devices[id].TimerFriday);
-				$('#DeviceTimerSaturday').prop("checked", devices[id].TimerSaturday);
-				$('#DeviceTimerSunday').prop("checked", devices[id].TimerSunday);
-
-
-				$('#DeviceTimerMinRunningtime').val(devices[id].TimerMinRunTime);
-				$('#DeviceTimerMaxRunningtime').val(devices[id].TimerMaxRunTime);
-				*/
 
 				$('#DeviceTimerCancelIfNotOn').prop("checked", devices[id].TimerCancelIfNotOn);
 				$('#DeviceTimerCancelIfNotOnTime').val(devices[id].TimerCancelIfNotOnTime);
@@ -749,10 +684,7 @@
                                     console.log("push " + devices[id].WallboxOIDs[d].Name);
 									tempWallboxOIDsWrite.push(devices[id].WallboxOIDs[d]);
 
-									/*if (devices[id].WallboxOIDs[d].Type == "URL") {
-										devices[id].WallboxOIDs[d].SetValue = "not used";
-									}
-									*/
+
 								}
 							}
 							else {
@@ -760,7 +692,7 @@
 							}
 						}
 					}
-					//tempWallboxOIDs = devices[id].WallboxOIDs;
+
 				}
 
 				let tempOID = "";
@@ -1042,16 +974,6 @@
 
 
 
-		/*
-		table-wallbox_oid_read
-		table-wallbox_oid_write
-		WallboxOidWrite
-WallboxOidRead
-table-wallbox_oid_read-div
-table-wallbox_oid_write-div
-		*/
-
-
 		function tableWallboxOIDReadOnReady() {
 			console.log('tableWallboxOIDReadOnReady');
 
@@ -1155,14 +1077,7 @@ table-wallbox_oid_write-div
 
                         
 
-						/*
-						devices[id].OID_PlugConnected = $('#DeviceOIDPlugConnected').val();
-						devices[id].OID_IsCharging = $('#DeviceOIDIsCharging').val();
-						devices[id].OID_IsError = $('#DeviceOIDIsError').val();
-						devices[id].OID_ChargePower = $('#DeviceOIDChargePower').val();
-						devices[id].OID_StartCharge = $('#DeviceOIDStartCharge').val();
-						devices[id].OID_StopCharge = $('#DeviceOIDStopCharge').val();
-						*/
+
 
 						devices[id].StatusDetection = $('#DeviceStatusDetectionType').val();
 						devices[id].StatusDetectionLimit = $('#DeviceStatusDetectionLimit').val();
@@ -1179,23 +1094,7 @@ table-wallbox_oid_write-div
                         devices[id].URLReadPollRate=$('#DeviceURLReadPollRate').val();
 
 						devices[id].TimerActive = $('#DeviceTimerActive').prop("checked");
-						/*
-						devices[id].TimerStart = $('#DeviceTimerStart').val();
-						devices[id].TimerEnd = $('#DeviceTimerEnd').val();
-						//devices[id].TimerDays = $('#DeviceTimerDays').val();
 
-						devices[id].TimerEveryDay = $('#DeviceTimerEveryDay').prop("checked");
-						devices[id].TimerMonday = $('#DeviceTimerMonday').prop("checked");
-						devices[id].TimerTuesday = $('#DeviceTimerTuesday').prop("checked");
-						devices[id].TimerWednesday = $('#DeviceTimerWednesday').prop("checked");
-						devices[id].TimerThursday = $('#DeviceTimerThursday').prop("checked");
-						devices[id].TimerFriday = $('#DeviceTimerFriday').prop("checked");
-						devices[id].TimerSaturday = $('#DeviceTimerSaturday').prop("checked");
-						devices[id].TimerSunday = $('#DeviceTimerSunday').prop("checked");
-
-						devices[id].TimerMinRunTime = $('#DeviceTimerMinRunningtime').val();
-						devices[id].TimerMaxRunTime = $('#DeviceTimerMaxRunningtime').val();
-						*/
 						devices[id].TimerCancelIfNotOn = $('#DeviceTimerCancelIfNotOn').prop("checked");
 						devices[id].TimerCancelIfNotOnTime = $('#DeviceTimerCancelIfNotOnTime').val();
 
