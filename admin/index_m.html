@@ -1040,10 +1040,22 @@
 			console.log('tableEnergyRequestOnReady, do nothing');
 		}
 
+
+
+		/*
+		table-wallbox_oid_read
+		table-wallbox_oid_write
+		WallboxOidWrite
+WallboxOidRead
+table-wallbox_oid_read-div
+table-wallbox_oid_write-div
+		*/
+
+
 		function tableWallboxOIDReadOnReady() {
 			console.log('tableWallboxOIDReadOnReady');
 
-			$('#WallboxOid .table-wallbox_oid_read-div .table-values .values-buttons[data-command="edit"]').on('click', function () {
+			$('#WallboxOidRead .table-wallbox_oid_read-div .table-values .values-buttons[data-command="edit"]').on('click', function () {
 				let id = $(this).data('index');
 
 				console.log('edit wallbox OID read clicked ID=' + id + " " + $('#WallboxOidRead .values-input[data-name="Name"][data-index="' + id + '"]').val());
@@ -1061,10 +1073,12 @@
 			});
 		}
 
+
+
         function tableWallboxOIDWriteOnReady() {
             console.log('tableWallboxOIDWriteOnReady');
 
-            $('#WallboxOid .table-wallbox_oid_write-div .table-values .values-buttons[data-command="edit"]').on('click', function () {
+            $('#WallboxOidWrite .table-wallbox_oid_write-div .table-values .values-buttons[data-command="edit"]').on('click', function () {
                 let id = $(this).data('index');
 
                 console.log('edit wallbox OID write clicked ID=' + id + " " + $('#WallboxOidWrite .values-input[data-name="Name"][data-index="' + id + '"]').val());
@@ -1854,7 +1868,6 @@
 											<input type="number" id="DeviceURLReadPollRate" class="value" min="5" max="60" step="1" />
 											<label for="DeviceURLReadPollRate" class="translate">DeviceURLReadPollRate</label>
 										</div>
-
 
 										<div class="table-wallbox_oid_read-div">
 											<table id="table-wallbox_oid_read" class="table-values" style="width: 100%;">

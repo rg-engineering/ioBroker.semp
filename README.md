@@ -66,6 +66,10 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
   Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+* (René) bug fix: see issue #206 - wallbox OID's selectable
+
 ### 1.3.15 (2024-02-03)
 * (René) bug fix: wallbox counter and status are not handled
 
