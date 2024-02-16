@@ -66,8 +66,7 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
   Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 1.4.2 (2024-02-16)
 * (René) bug fix in create timeframes
 
 ### 1.4.1 (2024-02-12)

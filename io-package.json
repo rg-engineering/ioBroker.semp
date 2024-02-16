@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "semp",
-    "version": "1.4.1",
+    "version": "1.4.2",
     "news": {
+      "1.4.2": {
+        "en": "(René) bug fix in create timeframes",
+        "de": "(René) Bugfix in Zeitrahmen erstellen",
+        "ru": "(René) исправление ошибок при создании временных рамок",
+        "pt": "(René) correção de bugs em criar prazos",
+        "nl": "(René) bug fix in create times",
+        "fr": "(René) Correction de bug dans créer des délais",
+        "it": "(René) correzione di bug nel creare timeframe",
+        "es": "(René) bug fix in create timeframes",
+        "pl": "(René) błąd naprawić w tworzeniu ram czasowych",
+        "uk": "(René) Виправлення помилок у створенні часових кадрів",
+        "zh-cn": "(René) 错误在创建时长中修正"
+      },
       "1.4.1": {
         "en": "(René) minor bug fix",
         "de": "(René) kleinere Fehlerbehebung",
@@ -80,19 +93,6 @@
         "pl": "więcej identyfikatorów OID można używać z adresem URL dla wallboxa\n możliwość ustawienia zalecanego prądu zamiast mocy (przydatne przy go-e",
         "uk": "більше OID можна використовувати з URL для wallbox\n опція встановлення рекомендованого струму замість потужності (корисно для go-e",
         "zh-cn": "更多 OID 可以与 Wallbox 的 URL 一起使用\n 设置推荐电流而不是功率的选项（对于 go-e 很有用）"
-      },
-      "1.3.10": {
-        "en": "URL can be used to set recommended power to wallbox (attention: still only power, not current as needed for go-e)",
-        "de": "Über URL kann die empfohlene Leistung für die Wallbox eingestellt werden (Achtung: immer noch nur Leistung, nicht Strom wie für Go-E benötigt)",
-        "ru": "URL-адрес можно использовать для установки рекомендуемой мощности для настенной коробки (внимание: по-прежнему только мощность, а не ток, необходимый для go-e)",
-        "pt": "O URL pode ser usado para definir a energia recomendada para a Wallbox (atenção: ainda apenas energia, não atual conforme necessário para go-e)",
-        "nl": "URL kan worden gebruikt om het aanbevolen vermogen voor de wallbox in te stellen (let op: nog steeds alleen vermogen, niet actueel zoals nodig voor go-e)",
-        "fr": "L'URL peut être utilisée pour définir l'alimentation recommandée pour la wallbox (attention : toujours uniquement l'alimentation, pas le courant nécessaire pour le go-e)",
-        "it": "L'URL può essere utilizzato per impostare l'alimentazione consigliata sulla wallbox (attenzione: solo l'alimentazione, non la corrente necessaria per go-e)",
-        "es": "La URL se puede utilizar para configurar la potencia recomendada para la caja de pared (atención: todavía solo energía, no corriente según sea necesario para go-e)",
-        "pl": "Adres URL może zostać użyty do ustawienia zalecanej mocy Wallboxa (uwaga: nadal tylko moc, a nie prąd, jak jest to potrzebne w przypadku go-e)",
-        "uk": "URL-адресу можна використовувати для налаштування рекомендованої потужності для Wallbox (увага: усе ще лише потужність, а не поточна, як потрібна для go-e)",
-        "zh-cn": "URL 可用于设置 wallbox 的推荐功率（注意：仍然只有功率，而不是 go-e 所需的电流）"
       }
     },
     "titleLang": {
