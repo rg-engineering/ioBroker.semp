@@ -67,7 +67,7 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
   ### **WORK IN PROGRESS**
 -->
 
- ### **WORK IN PROGRESS**
+### **WORK IN PROGRESS**
 * (René) wallbox: unnecessary warn messages deactivated
 * (René) dependencies updated
 
