@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "semp",
-    "version": "1.4.2",
+    "version": "1.4.3",
     "news": {
+      "1.4.3": {
+        "en": "(René) wallbox: unnecessary warn messages deactivated\n(René) dependencies updated",
+        "de": "(René) Wallbox: unnötige Warnmeldungen deaktiviert\n(René)",
+        "ru": "(René) настенный ящик: ненужные предупреждающие сообщения деактивируются\n(René)",
+        "pt": "(René) wallbox: mensagens de advertência desnecessárias desativadas\n(René) dependências atualizadas",
+        "nl": "(René) wallbox: onnodige waarschuwingsberichten uitgeschakeld\n(René) bijgewerkte afhankelijkheden",
+        "fr": "(René) wallbox : messages d'avertissement inutiles désactivés\n(René) dépendances mises à jour",
+        "it": "(René) wallbox: messaggi di avviso non necessari disattivati\n(René) dipendenze aggiornate",
+        "es": "(René) wallbox: mensajes de aviso innecesarios desactivados\n(René) dependencies updated",
+        "pl": "(René) tapeta: niepotrzebne ostrzeżenia wyłączone\nAktualizacja zależności (René)",
+        "uk": "(René) Wallbox: непотрібні повідомлення деактивовані\n(René) залежностей оновлено",
+        "zh-cn": "(René) 壁盒: 已关闭不必要的警告信息\n(René) 更新的依赖关系"
+      },
       "1.4.2": {
         "en": "(René) bug fix in create timeframes",
         "de": "(René) Bugfix in Zeitrahmen erstellen",
@@ -80,19 +93,6 @@
         "pl": "zależności zostały zaktualizowane\n naprawiono wyjątki zgłaszane przez wartownika",
         "uk": "залежності оновлено\n виправлено винятки, про які повідомляв вартовий",
         "zh-cn": "依赖项已更新\n 哨兵报告的异常已修复"
-      },
-      "1.3.12": {
-        "en": " more OID's can be used with URL for wallbox\n option to set recommneded current instead of power, (useful for go-e",
-        "de": "Weitere OIDs können mit der URL für die Wallbox verwendet werden\n Option zum Einstellen des empfohlenen Stroms anstelle der Leistung (nützlich für Go-E",
-        "ru": "с URL-адресом для Wallbox можно использовать больше OID\n возможность установить рекомендуемый ток вместо мощности (полезно для go-e",
-        "pt": "mais OIDs podem ser usados ​​com URL para wallbox\n opção para definir corrente recomendada em vez de energia, (útil para go-e",
-        "nl": "Er kunnen meer OID's worden gebruikt met URL voor wallbox\n optie om aanbevolen stroom in te stellen in plaats van vermogen (handig voor go-e",
-        "fr": "plus d'OID peuvent être utilisés avec l'URL de la wallbox\n option pour définir le courant recommandé au lieu de la puissance, (utile pour les go-e",
-        "it": "è possibile utilizzare più OID con l'URL per la wallbox\n opzione per impostare la corrente consigliata anziché la potenza, (utile per go-e",
-        "es": "Se pueden usar más OID con URL para Wallbox\n opción para configurar la corriente recomendada en lugar de la potencia (útil para go-e)",
-        "pl": "więcej identyfikatorów OID można używać z adresem URL dla wallboxa\n możliwość ustawienia zalecanego prądu zamiast mocy (przydatne przy go-e",
-        "uk": "більше OID можна використовувати з URL для wallbox\n опція встановлення рекомендованого струму замість потужності (корисно для go-e",
-        "zh-cn": "更多 OID 可以与 Wallbox 的 URL 一起使用\n 设置推荐电流而不是功率的选项（对于 go-e 很有用）"
       }
     },
     "titleLang": {

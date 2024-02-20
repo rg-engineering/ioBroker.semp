@@ -66,8 +66,7 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
   Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 1.4.3 (2024-02-20)
 * (René) wallbox: unnecessary warn messages deactivated
 * (René) dependencies updated
 
