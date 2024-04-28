@@ -18,7 +18,7 @@
     "url": "https://github.com/rg-engineering/ioBroker.semp"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "@iobroker/adapter-core": "3.1.4",
