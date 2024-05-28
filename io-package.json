@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "semp",
-    "version": "1.4.3",
+    "version": "1.4.4",
     "news": {
+      "1.4.4": {
+        "en": "(René) change of dependencies\n(René) wallbox: check and log wrong value for Wallbox3phaseSwitchDelay only if enabled",
+        "de": "(René) Veränderung der Abhängigkeiten\n(René) Wallbox: Überprüfen und Protokoll falschen Wert für Wallbox3phase Schalter Delay nur, wenn aktiviert",
+        "ru": "(René) изменение зависимостей\n(René) настенный ящик: значение для Wallbox3 Phase Переключение Задержка только в том случае, если",
+        "pt": "(René) mudança de dependências\n(René) wallbox: verificar e registrar o valor errado para Wallbox3phase Interruptor Atrasar somente se habilitado",
+        "nl": "(René) verandering van afhankelijkheden\n(René) wallbox: controleer en log verkeerde waarde voor Wallbox3phase Wisselen Vertraging alleen indien ingeschakeld",
+        "fr": "(René) changement de dépendances\n(René) wallbox: vérifiez et log wrong valeur pour Wallbox3phase Commutateur Retard seulement si activé",
+        "it": "(René) cambiamento delle dipendenze\n(René) wallbox: controllare e registrare il valore sbagliato per Wallbox3phase Interruttore Ritaglio solo se abilitato",
+        "es": "(René) cambio de dependencia\n(René) wallbox: comprobar y registrar el valor incorrecto para Wallbox3phase Cambio Retraso sólo si está habilitado",
+        "pl": "(René) zmiana zależności\n(René) tapeta: sprawdź i zaloguj nieprawidłową wartość dla Wallbox3phase Przełącz Opóźnienie tylko jeśli włączone",
+        "uk": "(Рене) зміна залежностей\n(René) Wallbox: перевірити і увійти неправильне значення для Wallbox3phase Перемикач Ввімкніть тільки якщо ввімкнено",
+        "zh-cn": "(René) 属地变化\n(René) 壁盒: 检查并日志错误的壁盒3相值 切换 仅在启用时延迟"
+      },
       "1.4.3": {
         "en": "(René) wallbox: unnecessary warn messages deactivated\n(René) dependencies updated",
         "de": "(René) Wallbox: unnötige Warnmeldungen deaktiviert\n(René)",
@@ -80,19 +93,6 @@
         "pl": "Aktualizacja zależności (René)",
         "uk": "(René) залежностей оновлено",
         "zh-cn": "(René) 更新的依赖关系"
-      },
-      "1.3.13": {
-        "en": "dependencies updated\n exceptions reported by sentry fixed",
-        "de": "Abhängigkeiten aktualisiert\n Von Sentry gemeldete Ausnahmen behoben",
-        "ru": "зависимости обновлены\n исправлены исключения, о которых сообщил часовой",
-        "pt": "dependências atualizadas\n exceções relatadas pela sentinela corrigidas",
-        "nl": "afhankelijkheden bijgewerkt\n uitzonderingen gemeld door schildwacht opgelost",
-        "fr": "dépendances mises à jour\n exceptions signalées par la sentinelle corrigées",
-        "it": "dipendenze aggiornate\n eccezioni segnalate da sentinella risolte",
-        "es": "dependencias actualizadas\n excepciones reportadas por centinela arregladas",
-        "pl": "zależności zostały zaktualizowane\n naprawiono wyjątki zgłaszane przez wartownika",
-        "uk": "залежності оновлено\n виправлено винятки, про які повідомляв вартовий",
-        "zh-cn": "依赖项已更新\n 哨兵报告的异常已修复"
       }
     },
     "titleLang": {
