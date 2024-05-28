@@ -66,8 +66,8 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
   Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
 -->
-
 ### **WORK IN PROGRESS**
+* (René) change of dependencies
 * (René) wallbox: check and log wrong value for Wallbox3phaseSwitchDelay only if enabled
 
 ### 1.4.3 (2024-02-20)

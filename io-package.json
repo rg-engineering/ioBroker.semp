@@ -129,7 +129,11 @@
       "SunnyPortal",
       "SEMP"
     ],
-    "license": "MIT",
+    "tier": 3,
+    "licenseInformation": {
+      "license": "MIT",
+      "type": "free"
+    },
     "platform": "Javascript/Node.js",
     "main": "main.js",
     "icon": "semp.png",
