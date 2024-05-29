@@ -66,6 +66,9 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
   Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (René) see issue #250: no Power to be send for devices without measurement in off-status
+
 ### 1.4.4 (2024-05-28)
 * (René) change of dependencies
 * (René) wallbox: check and log wrong value for Wallbox3phaseSwitchDelay only if enabled
