@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "semp",
-    "version": "1.4.4",
+    "version": "1.4.5",
     "news": {
+      "1.4.5": {
+        "en": "(René) see issue #250: no Power to be send for devices without measurement in off-status",
+        "de": "(René) siehe Ausgabe #250: keine Stromversorgung für Geräte ohne Messung im Off-Status",
+        "ru": "(René) см. вопрос #250: нет мощности для отправки для устройств без измерения в нестатусе",
+        "pt": "(René) veja a edição #250: no Power to be send for devices without Measurement in off-status",
+        "nl": "(René) zie nummer #250: geen vermogen om apparaten te verzenden zonder meting in off-status",
+        "fr": "(René) voir le numéro 250 : pas de puissance à envoyer pour les appareils sans mesure hors-statut",
+        "it": "(René) vedi numero #250: no Potenza da inviare per dispositivi senza misura in fuori-status",
+        "es": "(René) ver el número #250: no Power to be send for devices without measurement in off-status",
+        "pl": "(René) zob. numer # 250: brak mocy do wysłania dla urządzeń bez pomiaru w trybie off- status",
+        "uk": "(René) див. питання #250: не потрібно надсилати на пристрої без вимірювання в off-status",
+        "zh-cn": "(René)参见第250期:没有电源发送设备,没有测量状态"
+      },
       "1.4.4": {
         "en": "(René) change of dependencies\n(René) wallbox: check and log wrong value for Wallbox3phaseSwitchDelay only if enabled",
         "de": "(René) Veränderung der Abhängigkeiten\n(René) Wallbox: Überprüfen und Protokoll falschen Wert für Wallbox3phase Schalter Delay nur, wenn aktiviert",
@@ -80,19 +93,6 @@
         "pl": "(René) Naprawianie błędów: licznik tapet i status nie są obsługiwane",
         "uk": "(René) Виправлення помилок: лічильник стінок та статус не обробляються",
         "zh-cn": "(René) 错误修正: 壁盒计数器和状态未处理"
-      },
-      "1.3.14": {
-        "en": "(René) dependencies updated",
-        "de": "(René)",
-        "ru": "(René)",
-        "pt": "(René) dependências atualizadas",
-        "nl": "(René) bijgewerkte afhankelijkheden",
-        "fr": "(René) dépendances mises à jour",
-        "it": "(René) dipendenze aggiornate",
-        "es": "(René) dependencies updated",
-        "pl": "Aktualizacja zależności (René)",
-        "uk": "(René) залежностей оновлено",
-        "zh-cn": "(René) 更新的依赖关系"
       }
     },
     "titleLang": {

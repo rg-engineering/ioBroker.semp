@@ -66,7 +66,7 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
   Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 1.4.5 (2024-05-29)
 * (René) see issue #250: no Power to be send for devices without measurement in off-status
 
 ### 1.4.4 (2024-05-28)
