@@ -137,7 +137,7 @@ jobs:
           export SENTRY_URL=https://sentry.io
           export SENTRY_ORG=rg-engineering
           export SENTRY_PROJECT=iobroker_semp
-          export SENTRY_VERSION=rg-engineering.semp@${{ steps.extract_release.outputs.VERSION }}
+          export SENTRY_VERSION=iobroker.semp@${{ steps.extract_release.outputs.VERSION }}
           sentry-cli releases new $SENTRY_VERSION
           sentry-cli releases set-commits $SENTRY_VERSION --auto
           sentry-cli releases finalize $SENTRY_VERSION
