@@ -66,6 +66,10 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
   Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+* (René) see issue #314: bug fix to use express@5.0.0
+
 ### 1.4.6 (2024-08-24)
 * (René) update dependencies
 * (René) bug fixes based on adapter checker recommendation
