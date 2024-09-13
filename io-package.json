@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "semp",
-    "version": "1.4.6",
+    "version": "1.4.7",
     "news": {
+      "1.4.7": {
+        "en": "see issue #314: bug fix to use express@5.0.0",
+        "de": "siehe ausgabe #314: fehlerbehebung zur verwendung von express@5.0.0",
+        "ru": "#314: исправление ошибок для использования express@5.0.0",
+        "pt": "veja o problema #314: correção de bugs para usar express@5.0.0",
+        "nl": "zie probleem #314: bug fix om express@5.0.0 te gebruiken",
+        "fr": "voir le numéro #314: correction du bug pour utiliser express@5.0.0",
+        "it": "vedi numero #314: bug fix to use express@5.0.0",
+        "es": "ver número #314: bug fix to use express@5.0.0",
+        "pl": "see issue # 314: bug fix to use express @ 5.0.0",
+        "uk": "#314: виправлення помилок для використання експрес@5.0.0",
+        "zh-cn": "参见第314期: 错误修复以使用快递@ 5.0.0"
+      },
       "1.4.6": {
         "en": "update dependencies\nbug fixes based on adapter checker recommendation",
         "de": "aktualisierung der abhängigkeiten\nfehlerbehebungen basierend auf adapter-checker empfehlung",
@@ -80,19 +93,6 @@
         "pl": "(René) minor bug fix",
         "uk": "(René) незначна фіксація помилок",
         "zh-cn": "(René)小错误修复"
-      },
-      "1.3.15": {
-        "en": "(René) bug fix: wallbox counter and status are not handled",
-        "de": "(René) Bugfix: Wanddosenzähler und Status werden nicht behandelt",
-        "ru": "(René) исправление клопов: счетчик настенного ящика и статус не обрабатываются",
-        "pt": "(René) correção de bugs: contador de caixa de parede e status não são tratados",
-        "nl": "(René) bug fix: wallbox teller en status worden niet behandeld",
-        "fr": "Correction du bug (René) : le compteur et l'état de la boîte murale ne sont pas traités",
-        "it": "(René) bug fix: contatore e stato della scatola da parete non vengono maneggiati",
-        "es": "(René) bug fix: wallbox counter and status are not handled",
-        "pl": "(René) Naprawianie błędów: licznik tapet i status nie są obsługiwane",
-        "uk": "(René) Виправлення помилок: лічильник стінок та статус не обробляються",
-        "zh-cn": "(René) 错误修正: 壁盒计数器和状态未处理"
       }
     },
     "titleLang": {
