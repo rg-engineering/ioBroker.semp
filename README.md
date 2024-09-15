@@ -69,6 +69,7 @@ An description about general usage of energy requests see [SMA docu](docu/SMA/SS
 
 ### **WORK IN PROGRESS**
 * (René) update dependencies
+* (René) issue #317: test with nodejs@22
 
 
 ### 1.4.7 (2024-09-13)
