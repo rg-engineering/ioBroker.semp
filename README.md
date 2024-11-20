@@ -66,8 +66,7 @@ An description about general usage of energy requests see [SMA docu](https://git
   Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 1.4.8 (2024-11-20)
 * (René) update dependencies
 * (René) test with nodejs@22
 * (René) issue #317: links to docu updated

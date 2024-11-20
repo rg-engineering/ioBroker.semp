@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "semp",
-    "version": "1.4.7",
+    "version": "1.4.8",
     "news": {
+      "1.4.8": {
+        "en": "update dependencies\ntest with nodejs@22\nissue #317: links to docu updated",
+        "de": "aktualisierung der abhängigkeiten\ntest mit nodejs@22\nausgabe #317: links zu docu aktualisiert",
+        "ru": "обновление зависимостей\nтест с nodejs@22\n#317: ссылки на docu",
+        "pt": "dependências\nteste com nodejs@22\nissue #317: links para docu atualizado",
+        "nl": "afhankelijkheden bijwerken\ntest met nodejs@22\nnummer #317: links naar document bijgewerkt",
+        "fr": "mettre à jour les dépendances\ntest avec nodejs@22\nnuméro 317: liens vers docu mis à jour",
+        "it": "aggiornamento dipendenze\ntest con nodejs@22\nnumero #317: link a docu aggiornato",
+        "es": "dependencias de actualización\nprueba con nodejs@22\ntema #317: enlaces a docu actualizado",
+        "pl": "aktualizacji zależności\ntest z nodejs @ 22\nwydanie # 317: linki do zaktualizowanego doku",
+        "uk": "оновлення залежності\nтест з nodejs@22\nproblem #317: посилання на docu оновлений",
+        "zh-cn": "更新依赖关系\n用节点测试@ 22\n问题 317: 要更新的链接"
+      },
       "1.4.7": {
         "en": "see issue #314: bug fix to use express@5.0.0",
         "de": "siehe ausgabe #314: fehlerbehebung zur verwendung von express@5.0.0",
@@ -80,19 +93,6 @@
         "pl": "(René) błąd naprawić w tworzeniu ram czasowych",
         "uk": "(René) Виправлення помилок у створенні часових кадрів",
         "zh-cn": "(René) 错误在创建时长中修正"
-      },
-      "1.4.1": {
-        "en": "(René) minor bug fix",
-        "de": "(René) kleinere Fehlerbehebung",
-        "ru": "(René) незначительная ошибка",
-        "pt": "(René) menor correção de bugs",
-        "nl": "(René) kleine bug fix",
-        "fr": "Correction d'un bug mineur (René)",
-        "it": "(René) correzione di bug minore",
-        "es": "(René) corrección de fallo menor",
-        "pl": "(René) minor bug fix",
-        "uk": "(René) незначна фіксація помилок",
-        "zh-cn": "(René)小错误修复"
       }
     },
     "titleLang": {
