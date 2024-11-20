@@ -68,8 +68,8 @@ An description about general usage of energy requests see [SMA docu](https://git
 -->
 ### 1.4.8 (2024-11-20)
 * (René) update dependencies
-* (René) test with nodejs@22
-* (René) issue #317: links to docu updated
+* (René) issue #317: test with nodejs@22
+* (René) issue #329: links to docu updated
 
 ### 1.4.7 (2024-09-13)
 * (René) see issue #314: bug fix to use express@5.0.0
