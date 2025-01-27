@@ -26,7 +26,7 @@
     "csv-writer": "^1.6.0",
     "express": "^5.0.1",
     "node-ssdp": "^4.0.1",
-    "uuid": "^11.0.3",
+    "uuid": "^11.0.4",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
