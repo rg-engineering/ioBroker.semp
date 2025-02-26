@@ -66,6 +66,12 @@ An description about general usage of energy requests see [SMA docu](https://git
   Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+* René) see issue #333: new sequence to handle devices with quiescent current
+* (René) changes requested by adapter checker
+* (René) dependencies updated 
+
 ### 1.4.8 (2024-11-20)
 * (René) update dependencies
 * (René) issue #317: test with nodejs@22
