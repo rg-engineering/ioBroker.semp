@@ -57,6 +57,15 @@ An description about general usage of energy requests see [SMA docu](https://git
 ## Requirements
 
 
+## Dishwasher Mode
+
+The adapter can be used to control a dishwasher. The dishwasher is switched on when there is enough solar energy.
+Details of implementation can be found in issue #333.
+
+![Flowchart](https://github.com/rg-engineering/ioBroker.semp/blob/master/docu/settings/semp_dishwasher_sequence.png)
+
+
+
 ## known issues
 * please create issues at [github](https://github.com/rg-engineering/ioBroker.semp/issues) if you find bugs or whish new features
 
