@@ -15,6 +15,7 @@
     "Days": "Days",
     "DeviceBaseID": "Device Base ID",
     "DeviceBatteryCapacity": "Battery Capacity [Wh]",
+    "DeviceDishwasherMode": "switch off and wait for recommendation after first on",
     "DeviceHasOIDSwitch": "Has object-ID Switch",
     "DeviceID": "device ID",
     "DeviceInterruptionAllowed": "Interruptions Allowed",

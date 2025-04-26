@@ -15,6 +15,7 @@
     "Days": "Dagen",
     "DeviceBaseID": "Apparaatbasis-ID",
     "DeviceBatteryCapacity": "Batterijcapaciteit [Wh]",
+    "DeviceDishwasherMode": "Schakel uit en wacht op aanbeveling na het eerst",
     "DeviceHasOIDSwitch": "Heeft object-ID-schakelaar",
     "DeviceID": "apparaat ID",
     "DeviceInterruptionAllowed": "Onderbrekingen toegestaan",

@@ -15,6 +15,7 @@
     "Days": "Dni",
     "DeviceBaseID": "Podstawowy identyfikator urządzenia",
     "DeviceBatteryCapacity": "Pojemność baterii [Wh]",
+    "DeviceDishwasherMode": "wyłącz i poczekaj na rekomendację po pierwszym",
     "DeviceHasOIDSwitch": "Ma przełącznik identyfikatora obiektu",
     "DeviceID": "identyfikator urzadzenia",
     "DeviceInterruptionAllowed": "Dozwolone przerwy",

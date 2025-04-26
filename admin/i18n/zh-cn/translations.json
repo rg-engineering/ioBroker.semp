@@ -15,6 +15,7 @@
     "Days": "天",
     "DeviceBaseID": "设备基础 ID",
     "DeviceBatteryCapacity": "电池容量 [Wh]",
+    "DeviceDishwasherMode": "首先关闭并等待推荐",
     "DeviceHasOIDSwitch": "有对象 ID 开关",
     "DeviceID": "设备ID",
     "DeviceInterruptionAllowed": "允许中断",

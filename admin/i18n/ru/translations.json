@@ -15,6 +15,7 @@
     "Days": "Дни",
     "DeviceBaseID": "Базовый идентификатор устройства",
     "DeviceBatteryCapacity": "Емкость батареи [Втч]",
+    "DeviceDishwasherMode": "Выключите и подождите рекомендации после первого на",
     "DeviceHasOIDSwitch": "Имеет переключатель идентификатора объекта",
     "DeviceID": "идентификатор устройства",
     "DeviceInterruptionAllowed": "Разрешены прерывания",

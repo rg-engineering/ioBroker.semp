@@ -15,6 +15,7 @@
     "Days": "днів",
     "DeviceBaseID": "Ідентифікатор бази пристрою",
     "DeviceBatteryCapacity": "Ємність батареї [Вт·год]",
+    "DeviceDishwasherMode": "вимкніть і чекайте рекомендації після спочатку",
     "DeviceHasOIDSwitch": "Має перемикач ID об'єкта",
     "DeviceID": "ID пристрою",
     "DeviceInterruptionAllowed": "Переривання дозволено",

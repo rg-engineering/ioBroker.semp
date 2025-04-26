@@ -15,6 +15,7 @@
     "Days": "Tage",
     "DeviceBaseID": "Gerätebasis-ID",
     "DeviceBatteryCapacity": "Batteriekapazität [Wh]",
+    "DeviceDishwasherMode": "Gerät nach Einschalten ausschalten und auf Empfehlung warten",
     "DeviceHasOIDSwitch": "Verfügt über einen Objekt-ID-Schalter",
     "DeviceID": "Geräte ID",
     "DeviceInterruptionAllowed": "Unterbrechungen erlaubt",

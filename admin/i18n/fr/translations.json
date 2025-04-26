@@ -15,6 +15,7 @@
     "Days": "Jours",
     "DeviceBaseID": "ID de base de l'appareil",
     "DeviceBatteryCapacity": "Capacité de la batterie [Wh]",
+    "DeviceDishwasherMode": "Éteignez et attendez la recommandation après la première fois",
     "DeviceHasOIDSwitch": "Commutateur d'ID d'objet",
     "DeviceID": "Reference de l'appareil",
     "DeviceInterruptionAllowed": "Interruptions autorisées",

@@ -219,6 +219,17 @@
                 $('#3phaseDelay').hide();
 			}
 
+            if ($('#DeviceType').val() == "DishWasher" && $('#DeviceStatusDetectionType').val() == "FromPowerValue" && $('#DeviceHasOIDSwitch').prop("checked")) {
+                //console.log("show DeviceMeasurementMethod");
+                $('#divDeviceDishwasherMode').show();
+
+            }
+            else {
+                //console.log("hide DeviceMeasurementMethod");
+                $('#divDeviceDishwasherMode').hide();
+            }
+
+            
 
 			set_column_readonly("table-wallbox_oid_read", "tableWallboxOIDRead_col2", 1);
             set_column_readonly("table-wallbox_oid_write", "tableWallboxOIDWrite_col2", 1);
@@ -429,6 +440,10 @@
 			$("#DeviceTimerCancelIfNotOn").change(function () {
 				showHideSettings();
 			});
+            $("#DeviceDishwasherMode").change(function () {
+                showHideSettings();
+            });
+            
 			$("#DeviceWallboxPhases").change(function () {
 				showHideSettings();
 			});
@@ -550,6 +565,10 @@
 
 				$('#DeviceTimerCancelIfNotOn').prop("checked", devices[id].TimerCancelIfNotOn);
 				$('#DeviceTimerCancelIfNotOnTime').val(devices[id].TimerCancelIfNotOnTime);
+
+                $('#DeviceDishwasherMode').prop("checked", devices[id].DishwasherMode);
+
+                
 
 				//=====================================================================================================
 				//console.log("DeviceEnergyRequests " + JSON.stringify(devices[id]));
@@ -1097,6 +1116,9 @@
 
 						devices[id].TimerCancelIfNotOn = $('#DeviceTimerCancelIfNotOn').prop("checked");
 						devices[id].TimerCancelIfNotOnTime = $('#DeviceTimerCancelIfNotOnTime').val();
+
+                        devices[id].DishwasherMode = $('#DeviceDishwasherMode').prop("checked");
+                        
 
 						//====================================================================================
 
@@ -1652,6 +1674,15 @@
 									</div>
 								</div>
 							</div>
+							<div class="row">
+								<div id="divDeviceDishwasherMode" class="row">
+									<div class="input-field col s3">
+										<input type="checkbox" id="DeviceDishwasherMode" class="value" />
+										<label for="DeviceDishwasherMode" class="translate">DeviceDishwasherMode</label>
+									</div>
+								</div>
+							</div>
+
 
 							<div class="row">
 								<div class="col s12" id="DeviceEnergyRequests">

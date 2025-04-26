@@ -15,6 +15,7 @@
     "Days": "Giorni",
     "DeviceBaseID": "ID di base del dispositivo",
     "DeviceBatteryCapacity": "Capacità della batteria [Wh]",
+    "DeviceDishwasherMode": "Spegnere e attendere la raccomandazione dopo il primo acceso",
     "DeviceHasOIDSwitch": "Ha un cambio ID oggetto",
     "DeviceID": "ID del dispositivo",
     "DeviceInterruptionAllowed": "Interruzioni consentite",
