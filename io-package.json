@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "semp",
-    "version": "1.4.8",
+    "version": "1.5.0",
     "news": {
+      "1.5.0": {
+        "en": "see issue #333: new sequence to handle devices with quiescent current. ATTENTION: new dishwasher sequence is used for dishwasher devices optionally!\nchanges requested by adapter checker\ndependencies updated",
+        "de": "siehe Ausgabe #333: neue Sequenz, um Geräte mit Ruhestrom zu handhaben. ACHTUNG: Eine neue Geschirrspülersequenz wird optional für Geschirrspüler verwendet!\nänderungen, die von adapter checker angefordert werden\naktualisierte abhängigkeiten",
+        "ru": "проблема #333: новая последовательность для обработки устройств с неподвижным током. ВНИМАНИЕ: новая последовательность посудомоечных машин используется для устройств посудомоечных машин необязательно!\nизменения, запрошенные adapter checker\nобновленные зависимости",
+        "pt": "veja a edição #333: nova sequência para lidar com dispositivos com corrente quiescente. ATENÇÃO: nova sequência de máquina de lavar louça é usada para dispositivos de máquina de lavar louça opcionalmente!\nalterações solicitadas pelo verificador do adaptador\ndependências atualizadas",
+        "nl": "zie nummer #333: nieuwe volgorde om apparaten te behandelen met rustige stroom. ATTENTIE: nieuwe vaatwasser sequentie wordt gebruikt voor vaatwasser apparaten optioneel!\nwijzigingen gevraagd door adaptercontrole\nafhankelijkheden bijgewerkt",
+        "fr": "voir le numéro 333: nouvelle séquence pour gérer les appareils avec courant quiescent. ATTENTION: nouvelle séquence de lave-vaisselle est utilisée pour les appareils de lave-vaisselle en option!\nmodifications demandées par l'adaptateur checker\ndépendances mises à jour",
+        "it": "vedi numero 333: nuova sequenza per gestire i dispositivi con corrente quiescente. ATTENZIONE: la nuova sequenza di lavastoviglie viene utilizzata per i dispositivi lavastoviglie in modo facoltativo!\nmodifiche richieste da adattatore checker\ndipendenze aggiornate",
+        "es": "ver número #333: nueva secuencia para manejar dispositivos con corriente quiescente. ATENCIÓN: nueva secuencia de lavavajillas se utiliza para dispositivos de lavavajillas opcionalmente!\ncambios solicitados por el adaptador\ndependencias actualizadas",
+        "pl": "zob. numer # 333: nowa sekwencja obsługi urządzeń z cichym prądem. UWAGA: Nowa sekwencja zmywarki jest używana do urządzeń zmywarki opcjonalnie!\nzmiany wymagane przez sprawdzacz adaptera\nzaktualizowane zależności",
+        "uk": "переглянути номер #333: нова послідовність для обробки пристроїв з струмом калькуляції. УВАГА!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nзміни, які вимагаються перевіркою адаптера\nоновлені залежності",
+        "zh-cn": "参见第333期:用quiscent电流处理设备的新序列。 注意:新洗碗机序列可选用于洗碗机设备!!\n适配器检查器要求的更改\n更新依赖关系"
+      },
       "1.4.8": {
         "en": "update dependencies\ntest with nodejs@22\nissue #317: links to docu updated",
         "de": "aktualisierung der abhängigkeiten\ntest mit nodejs@22\nausgabe #317: links zu docu aktualisiert",
@@ -80,19 +93,6 @@
         "pl": "(René) tapeta: niepotrzebne ostrzeżenia wyłączone\nAktualizacja zależności (René)",
         "uk": "(René) Wallbox: непотрібні повідомлення деактивовані\n(René) залежностей оновлено",
         "zh-cn": "(René) 壁盒: 已关闭不必要的警告信息\n(René) 更新的依赖关系"
-      },
-      "1.4.2": {
-        "en": "(René) bug fix in create timeframes",
-        "de": "(René) Bugfix in Zeitrahmen erstellen",
-        "ru": "(René) исправление ошибок при создании временных рамок",
-        "pt": "(René) correção de bugs em criar prazos",
-        "nl": "(René) bug fix in create times",
-        "fr": "(René) Correction de bug dans créer des délais",
-        "it": "(René) correzione di bug nel creare timeframe",
-        "es": "(René) bug fix in create timeframes",
-        "pl": "(René) błąd naprawić w tworzeniu ram czasowych",
-        "uk": "(René) Виправлення помилок у створенні часових кадрів",
-        "zh-cn": "(René) 错误在创建时长中修正"
       }
     },
     "titleLang": {
