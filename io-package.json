@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "semp",
-    "version": "1.5.0",
+    "version": "1.5.1",
     "news": {
+      "1.5.1": {
+        "en": "bug fix calculation of used energy",
+        "de": "fehlerbehebung berechnung der verwendeten energie",
+        "ru": "баг фикс расчет использованной энергии",
+        "pt": "cálculo de correção de bugs da energia usada",
+        "nl": "bug fix berekening van de gebruikte energie",
+        "fr": "correction du bug calcul de l'énergie utilisée",
+        "it": "calcolo corretto bug dell'energia utilizzata",
+        "es": "corrección de errores cálculo de la energía utilizada",
+        "pl": "błąd fix obliczenia zużytej energii",
+        "uk": "виправлення помилок використовується енергія",
+        "zh-cn": "旧能量的bug 修正计算"
+      },
       "1.5.0": {
         "en": "see issue #333: new sequence to handle devices with quiescent current. ATTENTION: new dishwasher sequence is used for dishwasher devices optionally!\nchanges requested by adapter checker\ndependencies updated",
         "de": "siehe Ausgabe #333: neue Sequenz, um Geräte mit Ruhestrom zu handhaben. ACHTUNG: Eine neue Geschirrspülersequenz wird optional für Geschirrspüler verwendet!\nänderungen, die von adapter checker angefordert werden\naktualisierte abhängigkeiten",
@@ -80,19 +93,6 @@
         "pl": "(René) zmiana zależności\n(René) tapeta: sprawdź i zaloguj nieprawidłową wartość dla Wallbox3phase Przełącz Opóźnienie tylko jeśli włączone",
         "uk": "(Рене) зміна залежностей\n(René) Wallbox: перевірити і увійти неправильне значення для Wallbox3phase Перемикач Ввімкніть тільки якщо ввімкнено",
         "zh-cn": "(René) 属地变化\n(René) 壁盒: 检查并日志错误的壁盒3相值 切换 仅在启用时延迟"
-      },
-      "1.4.3": {
-        "en": "(René) wallbox: unnecessary warn messages deactivated\n(René) dependencies updated",
-        "de": "(René) Wallbox: unnötige Warnmeldungen deaktiviert\n(René)",
-        "ru": "(René) настенный ящик: ненужные предупреждающие сообщения деактивируются\n(René)",
-        "pt": "(René) wallbox: mensagens de advertência desnecessárias desativadas\n(René) dependências atualizadas",
-        "nl": "(René) wallbox: onnodige waarschuwingsberichten uitgeschakeld\n(René) bijgewerkte afhankelijkheden",
-        "fr": "(René) wallbox : messages d'avertissement inutiles désactivés\n(René) dépendances mises à jour",
-        "it": "(René) wallbox: messaggi di avviso non necessari disattivati\n(René) dipendenze aggiornate",
-        "es": "(René) wallbox: mensajes de aviso innecesarios desactivados\n(René) dependencies updated",
-        "pl": "(René) tapeta: niepotrzebne ostrzeżenia wyłączone\nAktualizacja zależności (René)",
-        "uk": "(René) Wallbox: непотрібні повідомлення деактивовані\n(René) залежностей оновлено",
-        "zh-cn": "(René) 壁盒: 已关闭不必要的警告信息\n(René) 更新的依赖关系"
       }
     },
     "titleLang": {
