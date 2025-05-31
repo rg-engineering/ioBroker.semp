@@ -84,6 +84,10 @@ The adapter allows you to control a dishwasher or other devices that consume sta
   Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+* (René) bug fix calculation of used energy
+
 ### 1.5.0 (2025-05-24)
 * (René) see issue #333: new sequence to handle devices with quiescent current. ATTENTION: new dishwasher sequence is used for dishwasher devices optionally!
 * (René) changes requested by adapter checker
