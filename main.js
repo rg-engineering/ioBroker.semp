@@ -1,3 +1,4 @@
+/* eslint-disable prefer-template */
 "use strict";
 
 /*
@@ -5,7 +6,7 @@
  */
 
 const utils = require("@iobroker/adapter-core");
-const { type } = require("os");
+//const { type } = require("os");
 const networkInterfaces = require("os").networkInterfaces;
 const { v4: uuidv4 } = require("uuid");
 
@@ -31,7 +32,7 @@ const Gateway = require("./lib/semp/Gateway").Gateway;
 class Semp extends utils.Adapter {
 
 	/**
-	 * @param {Partial<utils.AdapterOptions>} [options={}]
+	 * @param {Partial<utils.AdapterOptions>} [options]
 	 */
 	constructor(options) {
 		super({
@@ -77,14 +78,11 @@ class Semp extends utils.Adapter {
 
 			if (!ip) {
 				this.log.error("IP not specified!");
-			}
-			else if (!sempPort) {
+			} else if (!sempPort) {
 				this.log.error("Port not specified!");
-			}
-			else if (!uuid) {
+			} else if (!uuid) {
 				this.log.error("UUID not specified!");
-			}
-			else {
+			} else {
 
 				this.gw = new Gateway(this, uuid, ip, sempPort, name, manufacturer);
 				if (this.gw != null) {
@@ -167,7 +165,7 @@ class Semp extends utils.Adapter {
 
 			if (device.IsActive) {
 				this.gw.addDevice(device);
-				await this.SubscribeDevice(device);
+				//await this.SubscribeDevice(device);
 
 				if (device.MeasurementMethod == "Estimation") {
 					this.gw.setPowerDevice(device.ID, device.MaxPower, device.StatusDetection);
@@ -179,13 +177,14 @@ class Semp extends utils.Adapter {
 		}
 	}
 
-	async SubscribeDevice(device) {
+	//async SubscribeDevice(device) {
 
 		//is done in device itself
-	}
+	//}
 
 	/**
 	 * Is called when adapter shuts down - callback has to be called under any circumstances!
+	 *
 	 * @param {() => void} callback
 	 */
 	onUnload(callback) {
@@ -196,6 +195,7 @@ class Semp extends utils.Adapter {
 			}
 			callback();
 		} catch (e) {
+			this.log.error("exception in onUnload [" + e + "]");
 			callback();
 		}
 	}
@@ -211,8 +211,7 @@ class Semp extends utils.Adapter {
 
 				if (!bRet) {
 					this.log.warn(`state ${id} changed: ${state.val} (ack = ${state.ack}) but not handled`);
-				}
-				else {
+				} else {
 					if (ids[0] == "semp") {
 						this.setForeignState(id, { ack: true });
 					}
@@ -254,17 +253,13 @@ class Semp extends utils.Adapter {
 						if (device.WallboxOIDs[o].active) {
 							if (device.WallboxOIDs[o].Name == "DeviceOIDPlugConnected") {
 								OID_PlugConnected = device.WallboxOIDs[o].OID;
-							}
-							else if (device.WallboxOIDs[o].Name == "DeviceOIDIsCharging") {
+							} else if (device.WallboxOIDs[o].Name == "DeviceOIDIsCharging") {
 								OID_IsCharging = device.WallboxOIDs[o].OID;
-							}
-							else if (device.WallboxOIDs[o].Name == "DeviceOIDIsError") {
+							} else if (device.WallboxOIDs[o].Name == "DeviceOIDIsError") {
 								OID_IsError = device.WallboxOIDs[o].OID;
-							}
-							else if (device.WallboxOIDs[o].Name == "DeviceOIDCounter") {
+							} else if (device.WallboxOIDs[o].Name == "DeviceOIDCounter") {
 								OID_Counter = device.WallboxOIDs[o].OID;
-							}
-							else if (device.WallboxOIDs[o].Name == "DeviceOIDStatus") {
+							} else if (device.WallboxOIDs[o].Name == "DeviceOIDStatus") {
 								OID_Status = device.WallboxOIDs[o].OID;
 							}
 						}
@@ -298,17 +293,14 @@ class Semp extends utils.Adapter {
 						this.log.info("main: got minEnergy " + state.val);
 						this.gw.setMinEnergy(device.ID, state.val);
 						bRet = true;
-					}
-					else if (ids[4] == "MaxEnergy") {
+					} else if (ids[4] == "MaxEnergy") {
 						this.gw.setMaxEnergy(device.ID, state.val);
 						bRet = true;
-					}
-					else if (ids[4] == "EnableFastCharging") {
+					} else if (ids[4] == "EnableFastCharging") {
 						this.gw.EnableFastCharging(device.ID, state.val);
 						bRet = true;
-					}
-					//semp.0.Devices.Wallbox1.MaxChargeTime
-					else if (ids[4] == "MaxChargeTime") {
+					} else if (ids[4] == "MaxChargeTime") {
+						//semp.0.Devices.Wallbox1.MaxChargeTime
 						this.gw.SetMaxChargeTime(device.ID, state.val);
 						bRet = true;
 					}
@@ -328,23 +320,26 @@ class Semp extends utils.Adapter {
 
 				const myIP = this.GetIP();
 				// Send response in callback if required
-				if (obj.callback) this.sendTo(obj.from, obj.command, myIP, obj.callback);
-			}
-			else if (obj.command === "getUUID") {
+				if (obj.callback) {
+this.sendTo(obj.from, obj.command, myIP, obj.callback);
+}
+			} else if (obj.command === "getUUID") {
 				this.log.info("get UUID");
 
 				const uuid = this.GetUUID();
 				// Send response in callback if required
-				if (obj.callback) this.sendTo(obj.from, obj.command, uuid, obj.callback);
-			}
-			else if (obj.command === "getDeviceBaseID") {
+				if (obj.callback) {
+this.sendTo(obj.from, obj.command, uuid, obj.callback);
+}
+			} else if (obj.command === "getDeviceBaseID") {
 				this.log.info("get DeviceBaseID");
 
 				const devicebaseid = await this.GetDeviceBaseID();
 				// Send response in callback if required
-				if (obj.callback) this.sendTo(obj.from, obj.command, devicebaseid, obj.callback);
-			}
-			else {
+				if (obj.callback) {
+this.sendTo(obj.from, obj.command, devicebaseid, obj.callback);
+}
+			} else {
 				this.log.warn("unknown command " + obj.command);
 			}
 		}
@@ -407,8 +402,7 @@ class Semp extends utils.Adapter {
 		if (typeof id === "number" && Number.isInteger(id)) {
 
 			this.log.debug("BaseID: is integer number");
-		}
-		else {
+		} else {
 			this.log.error("BaseID: wrong type or not integer" + typeof id + " " + JSON.stringify(id) + Number.isInteger(id));
 		}
 
@@ -423,7 +417,7 @@ class Semp extends utils.Adapter {
 if (require.main !== module) {
 	// Export the constructor in compact mode
 	/**
-	 * @param {Partial<utils.AdapterOptions>} [options={}]
+	 * @param {Partial<utils.AdapterOptions>} [options]
 	 */
 	module.exports = (options) => new Semp(options);
 } else {
