@@ -57,19 +57,17 @@ An description about general usage of energy requests see [SMA docu](https://git
 ## Requirements
 
 
-## Dishwasher Mode
-
-## Functionality of the Adapter
+## Dishwasher Mode: Functionality of the Adapter
 
 The adapter allows you to control a dishwasher or other devices that consume standby power. It works as follows:
 
 - The user manually switches the device on as usual.  
-- Instead of starting immediately, the device remains paused.  
+- Instead of starting immediately, the device is switched off and remains paused.  
 - Once enough solar energy is available, the device will automatically start and run until the program is completed.  
 - Any recommendations from the Smart Home Manager (SHM) to switch off the device will be ignored during this process.
 
 > **Note:**  
-> Detailed information about the technical implementation can be found in [Issue #333](#) and in the flow chart below.
+> Detailed information about the technical implementation can be found in [Issue #333](https://github.com/rg-engineering/ioBroker.semp/issues/333) and in the flow chart below.
 
 ![Flowchart](https://github.com/rg-engineering/ioBroker.semp/blob/master/docu/settings/semp_dishwasher_sequence.png)
 
