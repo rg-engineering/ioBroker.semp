@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "semp",
-    "version": "1.5.1",
+    "version": "1.5.2",
     "news": {
+      "1.5.2": {
+        "en": "new testing\nissue #333 dishwasher sequence: off detection changed",
+        "de": "neue tests\nausgabe #333 geschirrspüler-sequenz: off-detektion geändert",
+        "ru": "новые испытания\nпроблема #333 посудомоечная машина последовательность: вне обнаружения изменена",
+        "pt": "novos testes\nquestão #333 sequência da máquina de lavar louça: fora detecção alterada",
+        "nl": "nieuwe tests\nprobleem #333 vaatwasser sequentie: uit detectie veranderd",
+        "fr": "nouveaux essais\nnuméro 333 séquence de lave-vaisselle: la détection a changé",
+        "it": "nuovi test\nnumero #333 sequenza lavastoviglie: disattivare il rilevamento cambiato",
+        "es": "nuevas pruebas\nemisión #333 secuencia de lavavajillas: fuera de detección cambió",
+        "pl": "nowe badania\nwydanie # 333 sekwencja zmywarki: wyłączone wykrywanie zmienione",
+        "uk": "новий тест\nпитання #333 послідовність посудомийної машини: від виявлення змінено",
+        "zh-cn": "新测试\n发行 # 333 洗碗机序列: 关闭检测更改"
+      },
       "1.5.1": {
         "en": "bug fix calculation of used energy",
         "de": "fehlerbehebung berechnung der verwendeten energie",
@@ -80,19 +93,6 @@
         "pl": "(René) zob. numer # 250: brak mocy do wysłania dla urządzeń bez pomiaru w trybie off- status",
         "uk": "(René) див. питання #250: не потрібно надсилати на пристрої без вимірювання в off-status",
         "zh-cn": "(René)参见第250期:没有电源发送设备,没有测量状态"
-      },
-      "1.4.4": {
-        "en": "(René) change of dependencies\n(René) wallbox: check and log wrong value for Wallbox3phaseSwitchDelay only if enabled",
-        "de": "(René) Veränderung der Abhängigkeiten\n(René) Wallbox: Überprüfen und Protokoll falschen Wert für Wallbox3phase Schalter Delay nur, wenn aktiviert",
-        "ru": "(René) изменение зависимостей\n(René) настенный ящик: значение для Wallbox3 Phase Переключение Задержка только в том случае, если",
-        "pt": "(René) mudança de dependências\n(René) wallbox: verificar e registrar o valor errado para Wallbox3phase Interruptor Atrasar somente se habilitado",
-        "nl": "(René) verandering van afhankelijkheden\n(René) wallbox: controleer en log verkeerde waarde voor Wallbox3phase Wisselen Vertraging alleen indien ingeschakeld",
-        "fr": "(René) changement de dépendances\n(René) wallbox: vérifiez et log wrong valeur pour Wallbox3phase Commutateur Retard seulement si activé",
-        "it": "(René) cambiamento delle dipendenze\n(René) wallbox: controllare e registrare il valore sbagliato per Wallbox3phase Interruttore Ritaglio solo se abilitato",
-        "es": "(René) cambio de dependencia\n(René) wallbox: comprobar y registrar el valor incorrecto para Wallbox3phase Cambio Retraso sólo si está habilitado",
-        "pl": "(René) zmiana zależności\n(René) tapeta: sprawdź i zaloguj nieprawidłową wartość dla Wallbox3phase Przełącz Opóźnienie tylko jeśli włączone",
-        "uk": "(Рене) зміна залежностей\n(René) Wallbox: перевірити і увійти неправильне значення для Wallbox3phase Перемикач Ввімкніть тільки якщо ввімкнено",
-        "zh-cn": "(René) 属地变化\n(René) 壁盒: 检查并日志错误的壁盒3相值 切换 仅在启用时延迟"
       }
     },
     "titleLang": {
