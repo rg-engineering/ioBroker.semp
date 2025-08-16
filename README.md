@@ -86,7 +86,8 @@ The adapter allows you to control a dishwasher or other devices that consume sta
 -->
 
 ### **WORK IN PROGRESS**
-* (René)new testing
+* (René) new testing
+* (René) issue #333 dishwasher sequence: off detection changed
 
 ### 1.5.1 (2025-05-31)
 * (René) bug fix calculation of used energy
