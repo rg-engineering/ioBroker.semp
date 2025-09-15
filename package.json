@@ -22,7 +22,7 @@
     "node": ">=20.0.0"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^3.2.3",
+    "@iobroker/adapter-core": "^3.3.2",
     "csv-writer": "^1.6.0",
     "express": "^5.1.0",
     "node-ssdp": "^4.0.1",
