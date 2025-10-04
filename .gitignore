@@ -15,7 +15,7 @@ Thumbs.db
 # i18n intermediate files
 admin/i18n/flat.txt
 admin/i18n/*/flat.txt
-/.vscode/
+
 /.create-adapter.json
 /_tsconfig.check.json
 /_tsconfig.json
@@ -32,3 +32,5 @@ admin/i18n/*/flat.txt
 /admin/jsonConfig.json
 /admin/jsonConfig.json5
 /docu/.$semp_dishwasher.drawio.bkp
+.commitinfo
+/.vscode/extensions.json
