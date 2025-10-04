@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "semp",
-    "version": "1.5.2",
+    "version": "1.5.3",
     "news": {
+      "1.5.3": {
+        "en": "update dependencies + changes based on adapter checker",
+        "de": "aktualisierung abhängigkeiten + änderungen basierend auf adapter-checker",
+        "ru": "зависимости обновления + изменения на основе проверки адаптера",
+        "pt": "atualizar dependências + alterações com base no verificador de adaptadores",
+        "nl": "update afhankelijkheden + wijzigingen op basis van adaptercontrole",
+        "fr": "mettre à jour les dépendances + les changements basés sur le vérificateur d'adaptateur",
+        "it": "aggiornamento dipendenze + modifiche in base all'adattatore checker",
+        "es": "dependencias de actualización + cambios basados en el control de adaptador",
+        "pl": "aktualizacja zależności + zmiany w oparciu o sprawdzacz adaptera",
+        "uk": "оновлення залежності + зміни на основі перевірки адаптера",
+        "zh-cn": "根据适配器检查器更新依赖性+变化"
+      },
       "1.5.2": {
         "en": "new testing\nissue #333 dishwasher sequence: off detection changed",
         "de": "neue tests\nausgabe #333 geschirrspüler-sequenz: off-detektion geändert",
@@ -80,19 +93,6 @@
         "pl": "aktualizacji zależności\npoprawki błędów oparte na rekomendacji sprawdzania adaptera",
         "uk": "оновлення залежності\nвиправлення помилок на основі рекомендації адаптера",
         "zh-cn": "更新依赖关系\n根据适配器检查器建议修正错误"
-      },
-      "1.4.5": {
-        "en": "(René) see issue #250: no Power to be send for devices without measurement in off-status",
-        "de": "(René) siehe Ausgabe #250: keine Stromversorgung für Geräte ohne Messung im Off-Status",
-        "ru": "(René) см. вопрос #250: нет мощности для отправки для устройств без измерения в нестатусе",
-        "pt": "(René) veja a edição #250: no Power to be send for devices without Measurement in off-status",
-        "nl": "(René) zie nummer #250: geen vermogen om apparaten te verzenden zonder meting in off-status",
-        "fr": "(René) voir le numéro 250 : pas de puissance à envoyer pour les appareils sans mesure hors-statut",
-        "it": "(René) vedi numero #250: no Potenza da inviare per dispositivi senza misura in fuori-status",
-        "es": "(René) ver el número #250: no Power to be send for devices without measurement in off-status",
-        "pl": "(René) zob. numer # 250: brak mocy do wysłania dla urządzeń bez pomiaru w trybie off- status",
-        "uk": "(René) див. питання #250: не потрібно надсилати на пристрої без вимірювання в off-status",
-        "zh-cn": "(René)参见第250期:没有电源发送设备,没有测量状态"
       }
     },
     "titleLang": {
