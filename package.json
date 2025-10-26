@@ -16,7 +16,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/rg-engineering/ioBroker.semp"
+    "url": "git+https://github.com/rg-engineering/ioBroker.semp.git"
   },
   "engines": {
     "node": ">=20.0.0"
