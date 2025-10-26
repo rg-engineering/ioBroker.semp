@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "semp",
-    "version": "1.5.3",
+    "version": "1.5.4",
     "news": {
+      "1.5.4": {
+        "en": "bug fix sentry",
+        "de": "fehlerbehebung gesendet",
+        "ru": "исправлять ошибки",
+        "pt": "corrigir o erro sentinela",
+        "nl": "bug repareren wacht",
+        "fr": "correction du bug sentinelle",
+        "it": "bug fix sendry",
+        "es": "bug fix centry",
+        "pl": "bug fix sentry",
+        "uk": "виправлення помилок",
+        "zh-cn": "错误修正哨兵"
+      },
       "1.5.3": {
         "en": "update dependencies + changes based on adapter checker",
         "de": "aktualisierung abhängigkeiten + änderungen basierend auf adapter-checker",
@@ -80,19 +93,6 @@
         "pl": "see issue # 314: bug fix to use express @ 5.0.0",
         "uk": "#314: виправлення помилок для використання експрес@5.0.0",
         "zh-cn": "参见第314期: 错误修复以使用快递@ 5.0.0"
-      },
-      "1.4.6": {
-        "en": "update dependencies\nbug fixes based on adapter checker recommendation",
-        "de": "aktualisierung der abhängigkeiten\nfehlerbehebungen basierend auf adapter-checker empfehlung",
-        "ru": "обновление зависимостей\nисправления ошибок на основе рекомендации адаптера",
-        "pt": "dependências\ncorreções de bugs com base na recomendação do verificador do adaptador",
-        "nl": "afhankelijkheden bijwerken\nbug fixes op basis van adaptercontrole aanbeveling",
-        "fr": "mettre à jour les dépendances\ncorrection des bugs en fonction de la recommandation du vérificateur d'adaptateur",
-        "it": "aggiornamento dipendenze\ncorrezioni di bug in base alla raccomandazione dell'adattatore checker",
-        "es": "dependencias de actualización\ncorrecciones de errores basado en la recomendación de control de adaptador",
-        "pl": "aktualizacji zależności\npoprawki błędów oparte na rekomendacji sprawdzania adaptera",
-        "uk": "оновлення залежності\nвиправлення помилок на основі рекомендації адаптера",
-        "zh-cn": "更新依赖关系\n根据适配器检查器建议修正错误"
       }
     },
     "titleLang": {
