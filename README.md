@@ -82,6 +82,10 @@ The adapter allows you to control a dishwasher or other devices that consume sta
   Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+* (René) handle exceptions reported by sentry
+
 ### 1.5.4 (2025-10-26)
 * (René) bug fix sentry
 
