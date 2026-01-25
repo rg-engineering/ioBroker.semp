@@ -69,7 +69,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
 
     console.log("DeviceSettings render: " + JSON.stringify(props.native));
 
-    const [selectedDevice, setSelectedDevice] = useState<string>(() => (props.native as any).deviceSelector ?? '');
+    const [selectedDevice, setSelectedDevice] = useState<string>(() => (props.native as any).deviceSelector ?? ' ');
 
     const findDevice = (idOrName: string): SempDevice | undefined => {
         if (!idOrName) {
@@ -270,11 +270,11 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                     <InputLabel id="device-selector-label">{I18n.t('select a device')}</InputLabel>
                     <Select
                         labelId="device-selector-label"
-                        value={selectedDevice ?? ''}
+                        value={selectedDevice ?? ' '}
                         onChange={handleDeviceChange}
                         displayEmpty
                     >
-                        <MenuItem value="">
+                        <MenuItem value=" ">
                             <em>{I18n.t('no device selected')}</em>
                         </MenuItem>
                         {(props.native as any).devices?.map((r: SempDevice) => (
@@ -302,240 +302,284 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
 
             {selectedDevice ? (
                 deviceIsActive ? (
-                    <FormControl fullWidth variant="standard">
+                    <div>
 
                         <BoxDivider
                             Name={I18n.t('main settings')}
                             theme={props.theme}
                         />
 
-                        <TextField
-                            style={{ marginBottom: 16 }}
-                            id='DeviceID'
-                            label={I18n.t('DeviceID')}
-                            variant="standard"
-                            value={valString('ID')}
-                            onChange={(e) => {
-                                // Beim ID-Ändern müssen wir editingDeviceOriginalId beachten
-                                const newId = e.target.value ?? '';
-                                const updated = { ...(device ?? {}), ID: newId } as SempDevice;
-                                setDevice(updated);
-                                persistDevice(updated);
-                            }}
-                        />
+                        <FormControl fullWidth variant="standard">
 
-                        <TextField
-                            style={{ marginBottom: 16 }}
-                            id='DeviceName'
-                            label={I18n.t('DeviceName')}
-                            variant="standard"
-                            value={valString('Name')}
-                            onChange={handleStringChange('Name')}
-                        />
-
-                        <TextField
-                            style={{ marginBottom: 16 }}
-                            id='DeviceVendor'
-                            label={I18n.t('DeviceVendor')}
-                            variant="standard"
-                            value={valString('Vendor')}
-                            onChange={handleStringChange('Vendor')}
-                        />
-
-                        <TextField
-                            style={{ marginBottom: 16 }}
-                            id='DeviceSerialnumber'
-                            label={I18n.t('DeviceSerialnumber')}
-                            variant="standard"
-                            value={valString('Serialnumber')}
-                            onChange={handleStringChange('Serialnumber')}
-                        />
-
-                        <InputLabel id="device-type-label">{I18n.t('select a type')}</InputLabel>
-                        <Select
-                            labelId="device-type-label"
-                            value={valString('Type') ?? ''}
-                            onChange={(e) => {
-                                const val = e.target.value ?? '';
-                                const updated = { ...(device ?? {}), Type: val } as SempDevice;
-                                setDevice(updated);
-                                persistDevice(updated);
-                            }}
-                            displayEmpty
-                        >
-                            <MenuItem value="AirConditioning">
-                                <em>{I18n.t('AirConditioning')}</em>
-                            </MenuItem>
-                            <MenuItem value="Charger">
-                                <em>{I18n.t('Charger')}</em>
-                            </MenuItem>
-                            <MenuItem value="DishWasher">
-                                <em>{I18n.t('DishWasher')}</em>
-                            </MenuItem>
-                            <MenuItem value="Dryer">
-                                <em>{I18n.t('Dryer')}</em>
-                            </MenuItem>
-                            <MenuItem value="ElectricVehicle">
-                                <em>{I18n.t('ElectricVehicle')}</em>
-                            </MenuItem>
-                            <MenuItem value="EVCharger">
-                                <em>{I18n.t('EVCharger')}</em>
-                            </MenuItem>
-                            <MenuItem value="Freezer">
-                                <em>{I18n.t('Freezer')}</em>
-                            </MenuItem>
-                            <MenuItem value="Fridge">
-                                <em>{I18n.t('Fridge')}</em>
-                            </MenuItem>
-                            <MenuItem value="Heater">
-                                <em>{I18n.t('Heater')}</em>
-                            </MenuItem>
-                            <MenuItem value="HeatPump">
-                                <em>{I18n.t('HeatPump')}</em>
-                            </MenuItem>
-                            <MenuItem value="Motor">
-                                <em>{I18n.t('Motor')}</em>
-                            </MenuItem>
-                            <MenuItem value="Pump">
-                                <em>{I18n.t('Pump')}</em>
-                            </MenuItem>
-                            <MenuItem value="WashingMachine">
-                                <em>{I18n.t('WashingMachine')}</em>
-                            </MenuItem>
-                            <MenuItem value="Other">
-                                <em>{I18n.t('Other')}</em>
-                            </MenuItem>
-                        </Select>
-
-                        <TextField
-                            style={{ marginBottom: 16 }}
-                            id='DeviceMinPower'
-                            label={I18n.t('DeviceMinPower (W)')}
-                            variant="standard"
-                            type="number"
-                            value={valNumber('MinPower')}
-                            onChange={handleNumberChange('MinPower')}
-                        />
-
-                        <TextField
-                            style={{ marginBottom: 16 }}
-                            id='DeviceMaxPower'
-                            label={I18n.t('DeviceMaxPower (W)')}
-                            variant="standard"
-                            type="number"
-                            value={valNumber('MaxPower')}
-                            onChange={handleNumberChange('MaxPower')}
-                        />
-
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    color="primary"
-                                    checked={!!(device && (device as any).InterruptionAllowed)}
-                                    onChange={handleBoolChange('InterruptionAllowed')}
-                                    aria-label="device Interruption Allowed"
-                                />
-                            }
-                            label={I18n.t('Interruption Allowed')}
-                        />
-
-                        {(device && (device as any).InterruptionAllowed) === true ? (
-                            <div>
+                            <div style={{ display: 'flex', gap: 16, marginBottom: 16 }}>
                                 <TextField
                                     style={{ marginBottom: 16 }}
-                                    id='DeviceMinOnTime'
-                                    label={I18n.t('DeviceMinOnTime')}
+                                    id='DeviceID'
+                                    label={I18n.t('DeviceID')}
                                     variant="standard"
-                                    type="number"
-                                    value={valNumber('MinOnTime')}
-                                    onChange={handleNumberChange('MinOnTime')}
+                                    value={valString('ID')}
+                                    onChange={(e) => {
+                                        // Beim ID-Ändern müssen wir editingDeviceOriginalId beachten
+                                        const newId = e.target.value ?? '';
+                                        const updated = { ...(device ?? {}), ID: newId } as SempDevice;
+                                        setDevice(updated);
+                                        persistDevice(updated);
+                                    }}
+                                    sx={{ minWidth: '30%', maxWidth: '50%' }}
                                 />
+
                                 <TextField
                                     style={{ marginBottom: 16 }}
-                                    id='DeviceMaxOnTime'
-                                    label={I18n.t('DeviceMaxOnTime')}
+                                    id='DeviceName'
+                                    label={I18n.t('DeviceName')}
                                     variant="standard"
-                                    type="number"
-                                    value={valNumber('MaxOnTime')}
-                                    onChange={handleNumberChange('MaxOnTime')}
-                                />
-                                <TextField
-                                    style={{ marginBottom: 16 }}
-                                    id='DeviceMinOffTime'
-                                    label={I18n.t('DeviceMinOffTime')}
-                                    variant="standard"
-                                    type="number"
-                                    value={valNumber('MinOffTime')}
-                                    onChange={handleNumberChange('MinOffTime')}
-                                />
-                                <TextField
-                                    style={{ marginBottom: 16 }}
-                                    id='DeviceMaxOffTime'
-                                    label={I18n.t('DeviceMaxOffTime')}
-                                    variant="standard"
-                                    type="number"
-                                    value={valNumber('MaxOffTime')}
-                                    onChange={handleNumberChange('MaxOffTime')}
+                                    value={valString('Name')}
+                                    onChange={handleStringChange('Name')}
+                                    sx={{ minWidth: '30%', maxWidth: '50%' }}
                                 />
                             </div>
-                        ) : null}
+
+
+                            <div style={{ display: 'flex', gap: 16, marginBottom: 16 }}>
+
+                                <TextField
+                                    style={{ marginBottom: 16 }}
+                                    id='DeviceVendor'
+                                    label={I18n.t('DeviceVendor')}
+                                    variant="standard"
+                                    value={valString('Vendor')}
+                                    onChange={handleStringChange('Vendor')}
+                                    sx={{ minWidth: '30%', maxWidth: '50%' }}
+                                />
+
+                                <TextField
+                                    style={{ marginBottom: 16 }}
+                                    id='DeviceSerialnumber'
+                                    label={I18n.t('DeviceSerialnumber')}
+                                    variant="standard"
+                                    value={valString('Serialnumber')}
+                                    onChange={handleStringChange('Serialnumber')}
+                                    sx={{ minWidth: '30%', maxWidth: '50%' }}
+                                />
+                            </div>
+                        </FormControl>
+
+                        <FormControl variant="standard" sx={{ minWidth: '40%', maxWidth: '60%' }}>
+                            <InputLabel id="device-type-label">{I18n.t('select a type')}</InputLabel>
+                            <Select
+                                labelId="device-type-label"
+                                value={valString('Type') ?? ''}
+                                onChange={(e) => {
+                                    const val = e.target.value ?? '';
+                                    const updated = { ...(device ?? {}), Type: val } as SempDevice;
+                                    setDevice(updated);
+                                    persistDevice(updated);
+                                }}
+                                displayEmpty
+                            >
+                                <MenuItem value="AirConditioning">
+                                    <em>{I18n.t('AirConditioning')}</em>
+                                </MenuItem>
+                                <MenuItem value="Charger">
+                                    <em>{I18n.t('Charger')}</em>
+                                </MenuItem>
+                                <MenuItem value="DishWasher">
+                                    <em>{I18n.t('DishWasher')}</em>
+                                </MenuItem>
+                                <MenuItem value="Dryer">
+                                    <em>{I18n.t('Dryer')}</em>
+                                </MenuItem>
+                                <MenuItem value="ElectricVehicle">
+                                    <em>{I18n.t('ElectricVehicle')}</em>
+                                </MenuItem>
+                                <MenuItem value="EVCharger">
+                                    <em>{I18n.t('EVCharger')}</em>
+                                </MenuItem>
+                                <MenuItem value="Freezer">
+                                    <em>{I18n.t('Freezer')}</em>
+                                </MenuItem>
+                                <MenuItem value="Fridge">
+                                    <em>{I18n.t('Fridge')}</em>
+                                </MenuItem>
+                                <MenuItem value="Heater">
+                                    <em>{I18n.t('Heater')}</em>
+                                </MenuItem>
+                                <MenuItem value="HeatPump">
+                                    <em>{I18n.t('HeatPump')}</em>
+                                </MenuItem>
+                                <MenuItem value="Motor">
+                                    <em>{I18n.t('Motor')}</em>
+                                </MenuItem>
+                                <MenuItem value="Pump">
+                                    <em>{I18n.t('Pump')}</em>
+                                </MenuItem>
+                                <MenuItem value="WashingMachine">
+                                    <em>{I18n.t('WashingMachine')}</em>
+                                </MenuItem>
+                                <MenuItem value="Other">
+                                    <em>{I18n.t('Other')}</em>
+                                </MenuItem>
+                            </Select>
+                        </FormControl>
+
+
+                        <FormControl variant="standard" fullWidth>
+                            <div style={{ display: 'flex', gap: 16, marginBottom: 16 }}>
+
+                                <TextField
+                                    style={{ marginBottom: 16 }}
+                                    id='DeviceMinPower'
+                                    label={I18n.t('DeviceMinPower (W)')}
+                                    variant="standard"
+                                    type="number"
+                                    value={valNumber('MinPower')}
+                                    onChange={handleNumberChange('MinPower')}
+                                    sx={{ minWidth: '20%', maxWidth: '50%' }}
+                                />
+
+                                <TextField
+                                    style={{ marginBottom: 16 }}
+                                    id='DeviceMaxPower'
+                                    label={I18n.t('DeviceMaxPower (W)')}
+                                    variant="standard"
+                                    type="number"
+                                    value={valNumber('MaxPower')}
+                                    onChange={handleNumberChange('MaxPower')}
+                                    sx={{ minWidth: '20%', maxWidth: '50%' }}
+                                />
+                            </div>
+                        </FormControl>
+
+
+                        <FormControl variant="standard" fullWidth>
+                            <div style={{ display: 'flex', gap: 16, marginBottom: 16 }}>
+
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            color="primary"
+                                            checked={!!(device && (device as any).InterruptionAllowed)}
+                                            onChange={handleBoolChange('InterruptionAllowed')}
+                                            aria-label="device Interruption Allowed"
+                                        />
+                                    }
+                                    label={I18n.t('Interruption Allowed')}
+                                />
+
+                                {(device && (device as any).InterruptionAllowed) === true ? (
+                                    <div>
+                                        <TextField
+                                            style={{ marginBottom: 16 }}
+                                            id='DeviceMinOnTime'
+                                            label={I18n.t('DeviceMinOnTime')}
+                                            variant="standard"
+                                            type="number"
+                                            value={valNumber('MinOnTime')}
+                                            onChange={handleNumberChange('MinOnTime')}
+                                            sx={{ minWidth: '20%', maxWidth: '20%' }}
+                                        />
+                                        <TextField
+                                            style={{ marginBottom: 16 }}
+                                            id='DeviceMaxOnTime'
+                                            label={I18n.t('DeviceMaxOnTime')}
+                                            variant="standard"
+                                            type="number"
+                                            value={valNumber('MaxOnTime')}
+                                            onChange={handleNumberChange('MaxOnTime')}
+                                            sx={{ minWidth: '20%', maxWidth: '20%' }}
+                                        />
+                                        <TextField
+                                            style={{ marginBottom: 16 }}
+                                            id='DeviceMinOffTime'
+                                            label={I18n.t('DeviceMinOffTime')}
+                                            variant="standard"
+                                            type="number"
+                                            value={valNumber('MinOffTime')}
+                                            onChange={handleNumberChange('MinOffTime')}
+                                            sx={{ minWidth: '20%', maxWidth: '20%' }}
+                                        />
+                                        <TextField
+                                            style={{ marginBottom: 16 }}
+                                            id='DeviceMaxOffTime'
+                                            label={I18n.t('DeviceMaxOffTime')}
+                                            variant="standard"
+                                            type="number"
+                                            value={valNumber('MaxOffTime')}
+                                            onChange={handleNumberChange('MaxOffTime')}
+                                            sx={{ minWidth: '20%', maxWidth: '20%' }}
+                                        />
+                                    </div>
+
+                                ) : null}
+                            </div>
+                        </FormControl>
 
                         <BoxDivider
                             Name={I18n.t('counter')}
                             theme={props.theme}
                         />
 
-                        <InputLabel id="device-MeasurementMethod-label">{I18n.t('select a type')}</InputLabel>
-                        <Select
-                            labelId="device-MeasurementMethod-label"
-                            value={valString('MeasurementMethod') || 'Measurement'}
-                            onChange={(e) => {
-                                const val = e.target.value ?? '';
-                                const updated = { ...(device ?? {}), MeasurementMethod: val } as SempDevice;
-                                setDevice(updated);
-                                persistDevice(updated);
-                            }}
-                            displayEmpty={false}
-                        >
-                            <MenuItem value="Measurement">
-                                <em>{I18n.t('Measurement')}</em>
-                            </MenuItem>
-                            <MenuItem value="Estimation">
-                                <em>{I18n.t('Estimation')}</em>
-                            </MenuItem>
-                        </Select>
 
-                        <SelectOID
-                            settingName={I18n.t('DeviceOIDPower')}
-                            socket={props.socket}
-                            theme={props.theme}
-                            themeName={props.themeName}
-                            themeType={props.themeType}
-                            Value={valString('OIDPower') }
-                            onChange={handleStringChangeValue('OIDPower')}
-                        />
+                        <FormControl variant="standard" sx={{ minWidth: '30%', maxWidth: '50%' }}>
+                            <InputLabel id="device-MeasurementMethod-label">{I18n.t('select a type')}</InputLabel>
+                            <Select
+                                labelId="device-MeasurementMethod-label"
+                                value={valString('MeasurementMethod') || 'Measurement'}
+                                onChange={(e) => {
+                                    const val = e.target.value ?? '';
+                                    const updated = { ...(device ?? {}), MeasurementMethod: val } as SempDevice;
+                                    setDevice(updated);
+                                    persistDevice(updated);
+                                }}
+                                displayEmpty={false}
+                            >
+                                <MenuItem value="Measurement">
+                                    <em>{I18n.t('Measurement')}</em>
+                                </MenuItem>
+                                <MenuItem value="Estimation">
+                                    <em>{I18n.t('Estimation')}</em>
+                                </MenuItem>
+                            </Select>
+                        </FormControl>
 
 
+                        {(device && (device as any).MeasurementMethod) === "Measurement" ? (
 
-                        <InputLabel id="device-MeasurementUnit-label">{I18n.t('select a unit')}</InputLabel>
-                        <Select
-                            labelId="device-MeasurementUnit-label"
-                            value={valString('MeasurementUnit') || 'W'}
-                            onChange={(e) => {
-                                const val = e.target.value ?? '';
-                                const updated = { ...(device ?? {}), MeasurementUnit: val } as SempDevice;
-                                setDevice(updated);
-                                persistDevice(updated);
-                            }}
-                            displayEmpty={false}
-                        >
-                            <MenuItem value="W">
-                                <em>{I18n.t('W')}</em>
-                            </MenuItem>
-                            <MenuItem value="kW">
-                                <em>{I18n.t('kW')}</em>
-                            </MenuItem>
-                        </Select>
+                            <SelectOID
+                                settingName={I18n.t('DeviceOIDPower')}
+                                socket={props.socket}
+                                theme={props.theme}
+                                themeName={props.themeName}
+                                themeType={props.themeType}
+                                Value={valString('OIDPower')}
+                                onChange={handleStringChangeValue('OIDPower')}
+                            />
+                        ) : null}
+
+                        <FormControl variant="standard" sx={{ minWidth: '30%', maxWidth: '40%' }}>
+                            <InputLabel id="device-MeasurementUnit-label">{I18n.t('select a unit')}</InputLabel>
+                            <Select
+                                labelId="device-MeasurementUnit-label"
+                                value={valString('MeasurementUnit') || 'W'}
+                                onChange={(e) => {
+                                    const val = e.target.value ?? '';
+                                    const updated = { ...(device ?? {}), MeasurementUnit: val } as SempDevice;
+                                    setDevice(updated);
+                                    persistDevice(updated);
+                                }}
+                                displayEmpty={false}
+                            >
+                                <MenuItem value="W">
+                                    <em>{I18n.t('W')}</em>
+                                </MenuItem>
+                                <MenuItem value="kW">
+                                    <em>{I18n.t('kW')}</em>
+                                </MenuItem>
+                            </Select>
+                        </FormControl>
+
+
+                       
 
                         <BoxDivider
                             Name={I18n.t('switch')}
@@ -672,7 +716,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                             aria-label="DeviceTimerCancelIfNotOn"
                                         />
                                     }
-                                label={I18n.t('DeviceTimerCancelIfNotOn')}
+                                    label={I18n.t('DeviceTimerCancelIfNotOn')}
                                 />
                                 <TextField
                                     style={{ marginBottom: 16 }}
@@ -692,7 +736,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                             aria-label="DishwasherMode"
                                         />
                                     }
-                                label={I18n.t('DishwasherMode')}
+                                    label={I18n.t('DishwasherMode')}
                                 />
 
                                 <div>
@@ -783,7 +827,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                                             variant="standard"
                                                             placeholder={I18n.t('MaxRunTime')}
                                                             type="number"
-                                                            />
+                                                        />
                                                     </TableCell>
 
                                                     <TableCell>
@@ -801,7 +845,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
 
                             </div>
 
-                        ): null
+                        ) : null
                         }
 
 
@@ -868,29 +912,29 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                             <MenuItem value="3">
                                 <em>{I18n.t('1 or 3 Phase Switchable')}</em>
                             </MenuItem>
-                            
+
                         </Select>
 
-                        {valString('WallboxPhases') === '3' ? ( 
+                        {valString('WallboxPhases') === '3' ? (
                             <div>
-                        <TextField
-                            style={{ marginBottom: 16 }}
-                            id='Wallbox3phaseSwitchLimit'
-                            label={I18n.t('Wallbox3phaseSwitchLimit')}
-                            variant="standard"
-                            type="number"
-                            value={valNumber('Wallbox3phaseSwitchLimit')}
-                            onChange={handleNumberChange('Wallbox3phaseSwitchLimit')}
-                        />
+                                <TextField
+                                    style={{ marginBottom: 16 }}
+                                    id='Wallbox3phaseSwitchLimit'
+                                    label={I18n.t('Wallbox3phaseSwitchLimit')}
+                                    variant="standard"
+                                    type="number"
+                                    value={valNumber('Wallbox3phaseSwitchLimit')}
+                                    onChange={handleNumberChange('Wallbox3phaseSwitchLimit')}
+                                />
 
-                        <TextField
-                            style={{ marginBottom: 16 }}
-                            id='Wallbox3phaseSwitchDelay'
-                            label={I18n.t('Wallbox3phaseSwitchDelay')}
-                            variant="standard"
-                            type="number"
-                            value={valNumber('Wallbox3phaseSwitchDelay')}
-                            onChange={handleNumberChange('Wallbox3phaseSwitchDelay')}
+                                <TextField
+                                    style={{ marginBottom: 16 }}
+                                    id='Wallbox3phaseSwitchDelay'
+                                    label={I18n.t('Wallbox3phaseSwitchDelay')}
+                                    variant="standard"
+                                    type="number"
+                                    value={valNumber('Wallbox3phaseSwitchDelay')}
+                                    onChange={handleNumberChange('Wallbox3phaseSwitchDelay')}
                                 />
                             </div>
                         ) : null}
@@ -962,7 +1006,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                         </TableCell>
 
                                         <TableCell>
-                                            
+
                                         </TableCell>
 
                                         <TableCell>
@@ -972,7 +1016,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                                 onChange={(e) => onWallboxWriteUpdate(idx, 'Type', e.target.value)}
                                                 variant="standard"
                                                 placeholder={I18n.t('Type')}
-                                                
+
                                             />
                                         </TableCell>
 
@@ -983,7 +1027,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                                 onChange={(e) => onWallboxWriteUpdate(idx, 'SetValue', e.target.value)}
                                                 variant="standard"
                                                 placeholder={I18n.t('SetValue')}
-                                                
+
                                             />
                                         </TableCell>
                                     </TableRow>
@@ -1017,7 +1061,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                             </TableHead>
                             <TableBody>
                                 {((device as any).wallbox_oid_read ?? []).map((t: any, idx: number) => (
-                                     <TableRow key={idx}>
+                                    <TableRow key={idx}>
                                         <TableCell>
                                             <Checkbox
                                                 checked={!!t.active}
@@ -1100,7 +1144,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
 
 
 
-                    </FormControl>
+                    </div>
                 ) : (
                     <div>
                         <em>{I18n.t('device is inactive - activate to edit settings')}</em>

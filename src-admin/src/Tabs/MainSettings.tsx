@@ -137,6 +137,7 @@ const schema: ConfigItemPanel = {
             "type": "text",
             "label": "LogToCSVPath",
             "help": "LogToCSVPath_help",
+            "hidden": "if (!data.LogToCSV) return true;",
             "xs": 12,
             "sm": 12,
             "md": 4,
