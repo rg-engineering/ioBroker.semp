@@ -38,7 +38,111 @@ const schema: ConfigItemPanel = {
             "lg": 1,
             "xl": 1
         },
-        
+
+        "dividerHdr1": {
+            "newLine": true,
+            "type": "header",
+            "text": "general configuration",
+            "size": 2
+        },
+        "IPAddress": {
+            "newLine": true,
+            "type": "text",
+            "label": "IPAddress",
+            "help": "IP address SunnyHomeManger",
+            "xs": 12,
+            "sm": 12,
+            "md": 4,
+            "lg": 4,
+            "xl": 4
+        },
+        "UUID": {
+            "newLine": false,
+            "type": "text",
+            "label": "UUID",
+            "help": "unique ID of Semp-Adapter",
+            "xs": 12,
+            "sm": 12,
+            "md": 4,
+            "lg": 4,
+            "xl": 4
+        },
+        "SempPort": {
+            "newLine": true,
+            "type": "number",
+            "label": "SempPort",
+            "help": "SemPort_help",
+            "default": 9522,
+            "min": 1, 
+            "xs": 12,
+            "sm": 12,
+            "md": 4,
+            "lg": 4,
+            "xl": 4
+        },
+        "SempName": {
+            "newLine": true,
+            "type": "text",
+            "label": "SempName",
+            "help": "SempName_help",
+            "xs": 12,
+            "sm": 12,
+            "md": 4,
+            "lg": 4,
+            "xl": 4
+        },
+        "SempManufacturer": {
+            "newLine": false,
+            "type": "text",
+            "label": "SempManufacturer",
+            "help": "SempManufacturer_help",
+            "xs": 12,
+            "sm": 12,
+            "md": 4,
+            "lg": 4,
+            "xl": 4
+        },
+        "dividerHdr2": {
+            "newLine": true,
+            "type": "header",
+            "text": "logging configuration",
+            "size": 2
+        },
+        "extendedLog": {
+            "newLine": true,
+            "type": "checkbox",
+            "label": "extendedLog",
+            "help": "extendedLog_help",
+            "default": false, 
+            "xs": 12,
+            "sm": 12,
+            "md": 4,
+            "lg": 4,
+            "xl": 4
+        },
+        "LogToCSV": {
+            "newLine": false,
+            "type": "checkbox",
+            "label": "LogToCSV",
+            "help": "LogToCSV_help",
+            "default": false,
+            "xs": 12,
+            "sm": 12,
+            "md": 4,
+            "lg": 4,
+            "xl": 4
+        },
+        "LogToCSVPath": {
+            "newLine": false,
+            "type": "text",
+            "label": "LogToCSVPath",
+            "help": "LogToCSVPath_help",
+            "xs": 12,
+            "sm": 12,
+            "md": 4,
+            "lg": 4,
+            "xl": 4
+        },
     }
 }
 
@@ -68,8 +172,14 @@ export default function MainSettings(props: SettingsProps): React.JSX.Element {
                     //console.log("MainSettings onChange native: " + JSON.stringify(native));
 
                     //Daten kopieren
-
-                    //native.locations = params.locations;
+                    native.IPAddress = params.IPAddress;
+                    native.UUID = params.UUID;
+                    native.SempPort = params.SempPort;
+                    native.SempName = params.SempName;
+                    native.SempManufacturer = params.SempManufacturer;
+                    native.extendedLog = params.extendedLog;
+                    native.LogToCSV = params.LogToCSV;
+                    native.LogToCSVPath = params.LogToCSVPath;
                     
                     props.changeNative(native);
                 }}

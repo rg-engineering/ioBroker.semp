@@ -23,6 +23,7 @@ import {
 
 
 import TabMainSettings from './Tabs/MainSettings';
+import TabDeviceSettings from './Tabs/DeviceSettings';
 
 
 
@@ -72,7 +73,10 @@ const tabs: {
             name: 'main_settings',
             title: 'Main_settings',
         },
-
+        {
+            name: 'device_settings',
+            title: 'Device_settings',
+        },
 
     ];
 
@@ -251,6 +255,31 @@ class App extends GenericApp<GenericAppProps, AppState> {
         );
     }
 
+    renderDeviceSettings(): React.JSX.Element {
+        if (!this.state.systemConfig) {
+            return <div>{I18n.t('Loading...')}</div>;
+        }
+
+        console.log("renderDeviceSettings called");
+
+        return (
+            <TabDeviceSettings
+                alive={this.state.alive}
+                common={this.common || ({} as ioBroker.InstanceCommon)}
+                socket={this.socket}
+                native={this.state.native as SempAdapterConfig}
+                instance={this.instance}
+                adapterName={this.adapterName}
+                changeNative={(native): void =>
+                    this.setState({ native, changed: this.getIsChanged(native) })
+                }
+                themeType={this.state.themeType}
+                theme={this.state.theme}
+                themeName={this.state.themeName}
+                systemConfig={this.state.systemConfig}
+            />
+        );
+    }
     
     
 
@@ -261,9 +290,9 @@ class App extends GenericApp<GenericAppProps, AppState> {
         if (this.state.selectedTab === 'main_settings' || !this.state.selectedTab) {
             return this.renderMainSettings();
         }
-
-
-
+        if (this.state.selectedTab === 'device_settings') {
+            return this.renderDeviceSettings();
+        }
 
         console.log("renderTab done");
 
