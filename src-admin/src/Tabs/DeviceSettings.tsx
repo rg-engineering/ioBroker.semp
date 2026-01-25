@@ -32,31 +32,22 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import BoxDivider from '../Components/BoxDivider'
+import SelectOID from '../Components/SelectOID';
 
 
 /*
-Pseudocode (Detaillierter Plan)
-1. Fehlende MUI-Komponenten und Icons importieren: Tooltip, IconButton, Table*, AddIcon, DeleteIcon.
-2. Energy-Requests-Logik:
-   - settings = device?.EnergyRequests ?? []
-   - colCount = Anzahl sichtbarer Tabellen-Spalten (inkl. Aktions-Spalte)
-   - onAdd: neues Request-Objekt erstellen, zu device.EnergyRequests hinzufügen, setDevice + persistDevice aufrufen.
-   - onUpdate: ein bestimmtes Feld eines Requests aktualisieren, setDevice + persistDevice.
-   - onRemove: Request aus Array entfernen, setDevice + persistDevice.
-3. Tabelle reparieren:
-   - Header mit allen verwendeten Spalten (ID, Days, EarliestStartTime, LatestEndTime, MinRunTime, MaxRunTime, Aktionen).
-   - Body verwendet settings.map((t: any, idx: number) => ...)
-   - Wenn settings leer, Zeile mit colSpan = colCount anzeigen.
-4. Zugriff auf Devices/EnergyRequests korrigieren:
-   - Statt props.native.devices[selectedDevice] das lokale device-Objekt verwenden.
-5. Diverse Benennungs-Inkonsistenzen für Bool-Felder beheben:
-   - 'TimerCancelIfNotOn' -> 'DeviceTimerCancelIfNotOn'
-   - 'DishwasherMode' -> 'DeviceDishwasherMode'
-6. inputProps-Type-Deprecation verhindern:
-   - inputProps={{ min: 0 } as any} verwenden, um Typsignal zu vermeiden (konsequent an allen Stellen).
-7. Minimal invasive Änderungen: existierende UI-Struktur und Persistenz-Logik erhalten.
+PSEUDOCODE / PLAN (detailliert):
+- Behalte bisherigen Component-Aufbau.
+- Probleme beheben:
+  - SelectOID verlangt onChange(value: string). Füge handleStringChangeValue hinzu, das direkt einen string akzeptiert.
+  - Bestehende handleStringChange behalte für <TextField> (event-basiert).
+  - handleBoolChange so erweitern, dass auch Keys außerhalb von keyof SempDevice akzeptiert werden (z.B. historische/freie Keys).
+  - Falsch geschriebene Komponente <CheckBox> zu <Checkbox> korrigieren.
+  - SelectOID-Callbacks im Wallbox-Teil so anpassen, dass sie den übergebenen string verwenden (nicht e.target.value).
+  - Entferne/deaktiviere problematische/deprecated inputProps / InputProps Verwendungen (min/max). Entferne sie, um TS-Fehler zu vermeiden; behalte type="number".
+- Zusätzliche kleine Typ-Anpassungen: casts mit "as any" nur dort, wo notwendig.
+- Danach Komponente kompilierbar machen ohne die UI-Logik zu verändern.
 */
-
 
 interface SettingsProps {
     common: ioBroker.InstanceCommon;
@@ -152,10 +143,19 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
         setDevice(newDevice);
     };
 
-    // Generische Handler
+    // Generische Handler (event-basiert für TextField)
     const handleStringChange = (field: keyof SempDevice) => (e: React.ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value ?? '';
         const updated = { ...(device ?? {}), [field]: val } as SempDevice;
+        setDevice(updated);
+        persistDevice(updated);
+    };
+
+    // Neuen Handler für SelectOID / Komponenten, die direkt einen string übergeben
+    const handleStringChangeValue = (field: keyof SempDevice | string) => (value: string): void => {
+        const val = value ?? '';
+        // device als any behandeln, da field evtl. nicht im Typ enthalten ist
+        const updated = { ...(device ?? {}), [field]: val } as unknown as SempDevice;
         setDevice(updated);
         persistDevice(updated);
     };
@@ -168,9 +168,10 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
         persistDevice(updated);
     };
 
-    const handleBoolChange = (field: keyof SempDevice) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    // handleBoolChange akzeptiert nun auch string-Keys (historische/abweichende Keys)
+    const handleBoolChange = (field: keyof SempDevice | string) => (e: React.ChangeEvent<HTMLInputElement>) => {
         const val = !!e.target.checked;
-        const updated = { ...(device ?? {}), [field]: val } as SempDevice;
+        const updated = { ...(device ?? {}), [field]: val } as unknown as SempDevice;
         setDevice(updated);
         persistDevice(updated);
     };
@@ -230,6 +231,36 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
             setDevice(updated);
             persistDevice(updated);
         }
+    };
+
+    // Wallbox handlers (write)
+    const onWallboxWriteUpdate = (idx: number, key: string, value: any): void => {
+        if (!device) return;
+        const arr = [...((device as any).wallbox_oid_write ?? [])];
+        arr[idx] = { ...(arr[idx] ?? {}), [key]: value };
+        const updated = { ...device, ...({ wallbox_oid_write: arr } as any) } as SempDevice;
+        setDevice(updated);
+        persistDevice(updated);
+    };
+
+    // Wallbox handlers (read)
+    const onWallboxReadUpdate = (idx: number, key: string, value: any): void => {
+        if (!device) return;
+        const arr = [...((device as any).wallbox_oid_read ?? [])];
+        arr[idx] = { ...(arr[idx] ?? {}), [key]: value };
+        const updated = { ...device, ...({ wallbox_oid_read: arr } as any) } as SempDevice;
+        setDevice(updated);
+        persistDevice(updated);
+    };
+
+    // Toggle active for wallbox items (write)
+    const onWallboxWriteToggleActive = (idx: number, checked: boolean): void => {
+        onWallboxWriteUpdate(idx, 'active', !!checked);
+    };
+
+    // Toggle active for wallbox items (read)
+    const onWallboxReadToggleActive = (idx: number, checked: boolean): void => {
+        onWallboxReadUpdate(idx, 'active', !!checked);
     };
 
     return (
@@ -382,7 +413,6 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                             label={I18n.t('DeviceMinPower (W)')}
                             variant="standard"
                             type="number"
-                            inputProps={{ min: 0 } as any}
                             value={valNumber('MinPower')}
                             onChange={handleNumberChange('MinPower')}
                         />
@@ -393,7 +423,6 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                             label={I18n.t('DeviceMaxPower (W)')}
                             variant="standard"
                             type="number"
-                            inputProps={{ min: 0 } as any}
                             value={valNumber('MaxPower')}
                             onChange={handleNumberChange('MaxPower')}
                         />
@@ -418,7 +447,6 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                     label={I18n.t('DeviceMinOnTime')}
                                     variant="standard"
                                     type="number"
-                                    inputProps={{ min: 0 } as any}
                                     value={valNumber('MinOnTime')}
                                     onChange={handleNumberChange('MinOnTime')}
                                 />
@@ -428,7 +456,6 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                     label={I18n.t('DeviceMaxOnTime')}
                                     variant="standard"
                                     type="number"
-                                    inputProps={{ min: 0 } as any}
                                     value={valNumber('MaxOnTime')}
                                     onChange={handleNumberChange('MaxOnTime')}
                                 />
@@ -438,7 +465,6 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                     label={I18n.t('DeviceMinOffTime')}
                                     variant="standard"
                                     type="number"
-                                    inputProps={{ min: 0 } as any}
                                     value={valNumber('MinOffTime')}
                                     onChange={handleNumberChange('MinOffTime')}
                                 />
@@ -448,7 +474,6 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                     label={I18n.t('DeviceMaxOffTime')}
                                     variant="standard"
                                     type="number"
-                                    inputProps={{ min: 0 } as any}
                                     value={valNumber('MaxOffTime')}
                                     onChange={handleNumberChange('MaxOffTime')}
                                 />
@@ -480,14 +505,17 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                             </MenuItem>
                         </Select>
 
-                        <TextField
-                            style={{ marginBottom: 16 }}
-                            id='DeviceOIDPower'
-                            label={I18n.t('DeviceOIDPower')}
-                            variant="standard"
-                            value={valString('OIDPower')}
-                            onChange={handleStringChange('OIDPower')}
+                        <SelectOID
+                            settingName={I18n.t('DeviceOIDPower')}
+                            socket={props.socket}
+                            theme={props.theme}
+                            themeName={props.themeName}
+                            themeType={props.themeType}
+                            Value={valString('OIDPower') }
+                            onChange={handleStringChangeValue('OIDPower')}
                         />
+
+
 
                         <InputLabel id="device-MeasurementUnit-label">{I18n.t('select a unit')}</InputLabel>
                         <Select
@@ -537,14 +565,19 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                             </MenuItem>
                         </Select>
 
-                        <TextField
-                            style={{ marginBottom: 16 }}
-                            id='DeviceOIDStatus'
-                            label={I18n.t('DeviceOIDStatus')}
-                            variant="standard"
-                            value={valString('OIDStatus')}
-                            onChange={handleStringChange('OIDStatus')}
+
+
+                        <SelectOID
+                            settingName={I18n.t('DeviceOIDStatus')}
+                            socket={props.socket}
+                            theme={props.theme}
+                            themeName={props.themeName}
+                            themeType={props.themeType}
+                            Value={valString('OIDStatus')}
+                            onChange={handleStringChangeValue('OIDStatus')}
                         />
+
+
 
                         <div>
                             <TextField
@@ -553,7 +586,6 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                 label={I18n.t('DeviceStatusDetectionLimit')}
                                 variant="standard"
                                 type="number"
-                                inputProps={{ min: 0 } as any}
                                 value={valNumber('StatusDetectionLimit')}
                                 onChange={handleNumberChange('StatusDetectionLimit')}
                             />
@@ -564,7 +596,6 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                 label={I18n.t('DeviceStatusDetectionLimitTimeOn')}
                                 variant="standard"
                                 type="number"
-                                inputProps={{ min: 0 } as any}
                                 value={valNumber('StatusDetectionLimitTimeOn')}
                                 onChange={handleNumberChange('StatusDetectionLimitTimeOn')}
                             />
@@ -575,7 +606,6 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                 label={I18n.t('DeviceStatusDetectionLimitTimeOff')}
                                 variant="standard"
                                 type="number"
-                                inputProps={{ min: 0 } as any}
                                 value={valNumber('StatusDetectionLimitTimeOff')}
                                 onChange={handleNumberChange('StatusDetectionLimitTimeOff')}
                             />
@@ -585,7 +615,6 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                 label={I18n.t('DeviceStatusDetectionMinRunTime')}
                                 variant="standard"
                                 type="number"
-                                inputProps={{ min: 0 } as any}
                                 value={valNumber('StatusDetectionMinRunTime')}
                                 onChange={handleNumberChange('StatusDetectionMinRunTime')}
                             />
@@ -603,14 +632,17 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                             label={I18n.t('Has OID Switch')}
                         />
 
-                        <TextField
-                            style={{ marginBottom: 16 }}
-                            id='DeviceOIDSwitch'
-                            label={I18n.t('DeviceOIDSwitch')}
-                            variant="standard"
-                            value={valString('OIDSwitch')}
-                            onChange={handleStringChange('OIDSwitch')}
+
+                        <SelectOID
+                            settingName={I18n.t('DeviceOIDSwitch')}
+                            socket={props.socket}
+                            theme={props.theme}
+                            themeName={props.themeName}
+                            themeType={props.themeType}
+                            Value={valString('OIDSwitch')}
+                            onChange={handleStringChangeValue('OIDSwitch')}
                         />
+
 
                         <BoxDivider
                             Name={I18n.t('energy requests')}
@@ -648,7 +680,6 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                     label={I18n.t('DeviceTimerCancelIfNotOnTime')}
                                     variant="standard"
                                     type="number"
-                                    inputProps={{ min: 0 } as any}
                                     value={valNumber('TimerCancelIfNotOnTime')}
                                     onChange={handleNumberChange('TimerCancelIfNotOnTime')}
                                 />
@@ -741,7 +772,6 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                                             variant="standard"
                                                             placeholder={I18n.t('MinRunTime')}
                                                             type="number"
-                                                            inputProps={{ min: 0 } as any}
                                                         />
                                                     </TableCell>
 
@@ -753,7 +783,6 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                                             variant="standard"
                                                             placeholder={I18n.t('MaxRunTime')}
                                                             type="number"
-                                                            inputProps={{ min: 0 } as any}
                                                             />
                                                     </TableCell>
 
@@ -787,7 +816,6 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                             label={I18n.t('DeviceBatteryCapacity')}
                             variant="standard"
                             type="number"
-                            inputProps={{ min: 0 } as any}
                             value={valNumber('BatteryCapacity')}
                             onChange={handleNumberChange('BatteryCapacity')}
                         />
@@ -851,7 +879,6 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                             label={I18n.t('Wallbox3phaseSwitchLimit')}
                             variant="standard"
                             type="number"
-                            inputProps={{ min: 0 } as any}
                             value={valNumber('Wallbox3phaseSwitchLimit')}
                             onChange={handleNumberChange('Wallbox3phaseSwitchLimit')}
                         />
@@ -862,7 +889,6 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                             label={I18n.t('Wallbox3phaseSwitchDelay')}
                             variant="standard"
                             type="number"
-                            inputProps={{ min: 0 } as any}
                             value={valNumber('Wallbox3phaseSwitchDelay')}
                             onChange={handleNumberChange('Wallbox3phaseSwitchDelay')}
                                 />
@@ -895,19 +921,19 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {native.props.devices[selectedDevice].wallbox_oid_write.map((t: any, idx: number) => (
+                                {((device as any).wallbox_oid_write ?? []).map((t: any, idx: number) => (
                                     <TableRow key={idx}>
                                         <TableCell>
-                                            <CheckBox
+                                            <Checkbox
                                                 checked={!!t.active}
-                                                onChange={(e) => onWallboxOIDUpdate(idx, 'active', e.target.checked)}
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onWallboxWriteToggleActive(idx, (e.target as HTMLInputElement).checked)}
                                             />
                                         </TableCell>
                                         <TableCell>
                                             <TextField
                                                 fullWidth
                                                 value={t.must}
-                                                onChange={(e) => onUpdate(idx, 'must', e.target.value)}
+                                                onChange={(e) => onWallboxWriteUpdate(idx, 'must', e.target.value)}
                                                 variant="standard"
                                                 placeholder={I18n.t('ID')}
                                             />
@@ -917,19 +943,21 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                             <TextField
                                                 fullWidth
                                                 value={t.Name}
-                                                onChange={(e) => onUpdate(idx, 'Name', e.target.value)}
+                                                onChange={(e) => onWallboxWriteUpdate(idx, 'Name', e.target.value)}
                                                 variant="standard"
                                                 placeholder={I18n.t('Name')}
                                             />
                                         </TableCell>
 
                                         <TableCell>
-                                            <TextField
-                                                fullWidth
-                                                value={t.OID}
-                                                onChange={(e) => onUpdate(idx, 'OID', e.target.value)}
-                                                variant="standard"
-                                                placeholder={I18n.t('OID')}
+                                            <SelectOID
+                                                settingName={I18n.t('OID')}
+                                                socket={props.socket}
+                                                theme={props.theme}
+                                                themeName={props.themeName}
+                                                themeType={props.themeType}
+                                                Value={t.OID}
+                                                onChange={(value: string) => onWallboxWriteUpdate(idx, 'OID', value)}
                                             />
                                         </TableCell>
 
@@ -941,7 +969,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                             <TextField
                                                 fullWidth
                                                 value={t.Type}
-                                                onChange={(e) => onUpdate(idx, 'Type', e.target.value)}
+                                                onChange={(e) => onWallboxWriteUpdate(idx, 'Type', e.target.value)}
                                                 variant="standard"
                                                 placeholder={I18n.t('Type')}
                                                 
@@ -952,7 +980,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                             <TextField
                                                 fullWidth
                                                 value={t.SetValue}
-                                                onChange={(e) => onUpdate(idx, 'SetValue', e.target.value)}
+                                                onChange={(e) => onWallboxWriteUpdate(idx, 'SetValue', e.target.value)}
                                                 variant="standard"
                                                 placeholder={I18n.t('SetValue')}
                                                 
@@ -969,7 +997,6 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                             label={I18n.t('URLReadPollRate')}
                             variant="standard"
                             type="number"
-                            inputProps={{ min: 0, max:60, step:1 } as any}
                             value={valNumber('URLReadPollRate')}
                             onChange={handleNumberChange('URLReadPollRate')}
                         />
@@ -989,19 +1016,19 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {native.props.devices[selectedDevice].wallbox_oid_read.map((t: any, idx: number) => (
-                                    <TableRow key={idx}>
+                                {((device as any).wallbox_oid_read ?? []).map((t: any, idx: number) => (
+                                     <TableRow key={idx}>
                                         <TableCell>
-                                            <CheckBox
+                                            <Checkbox
                                                 checked={!!t.active}
-                                                onChange={(e) => onWallboxOIDUpdate(idx, 'active', e.target.checked)}
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onWallboxReadToggleActive(idx, (e.target as HTMLInputElement).checked)}
                                             />
                                         </TableCell>
                                         <TableCell>
                                             <TextField
                                                 fullWidth
                                                 value={t.must}
-                                                onChange={(e) => onUpdate(idx, 'must', e.target.value)}
+                                                onChange={(e) => onWallboxReadUpdate(idx, 'must', e.target.value)}
                                                 variant="standard"
                                                 placeholder={I18n.t('ID')}
                                             />
@@ -1011,19 +1038,21 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                             <TextField
                                                 fullWidth
                                                 value={t.Name}
-                                                onChange={(e) => onUpdate(idx, 'Name', e.target.value)}
+                                                onChange={(e) => onWallboxReadUpdate(idx, 'Name', e.target.value)}
                                                 variant="standard"
                                                 placeholder={I18n.t('Name')}
                                             />
                                         </TableCell>
 
                                         <TableCell>
-                                            <TextField
-                                                fullWidth
-                                                value={t.OID}
-                                                onChange={(e) => onUpdate(idx, 'OID', e.target.value)}
-                                                variant="standard"
-                                                placeholder={I18n.t('OID')}
+                                            <SelectOID
+                                                settingName={I18n.t('OID')}
+                                                socket={props.socket}
+                                                theme={props.theme}
+                                                themeName={props.themeName}
+                                                themeType={props.themeType}
+                                                Value={t.OID}
+                                                onChange={(value: string) => onWallboxReadUpdate(idx, 'OID', value)}
                                             />
                                         </TableCell>
 
@@ -1035,7 +1064,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                             <TextField
                                                 fullWidth
                                                 value={t.Type}
-                                                onChange={(e) => onUpdate(idx, 'Type', e.target.value)}
+                                                onChange={(e) => onWallboxReadUpdate(idx, 'Type', e.target.value)}
                                                 variant="standard"
                                                 placeholder={I18n.t('Type')}
 
@@ -1046,7 +1075,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                             <TextField
                                                 fullWidth
                                                 value={t.Path2Check}
-                                                onChange={(e) => onUpdate(idx, 'Path2Check', e.target.value)}
+                                                onChange={(e) => onWallboxReadUpdate(idx, 'Path2Check', e.target.value)}
                                                 variant="standard"
                                                 placeholder={I18n.t('Path2Check')}
 
@@ -1057,7 +1086,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                                             <TextField
                                                 fullWidth
                                                 value={t.SetValue}
-                                                onChange={(e) => onUpdate(idx, 'SetValue', e.target.value)}
+                                                onChange={(e) => onWallboxReadUpdate(idx, 'SetValue', e.target.value)}
                                                 variant="standard"
                                                 placeholder={I18n.t('SetValue')}
 
