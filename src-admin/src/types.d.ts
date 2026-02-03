@@ -23,6 +23,8 @@ interface WallboxOIDSettings {
 }
 
 
+
+
 interface SempDevice {
     IsActive: boolean;
     ID: string;
@@ -74,6 +76,10 @@ interface SempDevice {
 
     URLReadPollRate: number;
     wallbox_oid_read: WallboxOIDSettings[];
+
+
+    //lagacy settings, to be removed later
+    WallboxOIDs: WallboxOIDSettings[]
 
 
 }

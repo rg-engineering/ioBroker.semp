@@ -42,6 +42,7 @@ import ukLang from './i18n/uk.json';
 import zhCnLang from './i18n/zh-cn.json';
 
 import type { SempAdapterConfig } from "./types";
+import LegacyMigrator from './MigrateData';
 
 
 const styles: Record<string, any> = {
@@ -131,30 +132,36 @@ class App extends GenericApp<GenericAppProps, AppState> {
 
     onPrepareSave(): boolean {
         console.log("onPrepareSave called " + JSON.stringify(this.state.native));
-
         return true;
     }
 
     onLoadConfig(): void {
         console.log("onLoadConfig called " + JSON.stringify(this.state.native));
-
-        
-
         return;
-
     }
 
     async onConnectionReady(): Promise<void> {
         super.onConnectionReady();
-        const selectedTab = window.localStorage.getItem(`daswetter.${this.instance}.selectedTab`) || 'main_settings';
+        const selectedTab = window.localStorage.getItem(`semp.${this.instance}.selectedTab`) || 'main_settings';
 
         void this.socket.getEnums('rooms').then(rooms => this.setState({ moreLoaded: true, rooms }));
         void this.socket.getEnums('functions').then(functions => this.setState({ moreLoaded: true, functions }));
 
         const systemConfig = await this.socket.getSystemConfig();
-        const aliveState = await this.socket.getState(`system.adapter.daswetter.${this.instance}.alive`);
+        const aliveState = await this.socket.getState(`system.adapter.semp.${this.instance}.alive`);
         this.setState({ alive: !!aliveState?.val, selectedTab, systemConfig });
-        await this.socket.subscribeState(`system.adapter.daswetter.${this.instance}.alive`, this.onAliveChanged);
+        await this.socket.subscribeState(`system.adapter.semp.${this.instance}.alive`, this.onAliveChanged);
+
+        // Migration auslagern - ruft LegacyMigrator.migrate auf
+        try {
+            LegacyMigrator.migrate(
+                (this.state.native as any) || {},
+                this.getIsChanged.bind(this),
+                (partial) => this.setState(partial as any)
+            );
+        } catch (err) {
+            console.error('Fehler beim Aufruf des LegacyMigrators:', err);
+        }
 
         console.log("onConnectionReady done");
 
@@ -174,7 +181,7 @@ class App extends GenericApp<GenericAppProps, AppState> {
             const blob = new Blob([json], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            const fileName = `daswetter-config-instance-${this.instance}.json`;
+            const fileName = `semp-config-instance-${this.instance}.json`;
             a.href = url;
             a.download = fileName;
             document.body.appendChild(a);
@@ -205,7 +212,7 @@ class App extends GenericApp<GenericAppProps, AppState> {
         reader.onload = () => {
             try {
                 const text = reader.result as string;
-                const parsed = JSON.parse(text) as DasWetterAdapterConfig;
+                const parsed = JSON.parse(text) as SempAdapterConfig;
                 // Set native and mark as changed
                 this.setState({ native: parsed as any, changed: this.getIsChanged(parsed as any) });
                 // eslint-disable-next-line no-alert
@@ -340,7 +347,7 @@ class App extends GenericApp<GenericAppProps, AppState> {
                                 value={this.state.selectedTab || tabs[0].name}
                                 onChange={(_e, value) => {
                                     this.setState({ selectedTab: value });
-                                    window.localStorage.setItem(`daswetter.${this.instance}.selectedTab`, value);
+                                    window.localStorage.setItem(`semp.${this.instance}.selectedTab`, value);
                                 }}
                                 variant="scrollable"
                                 scrollButtons="auto"
