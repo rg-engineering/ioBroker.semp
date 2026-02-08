@@ -5,7 +5,6 @@ import React from 'react';
 
 import {
     Box,
-    FormControl,
     TextField,
     Select,
     InputLabel,
@@ -17,10 +16,10 @@ import {
     TableCell,
     TableHead,
     TableRow,
+    FormControl
 } from '@mui/material';
-import type {
-    SelectChangeEvent
-} from '@mui/material';
+import type { SelectChangeEvent } from '@mui/material';
+
 import { I18n } from '@iobroker/adapter-react-v5';
 import type {
     IobTheme,
@@ -33,6 +32,24 @@ import type { SempDevice } from "../types";
 import SelectOID from './SelectOID'; // vorhandene Komponente importieren (oder anpassen)
 import BoxDivider from './BoxDivider'
 
+/*
+Ausführlicher Plan / PSEUDOCODE:
+1. Ziel: Lint-Fehler vom Typ "@typescript-eslint/explicit-function-return-type" beheben,
+   indem allen Funktionen (insbesondere Pfeilfunktionen) explizite Rückgabetypen gegeben werden.
+2. Vorgehen:
+   - Definiere einen Typ für OID-Settings (`OidSetting`) zur klaren Typisierung von `createOidSetting`.
+   - Ergänze `ensureDefaults` mit einem Rückgabetyp `{ device: SempDevice; changed: boolean }`.
+   - Ergänze `persistDevice` mit Rückgabetyp `void`.
+   - Ergänze alle Hilfsfunktionen (`handleNumberChange`, `handleBoolChange`,
+     `onWallboxWriteUpdate`, `onWallboxWriteToggleActive`, `onWallboxReadUpdate`,
+     `onWallboxReadToggleActive`) mit passenden Rückgabetypen (`void` oder Funktionssignaturen).
+   - Annotiere die `useEffect`-Callbackfunktion mit `: void`.
+   - Bei inline-Event-Handlern in JSX: Rückgabetyp `: void` hinzufügen und Parametertypen angeben,
+     damit keine impliziten "any" entstehen.
+3. Ziel ist minimale Codeänderung, volle Typisierung der relevanten Funktionen,
+   und keine Funktionslogik verändern.
+*/
+
 type Props = {
     theme: IobTheme;
     onChange: (value: string) => void;
@@ -42,29 +59,39 @@ type Props = {
     themeType: ThemeType;
 };
 
+type OidSetting = {
+    active: boolean;
+    must: string;
+    Name: string;
+    OID: string;
+    Type: string;
+    SetValue: string;
+    Path2Check?: string;
+};
+
 export default function WallboxSettings(props: Props): React.JSX.Element {
 
     // Generische Helfer für wallbox initialisierung
-    const defaultWallboxReadNames = [
-        "DeviceOIDPlugConnected",
-        "DeviceOIDIsCharging",
-        "DeviceOIDIsError",
-        "DeviceOIDCounter",
-        "DeviceOIDStatus"
+    const defaultWallboxReadNames: [string, string][] = [
+        ["DeviceOIDPlugConnected", "mandatory"],
+        ["DeviceOIDIsCharging", "optionally"], 
+        ["DeviceOIDIsError", "optionally"],
+        ["DeviceOIDCounter", "optionally"], 
+        ["DeviceOIDStatus", "optionally"],
     ];
 
-    const defaultWallboxWriteNames = [
-        "DeviceOIDChargePower",
-        "DeviceOIDStartCharge",
-        "DeviceOIDStopCharge",
-        "DeviceOID3PhaseChargeEnable",
-        "DeviceOID3PhaseChargeDisable",
-        "DeviceOIDSwitch"
+    const defaultWallboxWriteNames: [string, string][] = [
+        ["DeviceOIDChargePower", "mandatory"], 
+        ["DeviceOIDStartCharge", "optionally"], 
+        ["DeviceOIDStopCharge", "optionally"], 
+        ["DeviceOID3PhaseChargeEnable", "optionally"],
+        ["DeviceOID3PhaseChargeDisable", "optionally"], 
+        ["DeviceOIDSwitch", "optionally"]
     ];
 
-    const createOidSetting = (name: string) => ({
+    const createOidSetting = (name: string, must: string): OidSetting => ({
         active: true,
-        must: '',
+        must: I18n.t(must),
         Name: name,
         OID: '',
         Type: '',
@@ -72,17 +99,43 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
         Path2Check: ''
     });
 
+    // Ensure defaults helper returns updated device and whether it changed
+    const ensureDefaults = (d: SempDevice): { device: SempDevice; changed: boolean } => {
+        const updated = { ...(d ?? {}) } as any;
+        let changed = false;
 
-    // Lokaler State für das Device
-    const [device, setDevice] = React.useState<SempDevice>(props.device ?? ({} as SempDevice));
+        if (!Array.isArray(updated.wallbox_oid_read) || updated.wallbox_oid_read.length === 0) {
+            updated.wallbox_oid_read = defaultWallboxReadNames.map((n) => createOidSetting(n[0], n[1]));
+            changed = true;
+        }
 
-    // Wenn props.device sich ändert, State anpassen
-    React.useEffect(() => {
-        setDevice(props.device ?? ({} as SempDevice));
+        if (!Array.isArray(updated.wallbox_oid_write) || updated.wallbox_oid_write.length === 0) {
+            updated.wallbox_oid_write = defaultWallboxWriteNames.map((n) => createOidSetting(n[0], n[1]));
+            changed = true;
+        }
+
+        return { device: updated as SempDevice, changed };
+    };
+
+    // Lokaler State für das Device (mit Defaults falls nötig)
+    const { device: initialDevice } = ensureDefaults(props.device ?? ({} as SempDevice));
+    const [device, setDevice] = React.useState<SempDevice>(initialDevice);
+
+    // Wenn props.device sich ändert, State anpassen und Defaults ergänzen falls nötig
+    React.useEffect((): void => {
+        const { device: ensured, changed } = ensureDefaults(props.device ?? ({} as SempDevice));
+        setDevice(ensured);
+        if (changed) {
+            try {
+                props.onChange(JSON.stringify(ensured ?? {}));
+            } catch {
+                props.onChange('');
+            }
+        }
     }, [props.device]);
 
     // Persistenz-Funktion (hier minimal: ruft props.onChange mit JSON string auf)
-    const persistDevice = (d: SempDevice) => {
+    const persistDevice = (d: SempDevice): void => {
         try {
             props.onChange(JSON.stringify(d ?? {}));
         } catch {
@@ -102,42 +155,41 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
         return v === undefined || v === null ? '' : String(v);
     };
 
-    // Generische Handler (event-basiert für TextField)
-    const handleStringChange = (field: keyof SempDevice) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const val = e.target.value ?? '';
-        const updated = { ...(device ?? {}), [field]: val } as SempDevice;
-        setDevice(updated);
-        persistDevice(updated);
-    };
 
     // Numerische Felder (behandelt leeren String als Entfernen)
-    const handleNumberChange = (field: keyof SempDevice) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const raw = e.target.value;
-        const updated = { ...(device ?? {}) } as any;
-        if (raw === '' || raw === null) {
-            // Entferne Feld oder setze auf undefined
-            delete updated[field];
-        } else {
-            const num = Number(raw);
-            updated[field] = Number.isNaN(num) ? raw : num;
-        }
-        const updatedTyped = updated as SempDevice;
-        setDevice(updatedTyped);
-        persistDevice(updatedTyped);
+    const handleNumberChange = (field: keyof SempDevice): ((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void) => {
+        return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+            const raw = e.target.value;
+            const updated = { ...(device ?? {}) } as any;
+            if (raw === '' || raw === null) {
+                // Entferne Feld oder setze auf undefined
+                delete updated[field];
+            } else {
+                const num = Number(raw);
+                updated[field] = Number.isNaN(num) ? raw : num;
+            }
+            const updatedTyped = updated as SempDevice;
+            setDevice(updatedTyped);
+            persistDevice(updatedTyped);
+        };
     };
 
     // Checkbox / boolean Handler
-    const handleBoolChange = (field: keyof SempDevice) => (e: React.ChangeEvent<HTMLInputElement>) => {
-        const val = e.target.checked;
-        const updated = { ...(device ?? {}), [field]: val } as SempDevice;
-        setDevice(updated);
-        persistDevice(updated);
+    const handleBoolChange = (field: keyof SempDevice): ((e: React.ChangeEvent<HTMLInputElement>) => void) => {
+        return (e: React.ChangeEvent<HTMLInputElement>): void => {
+            const val = e.target.checked;
+            const updated = { ...(device ?? {}), [field]: val } as SempDevice;
+            setDevice(updated);
+            persistDevice(updated);
+        };
     };
 
     // Hilfsfunktionen für wallbox_oid_write
-    const onWallboxWriteUpdate = (idx: number, key: string, value: any) => {
+    const onWallboxWriteUpdate = (idx: number, key: string, value: any): void => {
         const list = Array.isArray((device as any).wallbox_oid_write) ? (device as any).wallbox_oid_write.slice() : [];
-        while (list.length <= idx) list.push({});
+        while (list.length <= idx) {
+            list.push({});
+        }
         const item = { ...(list[idx] ?? {}) };
         item[key] = value;
         list[idx] = item;
@@ -146,9 +198,11 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
         persistDevice(updated);
     };
 
-    const onWallboxWriteToggleActive = (idx: number, active: boolean) => {
+    const onWallboxWriteToggleActive = (idx: number, active: boolean): void => {
         const list = Array.isArray((device as any).wallbox_oid_write) ? (device as any).wallbox_oid_write.slice() : [];
-        while (list.length <= idx) list.push({});
+        while (list.length <= idx) {
+            list.push({});
+        }
         const item = { ...(list[idx] ?? {}) };
         item.active = active;
         list[idx] = item;
@@ -158,9 +212,11 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
     };
 
     // Hilfsfunktionen für wallbox_oid_read
-    const onWallboxReadUpdate = (idx: number, key: string, value: any) => {
+    const onWallboxReadUpdate = (idx: number, key: string, value: any): void => {
         const list = Array.isArray((device as any).wallbox_oid_read) ? (device as any).wallbox_oid_read.slice() : [];
-        while (list.length <= idx) list.push({});
+        while (list.length <= idx) {
+            list.push({});
+        }
         const item = { ...(list[idx] ?? {}) };
         item[key] = value;
         list[idx] = item;
@@ -169,9 +225,11 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
         persistDevice(updated);
     };
 
-    const onWallboxReadToggleActive = (idx: number, active: boolean) => {
+    const onWallboxReadToggleActive = (idx: number, active: boolean): void => {
         const list = Array.isArray((device as any).wallbox_oid_read) ? (device as any).wallbox_oid_read.slice() : [];
-        while (list.length <= idx) list.push({});
+        while (list.length <= idx) {
+            list.push({});
+        }
         const item = { ...(list[idx] ?? {}) };
         item.active = active;
         list[idx] = item;
@@ -182,303 +240,339 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
 
     return (
 
-        <div>
+        <Box
+            style={{ margin: 10 }}
+        >
             <BoxDivider
                 Name={I18n.t('wallbox')}
                 theme={props.theme}
             />
 
-            <TextField
-                style={{ marginBottom: 16 }}
-                id='DeviceBatteryCapacity'
-                label={I18n.t('DeviceBatteryCapacity')}
-                variant="standard"
-                type="number"
-                value={valNumber('BatteryCapacity')}
-                onChange={handleNumberChange('BatteryCapacity')}
-            />
-
-
-            <InputLabel id="device-WallboxChargeTime-label">{I18n.t('select a charge time')}</InputLabel>
-            <Select
-                labelId="device-WallboxChargeTime-label"
-                value={valString('WallboxChargeTime') || '1'}
-                onChange={(e) => {
-                    const val = (e.target as HTMLInputElement).value ?? '';
-                    const updated = { ...(device ?? {}), WallboxChargeTime: val } as SempDevice;
-                    setDevice(updated);
-                    persistDevice(updated);
-                }}
-                displayEmpty={false}
+            <Box
+                style={{ margin: 10 }}
             >
-                <MenuItem value="1">
-                    <em>{I18n.t('12h')}</em>
-                </MenuItem>
-                <MenuItem value="2">
-                    <em>{I18n.t('24h')}</em>
-                </MenuItem>
-                <MenuItem value="3">
-                    <em>{I18n.t('endless')}</em>
-                </MenuItem>
-                <MenuItem value="4">
-                    <em>{I18n.t('user defined')}</em>
-                </MenuItem>
-            </Select>
+                <TextField
+                    style={{ marginBottom: 16 }}
+                    id='DeviceBatteryCapacity'
+                    label={I18n.t('DeviceBatteryCapacity')}
+                    variant="standard"
+                    type="number"
+                    inputProps={{ min: 0 }}
+                    value={valNumber('BatteryCapacity')}
+                    onChange={handleNumberChange('BatteryCapacity')}
+                    sx={{ minWidth: '20%', maxWidth: '20%', marginRight: '10px' }}
+                />
 
-            <InputLabel id="device-WallboxPhases-label">{I18n.t('select a number of phases')}</InputLabel>
-            <Select
-                labelId="device-WallboxPhases-label"
-                value={valString('WallboxPhases') || '1'}
-                onChange={(e) => {
-                    const val = (e.target as HTMLInputElement).value ?? '';
-                    const updated = { ...(device ?? {}), WallboxPhases: val } as SempDevice;
-                    setDevice(updated);
-                    persistDevice(updated);
-                }}
-                displayEmpty={false}
+                <FormControl variant="standard" sx={{ minWidth: '20%', maxWidth: '30%' }}>
+                    <InputLabel id="device-WallboxChargeTime-label">{I18n.t('select a charge time')}</InputLabel>
+                    <Select
+                        labelId="device-WallboxChargeTime-label"
+                        value={valString('WallboxChargeTime') || '1'}
+                        onChange={(e: SelectChangeEvent<string>): void => {
+                            const val = e.target.value ?? '';
+                            const updated = { ...(device ?? {}), WallboxChargeTime: val } as SempDevice;
+                            setDevice(updated);
+                            persistDevice(updated);
+                        }}
+                        displayEmpty={false}
+                    >
+                        <MenuItem value="1">
+                            <em>{I18n.t('12h')}</em>
+                        </MenuItem>
+                        <MenuItem value="2">
+                            <em>{I18n.t('24h')}</em>
+                        </MenuItem>
+                        <MenuItem value="3">
+                            <em>{I18n.t('endless')}</em>
+                        </MenuItem>
+                        <MenuItem value="4">
+                            <em>{I18n.t('user defined')}</em>
+                        </MenuItem>
+                    </Select>
+                </FormControl>
+            </Box>
+
+
+            <Box
+                style={{ margin: 10 }}
             >
-                <MenuItem value="1">
-                    <em>{I18n.t('1Phase (230V)')}</em>
-                </MenuItem>
-                <MenuItem value="2">
-                    <em>{I18n.t('3Phase (400)')}</em>
-                </MenuItem>
-                <MenuItem value="3">
-                    <em>{I18n.t('1 or 3 Phase Switchable')}</em>
-                </MenuItem>
 
-            </Select>
+                <FormControl variant="standard" sx={{ minWidth: '20%', maxWidth: '30%' }}>
+                    <InputLabel id="device-WallboxPhases-label">{I18n.t('select a number of phases')}</InputLabel>
+                    <Select
+                        labelId="device-WallboxPhases-label"
+                        value={valString('WallboxPhases') || '1'}
+                        onChange={(e: SelectChangeEvent<string>): void => {
+                            const val = e.target.value ?? '';
+                            const updated = { ...(device ?? {}), WallboxPhases: val } as SempDevice;
+                            setDevice(updated);
+                            persistDevice(updated);
+                        }}
+                        displayEmpty={false}
+                    >
+                        <MenuItem value="1">
+                            <em>{I18n.t('1Phase (230V)')}</em>
+                        </MenuItem>
+                        <MenuItem value="2">
+                            <em>{I18n.t('3Phase (400)')}</em>
+                        </MenuItem>
+                        <MenuItem value="3">
+                            <em>{I18n.t('1 or 3 Phase Switchable')}</em>
+                        </MenuItem>
 
-            {valString('WallboxPhases') === '3' ? (
-                <div>
-                    <TextField
-                        style={{ marginBottom: 16 }}
-                        id='Wallbox3phaseSwitchLimit'
-                        label={I18n.t('Wallbox3phaseSwitchLimit')}
-                        variant="standard"
-                        type="number"
-                        value={valNumber('Wallbox3phaseSwitchLimit')}
-                        onChange={handleNumberChange('Wallbox3phaseSwitchLimit')}
-                    />
+                    </Select>
+                </FormControl>
 
-                    <TextField
-                        style={{ marginBottom: 16 }}
-                        id='Wallbox3phaseSwitchDelay'
-                        label={I18n.t('Wallbox3phaseSwitchDelay')}
-                        variant="standard"
-                        type="number"
-                        value={valNumber('Wallbox3phaseSwitchDelay')}
-                        onChange={handleNumberChange('Wallbox3phaseSwitchDelay')}
-                    />
-                </div>
-            ) : null}
+                {valString('WallboxPhases') === '3' ? (
+                    <div>
+                        <TextField
+                            style={{ marginBottom: 16 }}
+                            id='Wallbox3phaseSwitchLimit'
+                            label={I18n.t('Wallbox3phaseSwitchLimit')}
+                            variant="standard"
+                            type="number"
+                            inputProps={{ min: 0 }}
+                            value={valNumber('Wallbox3phaseSwitchLimit')}
+                            onChange={handleNumberChange('Wallbox3phaseSwitchLimit')}
+                            sx={{ minWidth: '20%', maxWidth: '20%', marginRight: '10px' }}
+                        />
 
-            <FormControlLabel
-                control={
-                    <Checkbox
-                        color="primary"
-                        checked={!!(device && (device as any).WallboxNeedCurrentRecommendation)}
-                        onChange={handleBoolChange('WallboxNeedCurrentRecommendation')}
-                        aria-label="WallboxNeedCurrentRecommendation"
-                    />
-                }
-                label={I18n.t('WallboxNeedCurrentRecommendation')}
-            />
+                        <TextField
+                            style={{ marginBottom: 16 }}
+                            id='Wallbox3phaseSwitchDelay'
+                            label={I18n.t('Wallbox3phaseSwitchDelay')}
+                            variant="standard"
+                            type="number"
+                            inputProps={{ min: 0 }}
+                            value={valNumber('Wallbox3phaseSwitchDelay')}
+                            onChange={handleNumberChange('Wallbox3phaseSwitchDelay')}
+                            sx={{ minWidth: '20%', maxWidth: '20%', marginRight: '10px' }}
+                        />
+                    </div>
+                ) : null}
+            </Box>
+
+            <Box
+                style={{ margin: 10 }}
+            >
 
 
-            <Table size="small">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>{I18n.t('active')}</TableCell>
-                        <TableCell></TableCell>
-                        <TableCell>{I18n.t('Name')}</TableCell>
-                        <TableCell>{I18n.t('OID/URL')}</TableCell>
-                        <TableCell></TableCell>
-                        <TableCell>{I18n.t('Type')}</TableCell>
-                        <TableCell>{I18n.t('SetValue')}</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {((device as any).wallbox_oid_write ?? []).map((t: any, idx: number) => (
-                        <TableRow key={idx}>
-                            <TableCell>
-                                <Checkbox
-                                    checked={!!t.active}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => onWallboxWriteToggleActive(idx, (e.target as HTMLInputElement).checked)}
-                                />
-                            </TableCell>
-                            <TableCell>
-                                <TextField
-                                    fullWidth
-                                    value={t.must ?? ''}
-                                    onChange={(e) => onWallboxWriteUpdate(idx, 'must', e.target.value)}
-                                    variant="standard"
-                                    placeholder={I18n.t('ID')}
-                                />
-                            </TableCell>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            color="primary"
+                            checked={!!(device && (device as any).WallboxNeedCurrentRecommendation)}
+                            onChange={handleBoolChange('WallboxNeedCurrentRecommendation')}
+                            aria-label="WallboxNeedCurrentRecommendation"
+                        />
+                    }
+                    label={I18n.t('WallboxNeedCurrentRecommendation')}
+                />
 
-                            <TableCell>
-                                <TextField
-                                    fullWidth
-                                    value={t.Name ?? ''}
-                                    onChange={(e) => onWallboxWriteUpdate(idx, 'Name', e.target.value)}
-                                    variant="standard"
-                                    placeholder={I18n.t('Name')}
-                                />
-                            </TableCell>
+            </Box>
 
-                            <TableCell>
-                                <SelectOID
-                                    settingName={I18n.t('OID')}
-                                    socket={props.socket}
-                                    theme={props.theme}
-                                    themeName={props.themeName}
-                                    themeType={props.themeType}
-                                    Value={t.OID ?? ''}
-                                    onChange={(value: string) => onWallboxWriteUpdate(idx, 'OID', value)}
-                                />
-                            </TableCell>
+            <Box
+                style={{ margin: 10 }}
+            >
 
-                            <TableCell>
 
-                            </TableCell>
-
-                            <TableCell>
-                                <TextField
-                                    fullWidth
-                                    value={t.Type ?? ''}
-                                    onChange={(e) => onWallboxWriteUpdate(idx, 'Type', e.target.value)}
-                                    variant="standard"
-                                    placeholder={I18n.t('Type')}
-
-                                />
-                            </TableCell>
-
-                            <TableCell>
-                                <TextField
-                                    fullWidth
-                                    value={t.SetValue ?? ''}
-                                    onChange={(e) => onWallboxWriteUpdate(idx, 'SetValue', e.target.value)}
-                                    variant="standard"
-                                    placeholder={I18n.t('SetValue')}
-
-                                />
-                            </TableCell>
+                <Table size="small">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>{I18n.t('active')}</TableCell>
+                            <TableCell></TableCell>
+                            <TableCell>{I18n.t('Name')}</TableCell>
+                            <TableCell>{I18n.t('OID/URL')}</TableCell>
+                            <TableCell></TableCell>
+                            <TableCell>{I18n.t('Type')}</TableCell>
+                            <TableCell>{I18n.t('SetValue')}</TableCell>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+                    </TableHead>
+                    <TableBody>
+                        {((device as any).wallbox_oid_write ?? []).map((t: any, idx: number) => (
+                            <TableRow key={idx}>
+                                <TableCell>
+                                    <Checkbox
+                                        checked={!!t.active}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => onWallboxWriteToggleActive(idx, (e.target as HTMLInputElement).checked)}
+                                    />
+                                </TableCell>
+                                <TableCell>
+                                    <TextField
+                                        fullWidth
+                                        value={t.must ?? ''}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => onWallboxWriteUpdate(idx, 'must', e.target.value)}
+                                        variant="standard"
+                                        placeholder={I18n.t('must or mandatory')}
+                                    />
+                                </TableCell>
 
-            <TextField
-                style={{ marginBottom: 16 }}
-                id='URLReadPollRate'
-                label={I18n.t('URLReadPollRate')}
-                variant="standard"
-                type="number"
-                value={valNumber('URLReadPollRate')}
-                onChange={handleNumberChange('URLReadPollRate')}
-            />
+                                <TableCell>
+                                    <TextField
+                                        fullWidth
+                                        value={t.Name ?? ''}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => onWallboxWriteUpdate(idx, 'Name', e.target.value)}
+                                        variant="standard"
+                                        placeholder={I18n.t('Name')}
+                                    />
+                                </TableCell>
+
+                                <TableCell>
+                                    <SelectOID
+                                        settingName={I18n.t('OID')}
+                                        socket={props.socket}
+                                        theme={props.theme}
+                                        themeName={props.themeName}
+                                        themeType={props.themeType}
+                                        Value={t.OID ?? ''}
+                                        onChange={(value: string): void => onWallboxWriteUpdate(idx, 'OID', value)}
+                                    />
+                                </TableCell>
+
+                                <TableCell>
+
+                                </TableCell>
+
+                                <TableCell>
+                                    <TextField
+                                        fullWidth
+                                        value={t.Type ?? ''}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => onWallboxWriteUpdate(idx, 'Type', e.target.value)}
+                                        variant="standard"
+                                        placeholder={I18n.t('Type')}
+
+                                    />
+                                </TableCell>
+
+                                <TableCell>
+                                    <TextField
+                                        fullWidth
+                                        value={t.SetValue ?? ''}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => onWallboxWriteUpdate(idx, 'SetValue', e.target.value)}
+                                        variant="standard"
+                                        placeholder={I18n.t('SetValue')}
+
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
 
 
-            <Table size="small">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>{I18n.t('active')}</TableCell>
-                        <TableCell></TableCell>
-                        <TableCell>{I18n.t('Name')}</TableCell>
-                        <TableCell>{I18n.t('OID/URL')}</TableCell>
-                        <TableCell></TableCell>
-                        <TableCell>{I18n.t('Type')}</TableCell>
-                        <TableCell>{I18n.t('Path2Check')}</TableCell>
-                        <TableCell>{I18n.t('SetValue')}</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {((device as any).wallbox_oid_read ?? []).map((t: any, idx: number) => (
-                        <TableRow key={idx}>
-                            <TableCell>
-                                <Checkbox
-                                    checked={!!t.active}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => onWallboxReadToggleActive(idx, (e.target as HTMLInputElement).checked)}
-                                />
-                            </TableCell>
-                            <TableCell>
-                                <TextField
-                                    fullWidth
-                                    value={t.must ?? ''}
-                                    onChange={(e) => onWallboxReadUpdate(idx, 'must', e.target.value)}
-                                    variant="standard"
-                                    placeholder={I18n.t('ID')}
-                                />
-                            </TableCell>
+            </Box>
 
-                            <TableCell>
-                                <TextField
-                                    fullWidth
-                                    value={t.Name ?? ''}
-                                    onChange={(e) => onWallboxReadUpdate(idx, 'Name', e.target.value)}
-                                    variant="standard"
-                                    placeholder={I18n.t('Name')}
-                                />
-                            </TableCell>
+            <Box
+                style={{ margin: 10 }}
+            >
 
-                            <TableCell>
-                                <SelectOID
-                                    settingName={I18n.t('OID')}
-                                    socket={props.socket}
-                                    theme={props.theme}
-                                    themeName={props.themeName}
-                                    themeType={props.themeType}
-                                    Value={t.OID ?? ''}
-                                    onChange={(value: string) => onWallboxReadUpdate(idx, 'OID', value)}
-                                />
-                            </TableCell>
+                <TextField
+                    style={{ marginBottom: 16 }}
+                    id='URLReadPollRate'
+                    label={I18n.t('URLReadPollRate')}
+                    variant="standard"
+                    type="number"
+                    value={valNumber('URLReadPollRate')}
+                    onChange={handleNumberChange('URLReadPollRate')}
+                />
 
-                            <TableCell>
 
-                            </TableCell>
-
-                            <TableCell>
-                                <TextField
-                                    fullWidth
-                                    value={t.Type ?? ''}
-                                    onChange={(e) => onWallboxReadUpdate(idx, 'Type', e.target.value)}
-                                    variant="standard"
-                                    placeholder={I18n.t('Type')}
-
-                                />
-                            </TableCell>
-
-                            <TableCell>
-                                <TextField
-                                    fullWidth
-                                    value={t.Path2Check ?? ''}
-                                    onChange={(e) => onWallboxReadUpdate(idx, 'Path2Check', e.target.value)}
-                                    variant="standard"
-                                    placeholder={I18n.t('Path2Check')}
-
-                                />
-                            </TableCell>
-
-                            <TableCell>
-                                <TextField
-                                    fullWidth
-                                    value={t.SetValue ?? ''}
-                                    onChange={(e) => onWallboxReadUpdate(idx, 'SetValue', e.target.value)}
-                                    variant="standard"
-                                    placeholder={I18n.t('SetValue')}
-
-                                />
-                            </TableCell>
+                <Table size="small">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>{I18n.t('active')}</TableCell>
+                            <TableCell></TableCell>
+                            <TableCell>{I18n.t('Name')}</TableCell>
+                            <TableCell>{I18n.t('OID/URL')}</TableCell>
+                            <TableCell></TableCell>
+                            <TableCell>{I18n.t('Type')}</TableCell>
+                            <TableCell>{I18n.t('Path2Check')}</TableCell>
+                            <TableCell>{I18n.t('SetValue')}</TableCell>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+                    </TableHead>
+                    <TableBody>
+                        {((device as any).wallbox_oid_read ?? []).map((t: any, idx: number) => (
+                            <TableRow key={idx}>
+                                <TableCell>
+                                    <Checkbox
+                                        checked={!!t.active}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => onWallboxReadToggleActive(idx, (e.target as HTMLInputElement).checked)}
+                                    />
+                                </TableCell>
+                                <TableCell>
+                                    <TextField
+                                        fullWidth
+                                        value={t.must ?? ''}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => onWallboxReadUpdate(idx, 'must', e.target.value)}
+                                        variant="standard"
+                                        placeholder={I18n.t('ID')}
+                                    />
+                                </TableCell>
 
-            <div>
+                                <TableCell>
+                                    <TextField
+                                        fullWidth
+                                        value={t.Name ?? ''}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => onWallboxReadUpdate(idx, 'Name', e.target.value)}
+                                        variant="standard"
+                                        placeholder={I18n.t('Name')}
+                                    />
+                                </TableCell>
 
+                                <TableCell>
+                                    <SelectOID
+                                        settingName={I18n.t('OID')}
+                                        socket={props.socket}
+                                        theme={props.theme}
+                                        themeName={props.themeName}
+                                        themeType={props.themeType}
+                                        Value={t.OID ?? ''}
+                                        onChange={(value: string): void => onWallboxReadUpdate(idx, 'OID', value)}
+                                    />
+                                </TableCell>
 
-            </div>
-        </div>
+                                <TableCell>
+
+                                </TableCell>
+
+                                <TableCell>
+                                    <TextField
+                                        fullWidth
+                                        value={t.Type ?? ''}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => onWallboxReadUpdate(idx, 'Type', e.target.value)}
+                                        variant="standard"
+                                        placeholder={I18n.t('Type')}
+
+                                    />
+                                </TableCell>
+
+                                <TableCell>
+                                    <TextField
+                                        fullWidth
+                                        value={t.Path2Check ?? ''}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => onWallboxReadUpdate(idx, 'Path2Check', e.target.value)}
+                                        variant="standard"
+                                        placeholder={I18n.t('Path2Check')}
+
+                                    />
+                                </TableCell>
+
+                                <TableCell>
+                                    <TextField
+                                        fullWidth
+                                        value={t.SetValue ?? ''}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => onWallboxReadUpdate(idx, 'SetValue', e.target.value)}
+                                        variant="standard"
+                                        placeholder={I18n.t('SetValue')}
+
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+
+            </Box>
+        </Box>
     );
 }

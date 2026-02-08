@@ -1,33 +1,17 @@
 /* eslint-disable prefer-template */
 /* eslint-disable quote-props */
 /* eslint-disable prettier/prettier */
+import React, { useEffect, useState, useCallback } from 'react';
+import type {
+    AdminConnection,
+    IobTheme,
+    ThemeName,
+    ThemeType
+} from '@iobroker/adapter-react-v5';
 
-/*
-Pseudocode / Plan (detailliert):
-1. Problem: mehrere TypeScript/JSX-Syntaxfehler und fehlende Handler/Props.
-2. Ziel: Datei reparieren:
-   - JSX korrekt schließen und Struktur vereinfachen (klarere ternäre Operatoren).
-   - Fehlende Funktion `onChangeSettings` hinzufügen.
-   - Kinderkomponenten die erwarteten Props (`socket`, `themeName`, `themeType`) übergeben.
-   - Sicherstellen, dass Wallbox-Arrays initialisiert werden (bestehende Logik beibehalten).
-   - Keine semantischen Änderungen außer den notwendigen Korrekturen.
-3. Schritt-für-Schritt:
-   - Behalte vorhandene Importe und Hilfsfunktionen.
-   - Ergänze `onChangeSettings(field, value)`:
-     - prüfe `device`, erstelle `updated = {...device, [field]: value}`, setze lokalen State und persistiere.
-   - Baue `return`-JSX neu auf:
-     - oberen Bereich (Select + Checkbox) rendern.
-     - Falls kein Gerät ausgewählt -> Hinweis.
-     - Falls Gerät ausgewählt und aktiv -> mehrere Sections rendern (mit übergebenen Props).
-     - Falls Gerät ausgewählt und inaktiv -> Hinweis.
-   - Übergib an alle Kinder `onChange={onChangeSettings}` sowie `socket`, `themeName`, `themeType`.
-   - Stelle sicher, dass alle JSX-Tags korrekt geöffnet/geschlossen sind.
-4. Ergebnis: Kompilierbare TSX-Datei mit behobenen TS-Fehlern und vollständigen Props/Handlern.
-*/
-
-import React, { useEffect, useState } from 'react';
-import type { AdminConnection, IobTheme, ThemeName, ThemeType } from '@iobroker/adapter-react-v5';
 import { I18n } from '@iobroker/adapter-react-v5';
+
+
 import type { SempAdapterConfig, SempDevice } from "../types";
 
 import {
@@ -37,10 +21,17 @@ import {
     InputLabel,
     Checkbox,
     FormControlLabel,
+    IconButton,
+    Box,
+    TextField,
 } from '@mui/material';
-import type { SelectChangeEvent } from '@mui/material';
 
-import BoxDivider from '../Components/BoxDivider'
+import type{ SelectChangeEvent } from '@mui/material';
+
+
+import AddIcon from '@mui/icons-material/Add';
+import AutorenewIcon from '@mui/icons-material/Autorenew';
+
 import GeneralSettings from '../Components/GeneralSettings';
 import CounterSettings from '../Components/CounterSettings';
 import SwitchSettings from '../Components/SwitchSettings';
@@ -67,17 +58,18 @@ interface SettingsProps {
 
 export default function DeviceSettings(props: SettingsProps): React.JSX.Element {
 
-    console.log("DeviceSettings render: " + JSON.stringify(props.native));
+    console.log("DeviceSettings render ");
 
     const [selectedDevice, setSelectedDevice] = useState<string>(() => (props.native as any).deviceSelector ?? ' ');
 
-    const findDevice = (idOrName: string): SempDevice | undefined => {
+    // findDevice als stable Callback, Abhängigkeit: props.native (die devices darin)
+    const findDevice = useCallback((idOrName: string): SempDevice | undefined => {
         if (!idOrName) {
             return undefined;
         }
         const arr: SempDevice[] = (props.native as any).devices ?? [];
         return arr.find(r => r && (r.ID === idOrName || r.Name === idOrName));
-    };
+    }, [props.native]);
 
     // Vollständiges Device-Objekt für Bearbeitung
     const [device, setDevice] = useState<SempDevice | undefined>(() => findDevice((props.native as any).deviceSelector ?? ''));
@@ -94,8 +86,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
             setDevice(cur);
             setEditingDeviceOriginalId(cur?.ID ?? '');
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.native.deviceSelector]);
+    }, [props.native, findDevice, selectedDevice]);
 
     // Wenn die Auswahl über UI geändert wird
     const handleDeviceChange = (event: SelectChangeEvent<string>): void => {
@@ -107,17 +98,19 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
         setEditingDeviceOriginalId(cur?.ID ?? '');
 
         // Persistiere die Auswahl durch changeNative (deviceSelector = ID)
-        const newNative = {
+        const newNative: any = {
             ...(props.native as any),
             deviceSelector: value,
-        } as SempAdapterConfig;
+        };
 
-        props.changeNative(newNative as unknown as ioBroker.AdapterConfig);
+        props.changeNative(newNative);
     };
 
     // Persistiert ein gesamtes Device in props.native.devices
     const persistDevice = (newDevice: SempDevice | undefined): void => {
-        if (!newDevice) return;
+        if (!newDevice) {
+            return;
+        }
         const devices: SempDevice[] = (props.native as any).devices ?? [];
         const origId = editingDeviceOriginalId || newDevice.ID;
         const newDevices = devices.map(d => d && d.ID === origId ? { ...newDevice } : d);
@@ -139,41 +132,9 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
             setEditingDeviceOriginalId(newDevice.ID);
         }
 
-        props.changeNative(newNative as unknown as ioBroker.AdapterConfig);
+        props.changeNative(newNative);
         // Lokalen device-state aktualisieren
         setDevice(newDevice);
-    };
-
-    // Generische Handler (event-basiert für TextField)
-    const handleStringChange = (field: keyof SempDevice) => (e: React.ChangeEvent<HTMLInputElement>) => {
-        const val = e.target.value ?? '';
-        const updated = { ...(device ?? {}), [field]: val } as SempDevice;
-        setDevice(updated);
-        persistDevice(updated);
-    };
-
-    // Neuen Handler für SelectOID / Komponenten, die direkt einen string übergeben
-    const handleStringChangeValue = (field: keyof SempDevice | string) => (value: string): void => {
-        const val = value ?? '';
-        const updated = { ...(device ?? {}), [field]: val } as unknown as SempDevice;
-        setDevice(updated);
-        persistDevice(updated);
-    };
-
-    const handleNumberChange = (field: keyof SempDevice) => (e: React.ChangeEvent<HTMLInputElement>) => {
-        const raw = e.target.value;
-        const val = raw === '' ? '' : Number(raw);
-        const updated = { ...(device ?? {}), [field]: val } as unknown as SempDevice;
-        setDevice(updated);
-        persistDevice(updated);
-    };
-
-    // handleBoolChange akzeptiert nun auch string-Keys (historische/abweichende Keys)
-    const handleBoolChange = (field: keyof SempDevice | string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-        const val = !!e.target.checked;
-        const updated = { ...(device ?? {}), [field]: val } as unknown as SempDevice;
-        setDevice(updated);
-        persistDevice(updated);
     };
 
     // isActive für das aktuell ausgewählten Gerät aus device
@@ -181,36 +142,116 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
 
     // Checkbox-Handler für IsActive (spezialisiert, weil IsActive auch UI-Checkbox ist)
     const persistDeviceIsActive = (checked: boolean): void => {
-        if (!device) return;
+        if (!device) {
+            return;
+        }
         const updated = { ...device, IsActive: !!checked } as SempDevice;
-        setDevice(updated);
-        persistDevice(updated);
-    };
-
-    // GENERISCHER onChange für untergeordnete Komponenten - BEWAHREN (field,value) für interne/nachfolgende Nutzung
-    const onChangeSettings = (field: keyof SempDevice | string, value: any): void => {
-        if (!device) return;
-        const updated = { ...(device ?? {}), [field]: value } as unknown as SempDevice;
         setDevice(updated);
         persistDevice(updated);
     };
 
     // Neuer Wrapper, der dem Interface der Kinder entspricht: (value: string) => void
     const onChildChange = (value: string): void => {
-        if (!value) return;
+        if (!value) {
+            return;
+        }
         try {
             const parsed = JSON.parse(value) as SempDevice;
+
+            console.log("onChildChange parsed value: ", parsed);
+
             setDevice(parsed);
             persistDevice(parsed);
         } catch (e) {
             // falls value kein JSON ist, ignoriere oder logge
-            // console.error('onChildChange: invalid JSON', e);
+            console.error("Failed to parse child change value:", e);
+        }
+    };
+
+    // Handler zum Erstellen eines neuen Devices mit Standardwerten
+    const createNewDevice = (): void => {
+        const devices: SempDevice[] = (props.native as any).devices ?? [];
+        const count = devices.length + 1;
+
+        // Anzahl der Devices als String, auf 12 Zeichen mit führenden Nullen auffüllen
+        const paddedCount = String(count).padStart(12, '0');
+
+        // DeviceBaseID aus Konfiguration (sicherstellen, dass es ein String ist)
+        const baseId = String((props.native as any).DeviceBaseID ?? '');
+
+        // Neue ID nach Schema: "F-" + BaseID + paddedCount + "-00"
+        const newId = 'F-' + baseId + "-"+ paddedCount + '-00';
+
+        const newName = I18n.t("new device")  + " " + String(count);
+        // Cast to SempDevice, damit TypeScript nicht über fehlende optionale Felder meckert
+        const newDevice = {
+            ID: newId,
+            Name: newName,
+            IsActive: true,
+            Type: '',
+            MeasurementMethod: "Measurement",
+            StatusDetectionType: "SeparateOID",
+            MeasurementUnit: "W",
+        } as SempDevice;
+
+        const newDevices = [...devices, newDevice];
+        const newNative: any = {
+            ...(props.native as any),
+            devices: newDevices,
+            deviceSelector: newId,
+        };
+
+        props.changeNative(newNative);
+
+        // Lokaler State sofort aktualisieren damit UI reaktiv ist
+        setSelectedDevice(newId);
+        setDevice(newDevice);
+        setEditingDeviceOriginalId(newId);
+    };
+
+    // Hilfsfunktion: wert eines string-feldes aus device anzeigen
+    const valString = (key: string): string => {
+        if (!props.native) {
+            return '';
+        }
+        const v = (props.native as any)[key];
+        return v === undefined || v === null ? '' : String(v);
+    };
+
+    // Handler: Änderung des DeviceBaseID-Feldes
+    const handleBaseIdChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+        if (!props.native) {
+            return;
+        }
+        const newVal = e.target.value ?? '';
+        const updated: any = { ...(props.native as any), DeviceBaseID: newVal };
+
+        // Direkt persistieren
+        props.changeNative(updated);
+    };
+
+    // Handler: Generiere eine DeviceBaseID basierend auf Name oder ID (gesäubert)
+    const handleGenerateBaseId = async (): Promise<void> => {
+        if (!props.native) {
+            return;
+        }
+
+        try {
+            const newBaseID = (await props.socket.sendTo(props.adapterName + "." + props.instance, 'getDeviceBaseID'));
+            const updated: any = { ...(props.native as any), DeviceBaseID: newBaseID ?? '' };
+
+            // Direkt persistieren
+            props.changeNative(updated);
+        } catch (err) {
+            console.error("Failed to generate base id:", err);
         }
     };
 
     return (
-        <div style={{ width: 'calc(100% - 8px)', minHeight: '100%' }}>
-            <div style={{ marginBottom: 12 }}>
+        <Box style={{ width: 'calc(100% - 8px)', minHeight: '100%' }}>
+            <Box
+                style={{ margin: 10 }}
+            >
                 <FormControl variant="standard" sx={{ minWidth: '40%', maxWidth: '60%' }} >
                     <InputLabel id="device-selector-label">{I18n.t('select a device')}</InputLabel>
                     <Select
@@ -229,6 +270,20 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                         )) ?? null}
                     </Select>
                 </FormControl>
+
+                {/* IconButton zum Anlegen eines neuen Devices */}
+                <IconButton
+                    color="primary"
+                    onClick={createNewDevice}
+                    sx={{ marginLeft: 2, marginTop: '6px' }}
+                    aria-label={I18n.t('add device')}
+                >
+                    <AddIcon />
+                </IconButton>
+
+
+
+
                 {/* Checkbox für isActive des aktuell ausgewählten Geräts */}
                 {selectedDevice ? (
                     <FormControlLabel
@@ -243,15 +298,37 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                         label={I18n.t('active')}
                     />
                 ) : null}
-            </div>
+            </Box>
+
+            <Box
+                style={{ margin: 10 }}
+            >
+                <TextField
+                    id='DeviceBaseID'
+                    label={I18n.t('DeviceBaseID')}
+                    variant="standard"
+                    value={valString('DeviceBaseID')}
+                    onChange={handleBaseIdChange}
+                    sx={{ minWidth: '30%', maxWidth: '50%', marginRight: '10px' }}
+                />
+
+                <IconButton
+                    color="secondary"
+                    onClick={handleGenerateBaseId}
+                    sx={{ marginTop: '6px' }}
+                    aria-label={I18n.t('generateBaseId')}
+                >
+                    <AutorenewIcon />
+                </IconButton>
+
+            </Box>
+
+
 
             {selectedDevice ? (
                 deviceIsActive ? (
                     <div>
-                        <BoxDivider
-                            Name={I18n.t('main settings')}
-                            theme={props.theme}
-                        />
+
 
                         <GeneralSettings
                             theme={props.theme}
@@ -262,10 +339,6 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                             onChange={onChildChange}
                         />
 
-                        <BoxDivider
-                            Name={I18n.t('counter')}
-                            theme={props.theme}
-                        />
 
                         <CounterSettings
                             theme={props.theme}
@@ -276,12 +349,8 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                             onChange={onChildChange}
                         />
 
-                        <BoxDivider
-                            Name={I18n.t('switch')}
-                            theme={props.theme}
-                        />
 
-                        <SwitchSettings         
+                        <SwitchSettings
                             theme={props.theme}
                             socket={props.socket}
                             themeName={props.themeName}
@@ -290,16 +359,16 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                             onChange={onChildChange}
                         />
 
-                        {device && (device as any).DeviceTimerActive === true ? (
-                            <EnergyRequestTimerSettings
-                                theme={props.theme}
-                                socket={props.socket}
-                                themeName={props.themeName}
-                                themeType={props.themeType}
-                                device={device}
-                                onChange={onChildChange}
-                            />
-                        ) : null}
+
+                        <EnergyRequestTimerSettings
+                            theme={props.theme}
+                            socket={props.socket}
+                            themeName={props.themeName}
+                            themeType={props.themeType}
+                            device={device}
+                            onChange={onChildChange}
+                        />
+
 
                         {(device && (device as any).Type) === "EVCharger" ? (
                             <WallboxSettings
@@ -322,7 +391,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                     <em>{I18n.t('select a device to display settings')}</em>
                 </div>
             )}
-        </div>
+        </Box>
     );
 }
 

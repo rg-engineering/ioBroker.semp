@@ -2,7 +2,11 @@
 /* eslint-disable quote-props */
 /* eslint-disable prettier/prettier */
 
-import {  FormControl, Button, TextField } from '@mui/material';
+import {
+    Box,
+    Button,
+    TextField
+} from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { DialogSelectID } from '@iobroker/adapter-react-v5';
 import type {
@@ -59,85 +63,84 @@ export default function SelectOID(props: Props): React.JSX.Element {
 
     const customFilter: ObjectBrowserCustomFilter = { type: ["channel", "state", "device"] };
     const root = "";
-    const types: ObjectBrowserType = ["channel", "state", "device"] ;
+    const types: ObjectBrowserType = ["channel", "state", "device"];
 
     return (
-        <FormControl fullWidth variant="standard">
+        <Box
+            style={{ margin: 10 }}
+            sx={{ display: 'flex', gap: 2, alignItems: 'flex-end', flexWrap: 'wrap', minWidth: '60%' }}
+        >
+            <TextField
+                variant="standard"
+                
+                value={value}
+                error={!!error}
+                disabled={disabled}
+                placeholder={props.settingName}
 
-            <div style={styles.flex} >
-                <TextField
-                    variant="standard"
-                    fullWidth
-                    value={value}
-                    error={!!error}
-                    disabled={disabled}
-                    placeholder={props.settingName}
-                    
-                   
-                    onChange={e => {
-                        const value_ = e.target.value;
-                        console.log("new value" + value_);
-                        setValue(value_);
+                onChange={e => {
+                    const value_ = e.target.value;
+                    console.log("new value" + value_);
+                    setValue(value_);
+                    // Parent informieren
+                    props.onChange(value_);
+                }}
+                sx={{ minWidth: '40%',  maxWidth: '80%', marginRight: '10px' }}
+            />
+            <Button
+                color="grey"
+                disabled={disabled}
+                style={styles.button}
+                size="small"
+                variant="outlined"
+                onClick={() => {
+                    console.log("on click ");
+                    setShowSelectId(true);
+                }}
+            >
+                ...
+            </Button>
+
+            {showSelectId ? (
+                <DialogSelectID
+                    imagePrefix={
+                        '../..'
+                    }
+                    dialogName="DialogName to do"
+
+                    themeType={props.themeType}
+                    theme={props.theme}
+                    types={types}
+                    customFilter={customFilter}
+
+                    socket={socket}
+                    selected={props.Value}
+                    root={root}
+                    onClose={() => {
+                        console.log("on close");
+                        setShowSelectId(false);
+                    }}
+                    onOk={value_ => {
+                        console.log("on okay, new value ");
+                        setShowSelectId(false);
+                        // Typabsicherung: value_ kann string | string[] | undefined sein.
+                        // Konvertiere in einen string, bevor setValue aufgerufen wird.
+                        const normalized: string = typeof value_ === 'string'
+                            ? value_
+                            : Array.isArray(value_)
+                                ? value_.join(',')
+                                : '';
+
+                        setValue(normalized);
                         // Parent informieren
-                        props.onChange(value_);
-
+                        props.onChange(normalized);
 
                     }}
                 />
-                <Button
-                    color="grey"
-                    disabled={disabled}
-                    style={styles.button}
-                    size="small"
-                    variant="outlined"
-                    onClick={() => {
-                        console.log("on click ");
-                        setShowSelectId(true);
-                    }}
-                >
-                    ...
-                </Button>
+            ) : (
+                null
+            )}
 
-                {showSelectId ? (
-                    <DialogSelectID
-                        imagePrefix={
-                            '../..'
-                        }
-                        dialogName="DialogName to do"
-
-                        themeType={props.themeType}
-                        theme={props.theme}
-                        types={types}
-                        customFilter={customFilter}
-
-                        socket={socket}
-                        selected={props.Value}
-                        root={root}
-                        onClose={() => {
-                            console.log("on close");
-                            setShowSelectId(false);
-                        }}
-                        onOk={value_ => {
-                            console.log("on okay, new value ");
-                            setShowSelectId(false);
-                            // Typabsicherung: value_ kann string | string[] | undefined sein.
-                            // Konvertiere in einen string, bevor setValue aufgerufen wird.
-                            const normalized: string = typeof value_ === 'string'
-                                ? value_
-                                : Array.isArray(value_)
-                                    ? value_.join(',')
-                                    : '';
-
-                            setValue(normalized);
-                            // Parent informieren
-                            props.onChange(normalized);
-
-                        }}
-                    />
-                ) : (
-                    null
-                )}
-            </div>
-        </FormControl>
+        </Box>
     );
 }

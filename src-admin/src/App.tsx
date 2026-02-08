@@ -155,7 +155,7 @@ class App extends GenericApp<GenericAppProps, AppState> {
         // Migration auslagern - ruft LegacyMigrator.migrate auf
         try {
             LegacyMigrator.migrate(
-                (this.state.native as any) || {},
+                (this.state.native as SempAdapterConfig) || {},
                 this.getIsChanged.bind(this),
                 (partial) => this.setState(partial as any)
             );

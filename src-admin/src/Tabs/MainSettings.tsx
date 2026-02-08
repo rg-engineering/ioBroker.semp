@@ -1,15 +1,30 @@
-/* eslint-disable prettier/prettier */
 /* eslint-disable prefer-template */
 /* eslint-disable quote-props */
+/* eslint-disable prettier/prettier */
+import React, {  useCallback } from 'react';
+import type {
+    AdminConnection,
+    IobTheme,
+    ThemeName,
+    ThemeType
+} from '@iobroker/adapter-react-v5';
+import { I18n } from '@iobroker/adapter-react-v5';
+import AutorenewIcon from '@mui/icons-material/Autorenew';
 
-import React from 'react';
-
-import type { AdminConnection, IobTheme, ThemeName, ThemeType } from '@iobroker/adapter-react-v5';
-import { type ConfigItemPanel, JsonConfigComponent } from '@iobroker/json-config';
 import type { SempAdapterConfig } from "../types";
 
+import {
+    Checkbox,
+    FormControlLabel,
+    IconButton,
+    Box,
+    TextField
+} from '@mui/material';
 
-interface SettingsProps {
+import BoxDivider from '../Components/BoxDivider'
+
+
+interface MainSettingsProps {
     common: ioBroker.InstanceCommon;
     native: SempAdapterConfig;
     instance: number;
@@ -20,176 +35,206 @@ interface SettingsProps {
     themeType: ThemeType;
     theme: IobTheme;
     systemConfig: ioBroker.SystemConfigObject;
+    rooms?: Record<string, ioBroker.EnumObject>;
+    functions?: Record<string, ioBroker.EnumObject>;
     alive: boolean;
 }
 
+export default function MainSettings(props: MainSettingsProps): React.JSX.Element {
 
-const schema: ConfigItemPanel = {
-    "type": "panel",
-    "label": "Main settings",
-    "items": {
-        "icontest": {
-            "type": "staticImage",
-            "src": "./semp.png",
-            "newLine": true,
-            "xs": 12,
-            "sm": 2,
-            "md": 2,
-            "lg": 1,
-            "xl": 1
-        },
+    console.log("MainSettings render ");
 
-        "dividerHdr1": {
-            "newLine": true,
-            "type": "header",
-            "text": "general configuration",
-            "size": 2
-        },
-        "IPAddress": {
-            "newLine": true,
-            "type": "text",
-            "label": "IPAddress",
-            "help": "IP address SunnyHomeManger",
-            "xs": 12,
-            "sm": 12,
-            "md": 4,
-            "lg": 4,
-            "xl": 4
-        },
-        "UUID": {
-            "newLine": false,
-            "type": "text",
-            "label": "UUID",
-            "help": "unique ID of Semp-Adapter",
-            "xs": 12,
-            "sm": 12,
-            "md": 4,
-            "lg": 4,
-            "xl": 4
-        },
-        "SempPort": {
-            "newLine": true,
-            "type": "number",
-            "label": "SempPort",
-            "help": "SemPort_help",
-            "default": 9522,
-            "min": 1, 
-            "xs": 12,
-            "sm": 12,
-            "md": 4,
-            "lg": 4,
-            "xl": 4
-        },
-        "SempName": {
-            "newLine": true,
-            "type": "text",
-            "label": "SempName",
-            "help": "SempName_help",
-            "xs": 12,
-            "sm": 12,
-            "md": 4,
-            "lg": 4,
-            "xl": 4
-        },
-        "SempManufacturer": {
-            "newLine": false,
-            "type": "text",
-            "label": "SempManufacturer",
-            "help": "SempManufacturer_help",
-            "xs": 12,
-            "sm": 12,
-            "md": 4,
-            "lg": 4,
-            "xl": 4
-        },
-        "dividerHdr2": {
-            "newLine": true,
-            "type": "header",
-            "text": "logging configuration",
-            "size": 2
-        },
-        "extendedLog": {
-            "newLine": true,
-            "type": "checkbox",
-            "label": "extendedLog",
-            "help": "extendedLog_help",
-            "default": false, 
-            "xs": 12,
-            "sm": 12,
-            "md": 4,
-            "lg": 4,
-            "xl": 4
-        },
-        "LogToCSV": {
-            "newLine": false,
-            "type": "checkbox",
-            "label": "LogToCSV",
-            "help": "LogToCSV_help",
-            "default": false,
-            "xs": 12,
-            "sm": 12,
-            "md": 4,
-            "lg": 4,
-            "xl": 4
-        },
-        "LogToCSVPath": {
-            "newLine": false,
-            "type": "text",
-            "label": "LogToCSVPath",
-            "help": "LogToCSVPath_help",
-            "hidden": "if (!data.LogToCSV) return true;",
-            "xs": 12,
-            "sm": 12,
-            "md": 4,
-            "lg": 4,
-            "xl": 4
-        },
-    }
-}
+    const valString = (name: string): string => {
+        const v = (props.native as any)?.[name];
+        return v === undefined || v === null ? '' : String(v);
+    };
 
+    const valNumber = (name: string): number | '' => {
+        const v = (props.native as any)?.[name];
+        if (v === undefined || v === null || v === '') {
+            return '';
+        }
+        const n = Number(v);
+        return Number.isNaN(n) ? '' : n;
+    };
 
-export default function MainSettings(props: SettingsProps): React.JSX.Element {
+    // updateDevice implementieren und als useCallback bereitstellen
+    const updateDevice = useCallback((updated: SempAdapterConfig): void => {
+        props.changeNative(updated);
+    }, [props.changeNative]);
 
+    // String-Handler erwartet jetzt das ChangeEvent
+    const handleStringChange = (name: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+        const value = e.target.value;
+        const updated = { ...(props.native ?? {}), [name]: value } as SempAdapterConfig;
+        updateDevice(updated);
+    };
 
-    console.log("settings: " + JSON.stringify(props.native));
+    // Number-Handler auf allgemeinen ChangeEvent-Typ anpassen
+    const handleNumberChange = (name: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+        const raw = (e.target as HTMLInputElement).value;
+        const num = raw === '' ? undefined : Number(raw);
+        const updated = { ...(props.native ?? {}), [name]: num } as SempAdapterConfig;
+        updateDevice(updated);
+    };
+
+    const handleBoolChange = (name: string) => (e: React.ChangeEvent<HTMLInputElement>): void => {
+        const checked = e.target.checked;
+        const updated = { ...(props.native ?? {}), [name]: checked } as SempAdapterConfig;
+        updateDevice(updated);
+    };
+
+    // Handler: Generiere eine DeviceBaseID basierend auf Name oder ID (gesäubert)
+    const handleGenerateUUID = async (): Promise<void> => {
+        if (!props.native) {
+            return;
+        }
+
+        try {
+            const newUUID = (await props.socket.sendTo(props.adapterName + "." + props.instance, 'getUUID'));
+            const updated: any = { ...(props.native as any), UUID: newUUID ?? '' };
+
+            // Direkt persistieren
+            props.changeNative(updated);
+        } catch (err) {
+            console.error("Failed to generate UUID:", err);
+        }
+    };
 
     return (
-        <div style={{ width: 'calc(100% - 8px)', minHeight: '100%' }}>
-            <JsonConfigComponent
-                common={props.common}
-                socket={props.socket}
-                themeName={props.themeName}
-                themeType={props.themeType}
-                adapterName="daswetter"
-                instance={props.instance || 0}
-                isFloatComma={props.systemConfig.common.isFloatComma}
-                dateFormat={props.systemConfig.common.dateFormat}
-                schema={schema}
-                onChange={(params): void => {
+        <Box style={{ width: 'calc(100% - 8px)', minHeight: '100%' }}>
+            <Box
+                style={{ margin: 10 }}
+            >
+                <BoxDivider
+                    Name={I18n.t('general configuration')}
+                    theme={props.theme}
+                />
 
-                    console.log("MainSettings onChange params: " + JSON.stringify(params));
+                <TextField
+                    style={{ marginBottom: 16 }}
+                    id='IPAddress'
+                    label={I18n.t('IPAddress')}
+                    variant="standard"
+                    type="text"
+                    value={valString('IPAddress')}
+                    onChange={handleStringChange('IPAddress')}
+                    sx={{ minWidth: '20%', maxWidth: '20%', marginRight: '10px' }}
+                />
 
-                    const native: SempAdapterConfig = JSON.parse(JSON.stringify(props.native));
-                    //console.log("MainSettings onChange native: " + JSON.stringify(native));
+                <TextField
+                    style={{ marginBottom: 16 }}
+                    id='UUID'
+                    label={I18n.t('UUID')}
+                    variant="standard"
+                    type="text"
+                    value={valString('UUID')}
+                    onChange={handleStringChange('UUID')}
+                    sx={{ minWidth: '20%', maxWidth: '20%', marginRight: '10px' }}
+                />
 
-                    //Daten kopieren
-                    native.IPAddress = params.IPAddress;
-                    native.UUID = params.UUID;
-                    native.SempPort = params.SempPort;
-                    native.SempName = params.SempName;
-                    native.SempManufacturer = params.SempManufacturer;
-                    native.extendedLog = params.extendedLog;
-                    native.LogToCSV = params.LogToCSV;
-                    native.LogToCSVPath = params.LogToCSVPath;
-                    
-                    props.changeNative(native);
-                }}
-                //data={props.native.params}
-                data={props.native}
-                onError={() => {}}
-                theme={props.theme}
-                withoutSaveButtons
-            />
-        </div>
+                <IconButton
+                    color="secondary"
+                    onClick={handleGenerateUUID}
+                    sx={{ marginTop: '6px' }}
+                    aria-label={I18n.t('generateUUID')}
+                >
+                    <AutorenewIcon />
+                </IconButton>
+
+
+                <TextField
+                    style={{ marginBottom: 16 }}
+                    id='SempPort'
+                    label={I18n.t('SempPort')}
+                    variant="standard"
+                    type="number"
+                    InputProps={{ inputProps: { min: 0 } }}
+                    value={valNumber('SempPort')}
+                    onChange={handleNumberChange('SempPort')}
+                    sx={{ minWidth: '20%', maxWidth: '20%', marginRight: '10px' }}
+                />
+
+                <TextField
+                    style={{ marginBottom: 16 }}
+                    id='SempName'
+                    label={I18n.t('SempName')}
+                    variant="standard"
+                    type="text"
+                    value={valString('SempName')}
+                    onChange={handleStringChange('SempName')}
+                    sx={{ minWidth: '20%', maxWidth: '20%', marginRight: '10px' }}
+                />
+
+                <TextField
+                    style={{ marginBottom: 16 }}
+                    id='SempManufacturer'
+                    label={I18n.t('SempManufacturer')}
+                    variant="standard"
+                    type="text"
+                    value={valString('SempManufacturer')}
+                    onChange={handleStringChange('SempManufacturer')}
+                    sx={{ minWidth: '20%', maxWidth: '20%', marginRight: '10px' }}
+                />
+
+
+            </Box>
+
+            <Box
+                style={{ margin: 10 }}
+            >
+                <BoxDivider
+                    Name={I18n.t('logging configuration')}
+                    theme={props.theme}
+                />
+
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            color="primary"
+                            checked={!!(props && (props.native as any).extendedLog)}
+                            onChange={handleBoolChange('extendedLog')}
+                            aria-label="extendedLog"
+                        />
+                    }
+                    label={I18n.t('extendedLog')}
+                    sx={{ minWidth: '20%', maxWidth: '40%', marginRight: '10px' }}
+                />
+
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            color="primary"
+                            checked={!!(props && (props.native as any).LogToCSV)}
+                            onChange={handleBoolChange('LogToCSV')}
+                            aria-label="LogToCSV"
+                        />
+                    }
+                    label={I18n.t('LogToCSV')}
+                    sx={{ minWidth: '20%', maxWidth: '40%', marginRight: '10px' }}
+                />
+
+
+
+                {
+                    (props && (props.native as any).LogToCSV) === true ? (
+                        <TextField
+                            style={{ marginBottom: 16 }}
+                            id='LogToCSVPath'
+                            label={I18n.t('LogToCSVPath')}
+                            variant="standard"
+                            type="text"
+                            value={valString('LogToCSVPath')}
+                            onChange={handleStringChange('LogToCSVPath')}
+                            sx={{ minWidth: '20%', maxWidth: '20%', marginRight: '10px' }}
+                        />
+
+
+                    ) : null
+                }
+
+            </Box>
+
+        </Box>
     );
 }

@@ -1,13 +1,13 @@
 /* eslint-disable prettier/prettier */
 //ist das gleiche interface wie in adapter-config.d.ts
 
-interface EnergyRequest {
+interface EnergyRequestPeriod {
     ID: string;
     Days: string;
     EarliestStartTime: string;
     LatestEndTime: string;
-    MinRunTime: string;
-    MaxRunTime: string;
+    MinRunTime: number;
+    MaxRunTime: number;
 }
 
 interface WallboxOIDSettings {
@@ -32,11 +32,11 @@ interface SempDevice {
 
     //main settings
     Vendor: string;
-    Serialnumber: string;
+    SerialNr: string;
     Type: string;
     MinPower: number;
     MaxPower: number;
-    InterruptionAllowed: boolean;
+    InterruptionsAllowed: boolean;
     MinOnTime: number;
     MaxOnTime: number;
     MinOffTime: number;
@@ -44,26 +44,26 @@ interface SempDevice {
 
     //counter settings
     MeasurementMethod: string;
-    OIDPower: string;
+    OID_Power: string;
     MeasurementUnit: string;
 
 
     //switch settings
     StatusDetectionType: string;
-    OIDStatus: string;
+    OID_Status: string;
     StatusDetectionLimit: number;
     StatusDetectionLimitTimeOn: number;
     StatusDetectionLimitTimeOff: number;
     StatusDetectionMinRunTime: number;
     HasOIDSwitch: boolean;
-    OIDSwitch: string;
+    OID_Switch: string;
 
     //timer settings
-    DeviceTimerActive: boolean;
+    TimerActive: boolean;
     TimerCancelIfNotOn: boolean;
     TimerCancelIfNotOnTime: string;
     DishwasherMode: boolean;
-    EnergyRequests: EnergyRequest[];
+    EnergyRequestPeriods: EnergyRequestPeriod[];
 
     //wallbox settings
     BatteryCapacity: number;
@@ -80,6 +80,7 @@ interface SempDevice {
 
     //lagacy settings, to be removed later
     WallboxOIDs: WallboxOIDSettings[]
+    StatusDetection: string;
 
 
 }
@@ -90,6 +91,7 @@ export interface SempAdapterConfig extends ioBroker.AdapterConfig {
 
     IPAddress: string;
     UUID: string;
+    DeviceBaseID: string;
     SempPort: number;
     SempName: string;
     SempManufacturer: string;

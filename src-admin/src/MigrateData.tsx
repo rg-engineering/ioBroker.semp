@@ -1,15 +1,13 @@
 /* eslint-disable prefer-template */
 /* eslint-disable quote-props */
 /* eslint-disable prettier/prettier */
-
-import type { SempDevice } from './types';
-
+import type { SempAdapterConfig, SempDevice } from './types';
 
 export default class LegacyMigrator {
 
     static migrate(
-        native: any,
-        getIsChanged: (native: any) => boolean,
+        native: SempAdapterConfig,
+        getIsChanged: (native: SempAdapterConfig) => boolean,
         setState: (s: Partial<any>) => void
     ): void {
         if (native === undefined || native === null) {
@@ -17,13 +15,25 @@ export default class LegacyMigrator {
         }
 
         let totalChanged = 0;
+
+        
+
         try {
             const res = this.removeEntries(native);
             native = res.native;
-            totalChanged = res.removed;
+            totalChanged += res.removed;
         } catch (err) {
             // Fehler protokollieren, aber Migration fortsetzen
             console.warn("migrate exception ignored " + err);
+        }
+
+        try {
+            const res = this.convertValues(native);
+            native = res.native;
+            totalChanged += res.changed;
+        } catch (e) {
+            // Fehler protokollieren, aber Migration fortsetzen
+            console.warn("convertValues exception ignored " + e);
         }
 
         // Versuche Wallbox OIDs aus der ursprünglichen Konfiguration zu übernehmen
@@ -40,6 +50,8 @@ export default class LegacyMigrator {
             setState({ native, changed: getIsChanged(native) });
         }
     }
+
+    
 
     private static removeEntries(native: any): { native: any; removed: number } {
         if (native === undefined || native === null || typeof native !== 'object') {
@@ -67,6 +79,57 @@ export default class LegacyMigrator {
 
         return { native, removed };
     }
+
+    private static convertValues(native: any): { native: any; changed: number } {
+        if (native === undefined || native === null || typeof native !== 'object') {
+            return { native, changed: 0 };
+        }
+
+        const devices = native.devices as SempDevice[];
+        if (devices === undefined || devices === null || typeof devices !== 'object') {
+            console.warn("populateWallboxOids: devices config is invalid");
+            return { native, changed: 0 };
+        }
+
+
+        let changed = 0;
+
+        for (let d = 0; d < devices.length; d++) {
+
+            try {
+                const device = devices[d];
+                if (device === undefined || device === null || typeof device !== 'object') {
+                    continue;
+                }
+
+                // Prüfe auf vorhandenes StatusDetection
+                if (Object.prototype.hasOwnProperty.call(device, 'StatusDetection') && device.StatusDetection !== undefined && device.StatusDetection !== null) {
+                    // Wenn StatusDetectionType nicht existiert, übernehme den Wert
+                    if (!Object.prototype.hasOwnProperty.call(device, 'StatusDetectionType') || device.StatusDetectionType === undefined || device.StatusDetectionType === null) {
+                        device.StatusDetectionType = device.StatusDetection;
+                    }
+
+                    // Lösche StatusDetection in jedem Fall
+                    try {
+                        delete device.StatusDetection;
+                    } catch (e) {
+                        console.warn(`convertValues: failed to delete StatusDetection for device ${device.Name || d}: ${e}`);
+                        // trotzdem als Änderung zählen, da wir versucht haben zu migrieren
+                    }
+
+                    changed++;
+                }
+            } catch (e) {
+                // Fehler für dieses Device protokollieren und mit nächsten weitermachen
+                console.warn(`convertValues: exception processing device index ${d}: ${e}`);
+            }
+        }
+
+        native.devices = devices;
+
+        return { native, changed };
+    }
+
 
     private static populateWallboxOids(native: any): { native: any; changed: number } {
         if (native === undefined || native === null || typeof native !== 'object') {

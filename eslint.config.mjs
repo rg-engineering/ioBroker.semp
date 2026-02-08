@@ -14,16 +14,20 @@ export default [
             '*.config.mjs',
             'build',
             'dist',
-            'admin/build',
-            'admin/words.js',
-            'admin/admin.d.ts',
-            'admin/blockly.js',
+            'admin',
+         
             '**/adapter-config.d.ts',
             'node_modules',
             'typings',
             '.github',
             'test',
-            'widgets/ebus/lib/js',
+            'src-admin/build',
+            'src-admin/node_modules',
+            'bin',
+            'node_modules',
+            'obj',
+
+            
         ],
     },
     {
