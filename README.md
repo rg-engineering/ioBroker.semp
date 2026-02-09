@@ -84,7 +84,7 @@ The adapter allows you to control a dishwasher or other devices that consume sta
 -->
 
 ### **WORK IN PROGRESS**
-* (René) handle exceptions reported by sentry
+* (René) admin overworked completely with react and vite. **ATTENTION**: breaking changes in admin settings !!!
 
 ### 1.5.4 (2025-10-26)
 * (René) bug fix sentry

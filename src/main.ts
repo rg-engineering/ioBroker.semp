@@ -1,65 +1,41 @@
 /* eslint-disable prefer-template */
-"use strict";
-
 /*
- * Created with @iobroker/create-adapter v2.1.1
+ * Created with @iobroker/create-adapter v2.6.5
  */
 
-const utils = require("@iobroker/adapter-core");
-//const { type } = require("os");
-const networkInterfaces = require("os").networkInterfaces;
-const { v4: uuidv4 } = require("uuid");
 
-const Gateway = require("./lib/semp/Gateway").Gateway;
+//https://www.iobroker.net/#en/documentation/dev/adapterdev.md
 
+import * as utils from "@iobroker/adapter-core";
+import Gateway from "./lib/Gateway";
+import { networkInterfaces } from "os";
 
+import { v4: uuidv4 } from "uuid";
 
-/* to do
+export class Semp extends utils.Adapter {
 
- * admin
- *	ID nur ändern, wenn sie nicht dem Format entspricht
- *	readme bzgl. der einstellbaren Parameter vervollständigen
- *
- *
+    gw: Gateway | null = null;
 
-
- *	Energieanforderung abbrechen, wenn Gerät ausschaltet, Zeit einstellbar
- *	Feiertag / Urlaub zu hause für Timer hinzufügen
-
-* timeout für dicovery (wenn description nicht innerhalb 2 Minuten abgefrgat)
-*/
-
-class Semp extends utils.Adapter {
-
-	/**
-	 * @param {Partial<utils.AdapterOptions>} [options]
-	 */
-	constructor(options) {
+	public constructor(options: Partial<utils.AdapterOptions> = {}) {
 		super({
 			...options,
 			name: "semp",
 		});
 		this.on("ready", this.onReady.bind(this));
 		this.on("stateChange", this.onStateChange.bind(this));
-		// this.on("objectChange", this.onObjectChange.bind(this));
+		this.on("objectChange", this.onObjectChange.bind(this));
 		this.on("message", this.onMessage.bind(this));
 		this.on("unload", this.onUnload.bind(this));
-
-		this.gw = null;
-
 	}
 
 	/**
 	 * Is called when databases are connected and adapter received configuration.
 	 */
-	async onReady() {
+	private async onReady(): Promise<void> {
+		this.log.debug(JSON.stringify(this.config));
+
 
 		try {
-
-			this.log.debug(JSON.stringify(this.config));
-
-
-
 			//"290B3891-0311-4854-4333-7C70BC802C2D"
 			const uuid = this.config.UUID;
 			const ip = this.config.IPAddress;
@@ -99,50 +75,27 @@ class Semp extends utils.Adapter {
 			// examples for the checkPassword/checkGroup functions
 			let result = await this.checkPasswordAsync("admin", "iobroker");
 			this.log.info("check user admin pw iobroker: " + result);
-
+	
 			result = await this.checkGroupAsync("admin", "admin");
 			this.log.info("check group user admin group admin: " + result);
 			*/
 		} catch (e) {
 			this.log.error("exception in onReady [" + e + "]");
 		}
+
+
 	}
 
-	UpdateData() {
+	UpdateData():void {
 		this.log.debug("UpdateData");
 		try {
 			for (let d = 0; d < this.config.devices.length; d++) {
 
 				this.log.debug("device " + JSON.stringify(this.config.devices[d]));
 
-				if (this.config.devices[d].IsActive && this.config.devices[d].TimerActive) {
-					if (this.config.devices[d].EnergyRequestPeriods == null || this.config.devices[d].EnergyRequestPeriods.length == 0) {
-						this.log.warn("use old energy request data with new data structure, please save it in admin");
+				
 
-						//is this necessary here???
-						//just make it backwards compatible 0.0.4 -> 0.0.3
-						const EnergyRequestPeriods = [];
-						const energyRequest = {
-							ID: 1,
-							Days: this.config.devices[d].TimerDays,
-							EarliestStartTime: this.config.devices[d].TimerStart,
-							LatestEndTime: this.config.devices[d].TimerEnd,
-							MinRunTime: this.config.devices[d].TimerMinRunTime,
-							MaxRunTime: this.config.devices[d].TimerMaxRunTime,
-							CancelRequestNotOn: this.config.devices[d].TimerCancelIfNotOn,
-							MaxTimeToOn: this.config.devices[d].TimerCancelIfNotOnTime,
-							CancelRequestAfterOff: false,
-							MinTimeAfterOff: "10"
-						};
-
-						EnergyRequestPeriods.push(energyRequest);
-
-						this.config.devices[d]["EnergyRequestPeriods"] = EnergyRequestPeriods;
-
-					}
-				}
-
-				this.log.debug("result " + JSON.stringify(this.config.devices[d].EnergyRequestPeriods));
+				//this.log.debug("result " + JSON.stringify(this.config.devices[d].EnergyRequestPeriods));
 			}
 
 
@@ -155,7 +108,12 @@ class Semp extends utils.Adapter {
 	}
 
 	//add all devices which are configured in admin page
-	async AddDevices() {
+	async AddDevices(): Promise<void> {
+
+		if (this.gw == null) {
+			this.log.error("Gateway is not initialized");
+			return;
+		}
 
 		for (let d = 0; d < this.config.devices.length; d++) {
 
@@ -168,39 +126,58 @@ class Semp extends utils.Adapter {
 				//await this.SubscribeDevice(device);
 
 				if (device.MeasurementMethod == "Estimation") {
-					this.gw.setPowerDevice(device.ID, device.MaxPower, device.StatusDetection);
+					this.gw.setPowerDevice(device.ID, device.MaxPower);
 				}
-				if (device.StatusDetection == "AlwaysOn") {
+				if (device.StatusDetectionType == "AlwaysOn") {
 					this.gw.setOnOffDevice(device.ID, true);
 				}
 			}
 		}
 	}
 
-	//async SubscribeDevice(device) {
 
-		//is done in device itself
-	//}
 
 	/**
 	 * Is called when adapter shuts down - callback has to be called under any circumstances!
-	 *
-	 * @param {() => void} callback
 	 */
-	onUnload(callback) {
+	private onUnload(callback: () => void): void {
 		try {
+			// Here you must clear all timeouts or intervals that may still be active
+			// clearTimeout(timeout1);
+			// clearTimeout(timeout2);
+			// ...
 
 			if (this.gw != null) {
 				this.gw.stop();
 			}
+
 			callback();
 		} catch (e) {
-			this.log.error("exception in onUnload [" + e + "]");
+			this.log.error("exception in onUnload " + e);
 			callback();
 		}
 	}
 
-	async onStateChange(id, state) {
+	// If you need to react to object changes, uncomment the following block and the corresponding line in the constructor.
+	// You also need to subscribe to the objects with `this.subscribeObjects`, similar to `this.subscribeStates`.
+	// /**
+	//  * Is called if a subscribed object changes
+	//  */
+	private onObjectChange(id: string, obj: ioBroker.Object | null | undefined): void {
+		if (obj) {
+			// The object was changed
+			this.log.info(`object ${id} changed: ${JSON.stringify(obj)}`);
+		} else {
+			// The object was deleted
+			this.log.info(`object ${id} deleted`);
+		}
+	}
+
+	/**
+	 * Is called if a subscribed state changes
+	 */
+
+	private async onStateChange(id: string, state: ioBroker.State | null | undefined): Promise<void> {
 		if (state) {
 			// The state was changed
 			const ids = id.split(".");
@@ -223,16 +200,28 @@ class Semp extends utils.Adapter {
 		}
 	}
 
-	UpdateDevice(id, state) {
+	UpdateDevice(id: string, state: ioBroker.State ): boolean {
 
 		let bRet = false;
+
+		if (this.gw == null) {
+			this.log.error("UpdateDevice: Gateway is not initialized");
+			return false;
+		}
+
+		if (state == null) {
+			this.log.error("UpdateDevice: state is null");
+			return false;
+        }
+
+
 		//find device and OID
 		for (let d = 0; d < this.config.devices.length; d++) {
 
 			const device = this.config.devices[d];
 			if (device.IsActive) {
 				if (device.OID_Power === id) {
-					this.gw.setPowerDevice(device.ID, state.val);
+					this.gw.setPowerDevice(device.ID, Number(state.val) );
 					bRet = true;
 				}
 				if (device.OID_Status === id) {
@@ -242,13 +231,17 @@ class Semp extends utils.Adapter {
 				//wallbox
 
 
-				if (device.Type == "EVCharger" && device.WallboxOIDs != null) {
+
+
+				
+				if (device.Type == "EVCharger" && device.wallbox_oid_read != null) {
 					let OID_PlugConnected = "";
 					let OID_IsCharging = "";
 					let OID_IsError = "";
 					let OID_Counter = "";
 					let OID_Status = "";
 
+					/*
 					for (let o = 0; o < device.WallboxOIDs.length; o++) {
 						if (device.WallboxOIDs[o].active) {
 							if (device.WallboxOIDs[o].Name == "DeviceOIDPlugConnected") {
@@ -264,6 +257,24 @@ class Semp extends utils.Adapter {
 							}
 						}
 					}
+					*/
+
+					for (let o = 0; o < device.wallbox_oid_read.length; o++) {
+						if (device.wallbox_oid_read[o].active) {
+							if (device.wallbox_oid_read[o].Name == "DeviceOIDPlugConnected") {
+								OID_PlugConnected = device.wallbox_oid_read[o].OID;
+							} else if (device.wallbox_oid_read[o].Name == "DeviceOIDIsCharging") {
+								OID_IsCharging = device.wallbox_oid_read[o].OID;
+							} else if (device.wallbox_oid_read[o].Name == "DeviceOIDIsError") {
+								OID_IsError = device.wallbox_oid_read[o].OID;
+							} else if (device.wallbox_oid_read[o].Name == "DeviceOIDCounter") {
+								OID_Counter = device.wallbox_oid_read[o].OID;
+							} else if (device.wallbox_oid_read[o].Name == "DeviceOIDStatus") {
+								OID_Status = device.wallbox_oid_read[o].OID;
+							}
+						}
+					}
+
 
 					if (OID_PlugConnected === id) {
 						this.gw.setWallboxPlugConnected(device.ID, state.val);
@@ -278,7 +289,7 @@ class Semp extends utils.Adapter {
 						bRet = true;
 					}
 					if (OID_Counter === id) {
-						this.gw.setPowerDevice(device.ID, state.val);
+						this.gw.setPowerDevice(device.ID, Number(state.val));
 						bRet = true;
 					}
 					if (OID_Status === id) {
@@ -312,7 +323,13 @@ class Semp extends utils.Adapter {
 		return bRet;
 	}
 
-	async onMessage(obj) {
+
+	// If you need to accept messages in your adapter, uncomment the following block and the corresponding line in the constructor.
+	// /**
+	//  * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
+	//  * Using this method requires "common.messagebox" property to be set to true in io-package.json
+	//  */
+	private async onMessage(obj: ioBroker.Message): Promise<void> {
 		this.log.info("on message " + JSON.stringify(obj));
 		if (typeof obj === "object" && obj.command) {
 			if (obj.command === "getIP") {
@@ -321,24 +338,24 @@ class Semp extends utils.Adapter {
 				const myIP = this.GetIP();
 				// Send response in callback if required
 				if (obj.callback) {
-this.sendTo(obj.from, obj.command, myIP, obj.callback);
-}
+					this.sendTo(obj.from, obj.command, myIP, obj.callback);
+				}
 			} else if (obj.command === "getUUID") {
 				this.log.info("get UUID");
 
 				const uuid = this.GetUUID();
 				// Send response in callback if required
 				if (obj.callback) {
-this.sendTo(obj.from, obj.command, uuid, obj.callback);
-}
+					this.sendTo(obj.from, obj.command, uuid, obj.callback);
+				}
 			} else if (obj.command === "getDeviceBaseID") {
 				this.log.info("get DeviceBaseID");
 
 				const devicebaseid = await this.GetDeviceBaseID();
 				// Send response in callback if required
 				if (obj.callback) {
-this.sendTo(obj.from, obj.command, devicebaseid, obj.callback);
-}
+					this.sendTo(obj.from, obj.command, devicebaseid, obj.callback);
+				}
 			} else {
 				this.log.warn("unknown command " + obj.command);
 			}
@@ -346,13 +363,15 @@ this.sendTo(obj.from, obj.command, devicebaseid, obj.callback);
 	}
 
 
-	GetIP() {
+	GetIP(): string {
 		let ip = "";
 		const nets = networkInterfaces();
 
 		for (const name of Object.keys(nets)) {
-			for (const net of nets[name]) {
-				if (net.family === "IPv4" && !net.internal) {
+			const list = nets[name] || [];
+			for (const net of list) {
+				// net.family can be string "IPv4" or number 4 depending on Node version
+				if ((net.family === "IPv4" || net.family === 4) && !net.internal) {
 					ip = net.address;
 				}
 			}
@@ -360,7 +379,7 @@ this.sendTo(obj.from, obj.command, devicebaseid, obj.callback);
 		return ip;
 	}
 
-	GetUUID() {
+	GetUUID(): string {
 		let uuid = "000-todo";
 
 		uuid = uuidv4();
@@ -368,7 +387,7 @@ this.sendTo(obj.from, obj.command, devicebaseid, obj.callback);
 		return uuid;
 	}
 
-	async GetDeviceBaseID() {
+	async GetDeviceBaseID(): Promise<string> {
 		let devicebaseid = "12345678";
 
 		const ret = await this.getForeignObjectAsync("system.config");
@@ -376,39 +395,48 @@ this.sendTo(obj.from, obj.command, devicebaseid, obj.callback);
 		if (ret != null) {
 			//this.log.debug("system config " + JSON.stringify(ret));
 
-			const latidude = ret.common.latitude;
+			// Safely read latitude
+			const common: any = (ret as any).common;
+			if (common && typeof common.latitude === "number" && !Number.isNaN(common.latitude)) {
+				const latitude: number = common.latitude;
 
-			devicebaseid = ("00000000" + Math.round(latidude * 100000000)).slice(-8);
+				devicebaseid = ("00000000" + Math.round(latitude * 100000000)).slice(-8);
 
-			this.CheckBaseId(devicebaseid);
+				this.CheckBaseId(devicebaseid);
 
-			this.log.debug("new created BaseID " + devicebaseid + " type " + typeof devicebaseid);
+				this.log.debug("new created BaseID " + devicebaseid + " type " + typeof devicebaseid);
+			} else {
+				this.log.warn("system.config.common.latitude is not a valid number, using default devicebaseid " + devicebaseid);
+			}
 
 
 		}
 		return devicebaseid;
 	}
 
-	CheckBaseId(id) {
+	CheckBaseId(id: string | number): boolean {
 
 		/*
 		base id muss nummer, 8 ziffern und kein punkt
 		*/
 
-		const ret = false;
+		let valid = false;
 		this.log.debug("check BaseID " + id + " type " + typeof id);
 
-		//only numbers
-		if (typeof id === "number" && Number.isInteger(id)) {
+		// normalize to string
+		const s = String(id);
 
-			this.log.debug("BaseID: is integer number");
+		// only digits and length 8
+		const re = /^\d{8}$/;
+		if (re.test(s)) {
+			this.log.debug("BaseID: valid 8-digit number");
+			valid = true;
 		} else {
-			this.log.error("BaseID: wrong type or not integer" + typeof id + " " + JSON.stringify(id) + Number.isInteger(id));
+			this.log.error("BaseID: wrong format, must be 8 digits (no dots). value: " + s);
+			valid = false;
 		}
 
-
-
-		return ret;
+		return valid;
 	}
 
 
@@ -416,11 +444,8 @@ this.sendTo(obj.from, obj.command, devicebaseid, obj.callback);
 
 if (require.main !== module) {
 	// Export the constructor in compact mode
-	/**
-	 * @param {Partial<utils.AdapterOptions>} [options]
-	 */
-	module.exports = (options) => new Semp(options);
+	module.exports = (options: Partial<utils.AdapterOptions> | undefined) => new Semp(options);
 } else {
 	// otherwise start the instance directly
-	new Semp();
+	(() => new Semp())();
 }

@@ -37,9 +37,10 @@
     "@iobroker/adapter-dev": "^1.5.0",
     "@iobroker/build-tools": "^2.0.15",
     "@iobroker/eslint-config": "^2.2.0",
-    "@iobroker/testing": "^5.2.2"
+    "@iobroker/testing": "^5.2.2",
+    "baseline-browser-mapping": "^2.9.18"
   },
-  "main": "main.js",
+  "main": "build/main.js",
   "scripts": {
     "test": "npm run test:package",
     "test:package": "mocha test/package --exit",
@@ -53,7 +54,7 @@
     "2-build": "node tasks.js --2-build",
     "3-copy": "node tasks.js --3-copy",
     "4-patch": "node tasks.js --4-patch",
-    "build": "node tasks && npm pack",
+    "build": "npm run build-backend && tasks && npm pack",
     "build-backend": "tsc -p tsconfig.build.json",
     "npm": "npm i && cd src-admin && npm i -f"
   },
@@ -63,7 +64,7 @@
   "files": [
     "admin/",
     "admin{,/!(i18n)/**}/flat.txt",
-    "lib/",
+    "!lib",
     "!.vscode",
     "!.github",
     "!.git",
@@ -76,7 +77,9 @@
     "!typings",
     "io-package.json",
     "LICENSE",
-    "main.js"
+    "!main.js",
+    "build/"
+
   ],
   "readmeFilename": "README.md"
 }

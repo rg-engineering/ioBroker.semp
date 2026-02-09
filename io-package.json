@@ -159,6 +159,29 @@
     "adminUI": {
       "config": "materialize"
     },
+    "messages": [
+      {
+        "condition": {
+          "operand": "and",
+          "rules": [
+            "oldVersion<1.6.0",
+            "newVersion>=1.99.0"
+          ]
+        },
+        "title": {
+          "en": "breaking change: configuration of devices needs to be checked",
+        },
+        "text": {
+          "en": "Due to the redesign of the administration interface in React, the configuration structure has changed. Devices must be checked. While the adapter attempts to migrate the data, this cannot be guaranteed. ",
+        },
+        "level": "warn",
+        "buttons": [
+          "agree",
+          "cancel"
+        ]
+      }
+    ],
+
     "plugins": {
       "sentry": {
         "dsn": "https://84efb82607d94201a8d1d3b180f10024@o390433.ingest.sentry.io/4503953214275584"
