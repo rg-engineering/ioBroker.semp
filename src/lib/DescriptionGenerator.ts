@@ -10,14 +10,7 @@ export default class DescriptionGenerator {
 
     //Generates an xml description
 	/**
-     * 
-     * @param {string} uuid - A globally unique uuid
-     * @param {string} serverAddress - Server address to write in description
-     * @param {string} friendlyName - gateway name
-     * @param {string} manufacturer - manufacturer name
-     * @param {string} basePath - Base path for semp requests
-     * @returns {string} - Description xml
-     * @throws {TypeError} if uuid or server address are not specified
+     *
      * @example
      *       generateDescription("2fac1234-31f8-11b4-a222-08002b34c003",
      *      "http://192.168.188.23:8080",

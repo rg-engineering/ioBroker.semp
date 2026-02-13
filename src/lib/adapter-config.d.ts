@@ -1,6 +1,52 @@
 // This file extends the AdapterConfig type from "@types/iobroker"
 
 
+interface Identification {
+    DeviceId: device.ID,
+    DeviceName: device.Name,
+    DeviceType: device.Type,
+    DeviceSerial: device.SerialNr,
+    DeviceVendor: device.Vendor
+}
+
+interface Characteristics {
+    MinPowerConsumption?: number ,
+    MaxPowerConsumption?: number,
+    MinOnTime?: number,
+    MaxOnTime?: number,
+    MinOffTime?: number,  
+    MaxOffTime?: number,
+}
+interface CurrentPower{
+    Method: string,
+}
+
+interface Timestamps {
+    AbsoluteTimestamps: boolean,
+}
+interface Interruptions {
+    InterruptionsAllowed: boolean,
+}
+
+interface Requests {
+    OptionalEnergy: boolean,
+}
+
+interface Capabilities {
+    CurrentPower: CurrentPower,
+    Timestamps: Timestamps,
+    Interruptions: Interruptions,
+    Requests: Requests,
+}
+
+export interface deviceInfo {
+    Identification: Identification,
+    Characteristics: Characteristics
+    Capabilities: Capabilities
+};
+
+
+
 interface EnergyRequestPeriod {
     ID: string;
     Days: string;
@@ -10,7 +56,7 @@ interface EnergyRequestPeriod {
     MaxRunTime: number;
 }
 
-interface WallboxOIDSettings {
+export interface WallboxOIDSettings {
     active: boolean;
     must: string;
     Name: string;
@@ -25,7 +71,7 @@ interface WallboxOIDSettings {
 
 
 
-interface SempDevice {
+export interface SempDevice {
     IsActive: boolean;
     ID: string;
     Name: string;
@@ -68,7 +114,7 @@ interface SempDevice {
     //wallbox settings
     BatteryCapacity: number;
     WallboxChargeTime: string;
-    WallboxPhases: string;
+    WallboxPhases: number;
     Wallbox3phaseSwitchLimit: number;
     Wallbox3phaseSwitchDelay: number;
     WallboxNeedCurrentRecommendation: boolean;
@@ -76,6 +122,21 @@ interface SempDevice {
 
     URLReadPollRate: number;
     wallbox_oid_read: WallboxOIDSettings[];
+
+    //same as above but different type for easier access in code
+    WallboxOID: {
+        DeviceOIDPlugConnected?: WallboxOIDSettings | null,
+        DeviceOIDIsCharging?: WallboxOIDSettings | null,
+        DeviceOIDIsError?: WallboxOIDSettings | null,
+        DeviceOIDChargePower?: WallboxOIDSettings | null,
+        DeviceOIDStartCharge?: WallboxOIDSettings | null,
+        DeviceOIDStopCharge?: WallboxOIDSettings | null,
+        DeviceOID3PhaseChargeEnable?: WallboxOIDSettings | null,
+        DeviceOID3PhaseChargeDisable?: WallboxOIDSettings | null,
+        DeviceOIDCounter?: WallboxOIDSettings | null,
+        DeviceOIDStatus?: WallboxOIDSettings | null,
+        DeviceOIDSwitch?: WallboxOIDSettings | null
+    }
 
 }
 

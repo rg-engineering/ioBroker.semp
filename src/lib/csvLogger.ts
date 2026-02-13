@@ -1,13 +1,23 @@
 /* eslint-disable prefer-template */
-const fs = require("fs");
-const Path = require("path");
-const createCsvWriter = require("csv-writer").createObjectCsvWriter;
+
+import { createObjectCsvWriter } from "csv-writer";
+import fs from "fs";
+import * as Path from "path";
+
+import type { Semp } from "../main";
 import Base from "./base";
+
 export default class csvLogger extends Base {
 
-	constructor(parentAdapter) {
+	parentAdapter: Semp;
+	lastDay: number;
+	csvWriters: { writeRecords: (records: any[]) => Promise<void> }[];
+	logData: { file: string; headers: { id: string; title?: string }[] }[];
+	Path2Csv: string;
 
-        super(parentAdapter,0,"csvLogger");
+	constructor(parentAdapter: Semp) {
+
+		super(parentAdapter, 0, "csvLogger");
 
 		this.parentAdapter = parentAdapter;
 
@@ -20,7 +30,7 @@ export default class csvLogger extends Base {
 		this.Path2Csv = "";
 	}
 
-	RotateLog() {
+	RotateLog(): void {
 
 		//get date
 		const now = new Date();
@@ -46,7 +56,7 @@ export default class csvLogger extends Base {
 	}
 
 
-	StartLog(file, headers) {
+	StartLog(file: string, headers: { id: string; title?: string }[]): void {
 		try {
 			this.CreateCsvWriter(file, headers);
 
@@ -60,7 +70,7 @@ export default class csvLogger extends Base {
 		}
 	}
 
-	RestartLog(idx) {
+	RestartLog(idx: number): void {
 		try {
 			const file = this.logData[idx].file;
 			const headers = this.logData[idx].headers;
@@ -71,62 +81,62 @@ export default class csvLogger extends Base {
 		}
 	}
 
-	CreateCsvWriter(file, headers) {
+	CreateCsvWriter(file: string, headers: { id: string; title?: string }[]): void {
 		const filename = this.CreateFilename(file);
 
+		if (!filename) {
+			this.parentAdapter.log.error("CreateCsvWriter: could not determine filename for " + file);
+			return;
+		}
+
 		this.parentAdapter.log.info("logging on " + filename);
-		const csvWriter = createCsvWriter({
+		const csvWriter = createObjectCsvWriter({
 			path: filename,
 			header: headers,
 			fieldDelimiter: ";",
 			append: true
 		});
 
-		this.csvWriters.push(csvWriter);
+		this.csvWriters.push(csvWriter as { writeRecords: (records: any[]) => Promise<void> });
 	}
 
 
-	CreateFilename(file) {
+	CreateFilename(file: string): string {
 		let newFilename = "";
 		try {
 
-			/*
-            exception in CreateFilename[Error: ENOENT: no such file or directory, stat '/home/datalogger/projects/test1234.csv']
-            wenn file nicht vorhanden
-            */
-
-			let stats = null;
+			let stats: fs.Stats | null = null;
 			try {
 				stats = fs.statSync(file);
 			} catch (e) {
-				//2023-06-10
-				//we need to catch exception here because statSync fires an exception if file not exists
-				this.parentAdapter.log.error("exception in fs.statSync [" + e + "]");
+				// fs.statSync throws if file does not exist - that's OK, we catch and continue
+				this.parentAdapter.log.debug("fs.statSync error (may be non-existent file): " + e);
 			}
 
 			const exist = fs.existsSync(file);
 
-			this.parentAdapter.log.debug(" CreateFilename " + JSON.stringify(stats) + " " + exist);
+			this.parentAdapter.log.debug(" CreateFilename stats: " + JSON.stringify(stats) + " exist:" + exist);
 
 
-			let path = "";
+			let targetPath = "";
 			let filename = "semp";
 			let extension = ".csv";
 
-			if (!exist || stats.isFile()) {
+			if (!exist || (stats && stats.isFile())) {
 
-				path = Path.dirname(file);
-				extension = Path.extname(file);
-				filename = Path.basename(file, extension);
+				targetPath = Path.dirname(file);
+				extension = Path.extname(file) || extension;
+				filename = Path.basename(file, extension) || filename;
 
-				this.parentAdapter.log.debug("csv filename provided: " + path + " " + filename + " " + extension);
+				this.parentAdapter.log.debug("csv filename provided: " + targetPath + " " + filename + " " + extension);
 
-			} else if (stats.isDirectory()) {
-				path = file;
+			} else if (stats && stats.isDirectory()) {
+				targetPath = file;
 
-				this.parentAdapter.log.debug("csv only path provided :" + path );
+				this.parentAdapter.log.debug("csv only path provided :" + targetPath);
 			} else {
 				this.parentAdapter.log.error("invalid path / file for csv logging " + file);
+				return "";
 			}
 
 			const now = new Date();
@@ -135,9 +145,9 @@ export default class csvLogger extends Base {
 			const date = ("0" + now.getDate()).slice(-2);
 			const datestring = year + month + date;
 
-			this.Path2Csv = path;
+			this.Path2Csv = targetPath;
 
-			newFilename = path + "/" + filename + "_" + datestring  + extension;
+			newFilename = Path.join(targetPath, filename + "_" + datestring + extension);
 
 		} catch (e) {
 			this.parentAdapter.log.error("exception in CreateFilename [" + e + "]");
@@ -145,7 +155,7 @@ export default class csvLogger extends Base {
 		return newFilename;
 	}
 
-	async WriteCSVLog(id, records) {
+	async WriteCSVLog(id: number, records: any[]): Promise<void> {
 
 		try {
 
@@ -160,24 +170,23 @@ export default class csvLogger extends Base {
 		}
 	}
 
-	deleteOldFiles() {
+	deleteOldFiles(): void {
 		try {
-			this.walkDir(this.Path2Csv, function (filePath) {
-				fs.stat(filePath, function (err, stat) {
-					const now = new Date().getTime();
-					const endTime = new Date(stat.mtime).getTime() + (3 * 24 * 60 * 60 * 1000); // 3 days in miliseconds
-
-					if (err) {
-						//this.parentAdapter.log.error("error deleting old files " + err);
+			if (!this.Path2Csv || !fs.existsSync(this.Path2Csv)) {
+				return;
+			}
+			this.walkDir(this.Path2Csv, (filePath: string) => {
+				fs.stat(filePath, (err, stat) => {
+					if (err || !stat) {
 						return;
 					}
+					const now = Date.now();
+					const endTime = new Date(stat.mtime).getTime() + (3 * 24 * 60 * 60 * 1000); // 3 days in miliseconds
 
 					if (now > endTime) {
-						//this.parentAdapter.log.info("deleting " + filePath);
-						return fs.unlink(filePath, function (err) {
+						fs.unlink(filePath, (err) => {
 							if (err) {
-								//this.parentAdapter.log.error("error deleting old files " + err);
-								return;
+								// ignore
 							}
 						});
 					}
@@ -188,12 +197,17 @@ export default class csvLogger extends Base {
 		}
 	}
 
-	walkDir(dir, callback) {
-		fs.readdirSync(dir).forEach(f => {
+	walkDir(dir: string, callback: (filePath: string) => void): void {
+		const entries = fs.readdirSync(dir);
+		entries.forEach(f => {
 			const dirPath = Path.join(dir, f);
-			const isDirectory = fs.statSync(dirPath).isDirectory();
-			isDirectory ?
-				this.walkDir(dirPath, callback) : callback(Path.join(dir, f));
+			const stat = fs.statSync(dirPath);
+			const isDirectory = stat.isDirectory();
+			if (isDirectory) {
+				this.walkDir(dirPath, callback);
+			} else {
+				callback(Path.join(dir, f));
+			}
 		});
 	}
 

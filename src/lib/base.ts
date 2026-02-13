@@ -1,13 +1,13 @@
 /* eslint-disable prefer-template */
-import type { DasWetter } from "../main";
+import type { Semp } from "../main";
 
 export default class Base {
 
-    public adapter: DasWetter;
+    public adapter: Semp;
     id: number;
     name: string;
 
-    constructor(adapter: DasWetter,id:number, name: string) {
+    constructor(adapter: Semp,id:number, name: string) {
         this.adapter = adapter;
         this.id = id;
         this.name = name;
