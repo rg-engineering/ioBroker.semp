@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "semp",
-    "version": "1.5.4",
+    "version": "1.9.9",
     "news": {
       "1.5.4": {
         "en": "bug fix sentry",
