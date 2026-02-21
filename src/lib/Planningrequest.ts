@@ -3,7 +3,7 @@ import Timeframe from "./Timeframe";
 import TimeframeWallbox from "./TimeframeWallbox";
 import Base from "./base";
 import type { Semp } from "../main";
-import type { EnergyRequestPeriod } from "./adapter-config";
+import type { EnergyRequestPeriod } from "./types";
 
 
 

@@ -1,7 +1,7 @@
 /* eslint-disable prefer-template */
 
 import type { Semp } from "../main";
-import type {  EnergyRequestPeriod } from "./adapter-config";
+import type {  EnergyRequestPeriod } from "./types";
 
 import Base from "./base";
 

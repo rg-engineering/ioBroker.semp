@@ -1,5 +1,5 @@
 /* eslint-disable prefer-template */
-import type { SempDevice, WallboxOIDSettings, iobObject, deviceInfo } from "./adapter-config";
+import type { SempDevice, WallboxOIDSettings, iobObject, deviceInfo } from "./types";
 import type Gateway from "./Gateway";
 import Planningrequest from "./Planningrequest";
 
@@ -11,6 +11,8 @@ import type csvLogger from "./csvLogger";
 type TimeoutHandle = ReturnType<typeof setTimeout>;
 type IntervalHandle = ReturnType<typeof setInterval>;
 
+
+	
 interface powerInfo {
 	AveragePower: number
 	Timestamp: number,
@@ -18,6 +20,7 @@ interface powerInfo {
 	MaxPower?: number
 	MinPower?: number
 }
+
 
 
 
@@ -50,6 +53,8 @@ export default class Device extends Base {
 
 	Gateway: Gateway;
 	device: SempDevice;
+
+	
 
 	deviceInfo: deviceInfo | null;
 	deviceStatus: any;

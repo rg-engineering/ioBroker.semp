@@ -9,14 +9,6 @@
 export default class DescriptionGenerator {
 
     //Generates an xml description
-	/**
-     *
-     * @example
-     *       generateDescription("2fac1234-31f8-11b4-a222-08002b34c003",
-     *      "http://192.168.188.23:8080",
-     *      "gateway", "testManufacturer", "/semp")
-     */
-
 
 	/* to do
         * manufacturerURL

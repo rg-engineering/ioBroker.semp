@@ -1,6 +1,6 @@
 /* eslint-disable prefer-template */
 import type { Semp } from "../main";
-import type {  iobObject } from "./adapter-config";
+import type {  iobObject } from "./types";
 
 export default class Base {
 

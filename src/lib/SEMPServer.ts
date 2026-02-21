@@ -11,7 +11,7 @@ import Base from "./base";
 import type csvLogger from "./csvLogger";
 import type Gateway from "./Gateway"; 
 
-import type { deviceInfo } from "./adapter-config";
+import type { deviceInfo } from "./types";
 
 type TimeoutHandle = ReturnType<typeof setTimeout>;
 
