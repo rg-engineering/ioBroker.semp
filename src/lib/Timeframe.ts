@@ -1,24 +1,57 @@
 /* eslint-disable prefer-template */
 
-/* todo
-
-
-
-*/
+import type { Semp } from "../main";
+import type {  EnergyRequestPeriod } from "./adapter-config";
 
 import Base from "./base";
+
+
+type TimeoutHandle = ReturnType<typeof setTimeout>;
+
+interface TimeframeSettings {
+	EnergyRequestPeriod: EnergyRequestPeriod,
+	DeviceName: string;
+	DishWasherMode: boolean;
+}
+
+interface Timeframedata {
+	TimeframeId: string;
+	DeviceId: string;
+	EarliestStart: number;
+	LatestEnd: number;
+	MinRunningTime: number;
+	MaxRunningTime: number;
+}
+
 export default class Timeframe extends Base {
 
-	constructor(settings, parentAdapter) {
+	settings: EnergyRequestPeriod;
+	deviceName: string;
+	DishWasherMode: boolean;
+	isActive: boolean;
+	EarliestStart: number;
+	LatestEnd: number;
+	MinRunningTime: number;
+	MaxRunningTime: number;
+	CurrentOnTime: number;
+	timediff: number;
+	CanceledOnDay: number;
+	Status: string;
+	UpdateTimesID: TimeoutHandle | null;
+	enabledbyUser: boolean;
+
+	constructor(settings: TimeframeSettings, parentAdapter: Semp | null) {
+
+		super(parentAdapter, 0, "Timeframe");
 
 		this.settings = settings.EnergyRequestPeriod;
 		this.deviceName = settings.DeviceName;
-        this.DishWasherMode = settings.DishWasherMode;
+		this.DishWasherMode = settings.DishWasherMode;
 
 		this.isActive = false;
-		this.parentAdapter = parentAdapter;
+		
 
-		this.parentAdapter.log.debug("timeframe constructor " + JSON.stringify(settings));
+		this.logDebug("timeframe constructor " + JSON.stringify(settings));
 
 		this.EarliestStart = -1;
 		this.LatestEnd = -1;
@@ -44,27 +77,27 @@ export default class Timeframe extends Base {
 
 	}
 
-	destructor() {
-		this.parentAdapter.log.debug("timeframe destructor called " + this.UpdateTimesID);
+	destructor(): void {
+		this.logDebug("timeframe destructor called " );
 		if (this.UpdateTimesID != null) {
 			clearInterval(this.UpdateTimesID);
 			this.UpdateTimesID = null;
-			this.parentAdapter.log.debug("timeframe timer killed ");
+			this.logDebug("timeframe timer killed ");
 		}
 	}
 
-	SetDeviceStatus(status) {
+	SetDeviceStatus(status: string): void {
 		this.Status = status;
 	}
 
-	async Prepare() {
+	async Prepare(): Promise <void> {
 		await this.createObjects();
 
 		const key = "Devices." + this.deviceName + ".TimeFrames." + this.settings.ID + ".TimeOn";
-		const curVal = await this.parentAdapter.getStateAsync(key);
+		const curVal = await this.adapter?.getStateAsync(key);
 
 		if (curVal != null) {
-			const vals = curVal.val.split(":");
+			const vals = (curVal.val as string ).split(":");
 			if (vals.length > 1) {
 
 				//todo
@@ -76,13 +109,13 @@ export default class Timeframe extends Base {
 
 	}
 
-	Start() {
+	Start() : void {
 
 		try {
 			const now = new Date();
 			const dayOfWeek = now.getDay();
 
-			this.parentAdapter.log.debug(this.deviceName + " (" + this.settings.ID + ") Start called");
+			this.logDebug(this.deviceName + " (" + this.settings.ID + ") Start called");
 
 			//if we have canceld it today, do not check again
 			if (this.CanceledOnDay != dayOfWeek) {
@@ -95,24 +128,24 @@ export default class Timeframe extends Base {
 
 				let allchecked = true;
 				if (start.length != 2) {
-					this.parentAdapter.log.error(this.deviceName + " EarliestStartTime, unsupported time format ' " + this.settings.EarliestStartTime + " ', should be hh:mm");
+					this.logError(this.deviceName + " EarliestStartTime, unsupported time format ' " + this.settings.EarliestStartTime + " ', should be hh:mm");
 					allchecked = false;
 				}
 				if (end.length != 2) {
-					this.parentAdapter.log.error(this.deviceName + " LatestEndTime, unsupported time format ' " + this.settings.LatestEndTime + " ', should be hh:mm");
+					this.logError(this.deviceName + " LatestEndTime, unsupported time format ' " + this.settings.LatestEndTime + " ', should be hh:mm");
 					allchecked = false;
 				}
 				if (minRunTimes.length != 2) {
-					this.parentAdapter.log.error(this.deviceName + " MinRunTime, unsupported time format ' " + this.settings.MinRunTime + " ', should be hh:mm");
+					this.logError(this.deviceName + " MinRunTime, unsupported time format ' " + this.settings.MinRunTime + " ', should be hh:mm");
 					allchecked = false;
 				}
 				if (maxRunTimes.length != 2) {
-					this.parentAdapter.log.error(this.deviceName + " MaxRunTime, unsupported time format ' " + this.settings.MaxRunTime + " ', should be hh:mm");
+					this.logError(this.deviceName + " MaxRunTime, unsupported time format ' " + this.settings.MaxRunTime + " ', should be hh:mm");
 					allchecked = false;
 				}
 
 				//check days
-				this.parentAdapter.log.debug(this.deviceName + " (" + this.settings.ID +  ") check run today  " + dayOfWeek + " " + this.settings.Days);
+				this.logDebug(this.deviceName + " (" + this.settings.ID +  ") check run today  " + dayOfWeek + " " + this.settings.Days);
 				let runToday = false;
 				if (this.settings.Days == "everyDay") {
 					runToday = true;
@@ -136,13 +169,13 @@ export default class Timeframe extends Base {
 				if (allchecked && runToday) {
 
 					const StartTime = new Date();
-					StartTime.setHours(start[0]);
-					StartTime.setMinutes(start[1]);
+					StartTime.setHours(Number(start[0]));
+					StartTime.setMinutes(Number(start[1]));
 					StartTime.setSeconds(0);
 
 					const EndTime = new Date();
-					EndTime.setHours(end[0]);
-					EndTime.setMinutes(end[1]);
+					EndTime.setHours(Number(end[0]));
+					EndTime.setMinutes(Number(end[1]));
 					EndTime.setSeconds(0);
 
 					const StartIn = StartTime.getTime() - now.getTime();
@@ -160,8 +193,8 @@ export default class Timeframe extends Base {
 						this.LatestEnd = Math.floor(EndIn / 1000);
 					}
 
-					this.MinRunningTime = (minRunTimes[0] * 60 * 60) + (minRunTimes[1] * 60);
-					this.MaxRunningTime = (maxRunTimes[0] * 60 * 60) + (maxRunTimes[1] * 60);
+					this.MinRunningTime = (Number(minRunTimes[0]) * 60 * 60) + (Number(minRunTimes[1]) * 60);
+					this.MaxRunningTime = (Number(maxRunTimes[0]) * 60 * 60) + (Number(maxRunTimes[1]) * 60);
 
 					this.CurrentOnTime = 0;
 
@@ -173,17 +206,17 @@ export default class Timeframe extends Base {
 					this.CurrentOnTime = -1;
 				}
 			}
-			this.parentAdapter.log.debug(this.deviceName + " timeframe " + this.settings.ID + " start earliest: " + this.EarliestStart + " latest: " + this.LatestEnd + " MinRunTime: " + this.MinRunningTime + " MaxRuntime: " + this.MaxRunningTime);
+			this.logDebug(this.deviceName + " timeframe " + this.settings.ID + " start earliest: " + this.EarliestStart + " latest: " + this.LatestEnd + " MinRunTime: " + this.MinRunningTime + " MaxRuntime: " + this.MaxRunningTime);
 		} catch (e) {
-			this.parentAdapter.log.error("exception in timeframe start [" + e + "]");
+			this.logError("exception in timeframe start [" + e + "]");
 		}
 	}
 
 
-	async GetEnabled() {
+	async GetEnabled(): Promise<void> {
 		const key = "Devices." + this.deviceName + ".TimeFrames." + this.settings.ID + ".active";
 
-		const current = await this.parentAdapter.getStateAsync(key);
+		const current = await this.adapter?.getStateAsync(key);
 
 		//this.parentAdapter.log.debug(key +  ": timeframe " + JSON.stringify(current));
 
@@ -200,9 +233,9 @@ export default class Timeframe extends Base {
 	}
 
 
-	Update() {
+	async Update(): Promise<void> {
 
-		this.GetEnabled();
+		await this.GetEnabled();
 
 		this.EarliestStart = this.EarliestStart - this.timediff;
 		if (this.EarliestStart < 0) {
@@ -231,13 +264,13 @@ export default class Timeframe extends Base {
 			}
 		}
 		if (this.EarliestStart > 0 || this.LatestEnd > 0) {
-			this.parentAdapter.log.debug(this.deviceName + " timeframe " + this.settings.ID + " update earliest: " + this.EarliestStart + " latest: " + this.LatestEnd + " MinRunTime: " + this.MinRunningTime + " MaxRuntime: " + this.MaxRunningTime);
+			this.logDebug(this.deviceName + " timeframe " + this.settings.ID + " update earliest: " + this.EarliestStart + " latest: " + this.LatestEnd + " MinRunTime: " + this.MinRunningTime + " MaxRuntime: " + this.MaxRunningTime);
 		} else {
-			this.parentAdapter.log.debug(this.deviceName + " timeframe " + this.settings.ID + " inactive");
+			this.logDebug(this.deviceName + " timeframe " + this.settings.ID + " inactive");
 		}
 	}
 
-	getTimeframeData() {
+	async getTimeframeData(): Promise<Timeframedata | null> {
 
 		let timeframeData = null;
 
@@ -266,11 +299,11 @@ export default class Timeframe extends Base {
 
 			const key = "Devices." + this.deviceName + ".TimeFrames." + this.settings.ID + ".LastSent";
 
-			this.parentAdapter.setState(key, { ack: true, val: JSON.stringify(timeframeData) });
+			await this.SetState(key,  true, JSON.stringify(timeframeData) );
 		} else {
 
 			if (!this.enabledbyUser) {
-				this.parentAdapter.log.debug(this.deviceName + " ( " + this.settings.ID + ") timeframe disabled by user ");
+				this.logDebug(this.deviceName + " ( " + this.settings.ID + ") timeframe disabled by user ");
 			}
 
 		}
@@ -284,19 +317,22 @@ export default class Timeframe extends Base {
 	}
 
 
-	Check2Switch() {
+	Check2Switch(): {
+		SwitchOff: boolean;
+		restart: boolean;
+	} {
 		let SwitchOff = false;
 		const restart = false;
 
 		if (this.isActive) {
-			this.parentAdapter.log.debug(this.deviceName + " (" + this.settings.ID + ")  000");
+			this.logDebug(this.deviceName + " (" + this.settings.ID + ")  000");
 			if (this.MaxRunningTime == 0) {
 				//SwitchOff = true; //done below
-				this.parentAdapter.log.debug(this.deviceName + " turn device off at end of MaxRunTime");
+				this.logDebug(this.deviceName + " turn device off at end of MaxRunTime");
 				//this.LatestEnd = 0; //stop energy request too
 				this.CancelActiveTimeframe();
 			} else {
-				this.parentAdapter.log.debug(this.deviceName + " (" + this.settings.ID + ")  111");
+				this.logDebug(this.deviceName + " (" + this.settings.ID + ")  111");
 			}
 
 
@@ -305,24 +341,24 @@ export default class Timeframe extends Base {
 
 				//xxx hier im Spülmaschinen-Modus nicht ausschalten
 				if (this.DishWasherMode) {
-					this.parentAdapter.log.debug(this.deviceName + " not to turn device off at end of LatestEnd, dishwasher");
+					this.logDebug(this.deviceName + " not to turn device off at end of LatestEnd, dishwasher");
 				} else {
 					SwitchOff = true;
-					this.parentAdapter.log.debug(this.deviceName + " turn device off at end of LatestEnd");
+					this.logDebug(this.deviceName + " turn device off at end of LatestEnd");
 					
 				}
 				this.isActive = false;
 				this.Start();
 			} else {
-				this.parentAdapter.log.debug(this.deviceName + " (" + this.settings.ID + ")  222 is active " + this.EarliestStart + " " + this.LatestEnd);
+				this.logDebug(this.deviceName + " (" + this.settings.ID + ")  222 is active " + this.EarliestStart + " " + this.LatestEnd);
 			}
 		} else {
 			this.Start();
-			this.parentAdapter.log.debug(this.deviceName + " (" + this.settings.ID + ")  333 not yet active");
+			this.logDebug(this.deviceName + " (" + this.settings.ID + ")  333 not yet active");
 		}
 		this.UpdateObjects();
 
-		this.parentAdapter.log.debug(this.deviceName + " (" + this.settings.ID + ") check end of max runtime " + SwitchOff + " " + this.isActive);
+		this.logDebug(this.deviceName + " (" + this.settings.ID + ") check end of max runtime " + SwitchOff + " " + this.isActive);
 
 		const ret = {
 			SwitchOff: SwitchOff,
@@ -333,7 +369,7 @@ export default class Timeframe extends Base {
 
 	}
 
-	CancelActiveTimeframe() {
+	CancelActiveTimeframe() : void {
 		if (this.isActive) {
 			this.EarliestStart = 0;
 			this.LatestEnd = 0;
@@ -346,7 +382,7 @@ export default class Timeframe extends Base {
 	}
 
 
-	GetFinished() {
+	GetFinished(): boolean {
 		let bRet = false;
 
 		if (this.EarliestStart == 0 && this.LatestEnd == 0) {
@@ -358,7 +394,7 @@ export default class Timeframe extends Base {
 
 
 	//=============================================================
-	async createObjects() {
+	async createObjects(): Promise<void> {
 
 		let key = "Devices." + this.deviceName + ".TimeFrames." + this.settings.ID + ".TimeOn";
 		let obj = {
@@ -435,102 +471,61 @@ export default class Timeframe extends Base {
 			}
 		};
 		await this.CreateObject(key, obj);
-		this.SetDefault(key, "true");
+		await this.SetDefault(key, "true");
 
 	}
 
-	async CreateObject(key, obj) {
-
-		const obj_new = await this.parentAdapter.getObjectAsync(key);
-		//adapter.log.warn("got object " + JSON.stringify(obj_new));
-
-		if (obj_new != null) {
-
-			if ((obj_new.common.role != obj.common.role
-                || obj_new.common.type != obj.common.type
-                || (obj_new.common.unit != obj.common.unit && obj.common.unit != null)
-                || obj_new.common.read != obj.common.read
-                || obj_new.common.write != obj.common.write
-                || obj_new.common.name != obj.common.name
-                || obj_new.common.desc != obj.common.desc)
-                && obj.type === "state"
-			) {
-				this.parentAdapter.log.warn("change object " + JSON.stringify(obj) + " " + JSON.stringify(obj_new));
-				await this.parentAdapter.extendObject(key, {
-					common: {
-						name: obj.common.name,
-						role: obj.common.role,
-						type: obj.common.type,
-						unit: obj.common.unit,
-						read: obj.common.read,
-						write: obj.common.write,
-						desc: obj.common.desc
-					}
-				});
-			}
-		} else {
-			await this.parentAdapter.setObjectNotExistsAsync(key, obj);
-		}
-	}
-
-	async SetDefault(key, value) {
-		const current = await this.parentAdapter.getStateAsync(key);
-		//set default only if nothing was set before
-		if (current === null || current === undefined || current.val === undefined) {
-			this.parentAdapter.log.info("set default " + key + " to " + value);
-			await this.parentAdapter.setStateAsync(key, { ack: true, val: value });
-		}
-	}
+	
 
 
-	UpdateObjects() {
+	async UpdateObjects(): Promise <void> {
 		let Hour = Math.floor(this.CurrentOnTime / 60 / 60);
 		let Minutes = Math.floor((this.CurrentOnTime - (Hour * 60 * 60)) / 60);
 		let sHour = "0";
 		if (Hour < 10) {
 			sHour = "0" + Hour;
 		} else {
-			sHour = Hour;
+			sHour = String(Hour);
 		}
 		let sMinutes = "0";
 		if (Minutes < 10) {
 			sMinutes = "0" + Minutes;
 		} else {
-			sMinutes = Minutes;
+			sMinutes = String(Minutes);
 		}
 
 		let val = sHour + ":" + sMinutes;
 
 		let key = "Devices." + this.deviceName + ".TimeFrames." + this.settings.ID + ".TimeOn";
 
-		this.parentAdapter.setState(key, { ack: true, val: val });
+		await this.SetState(key,   true, val );
 
 		//=======================================================
 		let isExcessEnergy = false;
 
-		if (this.MinRunningTime == 0 &&  this.Status == "On") {
+		if (this.MinRunningTime == 0 && this.Status == "On") {
 			isExcessEnergy = true;
 		}
 
 		key = "Devices." + this.deviceName + ".TimeFrames." + this.settings.ID + ".UsingExcessEnergy";
-		this.parentAdapter.setState(key, { ack: true, val: isExcessEnergy });
+		await this.SetState(key, true, isExcessEnergy );
 
 		//=======================================================
 		val = "00:00";
 
-		Hour = Math.floor((this.LatestEnd - this.EarliestStart)/ 60 / 60);
+		Hour = Math.floor((this.LatestEnd - this.EarliestStart) / 60 / 60);
 		Minutes = Math.floor(((this.LatestEnd - this.EarliestStart) - (Hour * 60 * 60)) / 60);
 		sHour = "0";
 		if (Hour < 10) {
 			sHour = "0" + Hour;
 		} else {
-			sHour = Hour;
+			sHour = String(Hour);
 		}
 		sMinutes = "0";
 		if (Minutes < 10) {
 			sMinutes = "0" + Minutes;
 		} else {
-			sMinutes = Minutes;
+			sMinutes = String(Minutes);
 		}
 
 		val = sHour + ":" + sMinutes;
@@ -538,7 +533,7 @@ export default class Timeframe extends Base {
 
 		key = "Devices." + this.deviceName + ".TimeFrames." + this.settings.ID + ".RemainingMaxOnTime";
 
-		this.parentAdapter.setState(key, { ack: true, val: val });
+		await this.SetState(key, true, val);
 	}
 
 
@@ -546,6 +541,3 @@ export default class Timeframe extends Base {
 }
 
 
-module.exports = {
-	Timeframe
-};

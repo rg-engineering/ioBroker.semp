@@ -1,14 +1,20 @@
 /* eslint-disable prefer-template */
 import type { Semp } from "../main";
+import type {  iobObject } from "./adapter-config";
 
 export default class Base {
 
-    public adapter: Semp;
+    public adapter: Semp | null;
     id: number;
     name: string;
 
-    constructor(adapter: Semp,id:number, name: string) {
-        this.adapter = adapter;
+    constructor(adapter: Semp | null, id: number, name: string) {
+
+        if (adapter != null) {
+            this.adapter = adapter;
+        } else {
+            this.adapter = null;
+        }
         this.id = id;
         this.name = name;
 
@@ -38,23 +44,50 @@ export default class Base {
         }
     }
 
-    async CreateDatapoint(key: string, type: any, common_role: string, common_type: string, common_unit: string, common_read: boolean, common_write: boolean, common_desc: string): Promise<void> {
 
-        const names = key.split(".");
-        let idx = names.length;
-        let name = key;
-        if (idx > 0) {
-            idx--;
-            name = names[idx];
+    async CreateObject(key: string, obj: iobObject): Promise<void> {
+
+        await this.CreateDatapoint(
+            key,
+            obj.type,
+            obj.common.name,
+            obj.common.role,
+            obj.common.type,
+            obj.common.unit,
+            obj.common.read,
+            obj.common.write,
+            obj.common.desc
+        );
+
+    }
+
+    async CreateDatapoint(key: string, name: string | undefined, type: any, common_role: string | undefined, common_type: string, common_unit: string | undefined, common_read: boolean, common_write: boolean, common_desc: ioBroker.StringOrTranslated | undefined): Promise<void> {
+
+
+        if (this.adapter == null) {
+            return;
+        }
+
+        let objName = "";
+        if (name === undefined) {
+            const names = key.split(".");
+            let idx = names.length;
+            objName = key;
+            if (idx > 0) {
+                idx--;
+                objName = names[idx];
+            }
+        } else {
+            objName = name;
         }
 
         await this.adapter.setObjectNotExistsAsync(key, {
             type: type,
             common: {
-                name: name,
+                name: objName,
                 role: common_role,
                 type: common_type,
-                unit: common_unit,
+                unit: common_unit ? common_unit : "",
                 read: common_read,
                 write: common_write,
                 desc: common_desc
@@ -79,7 +112,7 @@ export default class Base {
                         name: name,
                         role: common_role,
                         type: common_type,
-                        unit: common_unit,
+                        unit: common_unit ? common_unit : "",
                         read: common_read,
                         write: common_write,
                         desc: common_desc
@@ -90,6 +123,11 @@ export default class Base {
     }
 
     async SetDefault(key: string, value: any): Promise<void> {
+
+        if (this.adapter == null) {
+            return;
+        }
+
         const current = await this.adapter.getStateAsync(key);
         //set default only if nothing was set before
         if (current === null || current === undefined || current.val === undefined) {
@@ -97,4 +135,18 @@ export default class Base {
             await this.adapter.setState(key, { ack: true, val: value });
         }
     }
+
+    async SetState(key: string, 
+        ack: boolean,
+        val: string | number | boolean
+        
+    ): Promise < void> {
+
+        if (this.adapter == null) {
+            return;
+        }
+
+        await this.adapter.setState(key, { ack: ack, val: val });
+    }
+
 }

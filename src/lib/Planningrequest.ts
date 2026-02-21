@@ -1,25 +1,46 @@
 /* eslint-disable prefer-template */
-const Timeframe = require("./Timeframe.js").Timeframe;
-const TimeframeWallbox = require("./TimeframeWallbox.js").TimeframeWallbox;
-
-
-/* todo
-
-
-*/
-
+import Timeframe from "./Timeframe";
+import TimeframeWallbox from "./TimeframeWallbox";
 import Base from "./base";
+import type { Semp } from "../main";
+import type { EnergyRequestPeriod } from "./adapter-config";
+
+
+
+interface PlanningrequestSettings {
+	EnergyRequestPeriods: EnergyRequestPeriod[];
+	SwitchOffAtEndOfTimer: boolean;
+	DeviceName: string;
+	DeviceType: string;
+	MaxEnergy: number;
+	MinEnergy: number;
+	MinPower: number;
+	MaxPower: number;
+	WallboxChargeTime: number;
+	DishwasherMode: boolean;
+	Type: string;
+	Name: string;
+}
 
 export default class Planningrequest extends Base {
 
-	constructor(settings, parentadapter) {
+	// Fix: timeframes kann Elemente beider Typen enthalten -> Union-Array
+	timeframes: (Timeframe | TimeframeWallbox)[];
+	settings: PlanningrequestSettings;
+	WallboxPlugConnected: boolean;
+
+
+	constructor(settings: PlanningrequestSettings, parentadapter:Semp | null) {
+
+		super(parentadapter, 0, "planning request");
 
 		this.settings = settings;
-		this.parentAdapter = parentadapter;
-		this.timeframes = [];
-		this.parentAdapter.log.debug("planningrequest constructor " + JSON.stringify(settings));
 
-		if (this.settings.DeviceType != "EVCharger") {
+		// Initialisierung als leeres Array des Union-Typs
+		this.timeframes = [];
+		this.logDebug("planningrequest constructor " + JSON.stringify(settings));
+
+		if (this.settings.Type != "EVCharger") {
 			this.CreateTimeframes();
 		}
 
@@ -27,7 +48,7 @@ export default class Planningrequest extends Base {
 
 	}
 
-	destructor() {
+	destructor(): void {
 		for (let t = 0; t < this.timeframes.length; t++) {
 			this.timeframes[t].destructor();
 		}
@@ -35,46 +56,48 @@ export default class Planningrequest extends Base {
 	}
 
 
-	SetDeviceStatus(status) {
+	SetDeviceStatus(status:string):void {
 		for (let d = 0; d < this.timeframes.length; d++) {
 			this.timeframes[d].SetDeviceStatus(status);
 		}
 	}
 
 
-	CreateTimeframes() {
+	CreateTimeframes(): void {
 
 		if (this.settings.EnergyRequestPeriods !== undefined && this.settings.EnergyRequestPeriods != null && this.settings.EnergyRequestPeriods.length > 0) {
 
-			this.parentAdapter.log.debug("planningrequest create time frames " + this.settings.EnergyRequestPeriods.length);
+			this.logDebug("planningrequest create time frames " + this.settings.EnergyRequestPeriods.length);
 
 			for (let r = 0; r < this.settings.EnergyRequestPeriods.length; r++) {
 
 				const settings = {
 					EnergyRequestPeriod: this.settings.EnergyRequestPeriods[r],
-					DeviceName: this.settings.DeviceName,
+					DeviceName: this.settings.Name,
 					//SwitchOffAtEndOfTimer: this.settings.SwitchOffAtEndOfTimer
 					//xxx
-					DishWasherMode: this.settings.DishWasherMode
+					DishWasherMode: this.settings.DishwasherMode,
+
 				};
 
-				this.parentAdapter.log.debug("planningrequest " + JSON.stringify(this.settings) + " " + JSON.stringify(settings));
+				this.logDebug("planningrequest " + JSON.stringify(this.settings) + " " + JSON.stringify(settings));
 
-				const timeframe = new Timeframe(settings, this.parentAdapter);
+				const timeframe = new Timeframe(settings, this.adapter);
 
+				// OK: Union-Array akzeptiert Timeframe
 				this.timeframes.push(timeframe);
 			}
 		} else {
-			this.parentAdapter.log.warn("no planning request time frames defined");
+			this.logWarn("no planning request time frames defined");
 		}
 	}
 
-	CreateTimeframeWallbox() {
-		this.parentAdapter.log.debug("planningrequest create time frame for wallbox");
+	CreateTimeframeWallbox() : void {
+		this.logDebug("planningrequest create time frame for wallbox");
 
 		const settings = {
 			EnergyRequestPeriod: null,
-			DeviceName: this.settings.DeviceName,
+			DeviceName: this.settings.Name,
 			SwitchOffAtEndOfTimer: this.settings.SwitchOffAtEndOfTimer,
 			MaxEnergy: this.settings.MaxEnergy,
 			MinEnergy: this.settings.MinEnergy,
@@ -83,39 +106,42 @@ export default class Planningrequest extends Base {
 			WallboxChargeTime: this.settings.WallboxChargeTime
 		};
 
-		this.parentAdapter.log.debug("planningrequest " + JSON.stringify(this.settings) + " " + JSON.stringify(settings));
+		this.logDebug("planningrequest " + JSON.stringify(this.settings) + " " + JSON.stringify(settings));
 
-		const timeframe = new TimeframeWallbox(settings, this.parentAdapter);
+		const timeframe = new TimeframeWallbox(settings, this.adapter);
 
+		// OK: Union-Array akzeptiert TimeframeWallbox
 		this.timeframes.push(timeframe);
 	}
 
-	SetMinEnergy(value) {
+	SetMinEnergy(value: number): void{
 		if (value >= 0) {
-			this.parentAdapter.log.debug("planningrequest set minEnergy " +value);
+			this.logDebug("planningrequest set minEnergy " +value);
 			if (this.timeframes.length > 0) {
 				for (let t = 0; t < this.timeframes.length; t++) {
-					this.timeframes[t].SetMinEnergy(value);
+					// Fix: korrekte Syntax und Cast auf TimeframeWallbox
+					(this.timeframes[t] as TimeframeWallbox).SetMinEnergy(value);
 				}
 			}
 		}
 	}
 
-	SetMaxEnergy(value) {
+	SetMaxEnergy(value: number): void{
 		if (value > 0) {
-			this.parentAdapter.log.debug("planningrequest set maxEnergy " + value);
+			this.logDebug("planningrequest set maxEnergy " + value);
 			if (this.timeframes.length > 0) {
 				for (let t = 0; t < this.timeframes.length; t++) {
-					this.timeframes[t].SetMaxEnergy(value);
+					// Fix: korrekte Syntax und Cast auf TimeframeWallbox
+					(this.timeframes[t] as TimeframeWallbox).SetMaxEnergy(value);
 				}
 			}
 		}
 	}
 
 
-	getPlanningrequestData() {
+	getPlanningrequestData(): Array<any> {
 
-		const PlanningrequestData = [];
+		const PlanningrequestData: Array<any> = [];
 
 		if (this.WallboxPlugConnected || this.settings.DeviceType != "EVCharger") {
 			for (let t = 0; t < this.timeframes.length; t++) {
@@ -126,18 +152,19 @@ export default class Planningrequest extends Base {
 			}
 		}
 
-		this.parentAdapter.log.debug("planningrequest data " + JSON.stringify(PlanningrequestData));
+		this.logDebug("planningrequest data " + JSON.stringify(PlanningrequestData));
 
 		return PlanningrequestData;
 	}
 
 
-	getAllTimeframesFinished() {
+	getAllTimeframesFinished(): boolean {
 
         let AllFinished = true;
 		if (this.timeframes.length > 0) {
 			for (let t = 0; t < this.timeframes.length; t++) {
-				let val = this.timeframes[t].GetFinished();
+				// Fix: korrekte Syntax und Cast auf TimeframeWallbox
+				const val = (this.timeframes[t] as Timeframe).GetFinished();
 				if (val == false) {
 					AllFinished = false;
 				}
@@ -148,7 +175,7 @@ export default class Planningrequest extends Base {
 
 	}
 
-	Check2Switch() {
+	Check2Switch(): {SwitchOff: boolean; restart: boolean;}{
 
 		let SwitchOff = false;
 		let restart = false;
@@ -166,16 +193,6 @@ export default class Planningrequest extends Base {
 					this.SetPlugConnected(false);
 				}
 
-				/*
-                if (this.timeframes[t].Check2Switch().SwitchOff) {
-                    SwitchOff = true;
-                }
-                if (this.timeframes[t].Check2Switch().restart) {
-                    restart = true;
-                    //just delete timeframe
-                    SetPlugConnected(false);
-                }
-                */
 			}
 		} else {
 			SwitchOff = true;
@@ -185,11 +202,11 @@ export default class Planningrequest extends Base {
 			restart: restart
 		};
 
-		this.parentAdapter.log.debug("Planningrequest Check2Switch " + JSON.stringify(ret));
+		this.logDebug("Planningrequest Check2Switch " + JSON.stringify(ret));
 		return ret;
 	}
 
-	CancelActiveTimeframes() {
+	CancelActiveTimeframes(): void {
 		for (let t = 0; t < this.timeframes.length; t++) {
 			this.timeframes[t].CancelActiveTimeframe();
 		}
@@ -197,18 +214,19 @@ export default class Planningrequest extends Base {
 
 
 	//Wallbox
-	SetCurrentEnergy(energy) {
+	SetCurrentEnergy(energy: number) : void{
 		if (this.settings.DeviceType == "EVCharger") {
-			this.parentAdapter.log.debug("got energy used " + energy);
+			this.logDebug("got energy used " + energy);
 
 			for (let t = 0; t < this.timeframes.length; t++) {
-				this.timeframes[t].setCurrentEnergy(energy);
+				// Fix: korrekte Syntax und Cast auf TimeframeWallbox
+				(this.timeframes[t] as TimeframeWallbox).setCurrentEnergy(energy);
 			}
 		}
 	}
 
 
-	SetPlugConnected(state) {
+	SetPlugConnected(state: boolean): void {
 
 		if (this.settings.DeviceType == "EVCharger") {
 			this.WallboxPlugConnected = state;
@@ -218,7 +236,7 @@ export default class Planningrequest extends Base {
 					this.CreateTimeframeWallbox();
 				}
 			} else {
-				this.parentAdapter.log.debug("Planningrequest all timeframes canceled ");
+				this.logDebug("Planningrequest all timeframes canceled ");
 
 				for (let t = 0; t < this.timeframes.length; t++) {
 					this.timeframes[t].destructor();
@@ -230,16 +248,14 @@ export default class Planningrequest extends Base {
 	}
 
 
-	SetMaxChargeTime(state) {
+	SetMaxChargeTime(state: string) : void {
 		if (this.settings.DeviceType == "EVCharger") {
-			for(let t = 0; t < this.timeframes.length; t++) {
-				this.timeframes[t].SetMaxChargeTime(state);
+			for (let t = 0; t < this.timeframes.length; t++) {
+				// Fix: korrekte Syntax und Cast auf TimeframeWallbox
+				(this.timeframes[t] as TimeframeWallbox).SetMaxChargeTime(state);
 			}
 		}
 	}
 }
 
 
-module.exports = {
-	Planningrequest
-};

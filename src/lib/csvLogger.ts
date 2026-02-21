@@ -12,7 +12,7 @@ export default class csvLogger extends Base {
 	parentAdapter: Semp;
 	lastDay: number;
 	csvWriters: { writeRecords: (records: any[]) => Promise<void> }[];
-	logData: { file: string; headers: { id: string; title?: string }[] }[];
+	logData: { file: string; headers: { id: string; title: string }[] }[];
 	Path2Csv: string;
 
 	constructor(parentAdapter: Semp) {
@@ -56,7 +56,7 @@ export default class csvLogger extends Base {
 	}
 
 
-	StartLog(file: string, headers: { id: string; title?: string }[]): void {
+	StartLog(file: string, headers: { id: string; title: string }[]): void {
 		try {
 			this.CreateCsvWriter(file, headers);
 
@@ -81,7 +81,7 @@ export default class csvLogger extends Base {
 		}
 	}
 
-	CreateCsvWriter(file: string, headers: { id: string; title?: string }[]): void {
+	CreateCsvWriter(file: string, headers: { id: string; title: string }[]): void {
 		const filename = this.CreateFilename(file);
 
 		if (!filename) {
@@ -90,7 +90,9 @@ export default class csvLogger extends Base {
 		}
 
 		this.parentAdapter.log.info("logging on " + filename);
-		const csvWriter = createObjectCsvWriter({
+
+		
+		const csvWriter = (createObjectCsvWriter)({
 			path: filename,
 			header: headers,
 			fieldDelimiter: ";",
@@ -213,7 +215,3 @@ export default class csvLogger extends Base {
 
 
 }
-
-module.exports = {
-	csvLogger
-};

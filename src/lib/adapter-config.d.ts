@@ -1,75 +1,87 @@
 // This file extends the AdapterConfig type from "@types/iobroker"
 
 
-interface Identification {
-    DeviceId: device.ID,
-    DeviceName: device.Name,
-    DeviceType: device.Type,
-    DeviceSerial: device.SerialNr,
-    DeviceVendor: device.Vendor
+
+
+export interface iobObject {
+    type: string,
+    common: {
+        name: string,
+        role: string,
+        type: string,
+        unit?: string,
+        read: boolean,
+        write: boolean,
+        desc?: string
+    },
+    native?: { id: string }
 }
 
-interface Characteristics {
-    MinPowerConsumption?: number ,
-    MaxPowerConsumption?: number,
-    MinOnTime?: number,
-    MaxOnTime?: number,
-    MinOffTime?: number,  
-    MaxOffTime?: number,
-}
-interface CurrentPower{
-    Method: string,
-}
-
-interface Timestamps {
-    AbsoluteTimestamps: boolean,
-}
-interface Interruptions {
-    InterruptionsAllowed: boolean,
-}
-
-interface Requests {
-    OptionalEnergy: boolean,
-}
-
-interface Capabilities {
-    CurrentPower: CurrentPower,
-    Timestamps: Timestamps,
-    Interruptions: Interruptions,
-    Requests: Requests,
-}
-
-export interface deviceInfo {
-    Identification: Identification,
-    Characteristics: Characteristics
-    Capabilities: Capabilities
-};
-
-
-
-interface EnergyRequestPeriod {
+export interface EnergyRequestPeriod {
     ID: string;
     Days: string;
     EarliestStartTime: string;
     LatestEndTime: string;
-    MinRunTime: number;
-    MaxRunTime: number;
+    MinRunTime: string;
+    MaxRunTime: string;
 }
 
 export interface WallboxOIDSettings {
     active: boolean;
-    must: string;
+    must: boolean; //just for table in admin
     Name: string;
     OID: string;
     Type: string;
-    SetValue: string;
-
+    SetValue: string | number | boolean;
     //only for read OIDs
     Path2Check: string;
+
+    newValue: number;
 }
 
+export interface Identification {
+    DeviceId: string;
+    DeviceName: string;
+    DeviceType: string;
+    DeviceSerial: string;
+    DeviceVendor: string;
+}
 
+export interface Characteristics {
+    MinPowerConsumption?: number;
+    MaxPowerConsumption?: number;
+    MinOnTime?: number;
+    MaxOnTime?: number;
+    MinOffTime?: number;
+    MaxOffTime?: number;
+}
 
+export interface CurrentPower {
+    Method: string;
+}
+
+export interface Timestamps {
+    AbsoluteTimestamps: boolean;
+}
+export interface Interruptions {
+    InterruptionsAllowed: boolean;
+}
+export interface Requests {
+    OptionalEnergy: boolean;
+}
+
+export interface Capabilities {
+    CurrentPower: CurrentPower;
+    Timestamps: Timestamps;
+    Interruptions: Interruptions;
+    Requests: Requests;
+}
+
+export interface deviceInfo {
+    Identification: Identification;
+    Characteristics: Characteristics;
+    Capabilities: Capabilities;
+};
 
 export interface SempDevice {
     IsActive: boolean;
@@ -113,7 +125,7 @@ export interface SempDevice {
 
     //wallbox settings
     BatteryCapacity: number;
-    WallboxChargeTime: string;
+    WallboxChargeTime: number;
     WallboxPhases: number;
     Wallbox3phaseSwitchLimit: number;
     Wallbox3phaseSwitchDelay: number;
@@ -125,19 +137,23 @@ export interface SempDevice {
 
     //same as above but different type for easier access in code
     WallboxOID: {
-        DeviceOIDPlugConnected?: WallboxOIDSettings | null,
-        DeviceOIDIsCharging?: WallboxOIDSettings | null,
-        DeviceOIDIsError?: WallboxOIDSettings | null,
-        DeviceOIDChargePower?: WallboxOIDSettings | null,
-        DeviceOIDStartCharge?: WallboxOIDSettings | null,
-        DeviceOIDStopCharge?: WallboxOIDSettings | null,
-        DeviceOID3PhaseChargeEnable?: WallboxOIDSettings | null,
-        DeviceOID3PhaseChargeDisable?: WallboxOIDSettings | null,
-        DeviceOIDCounter?: WallboxOIDSettings | null,
-        DeviceOIDStatus?: WallboxOIDSettings | null,
-        DeviceOIDSwitch?: WallboxOIDSettings | null
+        DeviceOIDPlugConnected?: WallboxOIDSettings | null;
+        DeviceOIDIsCharging?: WallboxOIDSettings | null;
+        DeviceOIDIsError?: WallboxOIDSettings | null;
+        DeviceOIDChargePower?: WallboxOIDSettings | null;
+        DeviceOIDStartCharge?: WallboxOIDSettings | null;
+        DeviceOIDStopCharge?: WallboxOIDSettings | null;
+        DeviceOID3PhaseChargeEnable?: WallboxOIDSettings | null;
+        DeviceOID3PhaseChargeDisable?: WallboxOIDSettings | null;
+        DeviceOIDCounter?: WallboxOIDSettings | null;
+        DeviceOIDStatus?: WallboxOIDSettings | null;
+        DeviceOIDSwitch?: WallboxOIDSettings | null;
     }
 
+    SwitchOffAtEndOfTimer: boolean //only used for wallbox
+
+    //just internal use
+    OptionalEnergy: boolean;
 }
 
 // Augment the globally declared type ioBroker.AdapterConfig

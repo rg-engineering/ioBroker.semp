@@ -1,40 +1,128 @@
 /* eslint-disable prefer-template */
-/**
- * @fileOverview http server handling SEMP requests
- * @author Paul Orlob
- */
 
-const express = require("express");
-//const { TimeframeWallbox } = require("./TimeframeWallbox");
 
-const js2xml = require("xml-js").json2xml;
-const xml2js = require("xml-js").xml2js;
+
+import express from "express";
+import type { Server } from "http";
+import type { Express } from "express";
+import { js2xml, xml2js } from "xml-js";
 
 import Base from "./base";
+import type csvLogger from "./csvLogger";
+import type Gateway from "./Gateway"; 
+
+import type { deviceInfo } from "./adapter-config";
+
+type TimeoutHandle = ReturnType<typeof setTimeout>;
+
+
+interface EM2Text<T> {
+	_text: T;
+}
+
+interface EM2DeviceInput {
+	EM2Device: {
+		DeviceControl: {
+			DeviceId: EM2Text<string>;
+			On: EM2Text<boolean>;
+			Timestamp: EM2Text<number>;
+			RecommendedPowerConsumption?: EM2Text<number>;
+		};
+	};
+}
+
+interface DeviceControlOutput {
+	DeviceId: string;
+	On: boolean;
+	Timestamp: number;
+	RecommendedPowerConsumption?: number;
+}
+
+interface ConvertResult {
+	DeviceControl: DeviceControlOutput;
+}
+
+interface Timeframe {
+	TimeframeId: number;
+	EarliestStart: number;
+	LatestEnd: number;
+	MaxEnergy: number;
+	MinEnergy: number;
+	MaxRunningTime: number;
+	MinRunningTime: number;
+}
+
+interface planningRequest {
+	dummy: string;
+	Timeframe: Timeframe[];
+}
+
+interface PowerInfo {
+	dummy: string;
+	AveragePower: number;
+}
+
+interface PowerConsumption {
+	PowerInfo: PowerInfo[];
+}
+
+interface deviceStatus{
+	dummy: string;
+	PowerConsumption: PowerConsumption;
+	Status: number;
+
+}
+
+interface device2convert {
+
+	deviceInfo: deviceInfo;
+	deviceStatus: deviceStatus;
+	planningRequest: planningRequest;
+
+}
+
+interface _attributes {
+	xmlns: string;
+}
+
+interface convertedDevice {
+	
+	_attributes: _attributes;
+	DeviceInfo: deviceInfo[];
+	DeviceStatus: deviceStatus[];
+	PlanningRequest: planningRequest[];
+}
+
 
 
 export default class SEMPServer extends Base {
 
+	uuid: string;
+	ipAddress: string;
+	port: number;
+	descriptionXml: string;
+	Gateway: Gateway;
 
+	app: Express;
+	server: Server | null;
+	extendedLog: boolean;
+	DiscoveryheckTimerID: TimeoutHandle | null;
+	logger: csvLogger | null;
 
 	/**
 	 * Creates a new SEMP Server instance
-	 *
-	 * @param uuid - Globally unique uuid
-	 * @param ipAddress - ip address of the server
-	 * @param port - port to run the server on
-	 * @param descriptionXml Description XML string
-	 * @param gateway Gateway
 	 */
-	constructor(uuid,
-		ipAddress,
-		port,
-		descriptionXml,
-		gateway,
-		extendedLog,
-		logger
+	constructor(uuid : string,
+		ipAddress: string,
+		port: number,
+		descriptionXml: string,
+		gateway: Gateway,
+		extendedLog: boolean,
+		logger: csvLogger | null
 
 	) {
+
+		super(gateway.adapter, 0, "SempServer");
 
 		this.uuid = uuid;
 		this.ipAddress = ipAddress;
@@ -46,10 +134,11 @@ export default class SEMPServer extends Base {
 		this.initRoutes();
 		this.server = null;
 		this.extendedLog = extendedLog;
-
 		this.logger = logger;
 
-		this.Gateway.parentAdapter.log.debug("SEMPServer created");
+
+
+		this.logDebug("SEMPServer created");
 
 		this.DiscoveryheckTimerID = null;
 		this.DiscoveryheckTimerID = setTimeout(this.InfoNotDiscovered.bind(this), 3 * 60 * 1000);
@@ -59,14 +148,18 @@ export default class SEMPServer extends Base {
 	}
 
 
-	InfoNotDiscovered() {
-		this.Gateway.parentAdapter.log.error("adapter / gateway not yet discovered by SHM! check adapter and network settings!");
+	InfoNotDiscovered(): void {
+		this.logError("adapter / gateway not yet discovered by SHM! check adapter and network settings!");
+	}
+
+	isEM2DeviceInput(obj: any): obj is EM2DeviceInput {
+		return obj?.EM2Device?.DeviceControl != null;
 	}
 
 	/**
 	 * Initializes SEMP routes
 	 */
-	initRoutes() {
+	initRoutes():void {
 
 
 		//this.testtimer = setInterval(this.test.bind(this), 30 * 1000);
@@ -74,11 +167,11 @@ export default class SEMPServer extends Base {
 
 
 		this.app.get("/description.xml", (req, res) => {
-			this.Gateway.parentAdapter.log.debug("SHM requested description");
+			this.logDebug("SHM requested description");
 
 			if (this.DiscoveryheckTimerID != null) {
 
-				this.Gateway.parentAdapter.log.info("adapter discovered by SHM");
+				this.logInfo("adapter discovered by SHM");
 
 				clearTimeout(this.DiscoveryheckTimerID);
 				this.DiscoveryheckTimerID = null;
@@ -88,30 +181,39 @@ export default class SEMPServer extends Base {
 			res.set("Content-Type", "text/xml");
 			res.send(this.descriptionXml);
 			if (this.extendedLog) {
-				this.Gateway.parentAdapter.log.debug("description xml sent " + this.descriptionXml);
+				this.logDebug("description xml sent " + this.descriptionXml);
 			}
 		});
 
 		// All devices
 		this.app.get("/semp/", (req, res) => {
-			this.Gateway.parentAdapter.log.debug("SHM requested all devices. " + req.originalUrl  + " " + req.ip + " " + req.protocol);
+			this.logDebug("SHM requested all devices. " + req.originalUrl  + " " + req.ip + " " + req.protocol);
 			const deviceList = this.Gateway.getAllDevices();
 			//this.Gateway.parentAdapter.log.debug("got device list");
 			const devices = this.convertDevices(deviceList);
 			//this.Gateway.parentAdapter.log.debug("response " );
 			res.send(this.convertJSToXML(devices));
-			this.Gateway.parentAdapter.log.debug("response sent");
+			this.logDebug("response sent");
 		});
 
 		this.app.post("/semp/", (req, res) => {
-			this.Gateway.parentAdapter.log.debug("received post from SHM " + req.ip);
+			this.logDebug("received post from SHM " + req.ip);
 			let body = "";
 			req.on("data", (chunk => {
 				body += chunk;
 			}));
 			req.on("end", () => {
-				const json = xml2js(body, { compact: true, ignoreDeclaration: true, ignoreDoctype: true, nativeType: true });
-				this.Gateway.onSEMPMessage(this.convertEM2Device(json));
+				const json = xml2js(body, {
+					compact: true,
+					ignoreDeclaration: true,
+					ignoreDoctype: true,
+					nativeType: true
+				}) as EM2DeviceInput;   
+
+				if (this.isEM2DeviceInput(json)) {
+					this.Gateway.onSEMPMessage(this.convertEM2Device(json));
+				}
+				res.end();
 				res.end();
 			});
 		});
@@ -152,7 +254,7 @@ export default class SEMPServer extends Base {
 
 
 		this.app.all(/(.*)/, (req, res) => {
-			this.Gateway.parentAdapter.log.error("Unmatched url... " + req.url + " " + JSON.stringify(req.query));
+			this.logError("Unmatched url... " + req.url + " " + JSON.stringify(req.query));
 			res.end();
 		});
 	}
@@ -171,7 +273,7 @@ export default class SEMPServer extends Base {
 	}
 	*/
 
-	convertJSToXML(js) {
+	convertJSToXML(js: convertedDevice):string {
 
 		const rawJs = {
 			_declaration: {
@@ -186,7 +288,7 @@ export default class SEMPServer extends Base {
 		const ret = js2xml(rawJs, { compact: true, spaces: 4 } );
 
 		//if (this.extendedLog) {
-		this.Gateway.parentAdapter.log.debug("response xml " + ret);
+		this.logDebug("response xml " + ret);
 		//}
 		return ret;
 	}
@@ -209,46 +311,31 @@ export default class SEMPServer extends Base {
         </EM2Device>
 
 */
-	convertEM2Device(em2dev) {
-		em2dev = em2dev.EM2Device;
+	convertEM2Device(em2dev: EM2DeviceInput): ConvertResult  {
+		const device = em2dev.EM2Device.DeviceControl;
 
-		//this.Gateway.parentAdapter.log.debug("convertEM2Device got " + JSON.stringify(em2dev));
-
-		/*
-         "RecommendationPower": "{\"DeviceId\":{\"_text\":\"F-53088660-000000000003-00\"},\"On\":{\"_text\":true},\"RecommendedPowerConsumption\":{\"_text\":11040},\"Timestamp\":{\"_text\":0}}" }]
-         */
-
-		if (this.logger != null) {
-			const records = [];
-			//hier records bauen
+		if (this.logger) {
 			const record = {
 				Time: new Date().toLocaleString("de-DE"),
-				DeviceId: em2dev.DeviceControl.DeviceId._text,
-				RecommendationStatus: em2dev.DeviceControl.On._text,
-				RecommendationPower: JSON.stringify(em2dev.DeviceControl)
+				DeviceId: device.DeviceId._text,
+				RecommendationStatus: device.On._text,
+				RecommendationPower: JSON.stringify(device)
 			};
-			records.push(record);
 
-			//und jetzt alle schreiben
-			this.logger.WriteCSVLog(0, records);
+			this.logger.WriteCSVLog(0, [record]);
 		}
 
-		const oRet = {
+		const oRet: ConvertResult = {
 			DeviceControl: {
-				DeviceId: em2dev.DeviceControl.DeviceId._text,
-				On: em2dev.DeviceControl.On._text,
-				//RecommendedPowerConsumption: em2dev.DeviceControl.RecommendedPowerConsumption._text,
-				Timestamp: em2dev.DeviceControl.Timestamp._text
+				DeviceId: device.DeviceId._text,
+				On: device.On._text,
+				Timestamp: device.Timestamp._text
 			}
 		};
 
-		if (em2dev.DeviceControl.RecommendedPowerConsumption != null && em2dev.DeviceControl.RecommendedPowerConsumption._text != null) {
-
-			//2023-02-15
-			//we got
-			//semp message {"DeviceControl":{"DeviceId":"F-12345678-000000000009-00","On":true,"Timestamp":0,"RecommendedPowerConsumption":2456.39990234375}}
-			// -> round() added
-			oRet.DeviceControl.RecommendedPowerConsumption = Math.round(Number(em2dev.DeviceControl.RecommendedPowerConsumption._text));
+		if (device.RecommendedPowerConsumption?._text != null) {
+			oRet.DeviceControl.RecommendedPowerConsumption =
+				Math.round(Number(device.RecommendedPowerConsumption._text));
 		}
 
 
@@ -256,16 +343,16 @@ export default class SEMPServer extends Base {
 
 	}
 
+	
 
 
-
-	convertDevices(devices) {
+	convertDevices(devices: device2convert[]): convertedDevice {
 
 		//this.Gateway.parentAdapter.log.debug("convert device ");
 
-		const devInfos = [];
-		const devStatuses = [];
-		const devPlanningRequests = [];
+		const devInfos: deviceInfo[] = [];
+		const devStatuses: deviceStatus[] = [];
+		const devPlanningRequests: planningRequest[] = [];
 		const records = [];
 
 		for (const d of devices) {
@@ -348,56 +435,60 @@ export default class SEMPServer extends Base {
 
 	}
 
-	/**
-	 * Start the server.
-	 *
-	 * @returns promise that resolves when server has started.
-	 */
-	start() {
+	
+
+
+	async start(): Promise<void> {
+
 		if (!this.port) {
-			this.Gateway.parentAdapter.log.error("SempServer: Port must be specified!");
-			throw "Port must be specified!";
+			this.logError("SempServer: Port must be specified!");
+			//throw "Port must be specified!";
 		}
 		if (this.port < 0) {
-			this.Gateway.parentAdapter.log.error("SempServer: Port has to be greater than 0! " + this.port);
-			throw "Port has to be greater than 0!";
+			this.logError("SempServer: Port has to be greater than 0! " + this.port);
+			//throw "Port has to be greater than 0!";
 		}
 
-		return new Promise((resolve) => {
-			this.server = this.app.listen(this.port, () => {
-				this.Gateway.parentAdapter.log.debug("SEMP server listening on " + this.port);
-				resolve();
-			})
-				.on("error", function (err) {
-					this.Gateway.parentAdapter.log.error("SEMP server cannot start: " + err);
+		try {
+			this.server = await new Promise<Server>((resolve, reject) => {
+				const server = this.app.listen(this.port, () => {
+					this.logDebug("SEMP server listening on " + this.port);
+					resolve(server);
 				});
-		});
+
+				server.on("error", (err) => {
+					reject(err);
+				});
+			});
+		} catch (error) {
+			this.logError("SEMP server cannot start: " + error);
+			
+		}
 	}
 
 
+	async stop(): Promise<void> {
+		this.logDebug("SEMP server stopped");
 
-	/**
-	 * Stops the server.
-	 *
-	 * @returns promise that resolves when the server is stopped.
-	 */
-	stop() {
-		this.Gateway.parentAdapter.log.debug("SEMP server stopped");
-		return new Promise((resolve, reject) => {
-			if (this.server != null) {
-				this.server.close(() => {
+		const server = this.server;
+		if (!server) {
+			return;
+		}
+
+		await new Promise<void>((resolve, reject) => {
+			server.close((err?: Error) => {
+				if (err) {
+					reject(err);
+				} else {
 					resolve();
-				});
-			} else {
-				reject();
-			}
+				}
+			});
 		});
-	}
 
+		this.server = null;
+	}
 }
 
-module.exports = {
-	SEMPServer
-};
+
 
 

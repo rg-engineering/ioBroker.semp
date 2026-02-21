@@ -8,9 +8,9 @@
 
 import * as utils from "@iobroker/adapter-core";
 import Gateway from "./lib/Gateway";
-import { networkInterfaces } from "os";
+//import { networkInterfaces } from "os";
 
-import { v4: uuidv4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 export class Semp extends utils.Adapter {
 
@@ -122,7 +122,7 @@ export class Semp extends utils.Adapter {
 			this.log.debug("add device " + JSON.stringify(device));
 
 			if (device.IsActive) {
-				this.gw.addDevice(device);
+				await this.gw.addDevice(device);
 				//await this.SubscribeDevice(device);
 
 				if (device.MeasurementMethod == "Estimation") {
@@ -140,7 +140,7 @@ export class Semp extends utils.Adapter {
 	/**
 	 * Is called when adapter shuts down - callback has to be called under any circumstances!
 	 */
-	private onUnload(callback: () => void): void {
+	private async onUnload(callback: () => void): Promise<void> {
 		try {
 			// Here you must clear all timeouts or intervals that may still be active
 			// clearTimeout(timeout1);
@@ -148,7 +148,7 @@ export class Semp extends utils.Adapter {
 			// ...
 
 			if (this.gw != null) {
-				this.gw.stop();
+				await this.gw.stop();
 			}
 
 			callback();
@@ -177,7 +177,7 @@ export class Semp extends utils.Adapter {
 	 * Is called if a subscribed state changes
 	 */
 
-	private async onStateChange(id: string, state: ioBroker.State | null | undefined): Promise<void> {
+	private  onStateChange(id: string, state: ioBroker.State | null | undefined): void {
 		if (state) {
 			// The state was changed
 			const ids = id.split(".");
@@ -224,7 +224,7 @@ export class Semp extends utils.Adapter {
 					this.gw.setPowerDevice(device.ID, Number(state.val) );
 					bRet = true;
 				}
-				if (device.OID_Status === id) {
+				if (device.OID_Status === id && state.val!=null) {
 					this.gw.setOnOffDevice(device.ID, state.val);
 					bRet = true;
 				}
@@ -276,15 +276,15 @@ export class Semp extends utils.Adapter {
 					}
 
 
-					if (OID_PlugConnected === id) {
+					if (OID_PlugConnected === id && state.val!=null) {
 						this.gw.setWallboxPlugConnected(device.ID, state.val);
 						bRet = true;
 					}
-					if (OID_IsCharging === id) {
+					if (OID_IsCharging === id && state.val != null) {
 						this.gw.setWallboxIsCharging(device.ID, state.val);
 						bRet = true;
 					}
-					if (OID_IsError === id) {
+					if (OID_IsError === id && state.val != null) {
 						this.gw.setWallboxIsError(device.ID, state.val);
 						bRet = true;
 					}
@@ -292,28 +292,38 @@ export class Semp extends utils.Adapter {
 						this.gw.setPowerDevice(device.ID, Number(state.val));
 						bRet = true;
 					}
-					if (OID_Status === id) {
+					if (OID_Status === id && state.val != null) {
 						this.gw.setOnOffDevice(device.ID, state.val);
 						bRet = true;
 					}
 				}
 				//state semp.0.Devices.newDevice2.MaxEnergy changed: 1102(ack = false) but not handled
 				const ids = id.split(".");
-				if (ids.length > 3 && ids[3] == device.Name) {
+				if (ids.length > 3 && ids[3] == device.Name && state.val != null ) {
 					if (ids[4] == "MinEnergy") {
 						this.log.info("main: got minEnergy " + state.val);
-						this.gw.setMinEnergy(device.ID, state.val);
+						if (typeof state.val == "number" || typeof state.val == "string") {
+							this.gw.setMinEnergy(device.ID, state.val);
+						}
 						bRet = true;
 					} else if (ids[4] == "MaxEnergy") {
-						this.gw.setMaxEnergy(device.ID, state.val);
+						if (typeof state.val == "number" || typeof state.val == "string") {
+							this.gw.setMaxEnergy(device.ID, state.val);
+						}
 						bRet = true;
 					} else if (ids[4] == "EnableFastCharging") {
-						this.gw.EnableFastCharging(device.ID, state.val);
+						if (typeof state.val == "boolean" || typeof state.val == "string" || typeof state.val == "number") {
+
+							this.gw.EnableFastCharging(device.ID, state.val);
+						}
 						bRet = true;
 					} else if (ids[4] == "MaxChargeTime") {
 						//semp.0.Devices.Wallbox1.MaxChargeTime
-						this.gw.SetMaxChargeTime(device.ID, state.val);
-						bRet = true;
+						if ( typeof state.val == "string" || typeof state.val == "number") {
+
+							this.gw.SetMaxChargeTime(device.ID, state.val);
+						}
+							bRet = true;
 					}
 
 				}
@@ -332,15 +342,16 @@ export class Semp extends utils.Adapter {
 	private async onMessage(obj: ioBroker.Message): Promise<void> {
 		this.log.info("on message " + JSON.stringify(obj));
 		if (typeof obj === "object" && obj.command) {
-			if (obj.command === "getIP") {
-				this.log.info("get IP");
-
-				const myIP = this.GetIP();
-				// Send response in callback if required
-				if (obj.callback) {
-					this.sendTo(obj.from, obj.command, myIP, obj.callback);
-				}
-			} else if (obj.command === "getUUID") {
+			//if (obj.command === "getIP") {
+			//	this.log.info("get IP");
+			//
+			//	const myIP = this.GetIP();
+			//	// Send response in callback if required
+			//	if (obj.callback) {
+			//		this.sendTo(obj.from, obj.command, myIP, obj.callback);
+			//	}
+			//} else if (obj.command === "getUUID") {
+			if (obj.command === "getUUID") {
 				this.log.info("get UUID");
 
 				const uuid = this.GetUUID();
@@ -362,7 +373,7 @@ export class Semp extends utils.Adapter {
 		}
 	}
 
-
+	/*
 	GetIP(): string {
 		let ip = "";
 		const nets = networkInterfaces();
@@ -378,6 +389,7 @@ export class Semp extends utils.Adapter {
 		}
 		return ip;
 	}
+	*/
 
 	GetUUID(): string {
 		let uuid = "000-todo";

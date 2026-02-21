@@ -186,7 +186,7 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
 
     // Hilfsfunktionen für wallbox_oid_write
     const onWallboxWriteUpdate = (idx: number, key: string, value: any): void => {
-        const list = Array.isArray((device as any).wallbox_oid_write) ? (device as any).wallbox_oid_write.slice() : [];
+        const list = Array.isArray(device.wallbox_oid_write) ? device.wallbox_oid_write.slice() : [];
         while (list.length <= idx) {
             list.push({});
         }
@@ -199,7 +199,7 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
     };
 
     const onWallboxWriteToggleActive = (idx: number, active: boolean): void => {
-        const list = Array.isArray((device as any).wallbox_oid_write) ? (device as any).wallbox_oid_write.slice() : [];
+        const list = Array.isArray(device.wallbox_oid_write) ? device.wallbox_oid_write.slice() : [];
         while (list.length <= idx) {
             list.push({});
         }
@@ -213,7 +213,7 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
 
     // Hilfsfunktionen für wallbox_oid_read
     const onWallboxReadUpdate = (idx: number, key: string, value: any): void => {
-        const list = Array.isArray((device as any).wallbox_oid_read) ? (device as any).wallbox_oid_read.slice() : [];
+        const list = Array.isArray(device.wallbox_oid_read) ? device.wallbox_oid_read.slice() : [];
         while (list.length <= idx) {
             list.push({});
         }
@@ -226,7 +226,7 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
     };
 
     const onWallboxReadToggleActive = (idx: number, active: boolean): void => {
-        const list = Array.isArray((device as any).wallbox_oid_read) ? (device as any).wallbox_oid_read.slice() : [];
+        const list = Array.isArray(device.wallbox_oid_read) ? device.wallbox_oid_read.slice() : [];
         while (list.length <= idx) {
             list.push({});
         }
@@ -361,12 +361,24 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
                     control={
                         <Checkbox
                             color="primary"
-                            checked={!!(device && (device as any).WallboxNeedCurrentRecommendation)}
+                            checked={!!(device && device.WallboxNeedCurrentRecommendation)}
                             onChange={handleBoolChange('WallboxNeedCurrentRecommendation')}
                             aria-label="WallboxNeedCurrentRecommendation"
                         />
                     }
                     label={I18n.t('WallboxNeedCurrentRecommendation')}
+                />
+
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            color="primary"
+                            checked={!!(device && device.SwitchOffAtEndOfTimer)}
+                            onChange={handleBoolChange('SwitchOffAtEndOfTimer')}
+                            aria-label="SwitchOffAtEndOfTimer"
+                        />
+                    }
+                    label={I18n.t('SwitchOffAtEndOfTimer')}
                 />
 
             </Box>
@@ -389,7 +401,7 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {((device as any).wallbox_oid_write ?? []).map((t: any, idx: number) => (
+                        {(device.wallbox_oid_write ?? []).map((t: any, idx: number) => (
                             <TableRow key={idx}>
                                 <TableCell>
                                     <Checkbox
@@ -491,7 +503,7 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {((device as any).wallbox_oid_read ?? []).map((t: any, idx: number) => (
+                        {(device.wallbox_oid_read ?? []).map((t: any, idx: number) => (
                             <TableRow key={idx}>
                                 <TableCell>
                                     <Checkbox

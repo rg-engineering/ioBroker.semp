@@ -1,24 +1,73 @@
 /* eslint-disable prefer-template */
 
-/* todo
-
-
-*/
+import type { Semp } from "../main";
+import type {  EnergyRequestPeriod } from "./adapter-config";
 
 import Base from "./base";
+
+type TimeoutHandle = ReturnType<typeof setTimeout>;
+
+interface TimeframeWallboxSettings {
+	EnergyRequestPeriod: EnergyRequestPeriod | null;
+	DeviceName: string;
+	SwitchOffAtEndOfTimer: boolean;
+	MaxEnergy: number;
+	MinEnergy: number;
+	MinPower: number;
+	MaxPower: number;
+	WallboxChargeTime: number;
+}
+
+
+interface Timeframedata {
+	TimeframeId: number;
+	DeviceId: string;
+	EarliestStart: number;
+	LatestEnd: number;
+	MinEnergy: number;
+	MaxEnergy: number;
+	MaxPowerConsumption: number;
+	MinPowerConsumption: number;
+}
 export default class TimeframeWallbox extends Base {
 
-	constructor(settings, parentAdapter) {
+	
+	deviceName: string;
+	
+	isActive: boolean;
+	EarliestStart: number;
+	LatestEnd: number;
+	
+	CurrentOnTime: number;
+	timediff: number;
+	CanceledOnDay: number;
+	Status: string;
+	UpdateTimesID: TimeoutHandle | null;
+	
+	MinEnergy: number
+	MaxEnergy: number;
+MinPower : number;
+	MaxPower: number;
+	SwitchOffAtEndOfTimer: boolean;
+	WallboxChargeTimeEndles: boolean;
+	WallboxChargeTime: number;
+	CurrentEnergy: number;
+	CurrentEnergyDiff: number;
+	ID: number;
+
+	constructor(settings: TimeframeWallboxSettings, parentAdapter: Semp | null) {
+
+		super(parentAdapter, 0, "Timeframe");
 
 		this.ID = 1;
 
 		this.deviceName = settings.DeviceName;
 
 		this.isActive = false;
-		this.parentAdapter = parentAdapter;
+
 		this.SwitchOffAtEndOfTimer = settings.SwitchOffAtEndOfTimer;
 
-		this.parentAdapter.log.debug("timeframeWallbox constructor " + JSON.stringify(settings));
+		this.logDebug("timeframeWallbox constructor " + JSON.stringify(settings));
 
 		this.EarliestStart = 0; //always now
 		if (settings.WallboxChargeTime == 3) {
@@ -46,7 +95,7 @@ export default class TimeframeWallbox extends Base {
 			}
 		}
 
-		this.parentAdapter.log.debug("charge time " + settings.WallboxChargeTime + " " + typeof settings.WallboxChargeTime + " " + maxChargeTime);
+		this.logDebug("charge time " + settings.WallboxChargeTime + " " + typeof settings.WallboxChargeTime + " " + maxChargeTime);
 
 
 		//For EV chargers LatestEnd should be set to the time that is available for excess energy charging. Can be set to 86400 (24h).
@@ -74,30 +123,30 @@ export default class TimeframeWallbox extends Base {
 
 	}
 
-	destructor() {
-		this.parentAdapter.log.debug("timeframe destructor called " + this.UpdateTimesID);
+	destructor(): void  {
+		this.logDebug("timeframe destructor called " );
 		if (this.UpdateTimesID != null) {
 
 			clearInterval(this.UpdateTimesID);
 			this.UpdateTimesID = null;
-			this.parentAdapter.log.debug("timeframe timer killed ");
+			this.logDebug("timeframe timer killed ");
 		}
 	}
 
-	SetMinEnergy(value) {
-		this.parentAdapter.log.debug("wallbox timeframe set minEnergy " + value);
+	SetMinEnergy(value: number):void {
+		this.logDebug("wallbox timeframe set minEnergy " + value);
 		this.MinEnergy = value;
 	}
-	SetMaxEnergy(value) {
-		this.parentAdapter.log.debug("wallbox timeframe set maxEnergy " + value);
+	SetMaxEnergy(value: number): void {
+		this.logDebug("wallbox timeframe set maxEnergy " + value);
 		this.MaxEnergy = value;
 	}
 
-	SetDeviceStatus(status) {
+	SetDeviceStatus(status: string): void {
 		this.Status = status;
 	}
 
-	setCurrentEnergy(energy) {
+	setCurrentEnergy(energy: number): void {
 
 		this.CurrentEnergyDiff = energy - this.CurrentEnergy;
 
@@ -122,11 +171,11 @@ export default class TimeframeWallbox extends Base {
 		}
 	}
 
-	async Prepare() {
+	async Prepare(): Promise<void> {
 		await this.createObjects();
 	}
 
-	Update() {
+	Update(): void {
 		this.EarliestStart = this.EarliestStart - this.timediff;
 		if (this.EarliestStart < 0) {
 			this.EarliestStart = 0;
@@ -145,13 +194,13 @@ export default class TimeframeWallbox extends Base {
 		}
 
 		if (this.EarliestStart > 0 || this.LatestEnd > 0) {
-			this.parentAdapter.log.debug(this.deviceName + " timeframe " + this.ID + " update earliest: " + this.EarliestStart + " latest: " + this.LatestEnd + " MinEnergy: " + this.MinEnergy + " MaxEnergy: " + this.MaxEnergy);
+			this.logDebug(this.deviceName + " timeframe " + this.ID + " update earliest: " + this.EarliestStart + " latest: " + this.LatestEnd + " MinEnergy: " + this.MinEnergy + " MaxEnergy: " + this.MaxEnergy);
 		} else {
-			this.parentAdapter.log.debug(this.deviceName + " timeframe " + this.ID + " inactive");
+			this.logDebug(this.deviceName + " timeframe " + this.ID + " inactive");
 		}
 	}
 
-	getTimeframeData() {
+	async getTimeframeData(): Promise<Timeframedata | null>  {
 
 		let timeframeData = null;
 		if (this.EarliestStart > 0 || this.LatestEnd > 0) {
@@ -170,17 +219,20 @@ export default class TimeframeWallbox extends Base {
 			};
 		}
 
-		this.parentAdapter.log.debug(this.deviceName + " ( " + this.ID + ") timeframe data " + JSON.stringify(timeframeData));
+		this.logDebug(this.deviceName + " ( " + this.ID + ") timeframe data " + JSON.stringify(timeframeData));
 
 		const key = "Devices." + this.deviceName + ".TimeFrames." + this.ID + ".LastSent";
 
-		this.parentAdapter.setState(key, { ack: true, val: JSON.stringify(timeframeData) });
+		await this.SetState(key,  true,  JSON.stringify(timeframeData) );
 
 		return timeframeData;
 	}
 
 
-	Check2Switch() {
+	Check2Switch(): {
+		SwitchOff: boolean,
+		restart: boolean
+	} {
 		let SwitchOff = false;
 		let restart = false;
 
@@ -189,12 +241,12 @@ export default class TimeframeWallbox extends Base {
 
 			if (this.SwitchOffAtEndOfTimer) {
 				SwitchOff = true;
-				this.parentAdapter.log.debug(this.deviceName + " turn device off at end of max runtime");
+				this.logDebug(this.deviceName + " turn device off at end of max runtime");
 			}
 
 			if (this.WallboxChargeTimeEndles) {
 				restart = true;
-				this.parentAdapter.log.debug(this.deviceName + " restart timeframe");
+				this.logDebug(this.deviceName + " restart timeframe");
 			}
 
 			this.isActive = false;
@@ -203,7 +255,7 @@ export default class TimeframeWallbox extends Base {
 
 		this.UpdateObjects();
 
-		this.parentAdapter.log.debug(this.deviceName + " (" + this.ID + ") check end of max runtime: " + SwitchOff);
+		this.logDebug(this.deviceName + " (" + this.ID + ") check end of max runtime: " + SwitchOff);
 
 
 		const ret = {
@@ -216,7 +268,7 @@ export default class TimeframeWallbox extends Base {
 
 	}
 
-	CancelActiveTimeframe() {
+	CancelActiveTimeframe(): void {
 		if (this.isActive) {
 			this.EarliestStart = 0;
 			this.LatestEnd = 0;
@@ -229,7 +281,7 @@ export default class TimeframeWallbox extends Base {
 	}
 
 	//=============================================================
-	async createObjects() {
+	async createObjects() : Promise<void> {
 
 		let key = "Devices." + this.deviceName + ".TimeFrames." + this.ID + ".TimeOn";
 		let obj = {
@@ -293,61 +345,29 @@ export default class TimeframeWallbox extends Base {
 
 	}
 
-	async CreateObject(key, obj) {
+	
 
-		const obj_new = await this.parentAdapter.getObjectAsync(key);
-		//adapter.log.warn("got object " + JSON.stringify(obj_new));
-
-		if (obj_new != null) {
-
-			if ((obj_new.common.role != obj.common.role
-                || obj_new.common.type != obj.common.type
-                || (obj_new.common.unit != obj.common.unit && obj.common.unit != null)
-                || obj_new.common.read != obj.common.read
-                || obj_new.common.write != obj.common.write
-                || obj_new.common.name != obj.common.name
-                || obj_new.common.desc != obj.common.desc)
-                && obj.type === "state"
-			) {
-				this.parentAdapter.log.warn("change object " + JSON.stringify(obj) + " " + JSON.stringify(obj_new));
-				await this.parentAdapter.extendObject(key, {
-					common: {
-						name: obj.common.name,
-						role: obj.common.role,
-						type: obj.common.type,
-						unit: obj.common.unit,
-						read: obj.common.read,
-						write: obj.common.write,
-						desc: obj.common.desc
-					}
-				});
-			}
-		} else {
-			await this.parentAdapter.setObjectNotExistsAsync(key, obj);
-		}
-	}
-
-	UpdateObjects() {
+	async UpdateObjects(): Promise <void> {
 		const Hour = Math.floor(this.CurrentOnTime / 60 / 60);
 		const Minutes = Math.floor((this.CurrentOnTime - (Hour * 60 * 60)) / 60);
 		let sHour = "0";
 		if (Hour < 10) {
 			sHour = "0" + Hour;
 		} else {
-			sHour = Hour;
+			sHour = String( Hour);
 		}
 		let sMinutes = "0";
 		if (Minutes < 10) {
 			sMinutes = "0" + Minutes;
 		} else {
-			sMinutes = Minutes;
+			sMinutes = String(Minutes);
 		}
 
 		let val = sHour + ":" + sMinutes;
 
 		let key = "Devices." + this.deviceName + ".TimeFrames." + this.ID + ".TimeOn";
 
-		this.parentAdapter.setState(key, { ack: true, val: val });
+		await this.SetState(key,  true,  val );
 
 		//=======================================================
 		let isExcessEnergy = false;
@@ -357,17 +377,17 @@ export default class TimeframeWallbox extends Base {
 		}
 
 		key = "Devices." + this.deviceName + ".TimeFrames." + this.ID + ".UsingExcessEnergy";
-		this.parentAdapter.setState(key, { ack: true, val: isExcessEnergy });
+		await this.SetState(key,  true, isExcessEnergy );
 
 		//=======================================================
-		val = Number(this.MaxEnergy);
+		val = String(this.MaxEnergy);
 
 		key = "Devices." + this.deviceName + ".TimeFrames." + this.ID + ".RemainingMaxEnergy";
 
-		this.parentAdapter.setState(key, { ack: true, val: val });
+		await this.SetState(key,  true,  val );
 	}
 
-	SetMaxChargeTime(state) {
+	SetMaxChargeTime(state: string) : void {
 
 		if (this.WallboxChargeTime != null && this.WallboxChargeTime == 4) {
 			const vals = state.split(":");
@@ -377,14 +397,10 @@ export default class TimeframeWallbox extends Base {
 
 			this.LatestEnd = maxChargeTime * 60 * 60; //in 24h
 
-			this.parentAdapter.log.debug("set user defined max charge time " + state + " " + maxChargeTime + " " + this.LatestEnd);
+			this.logDebug("set user defined max charge time " + state + " " + maxChargeTime + " " + this.LatestEnd);
 		} else {
-			this.parentAdapter.log.warn("trying to set user defined max charge time, but not enabled " + this.WallboxChargeTime + " " + state);
+			this.logWarn("trying to set user defined max charge time, but not enabled " + this.WallboxChargeTime + " " + state);
 		}
 	}
 }
 
-
-module.exports = {
-	TimeframeWallbox
-};

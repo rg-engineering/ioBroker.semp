@@ -1,19 +1,29 @@
 /* eslint-disable prefer-template */
-const nodeSSDP = require("node-ssdp").Server;
 
+
+import { Server } from "node-ssdp";
 import Base from "./base";
+import type Gateway from "./Gateway"; 
+
 export default class SSDPServer extends Base {
 
-	constructor(descriptionURL, uniqueDeviceName, gateway) {
+	Gateway: Gateway;
+	ssdp: Server;
+
+
+
+	constructor(descriptionURL: string, uniqueDeviceName: string, gateway:Gateway) {
+
+		super(gateway.adapter,0, "SSDPServer");
 
 		this.Gateway = gateway;
 
 		if (descriptionURL == null || descriptionURL === "") {
-			this.Gateway.parentAdapter.log.error("Description url cant be empty!");
+			this.Gateway.logError("Description url cant be empty!");
 			throw new TypeError("Description url cant be empty!");
 		}
 
-		this.ssdp = new nodeSSDP({
+		this.ssdp = new Server({
 			location: descriptionURL,
 			udn: "uuid:" + uniqueDeviceName,
 			adInterval: 20000
@@ -25,20 +35,17 @@ export default class SSDPServer extends Base {
 
 		this.ssdp.addUSN("urn:schemas-simple-energy-management-protocol:device:Gateway:1");
 
-		this.Gateway.parentAdapter.log.debug("SSDPServer created: " + descriptionURL + " " + uniqueDeviceName);
+		this.Gateway.logDebug("SSDPServer created: " + descriptionURL + " " + uniqueDeviceName);
 	}
 
-	start() {
+	start(): void {
 		this.ssdp.start();
-		this.Gateway.parentAdapter.log.debug("SSDPServer started");
+		this.Gateway.logDebug("SSDPServer started");
 	}
 
-	stop() {
+	stop() : void{
 		this.ssdp.stop();
-		this.Gateway.parentAdapter.log.debug("SSDPServer stopped");
+		this.Gateway.logDebug("SSDPServer stopped");
 	}
 }
 
-module.exports = {
-	SSDPServer
-};

@@ -32,7 +32,7 @@ export default class DescriptionGenerator {
 		serverAddress:string,
 		friendlyName:string,
 		manufacturer:string,
-		basePath:string) {
+		basePath:string) : string {
 
 		if (!uuid) {
 			throw new TypeError("uuid must be specified!");
@@ -72,6 +72,3 @@ export default class DescriptionGenerator {
 }
 
 
-module.exports = {
-	DescriptionGenerator
-};

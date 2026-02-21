@@ -82,6 +82,7 @@ interface SempDevice {
     WallboxOIDs: WallboxOIDSettings[]
     StatusDetection: string;
 
+    SwitchOffAtEndOfTimer: boolean //only used for wallbox
 
 }
 
