@@ -170,9 +170,29 @@
         },
         "title": {
           "en": "breaking change: configuration of devices needs to be checked",
+          "de": "Breaking Change: Die Konfiguration der Geräte muss überprüft werden",
+          "ru": "критическое изменение: необходимо проверить конфигурацию устройств",
+          "pt": "alteração significativa: a configuração dos dispositivos precisa ser verificada",
+          "nl": "belangrijke verandering: de configuratie van apparaten moet worden gecontroleerd",
+          "fr": "changement radical : la configuration des appareils doit être vérifiée",
+          "it": "modifica sostanziale: è necessario verificare la configurazione dei dispositivi",
+          "es": "Cambio importante: es necesario comprobar la configuración de los dispositivos.",
+          "pl": "istotna zmiana: należy sprawdzić konfigurację urządzeń",
+          "uk": "зміна порушення: потрібно перевірити конфігурацію пристроїв",
+          "zh-cn": "重大变更：需要检查设备的配置"
         },
         "text": {
           "en": "Due to the redesign of the administration interface in React and backend in typescript, the configuration structure has changed. Devices must be checked. While the adapter attempts to migrate the data, this cannot be guaranteed. ",
+          "de": "Aufgrund der Neugestaltung der Administrationsoberfläche in React und des Backends in Typescript hat sich die Konfigurationsstruktur geändert. Geräte müssen überprüft werden. Während der Adapter versucht, die Daten zu migrieren, kann dies nicht garantiert werden.",
+          "ru": "В связи с переработкой интерфейса администрирования в React и бэкенда в typescript изменилась структура конфигурации. Устройства необходимо проверить. Хотя адаптер пытается перенести данные, это не может быть гарантировано.",
+          "pt": "Devido ao redesenho da interface de administração no React e backend no TypeScript, a estrutura de configuração mudou. Os dispositivos devem ser verificados. Embora o adaptador tente migrar os dados, isso não pode ser garantido.",
+          "nl": "Door het herontwerp van de beheerinterface in React en de backend in typescript is de configuratiestructuur veranderd. Apparaten moeten worden gecontroleerd. Hoewel de adapter probeert de gegevens te migreren, kan dit niet worden gegarandeerd.",
+          "fr": "En raison de la refonte de l'interface d'administration en React et du backend en typescript, la structure de configuration a changé. Les appareils doivent être vérifiés. Même si l'adaptateur tente de migrer les données, cela ne peut pas être garanti.",
+          "it": "A causa della riprogettazione dell'interfaccia di amministrazione in React e del backend in TypeScript, la struttura di configurazione è cambiata. I dispositivi devono essere controllati. Mentre l'adattatore tenta di migrare i dati, ciò non può essere garantito.",
+          "es": "Debido al rediseño de la interfaz de administración en React y backend en mecanografiado, la estructura de configuración ha cambiado. Se deben comprobar los dispositivos. Mientras el adaptador intenta migrar los datos, esto no se puede garantizar.",
+          "pl": "W związku z przeprojektowaniem interfejsu administracyjnego w React i backendu w maszynopisie, zmieniła się struktura konfiguracji. Urządzenia muszą zostać sprawdzone. Chociaż adapter podejmuje próbę migracji danych, nie można tego zagwarantować.",
+          "uk": "Через редизайн інтерфейсу адміністрування в React і бекенда в typescript структура конфігурації змінилася. Обладнання необхідно перевірити. Поки адаптер намагається перенести дані, це не можна гарантувати.",
+          "zh-cn": "由于React中的管理界面和TypeScript中的后端的重新设计，配置结构发生了变化。必须检查设备。当适配器尝试迁移数据时，这不能得到保证。"
         },
         "level": "warn",
         "buttons": [
@@ -181,7 +201,6 @@
         ]
       }
     ],
-
     "plugins": {
       "sentry": {
         "dsn": "https://84efb82607d94201a8d1d3b180f10024@o390433.ingest.sentry.io/4503953214275584"
