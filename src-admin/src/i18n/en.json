@@ -68,12 +68,12 @@
   "DeviceType": "Device type",
   "DeviceURLReadPollRate": "URL reading interval [sec]",
   "DeviceVendor": "Manufacturer",
-  "DeviceWallbox3phaseSwitchDelay": "Delay for switching to 3-phase charging [min]",
-  "DeviceWallbox3phaseSwitchLimit": "Limit for switching to 3-phase charging [W]",
-  "DeviceWallboxChargeTime": "Maximum charging time after connecting the plug",
-  "DeviceWallboxHas3phaseEnabler": "has a switch to activate 3-phase charging",
-  "DeviceWallboxNeedCurrentRecommendation": "Use electricity and power",
-  "DeviceWallboxPhases": "electrical phases",
+  "Wallbox3phaseSwitchDelay": "Delay for switching to 3-phase charging [min]",
+  "Wallbox3phaseSwitchLimit": "Limit for switching to 3-phase charging [W]",
+  "WallboxChargeTime": "Maximum charging time after connecting the plug",
+  "WallboxHas3phaseEnabler": "has a switch to activate 3-phase charging",
+  "WallboxNeedCurrentRecommendation": "Use electricity and power",
+  "WallboxPhases": "electrical phases",
   "Device_settings": "Device settings",
   "DishWasher": "dishwasher",
   "Dryer": "dryer",
@@ -166,5 +166,22 @@
   "timers": "timer",
   "user defined": "Custom",
   "vendor": "Manufacturer",
-  "wallbox": "Wallbox"
+  "wallbox": "Wallbox",
+
+
+  "select a unit": "select a unit",
+  "OIDPower": "OID Power",
+  "OIDStatus": "OID Status",
+  "OIDSwitch": "OID Switch",
+  "Has OID Switch": "use separate OID for switch",
+  "energy request timer active": "energy request timer active",
+  "energy requests": "energy requests",
+  "DishwasherMode": "Dishwasher Mode",
+  "Actions": "Actions",
+  "select a charge time": "select a charge time",
+  "select a number of phases": "select number of phases"
+
+
+
+
 }

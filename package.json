@@ -57,7 +57,7 @@
     "2-build": "node tasks.js --2-build",
     "3-copy": "node tasks.js --3-copy",
     "4-patch": "node tasks.js --4-patch",
-    "build": "npm run build-backend && tasks && npm pack",
+    "build": "npm run build-backend && node tasks --build && npm pack",
     "build-backend": "tsc -p tsconfig.build.json",
     "npm": "npm i && cd src-admin && npm i -f"
   },

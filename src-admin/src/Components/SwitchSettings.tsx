@@ -12,6 +12,7 @@ import {
     MenuItem,
     Checkbox,
     FormControlLabel,
+    Badge
 } from '@mui/material';
 import type {
     SelectChangeEvent
@@ -111,6 +112,10 @@ export default function SwitchSettings(props: Props): React.JSX.Element {
             <Box
                 style={{ margin: 10 }}
             >
+                 <Badge color="primary" id='hint_switch' sx={{ display: 'block', mb: 2, minWidth: '100%' }}>
+                    {I18n.t('hint_switch')}
+                </Badge>
+
 
                 {/* Flex-Container: Select + optionaler SelectOID nebeneinander */}
                 <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-end', flexWrap: 'wrap' }}>

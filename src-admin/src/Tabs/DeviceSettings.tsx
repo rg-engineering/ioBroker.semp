@@ -28,7 +28,6 @@ import {
 
 import type{ SelectChangeEvent } from '@mui/material';
 
-
 import AddIcon from '@mui/icons-material/Add';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 
@@ -37,8 +36,6 @@ import CounterSettings from '../Components/CounterSettings';
 import SwitchSettings from '../Components/SwitchSettings';
 import EnergyRequestTimerSettings from '../Components/EnergyRequestTimerSettings';
 import WallboxSettings from '../Components/WallboxSettings';
-
-
 
 interface SettingsProps {
     common: ioBroker.InstanceCommon;

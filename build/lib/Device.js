@@ -1,0 +1,1709 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const Planningrequest_1 = __importDefault(require("./Planningrequest"));
+const base_1 = __importDefault(require("./base"));
+class Device extends base_1.default {
+    states = {
+        waiting: "waiting",
+        waiting4On: "waiting for on",
+        on: "on",
+        //wallbox
+        plugNotConnected: "plug not connected",
+        plugConnected: "plug connected",
+        startCharge: "charge starting",
+        charging: "charging",
+        fastCharging: "fast charging",
+        stopCharge: "charge stopping",
+        //dishwasher
+        off: "off",
+        waiting4OnRecommendation: "waiting for SHM recommendation",
+        TimeframeOn: "Timeframe On",
+        FinishedWaiting4TF: "FinishedWaiting4TF",
+        TFendedWaiting4Device: "TFendedWaiting4Device",
+        TFended: "TFended",
+        DeviceFinished: "DeviceFinished",
+        DeviceInStandby: "DeviceInStandby",
+        waiting4FirstOff: "waiting for first off"
+    };
+    Gateway;
+    device;
+    deviceInfo;
+    deviceStatus;
+    EnergyData;
+    logger;
+    DishWasherMode;
+    planningrequest;
+    lastRecommendation;
+    isConnected;
+    isFastCharging;
+    isStarting;
+    isStopping;
+    isCharging;
+    isError;
+    StatusDetectionOnTimerID = null;
+    StatusDetectionOffTimerID = null;
+    InMinRunTime;
+    MinRunTimeExpired;
+    DisconnectTimerID = null;
+    CancelRequestTimerID = null;
+    StatusDetectionMinRunTimerID = null;
+    URLs2Check = [];
+    UrlTimerId = [];
+    WallboxIs3PhaseCharging = false;
+    DeviceWallboxPhases = 1;
+    start3PhaseChargeTimer = null;
+    stop3PhaseChargeTimer = null;
+    DishwasherStatusTimerID = null;
+    DishwasherOffTimeoutID = null;
+    dishwasherstate = "";
+    DishWasherRecommendation = false;
+    DishWasherOffTimerCheckExceeded = false;
+    /**
+     * Creates new device
+     */
+    constructor(gateway, device, logger) {
+        // super erwartet 3 Argumente laut TS-Fehler - übergebe adapter, device.Name, logger
+        super(gateway.adapter, 0, device.Name);
+        this.Gateway = gateway;
+        this.device = device;
+        this.deviceInfo = null;
+        this.deviceStatus = null;
+        this.EnergyData = {
+            lastTimestamp: -99,
+            lastValue: 0,
+            SumEnergy: 0
+        };
+        this.logger = logger;
+        this.DishWasherMode = (this.device.Type == "DishWasher" && this.device.DishwasherMode) ? true : false;
+        const planningrequestsSettings = {
+            EnergyRequestPeriods: this.device.EnergyRequestPeriods,
+            SwitchOffAtEndOfTimer: this.device.SwitchOffAtEndOfTimer,
+            DeviceName: this.device.Name,
+            DeviceType: this.device.Type,
+            MaxEnergy: this.device.BatteryCapacity,
+            MinEnergy: 0.1 * this.device.BatteryCapacity,
+            MinPower: this.device.MinPower,
+            MaxPower: this.device.MaxPower,
+            WallboxChargeTime: this.device.WallboxChargeTime,
+            DishwasherMode: this.DishWasherMode,
+            Type: this.device.Type,
+            Name: this.device.Name,
+        };
+        this.planningrequest = null;
+        if (this.device.TimerActive || this.device.Type == "EVCharger") {
+            this.planningrequest = new Planningrequest_1.default(planningrequestsSettings, this.Gateway.adapter);
+        }
+        this.lastRecommendation = null;
+        if (this.device.ID === undefined || this.device.ID.length < 25) {
+            this.logError(this.device.Name + " wrong device id " + this.device.ID + "! must follow F-xxxxxxxx-yyyyyyyyyyyy-zz");
+        }
+        this.logDebug(this.device.Name + " check DeviceID " + this.device.ID + " type " + typeof this.device.ID);
+        const ids = this.device.ID.split("-");
+        this.logDebug(this.device.Name + " BaseId " + ids[1] + " length " + ids[1].length);
+        if (ids[1].length != 8 || !Number.isInteger(Number(ids[1]))) {
+            this.logError(this.device.Name + " wrong BaseId " + ids[1] + ". Must be a integer with 8 digits." + ids[1].length + " " + Number.isInteger(Number(ids[1])));
+        }
+        if (this.device.Name === undefined || this.device.Name.length < 2) {
+            this.logError(this.device.Name + " wrong device name " + this.device.Name);
+        }
+        if (this.device.Type === undefined || this.device.Type == null) {
+            this.logError(this.device.Name + " wrong device type " + String(this.device.Type));
+        }
+        if (this.device.MeasurementMethod === undefined || this.device.MeasurementMethod == null) {
+            this.logError(this.device.Name + " wrong device MeasurementMethod " + String(this.device.MeasurementMethod));
+        }
+        if (this.device.SerialNr === undefined || this.device.SerialNr.length < 2) {
+            this.logError(this.device.Name + " wrong device SerialNr " + this.device.SerialNr);
+        }
+        if (this.device.MaxPower === undefined || this.device.MaxPower == null || this.device.MaxPower < 1) {
+            this.logError(this.device.Name + " max. Power not set!  " + this.device.MaxPower + "; setting to default 100");
+            this.device.MaxPower = 100;
+        }
+        //muss true sein, um das entsprechende Menü im portal zu bekommen
+        device.OptionalEnergy = this.GetOptionalEnergy();
+        this.deviceInfo = {
+            Identification: {
+                DeviceId: device.ID,
+                DeviceName: device.Name,
+                DeviceType: device.Type,
+                DeviceSerial: device.SerialNr,
+                DeviceVendor: device.Vendor
+            },
+            Characteristics: {
+                //MaxPowerConsumption: device.MaxPower,
+                //MinPowerConsumption: device.MinPower
+                MaxPowerConsumption: device.MaxPower
+            },
+            Capabilities: {
+                CurrentPower: { Method: device.MeasurementMethod },
+                Timestamps: { AbsoluteTimestamps: false },
+                Interruptions: { InterruptionsAllowed: device.InterruptionsAllowed },
+                Requests: { OptionalEnergy: device.OptionalEnergy },
+            }
+        };
+        //2023-03-11 only if InterruptionsAllowed
+        if (device.MinOnTime && device.InterruptionsAllowed) {
+            this.deviceInfo.Characteristics.MinOnTime = device.MinOnTime;
+        }
+        if (device.MaxOnTime && device.InterruptionsAllowed) {
+            this.deviceInfo.Characteristics.MaxOnTime = device.MaxOnTime;
+        }
+        if (device.MinOffTime && device.InterruptionsAllowed) {
+            this.deviceInfo.Characteristics.MinOffTime = device.MinOffTime;
+        }
+        if (device.MaxOffTime && device.InterruptionsAllowed) {
+            this.deviceInfo.Characteristics.MaxOffTime = device.MaxOffTime;
+        }
+        this.URLs2Check = [];
+        this.UrlTimerId = [];
+        if (device.Type == "EVCharger") {
+            //see SEMP-41YE3814-AN-EVCharger-1.0.3.pdf
+            //add additional infos
+            this.deviceInfo.Characteristics.MaxPowerConsumption = device.MaxPower; //
+            if (device != null && device.MinPower != null && device.MinPower > 0) {
+                this.deviceInfo.Characteristics.MinPowerConsumption = device.MinPower; //needed to control level
+            }
+            this.WallboxIs3PhaseCharging = false;
+            if (this.device.wallbox_oid_read === undefined || this.device.wallbox_oid_read == null) {
+                this.logError("missing wallbox OID configuration " + JSON.stringify(this.device.wallbox_oid_read));
+            }
+            else if (this.device.wallbox_oid_write === undefined || this.device.wallbox_oid_write == null) {
+                this.logError("missing wallbox OID configuration " + JSON.stringify(this.device.wallbox_oid_write));
+            }
+            else {
+                this.logDebug("wallbox OID configuration (1) " + JSON.stringify(this.device.wallbox_oid_read) + " " + JSON.stringify(this.device.wallbox_oid_write));
+                /*
+                let DeviceOIDPlugConnected: WallboxOIDSettings | null = null;
+                let DeviceOIDIsCharging: WallboxOIDSettings | null = null;
+                let DeviceOIDIsError: WallboxOIDSettings | null = null;
+                let DeviceOIDChargePower: WallboxOIDSettings | null = null;
+                let DeviceOIDStartCharge: WallboxOIDSettings | null = null;
+                let DeviceOIDStopCharge: WallboxOIDSettings | null = null;
+                let DeviceOID3PhaseChargeEnable: WallboxOIDSettings | null = null;
+                let DeviceOID3PhaseChargeDisable: WallboxOIDSettings | null = null;
+                let DeviceOIDCounter: WallboxOIDSettings | null = null;
+                let DeviceOIDStatus: WallboxOIDSettings | null = null;
+                let DeviceOIDSwitch: WallboxOIDSettings | null = null;
+                */
+                for (let o = 0; o < this.device.wallbox_oid_read.length; o++) {
+                    if (this.device.wallbox_oid_read[o].active) {
+                        this.device.WallboxOID.DeviceOIDPlugConnected = this.device.wallbox_oid_read[o];
+                    }
+                    else if (this.device.wallbox_oid_read[o].Name == "DeviceOIDIsCharging") {
+                        this.device.WallboxOID.DeviceOIDIsCharging = this.device.wallbox_oid_read[o];
+                    }
+                    else if (this.device.wallbox_oid_read[o].Name == "DeviceOIDIsError") {
+                        this.device.WallboxOID.DeviceOIDIsError = this.device.wallbox_oid_read[o];
+                    }
+                    else if (this.device.wallbox_oid_read[o].Name == "DeviceOIDCounter") {
+                        this.device.WallboxOID.DeviceOIDCounter = this.device.wallbox_oid_read[o];
+                    }
+                    else if (this.device.wallbox_oid_read[o].Name == "DeviceOIDStatus") {
+                        this.device.WallboxOID.DeviceOIDStatus = this.device.wallbox_oid_read[o];
+                    }
+                }
+                for (let o = 0; o < this.device.wallbox_oid_write.length; o++) {
+                    if (this.device.wallbox_oid_write[o].active) {
+                        if (this.device.wallbox_oid_write[o].Name == "DeviceOIDChargePower") {
+                            this.device.WallboxOID.DeviceOIDChargePower = this.device.wallbox_oid_write[o];
+                        }
+                        else if (this.device.wallbox_oid_write[o].Name == "DeviceOIDStartCharge") {
+                            this.device.WallboxOID.DeviceOIDStartCharge = this.device.wallbox_oid_write[o];
+                        }
+                        else if (this.device.wallbox_oid_write[o].Name == "DeviceOIDStopCharge") {
+                            this.device.WallboxOID.DeviceOIDStopCharge = this.device.wallbox_oid_write[o];
+                        }
+                        else if (this.device.wallbox_oid_write[o].Name == "DeviceOID3PhaseChargeEnable") {
+                            this.device.WallboxOID.DeviceOID3PhaseChargeEnable = this.device.wallbox_oid_write[o];
+                        }
+                        else if (this.device.wallbox_oid_write[o].Name == "DeviceOID3PhaseChargeDisable") {
+                            this.device.WallboxOID.DeviceOID3PhaseChargeDisable = this.device.wallbox_oid_write[o];
+                        }
+                        else if (this.device.wallbox_oid_write[o].Name == "DeviceOIDSwitch") {
+                            this.device.WallboxOID.DeviceOIDSwitch = this.device.wallbox_oid_write[o];
+                        }
+                    }
+                }
+                /*
+                this.device.WallboxOID = {
+                    DeviceOIDPlugConnected: DeviceOIDPlugConnected,
+                    DeviceOIDIsCharging: DeviceOIDIsCharging,
+                    DeviceOIDIsError: DeviceOIDIsError,
+                    DeviceOIDChargePower: DeviceOIDChargePower,
+                    DeviceOIDStartCharge: DeviceOIDStartCharge,
+                    DeviceOIDStopCharge: DeviceOIDStopCharge,
+                    DeviceOID3PhaseChargeEnable: DeviceOID3PhaseChargeEnable,
+                    DeviceOID3PhaseChargeDisable: DeviceOID3PhaseChargeDisable,
+                    DeviceOIDCounter: DeviceOIDCounter,
+                    DeviceOIDStatus: DeviceOIDStatus,
+                    DeviceOIDSwitch: DeviceOIDSwitch
+                };
+                */
+                this.logDebug(this.device.Name + " wallbox OID configuration (2) " + JSON.stringify(this.device.WallboxOID));
+                // check, dass enable und disable nicht gleich ist
+                if (this.device.WallboxOID.DeviceOID3PhaseChargeEnable != null && this.device.WallboxOID.DeviceOID3PhaseChargeEnable.OID != null && this.device.WallboxOID.DeviceOID3PhaseChargeEnable.OID.length > 5
+                    && this.device.WallboxOID.DeviceOID3PhaseChargeDisable != null && this.device.WallboxOID.DeviceOID3PhaseChargeDisable.OID != null && this.device.WallboxOID.DeviceOID3PhaseChargeDisable.OID.length > 5
+                    && this.device.WallboxOID.DeviceOID3PhaseChargeEnable.Type == "URL" && this.device.WallboxOID.DeviceOID3PhaseChargeDisable.Type == "URL"
+                    && this.device.WallboxOID.DeviceOID3PhaseChargeEnable.OID == this.device.WallboxOID.DeviceOID3PhaseChargeDisable.OID) {
+                    this.logError(this.device.Name + " wrong DeviceOID3PhaseCharge enable and disable URL should be different   " + this.device.WallboxOID.DeviceOID3PhaseChargeEnable.OID + " " + this.device.WallboxOID.DeviceOID3PhaseChargeDisable.OID);
+                }
+            }
+            if (this.device.WallboxPhases == 3 && (this.device.Wallbox3phaseSwitchDelay === undefined || this.device.Wallbox3phaseSwitchDelay == null || this.device.Wallbox3phaseSwitchDelay <= 0)) {
+                this.logError(this.device.Name + " wrong Wallbox3phaseSwitchDelay  " + this.device.Wallbox3phaseSwitchDelay + "; setting to default 3");
+                this.device.Wallbox3phaseSwitchDelay = 3;
+            }
+            if (this.device.WallboxPhases == 3 && this.device.Wallbox3phaseSwitchLimit > 4600) {
+                this.logWarn(this.device.Name + " check limit to enable 3phase-charging  " + this.device.Wallbox3phaseSwitchLimit + "; it should below 4600 W to avoid unbalanced grid network");
+            }
+        }
+        if (this.DishWasherMode) {
+            this.dishwasherstate = this.states.off;
+            this.DishWasherRecommendation = false;
+            this.DishwasherStatusTimerID = setInterval(this.DishWasherSequence.bind(this), 10 * 1000);
+            this.DishwasherOffTimeoutID = null;
+            this.DishWasherOffTimerCheckExceeded = false;
+            this.logDebug(this.device.Name + " is in dishwashermoder");
+        }
+        this.deviceStatus = {
+            DeviceId: device.ID,
+            EMSignalsAccepted: true,
+            Status: "Off",
+        };
+        this.isConnected = false;
+        this.isFastCharging = false;
+        this.isStarting = false;
+        this.isStopping = false;
+        this.isCharging = false;
+        this.isError = false;
+        this.StatusDetectionOnTimerID = null;
+        this.StatusDetectionOffTimerID = null;
+        this.InMinRunTime = false;
+        this.MinRunTimeExpired = false;
+        this.DisconnectTimerID = null;
+        this.start3PhaseChargeTimer = null;
+        this.stop3PhaseChargeTimer = null;
+        this.CancelRequestTimerID = null;
+        this.StatusDetectionMinRunTimerID = null;
+        //await this.startup(); now done from gateway
+        this.logInfo("device created " + this.device.ID + " " + this.device.Name);
+    }
+    //2023-03-11 startup added to support async await
+    async startup() {
+        await this.createObjects();
+        await this.subscribe();
+        this.getCurrentStates();
+        await this.SetDeviceState();
+    }
+    destructor() {
+        this.logDebug("destructor called ");
+        if (this.CancelRequestTimerID) {
+            clearTimeout(this.CancelRequestTimerID);
+            this.CancelRequestTimerID = null;
+        }
+        if (this.DishwasherStatusTimerID) {
+            clearTimeout(this.DishwasherStatusTimerID);
+            this.DishwasherStatusTimerID = null;
+        }
+        if (this.DishwasherOffTimeoutID) {
+            clearTimeout(this.DishwasherOffTimeoutID);
+            this.DishwasherOffTimeoutID = null;
+            this.DishWasherOffTimerCheckExceeded = false;
+        }
+        for (let i = 0; i < this.UrlTimerId.length; i++) {
+            if (this.UrlTimerId[i]) {
+                clearInterval(this.UrlTimerId[i]);
+                this.UrlTimerId[i] = null;
+            }
+        }
+    }
+    async Check2Switch() {
+        if (this.planningrequest != null) {
+            const ret = this.planningrequest.Check2Switch();
+            if (ret.SwitchOff) {
+                await this.SwitchOff();
+            }
+            if (ret.restart) {
+                //restart timeframe
+                if (this.planningrequest != null) {
+                    if (this.device.Type == "EVCharger" && this.isConnected) {
+                        this.planningrequest.SetPlugConnected(true);
+                    }
+                }
+            }
+        }
+    }
+    async SwitchOff() {
+        this.logDebug(this.device.Name + " turn device off");
+        await this.Switch(false);
+    }
+    async SwitchOn() {
+        this.logDebug(this.device.Name + " turn device on");
+        await this.Switch(true);
+    }
+    async setLastPower(watts, minPower, maxPower) {
+        if (this.device.MeasurementUnit == "kW") {
+            watts = watts * 1000;
+        }
+        this.logDebug(this.device.Name + " setLastPower " + watts + " " + typeof watts + " " + this.device.StatusDetectionType + " " + this.device.MeasurementUnit);
+        this.CalcEnergy(watts);
+        if (this.planningrequest != null) {
+            this.planningrequest.SetCurrentEnergy(Math.round(this.EnergyData.SumEnergy));
+        }
+        const key = "Devices." + this.device.Name + ".Energy";
+        await this.SetState(key, true, Math.round(this.EnergyData.SumEnergy));
+        if (this.device.StatusDetectionType == "FromPowerValue") {
+            //limit festlegen, 1 Watt könnte standby sein
+            let limit = 0;
+            if (this.device.StatusDetectionLimit !== undefined && this.device.StatusDetectionLimit != null && Number(this.device.StatusDetectionLimit) > 0) {
+                limit = Number(this.device.StatusDetectionLimit);
+                this.logDebug(this.device.Name + " set status detection limit to " + limit);
+            }
+            if (watts > limit) {
+                if (this.device.StatusDetectionLimitTimeOn !== undefined && this.device.StatusDetectionLimitTimeOn != null && Number(this.device.StatusDetectionLimitTimeOn) > 0) {
+                    this.logDebug(this.device.Name + " status detection time limit is " + this.device.StatusDetectionLimitTimeOn + " going to on");
+                    //going to on
+                    if (this.deviceStatus.Status == "On" || this.StatusDetectionOnTimerID != null) {
+                        //nothing to do, already true or timer started
+                        this.logDebug(this.device.Name + " already on, no timer start " + this.deviceStatus.Status + " " + (this.StatusDetectionOnTimerID != null ? "StatusDetectionOnTimerID already running" : "StatusDetectionOnTimerID not running"));
+                    }
+                    else {
+                        this.StatusDetectionOnTimerID = setTimeout(this.SetStatusOn.bind(this), this.device.StatusDetectionLimitTimeOn * 60 * 1000);
+                        this.logDebug(this.device.Name + " start setStatusOn - timer");
+                    }
+                    if (this.StatusDetectionOffTimerID) {
+                        this.logDebug(this.device.Name + " cancel setStatusOff - timer");
+                        clearTimeout(this.StatusDetectionOffTimerID);
+                        this.StatusDetectionOffTimerID = null;
+                    }
+                }
+                else {
+                    await this.setOnOff("On");
+                }
+                if (this.device.StatusDetectionMinRunTime !== undefined && this.device.StatusDetectionMinRunTime != null && Number(this.device.StatusDetectionMinRunTime) > 0) {
+                    if (this.InMinRunTime == true || this.MinRunTimeExpired == true) {
+                        this.logDebug(this.device.Name + " already in MinRunTime or already expired, no timer restart");
+                    }
+                    else {
+                        if (this.StatusDetectionMinRunTimerID != null) {
+                            clearTimeout(this.StatusDetectionMinRunTimerID);
+                            this.StatusDetectionMinRunTimerID = null;
+                        }
+                        this.StatusDetectionMinRunTimerID = setTimeout(this.ResetMinRunTime.bind(this), this.device.StatusDetectionMinRunTime * 60 * 1000);
+                        this.logDebug(this.device.Name + " start min run time for status detection " + this.device.StatusDetectionMinRunTime * 60 * 1000 + " ms");
+                        this.InMinRunTime = true;
+                        this.MinRunTimeExpired = false;
+                    }
+                }
+            }
+            else {
+                if (!this.InMinRunTime) {
+                    if (this.device.StatusDetectionLimitTimeOff !== undefined && this.device.StatusDetectionLimitTimeOff != null && Number(this.device.StatusDetectionLimitTimeOff) > 0) {
+                        this.logDebug(this.device.Name + " status detection time limit is " + this.device.StatusDetectionLimitTimeOff + " going to off");
+                        //going to off
+                        if (this.deviceStatus.Status == "Off" || this.StatusDetectionOffTimerID != null) {
+                            //nothing to do, already false or timer started
+                            this.logDebug(this.device.Name + " already off, no timer start " + this.deviceStatus.Status + " " + (this.StatusDetectionOffTimerID != null ? "StatusDetectionOffTimerID already running" : "StatusDetectionOffTimerID not running"));
+                        }
+                        else {
+                            this.StatusDetectionOffTimerID = setTimeout(this.SetStatusOff.bind(this), this.device.StatusDetectionLimitTimeOff * 60 * 1000);
+                            this.logDebug(this.device.Name + " start setStatusOff - timer");
+                        }
+                        if (this.StatusDetectionOnTimerID) {
+                            this.logDebug(this.device.Name + " cancel setStatusOn - timer");
+                            clearTimeout(this.StatusDetectionOnTimerID);
+                            this.StatusDetectionOnTimerID = null;
+                        }
+                    }
+                    else {
+                        this.MinRunTimeExpired = false;
+                        await this.setOnOff("Off");
+                    }
+                }
+                else {
+                    this.logDebug(this.device.Name + " still in min run time... not to switch off");
+                }
+            }
+        }
+        const powerInfo = {
+            AveragePower: Math.round(watts),
+            Timestamp: 0,
+            AveragingInterval: 60
+        };
+        if (maxPower) {
+            powerInfo.MaxPower = Math.round(maxPower);
+        }
+        if (minPower) {
+            powerInfo.MinPower = Math.round(minPower);
+        }
+        this.deviceStatus.PowerConsumption = {
+            PowerInfo: [powerInfo]
+        };
+    }
+    async ResetMinRunTime() {
+        this.InMinRunTime = false;
+        this.MinRunTimeExpired = true;
+        if (this.StatusDetectionMinRunTimerID) {
+            clearTimeout(this.StatusDetectionMinRunTimerID);
+            this.StatusDetectionMinRunTimerID = null;
+        }
+        this.logDebug(this.device.Name + " min run time for status detection finished, timer cleared ");
+        //get power and call setLastPower(watts, minPower, maxPower)
+        if (this.device.OID_Power !== undefined && this.device.OID_Power != null && this.device.OID_Power.length > 0) {
+            if (this.Gateway.adapter != null) {
+                const current = await this.Gateway.adapter.getForeignStateAsync(this.device.OID_Power);
+                if (current != null && current.val != null) {
+                    await this.setLastPower(Number(current.val), 0, 0);
+                }
+            }
+            else {
+                this.logError(this.device.Name + " cannot get power value to reset min run time, no parent adapter");
+            }
+        }
+    }
+    async SetStatusOn() {
+        if (this.StatusDetectionOnTimerID) {
+            clearTimeout(this.StatusDetectionOnTimerID);
+            this.StatusDetectionOnTimerID = null;
+        }
+        await this.setOnOff("On");
+    }
+    async SetStatusOff() {
+        this.MinRunTimeExpired = false;
+        if (this.StatusDetectionOffTimerID) {
+            clearTimeout(this.StatusDetectionOffTimerID);
+            this.StatusDetectionOffTimerID = null;
+        }
+        await this.setOnOff("Off");
+    }
+    async setOnOff(state) {
+        if (state == "On") {
+            //cancel timer if running
+            if (this.CancelRequestTimerID) {
+                clearTimeout(this.CancelRequestTimerID);
+                this.CancelRequestTimerID = null;
+            }
+        }
+        //could be On, Off, Offline
+        this.logDebug(this.device.Name + " setState " + state);
+        this.deviceStatus.Status = state;
+        if (this.planningrequest != null) {
+            this.planningrequest.SetDeviceStatus(state);
+        }
+        await this.SetDeviceState();
+        if (this.device.MeasurementMethod == "Estimation") {
+            //see issue #250: no Power to be send for devices without measurement in off-status
+            if (state === "On") {
+                if (this.deviceInfo && this.deviceInfo.Characteristics.MaxPowerConsumption != undefined) {
+                    await this.setLastPower(this.deviceInfo.Characteristics.MaxPowerConsumption, 0, 0);
+                }
+            }
+            else {
+                await this.setLastPower(0, 0, 0);
+            }
+        }
+    }
+    DishWasherOffTimerCheck() {
+        this.logDebug(this.device.Name + " DishWasherOffTimerCheck");
+        this.DishWasherOffTimerCheckExceeded = true;
+    }
+    async DishWasherSequence() {
+        //squence see draw.io diagram
+        switch (this.dishwasherstate) {
+            //============================================
+            case this.states.off:
+                //waiting for device on
+                if (this.deviceStatus.Status == "On") {
+                    //if device on
+                    this.dishwasherstate = this.states.waiting4FirstOff;
+                    let timeout = 100;
+                    if (this.device.StatusDetectionLimitTimeOff !== undefined && this.device.StatusDetectionLimitTimeOff != null && Number(this.device.StatusDetectionLimitTimeOff) > 0) {
+                        timeout = 2 * this.device.StatusDetectionLimitTimeOff * 60 * 1000;
+                    }
+                    else {
+                        timeout = 2 * 30 * 1000;
+                    }
+                    this.DishWasherOffTimerCheckExceeded = false;
+                    this.DishwasherOffTimeoutID = setTimeout(this.DishWasherOffTimerCheck.bind(this), timeout);
+                    //start timeout timer
+                    //switch off the device completely
+                    await this.SwitchOff();
+                    this.DishWasherRecommendation = false;
+                    if (this.InMinRunTime) {
+                        this.InMinRunTime = false;
+                        //hier nicht zurücksetzen
+                        //this.MinRunTimeExpired = true;
+                        if (this.StatusDetectionMinRunTimerID != null) {
+                            clearTimeout(this.StatusDetectionMinRunTimerID);
+                            this.StatusDetectionMinRunTimerID = null;
+                        }
+                        this.logDebug(this.device.Name + " not to wait MinRunTime here");
+                    }
+                }
+                break;
+            case this.states.waiting4FirstOff:
+                if (this.deviceStatus.Status == "Off" || this.StatusDetectionOffTimerID != null) {
+                    this.dishwasherstate = this.states.waiting4OnRecommendation;
+                    this.logDebug(this.device.Name + " device is off (or going to off) after first on");
+                    if (this.DishwasherOffTimeoutID) {
+                        clearTimeout(this.DishwasherOffTimeoutID);
+                        this.DishwasherOffTimeoutID = null;
+                    }
+                }
+                //set timeout als Notausgang, minimum ist Einschaltdauer
+                if (this.DishWasherOffTimerCheckExceeded) {
+                    this.logError(this.device.Name + " DishWasherOffTimerCheckExceeded! action still missing");
+                    this.DishWasherOffTimerCheckExceeded = false;
+                }
+                break;
+            case this.states.waiting4OnRecommendation:
+                //das muss ein manuelles ein sein!!!
+                if (this.deviceStatus.Status == "On") {
+                    this.logDebug(this.device.Name + " device is on after first off without recommendation");
+                    this.dishwasherstate = this.states.on;
+                }
+                //now waiting for On-recommndation
+                if (this.DishWasherRecommendation) {
+                    await this.setRecommendationState("On");
+                    //switch device on
+                    await this.Switch(true);
+                    this.dishwasherstate = this.states.waiting4On;
+                }
+                //notausgang
+                if (this.planningrequest != null && this.planningrequest.getAllTimeframesFinished()) {
+                    this.logDebug(this.device.Name + " device will not recommended to turn on today");
+                    // falls manuell on dann nach on
+                    if (this.deviceStatus.Status == "Off") {
+                        this.dishwasherstate = this.states.off;
+                    }
+                    else if (this.deviceStatus.Status == "On") {
+                        this.dishwasherstate = this.states.on;
+                    }
+                }
+                break;
+            case this.states.waiting4On:
+                if (this.deviceStatus.Status == "On") {
+                    this.dishwasherstate = this.states.on;
+                }
+                break;
+            case this.states.on:
+                //wait until device is finished
+                if (this.deviceStatus.Status == "Off") {
+                    if (this.planningrequest != null) {
+                        this.planningrequest.CancelActiveTimeframes();
+                        this.logDebug(this.device.Name + " cancel timeframe because device is off");
+                    }
+                    //if finished start sequence again
+                    this.logDebug(this.device.Name + " device is off now");
+                    this.dishwasherstate = this.states.off;
+                    this.deviceStatus.Status = "Off";
+                }
+                break;
+            default:
+                this.logError(this.device.Name + " DishWasherSequence: unknown dishwasherstate: " + this.dishwasherstate);
+                this.dishwasherstate = this.states.off;
+                break;
+        }
+        await this.SetDeviceState();
+        this.logDebug(this.device.Name + " DishWasherSequence: dishwasherstate: " + this.dishwasherstate + " status " + this.deviceStatus.Status);
+    }
+    async sendEMRecommendation(em2dev) {
+        if (this.device.Type == "EVCharger" && this.isFastCharging) {
+            this.logDebug(this.device.Name + " ignoring recommendation because fast charging is active");
+        }
+        else {
+            this.logDebug(this.device.Name + " received recommendation " + JSON.stringify(em2dev) + " " + JSON.stringify(this.lastRecommendation));
+            if (this.lastRecommendation == null || this.lastRecommendation.DeviceControl.On != em2dev.DeviceControl.On) {
+                await this.setRecommendationState(em2dev.DeviceControl.On);
+            }
+            await this.setRecommendation(em2dev.DeviceControl.On);
+            if (this.device.Type == "EVCharger") {
+                await this.setRecommendationPowerConsumption(em2dev.DeviceControl.RecommendedPowerConsumption);
+                this.Check3PhaseCharge(em2dev.DeviceControl.RecommendedPowerConsumption);
+            }
+            await this.StartCancelRequest(em2dev.DeviceControl.On);
+            this.lastRecommendation = em2dev;
+        }
+    }
+    async StartCancelRequest(value) {
+        //TimerCancelIfNotOn
+        //TimerCancelIfNotOnTime
+        if (value) {
+            if (this.device.TimerCancelIfNotOn != null && this.device.TimerCancelIfNotOn) {
+                if (this.device.TimerCancelIfNotOnTime != null && Number(this.device.TimerCancelIfNotOnTime) > 0) {
+                    if (this.CancelRequestTimerID) {
+                        this.logDebug(this.device.Name + " StartCancelRequest, nothing to do, already running");
+                    }
+                    else {
+                        this.logDebug(this.device.Name + " StartCancelRequest");
+                        this.CancelRequestTimerID = setTimeout(this.CancelRequest.bind(this), Number(this.device.TimerCancelIfNotOnTime) * 60 * 1000);
+                    }
+                }
+                else {
+                    this.logWarn(this.device.Name + " invalid time to cancel energy request " + JSON.stringify(this.device.TimerCancelIfNotOnTime));
+                }
+            }
+            await this.SetDeviceState();
+        }
+        else {
+            //cancel timer if running
+            if (this.CancelRequestTimerID) {
+                clearTimeout(this.CancelRequestTimerID);
+                this.CancelRequestTimerID = null;
+            }
+        }
+    }
+    async CancelRequest() {
+        this.logDebug(this.device.Name + " cancel energy request because device is not switched on");
+        if (this.planningrequest != null) {
+            this.planningrequest.CancelActiveTimeframes();
+        }
+        //switch device off
+        await this.SwitchOff();
+        if (this.CancelRequestTimerID) {
+            clearTimeout(this.CancelRequestTimerID);
+            this.CancelRequestTimerID = null;
+        }
+    }
+    Check3PhaseCharge(power) {
+        if (this.device.WallboxPhases == 3 && this.device.Wallbox3phaseSwitchLimit > 3000) {
+            if (power > this.device.Wallbox3phaseSwitchLimit) {
+                if (this.start3PhaseChargeTimer == null) {
+                    this.start3PhaseChargeTimer = setTimeout(this.Start3PhaseCharging.bind(this), this.device.Wallbox3phaseSwitchDelay * 60 * 1000);
+                    this.logDebug(this.device.Name + " start 3phase charging start timer");
+                }
+                if (this.stop3PhaseChargeTimer != null) {
+                    clearTimeout(this.stop3PhaseChargeTimer);
+                    this.stop3PhaseChargeTimer = null;
+                    this.logDebug(this.device.Name + " cancel 3phase charging stop timer");
+                }
+            }
+            else {
+                if (this.stop3PhaseChargeTimer == null) {
+                    this.stop3PhaseChargeTimer = setTimeout(this.Stop3PhaseCharging.bind(this), this.device.Wallbox3phaseSwitchDelay * 60 * 1000);
+                    this.logDebug(this.device.Name + " start 3phase charging stop timer");
+                }
+                if (this.start3PhaseChargeTimer != null) {
+                    clearTimeout(this.start3PhaseChargeTimer);
+                    this.start3PhaseChargeTimer = null;
+                    this.logDebug(this.device.Name + " cancel 3phase charging start timer");
+                }
+            }
+        }
+    }
+    async Start3PhaseCharging() {
+        this.logDebug(this.device.Name + " start 3phase charging");
+        const key = "Devices." + this.device.Name + ".Enable3PhaseCharge";
+        await this.SetState(key, true, true);
+        this.WallboxIs3PhaseCharging = true;
+        if (this.device.WallboxOID.DeviceOID3PhaseChargeEnable != null && this.device.WallboxOID.DeviceOID3PhaseChargeEnable.OID != null && this.device.WallboxOID.DeviceOID3PhaseChargeEnable.OID.length > 5) {
+            await this.setStateTypebased(this.device.WallboxOID.DeviceOID3PhaseChargeEnable);
+        }
+        if (this.start3PhaseChargeTimer) {
+            clearTimeout(this.start3PhaseChargeTimer);
+            this.start3PhaseChargeTimer = null;
+        }
+    }
+    async Stop3PhaseCharging() {
+        this.logDebug(this.device.Name + " stop 3phase charging");
+        const key = "Devices." + this.device.Name + ".Enable3PhaseCharge";
+        await this.SetState(key, true, false);
+        this.WallboxIs3PhaseCharging = false;
+        if (this.device.WallboxOID.DeviceOID3PhaseChargeDisable != null && this.device.WallboxOID.DeviceOID3PhaseChargeDisable.OID != null && this.device.WallboxOID.DeviceOID3PhaseChargeDisable.OID.length > 5) {
+            await this.setStateTypebased(this.device.WallboxOID.DeviceOID3PhaseChargeDisable);
+        }
+        if (this.stop3PhaseChargeTimer) {
+            clearTimeout(this.stop3PhaseChargeTimer);
+            this.stop3PhaseChargeTimer = null;
+        }
+    }
+    async setRecommendationState(value) {
+        this.logDebug(this.device.Name + " new recommendation " + value + " " + typeof value);
+        let boolVal = value;
+        if (typeof value === "string") {
+            //convert to boolean
+            boolVal = value.toLowerCase() === "true" || value === "1" || value === "on" || value === "yes";
+        }
+        else if (typeof value === "number") {
+            boolVal = value > 0;
+        }
+        let key = "Devices." + this.device.Name + ".RecommendedState";
+        await this.SetState(key, true, boolVal);
+        key = "Devices." + this.device.Name + ".Changed";
+        const now = new Date();
+        await this.SetState(key, true, now.toLocaleTimeString("de-DE"));
+    }
+    async setRecommendationPowerConsumption(value) {
+        let val = 0;
+        if (value === undefined) {
+            val = 0;
+        }
+        else {
+            val = value;
+        }
+        this.logDebug(this.device.Name + " new recommendation power " + val + " " + typeof val);
+        await this.SetWallboxPower(val);
+        const key = "Devices." + this.device.Name + ".RecommendedPower";
+        await this.SetState(key, true, val);
+    }
+    async setRecommendation(value) {
+        if (this.device.HasOIDSwitch) {
+            if (this.DishWasherMode) {
+                this.DishWasherRecommendation = value;
+                this.logDebug(this.device.Name + " set new recommendation state for dishwasher to " + value);
+            }
+            else {
+                this.logDebug(this.device.Name + " set new recommendation state to " + value);
+                await this.Switch(value);
+            }
+        }
+        if (this.device.Type == "EVCharger") {
+            if (value) {
+                await this.StartWallbox();
+            }
+            else {
+                await this.StopWallbox();
+            }
+        }
+    }
+    async Switch(value) {
+        let setstate = "unknown";
+        //get current state, if different set it
+        if (this.device.OID_Switch != null && this.device.OID_Switch.length > 3) {
+            const curVal = await this.Gateway.adapter.getForeignStateAsync(this.device.OID_Switch);
+            this.logDebug(this.device.Name + " got state " + JSON.stringify(curVal) + " target is " + value);
+            if (curVal != null && curVal.val != value) {
+                this.logDebug(this.device.OID_Switch + " set state " + value);
+                await this.Gateway.adapter.setForeignStateAsync(this.device.OID_Switch, value);
+                if (value) {
+                    setstate = "SetOn";
+                }
+                else {
+                    setstate = "SetOff";
+                }
+            }
+        }
+        else {
+            this.logDebug(this.device.Name + " no switch configured");
+        }
+        if (this.logger != null) {
+            const records = [];
+            //hier records bauen
+            const record = {
+                Time: new Date().toLocaleString("de-DE"),
+                DeviceId: this.device.ID,
+                DeviceName: this.device.Name,
+                Status: setstate
+            };
+            records.push(record);
+            //und jetzt alle schreiben
+            this.logger.WriteCSVLog(0, records);
+        }
+    }
+    getCurrentStates() {
+        try {
+            //placeholder for future logic
+        }
+        catch (e) {
+            this.logError("exception in getCurrentStates [" + e + "]");
+        }
+    }
+    async createObjects() {
+        let key = "Devices." + this.device.Name + ".RecommendedState";
+        let obj = {
+            type: "state",
+            common: {
+                name: "recommended state got from SHM",
+                type: "boolean",
+                role: "state",
+                read: true,
+                write: false,
+                desc: "value set by SHM"
+            }
+        };
+        await this.CreateObject(key, obj);
+        await this.SetDefault(key, false);
+        key = "Devices." + this.device.Name + ".Changed";
+        obj = {
+            type: "state",
+            common: {
+                name: "last time recommendation changed",
+                type: "string",
+                role: "value.time",
+                read: true,
+                write: false,
+                desc: "last changed time"
+            }
+        };
+        await this.CreateObject(key, obj);
+        await this.SetDefault(key, "none");
+        key = "Devices." + this.device.Name + ".State";
+        obj = {
+            type: "state",
+            common: {
+                name: "current State",
+                type: "string",
+                role: "state",
+                read: true,
+                write: false,
+                desc: "current state"
+            }
+        };
+        await this.CreateObject(key, obj);
+        await this.SetDefault(key, "unknown");
+        key = "Devices." + this.device.Name + ".Energy";
+        obj = {
+            type: "state",
+            common: {
+                name: "Energy used",
+                type: "number",
+                role: "value",
+                read: true,
+                write: false,
+                desc: "Energy in Wh"
+            }
+        };
+        await this.CreateObject(key, obj);
+        await this.SetDefault(key, 0);
+        if (this.device.Type == "EVCharger") {
+            key = "Devices." + this.device.Name + ".MinEnergy";
+            obj = {
+                type: "state",
+                common: {
+                    name: "minimum energy for charging",
+                    type: "number",
+                    role: "value",
+                    read: true,
+                    write: true,
+                    desc: "min energy Wh"
+                }
+            };
+            await this.CreateObject(key, obj);
+            await this.SetDefault(key, 0.1 * this.device.BatteryCapacity);
+            key = "Devices." + this.device.Name + ".MaxEnergy";
+            obj = {
+                type: "state",
+                common: {
+                    name: "maximum energy for charging",
+                    type: "number",
+                    role: "value",
+                    read: true,
+                    write: true,
+                    desc: "max energy Wh"
+                }
+            };
+            await this.CreateObject(key, obj);
+            await this.SetDefault(key, this.device.BatteryCapacity);
+            key = "Devices." + this.device.Name + ".RecommendedPower";
+            obj = {
+                type: "state",
+                common: {
+                    name: "recommended power got from SHM",
+                    type: "number",
+                    role: "value",
+                    read: true,
+                    write: false,
+                    desc: "recommended power W"
+                }
+            };
+            await this.CreateObject(key, obj);
+            key = "Devices." + this.device.Name + ".EnableFastCharging";
+            obj = {
+                type: "state",
+                common: {
+                    name: "start fast charging with highest power",
+                    type: "boolean",
+                    role: "value",
+                    read: false,
+                    write: true,
+                    desc: "fast charge flag"
+                }
+            };
+            await this.CreateObject(key, obj);
+            await this.SetDefault(key, false);
+            if (this.device.WallboxPhases != null && this.device.WallboxPhases == 3) {
+                key = "Devices." + this.device.Name + ".Enable3PhaseCharge";
+                obj = {
+                    type: "state",
+                    common: {
+                        name: "signal to EV to enable 3phase charging",
+                        type: "boolean",
+                        role: "value",
+                        read: true,
+                        write: false,
+                        desc: "3phase indicator"
+                    }
+                };
+                await this.CreateObject(key, obj);
+                await this.SetDefault(key, false);
+                this.Check3PhaseCharge(0);
+            }
+            if (this.device.WallboxChargeTime != null && Number(this.device.WallboxChargeTime) == 4) {
+                key = "Devices." + this.device.Name + ".MaxChargeTime";
+                obj = {
+                    type: "state",
+                    common: {
+                        name: "user defined maximum time to charge",
+                        type: "string",
+                        role: "value",
+                        read: true,
+                        write: true,
+                        desc: "hh:mm"
+                    }
+                };
+                await this.CreateObject(key, obj);
+                await this.SetDefault(key, "06:00");
+            }
+            if (this.device.WallboxNeedCurrentRecommendation) {
+                key = "Devices." + this.device.Name + ".RecommendedCurrent";
+                obj = {
+                    type: "state",
+                    common: {
+                        name: "recommended current calculated from recommended power",
+                        type: "number",
+                        role: "value",
+                        read: true,
+                        write: false,
+                        desc: "recommended current A"
+                    }
+                };
+                await this.CreateObject(key, obj);
+                await this.SetDefault(key, 0);
+            }
+        }
+    }
+    async subscribe() {
+        if (this.device.Type != "EVCharger") {
+            if (this.device.MeasurementMethod == "Measurement") {
+                if (this.device.OID_Power != null && this.device.OID_Power.length > 5) {
+                    this.logDebug("subscribe OID_Power " + this.device.OID_Power);
+                    this.Gateway.adapter.subscribeForeignStates(this.device.OID_Power);
+                    //and get last value
+                    const current = await this.Gateway.adapter.getForeignStateAsync(this.device.OID_Power);
+                    if (current != null && current.val != null) {
+                        await this.setLastPower(Number(current.val), 0, 0);
+                    }
+                }
+                else {
+                    this.logWarn("no OID_Power specified " + this.device.OID_Power);
+                }
+            }
+            else {
+                await this.setLastPower(0, 0, 0);
+            }
+            if (this.device.StatusDetectionType == "SeparateOID") {
+                if (this.device.OID_Status != null && this.device.OID_Status.length > 5) {
+                    this.logDebug("subscribe OID_Status " + this.device.OID_Status);
+                    this.Gateway.adapter.subscribeForeignStates(this.device.OID_Status);
+                    //and get last value
+                    const current = await this.Gateway.adapter.getForeignStateAsync(this.device.OID_Status);
+                    if (current != null && current.val != null) {
+                        if (current.val) {
+                            await this.setOnOff("On");
+                        }
+                        else {
+                            await this.setOnOff("Off");
+                        }
+                    }
+                }
+                else {
+                    this.logWarn("no OID_Status specified " + this.device.OID_Status);
+                }
+            }
+        }
+        await this.SubscribeWallbox();
+    }
+    GetOptionalEnergy() {
+        let bRet = false;
+        if (this.device.Type == "EVCharger") {
+            bRet = true;
+        }
+        else {
+            if (this.device.HasOIDSwitch) {
+                bRet = true;
+            }
+            if (this.device.StatusDetectionType == "AlwaysOn") {
+                bRet = false;
+            }
+        }
+        this.logDebug("can use optional energy: " + bRet);
+        return bRet;
+    }
+    async SetDeviceState() {
+        let state = this.states.waiting;
+        if (this.device.Type == "EVCharger") {
+            if (this.isConnected) {
+                state = this.states.plugConnected;
+                if (this.isCharging) {
+                    state = this.states.charging;
+                    this.isStarting = false;
+                    this.isStopping = false;
+                }
+                if (this.isStarting) {
+                    state = this.states.startCharge;
+                }
+                if (this.isStopping) {
+                    state = this.states.stopCharge;
+                }
+                if (this.isFastCharging) {
+                    state = this.states.fastCharging;
+                }
+            }
+            else {
+                state = this.states.plugNotConnected;
+                this.isStarting = false;
+                this.isStopping = false;
+                this.isCharging = false;
+                this.isFastCharging = false;
+            }
+        }
+        if (this.CancelRequestTimerID != null) {
+            state = this.states.waiting4On;
+        }
+        else if (this.deviceStatus.Status == "On") {
+            state = this.states.on;
+        }
+        const key = "Devices." + this.device.Name + ".State";
+        //nur setzen, wenn geändert 2023-02-25
+        const currentState = await this.Gateway.adapter.getStateAsync(key);
+        this.logDebug(this.device.Name + " in SetState got " + JSON.stringify(currentState) + " from " + key);
+        //2023-03-11 check for null added
+        if (currentState == null || currentState.val != state) {
+            await this.SetState(key, true, state);
+            this.logDebug(this.device.Name + " in SetState, set new state " + state);
+        }
+        else {
+            this.logDebug(this.device.Name + " in SetState, no new state to set, is " + state);
+        }
+    }
+    //=====================================================================================
+    //wallbox
+    async getStateTypebased(sensor) {
+        let bRet = -1;
+        if (sensor !== undefined && sensor != null) {
+            const oid = sensor.OID;
+            if (typeof oid === "string" && oid != null && oid.length > 5) {
+                const current = await this.Gateway.adapter.getForeignStateAsync(oid);
+                if (current != null && current.val != null) {
+                    if (sensor.Type == "Boolean") {
+                        if (current.val === Boolean(sensor.SetValue)) {
+                            bRet = true;
+                        }
+                        else {
+                            bRet = false;
+                        }
+                    }
+                    else if (sensor.Type == "Number") {
+                        if (current.val === Number(sensor.SetValue)) {
+                            bRet = true;
+                        }
+                        else {
+                            bRet = false;
+                        }
+                    }
+                    else if (sensor.Type == "URL") {
+                        this.logError(sensor.Name + " URL sensor type not yet supported, please inform developer!" + sensor.SetValue);
+                    }
+                    else {
+                        this.logWarn(sensor.Name + " unknown sensor type " + sensor.Type);
+                    }
+                }
+            }
+        }
+        else {
+            this.logError("getStateTypeBased: sensor not found");
+        }
+        return bRet;
+    }
+    async setStateTypebased(actor) {
+        if (actor !== undefined && actor != null) {
+            const key = actor.OID;
+            //const value = actor.SetValue;
+            this.logDebug(actor.Name + " actor type " + actor.Type + " setValue " + actor.SetValue + " " + typeof actor.SetValue);
+            if (actor.Type == "Boolean") {
+                let val = false;
+                if (Boolean(actor.SetValue) == true || actor.SetValue == "true") {
+                    val = true;
+                }
+                else if (Boolean(actor.SetValue) == false || actor.SetValue == "false") {
+                    val = false;
+                }
+                else {
+                    this.logWarn(actor.Name + " unknown set value " + actor.SetValue + " as " + actor.Type);
+                }
+                await this.Gateway.adapter.setForeignStateAsync(key, { ack: false, val: val });
+            }
+            else if (actor.Type == "Number") {
+                const val = Number(actor.SetValue);
+                await this.Gateway.adapter.setForeignStateAsync(key, { ack: false, val: val });
+            }
+            else if (actor.Type == "URL") {
+                let url = actor.OID;
+                if (typeof url === "string" && url != null && url.length > 5) {
+                    try {
+                        // dynamic import to avoid eslint require
+                        const axios = await import("axios");
+                        const config = {
+                            headers: {},
+                            timeout: 5000
+                        };
+                        if (actor.SetValue != null && actor.SetValue.length > 1 && actor.SetValue != "not used") {
+                            url = url + "?" + actor.SetValue;
+                        }
+                        if (actor.newValue != null) {
+                            url = url + actor.newValue;
+                        }
+                        this.logWarn(actor.Name + " call get URL " + url);
+                        const result = await axios.default.get(url, config);
+                        this.logDebug(actor.Name + " result URL " + JSON.stringify(result.data));
+                    }
+                    catch (e) {
+                        this.logError(actor.Name + " got error " + e + " after calling url");
+                    }
+                }
+                else {
+                    this.logError(actor.Name + " unknown url " + actor.SetValue);
+                }
+            }
+            else {
+                this.logWarn(actor.Name + " unknown actor type " + actor.Type);
+            }
+        }
+        else {
+            this.logError(this.device.Name + " setStateTypeBased: actor not found");
+        }
+        return;
+    }
+    checkStateTypebased(sensor, value) {
+        let bRet = -1;
+        if (sensor !== undefined && sensor != null) {
+            this.logDebug(sensor.Name + " sensor type " + sensor.Type + " setValue " + sensor.SetValue + " value " + value + " " + typeof sensor.SetValue + " " + typeof value);
+            if (sensor.Type == "Boolean") {
+                if (value === Boolean(sensor.SetValue)) {
+                    bRet = true;
+                }
+                else {
+                    bRet = false;
+                }
+            }
+            else if (sensor.Type == "Number") {
+                if (value === Number(sensor.SetValue)) {
+                    bRet = true;
+                }
+                else {
+                    bRet = false;
+                }
+            }
+            else if (sensor.Type == "URL") {
+                //wir kommen hierhin bereits mit dem richtigen Wert
+                bRet = value;
+            }
+            else {
+                this.logWarn(sensor.Name + " unknown sensor type " + sensor.Type);
+            }
+        }
+        return bRet;
+    }
+    async SubscribeWallbox() {
+        if (this.device.Type == "EVCharger") {
+            if (this.device.WallboxOID.DeviceOIDPlugConnected != null && this.device.WallboxOID.DeviceOIDPlugConnected.OID != null && this.device.WallboxOID.DeviceOIDPlugConnected.OID.length > 5) {
+                if (this.device.WallboxOID.DeviceOIDPlugConnected.Type == "URL") {
+                    this.AddUrl(this.device.WallboxOID.DeviceOIDPlugConnected);
+                }
+                else {
+                    this.logDebug("subscribe OID_PlugConnected " + this.device.WallboxOID.DeviceOIDPlugConnected.OID);
+                    this.Gateway.adapter.subscribeForeignStates(this.device.WallboxOID.DeviceOIDPlugConnected.OID);
+                    //and get last state
+                    const current = await this.Gateway.adapter.getForeignStateAsync(this.device.WallboxOID.DeviceOIDPlugConnected.OID);
+                    //hier nur state holen, umrechnung type based erfolgt noch
+                    if (current != null) {
+                        await this.setWallboxPlugConnected(current.val);
+                    }
+                    else {
+                        this.logError("could not read value of " + this.device.WallboxOID.DeviceOIDPlugConnected.OID);
+                    }
+                }
+            }
+            if (this.device.WallboxOID.DeviceOIDIsCharging != null && this.device.WallboxOID.DeviceOIDIsCharging.OID != null && this.device.WallboxOID.DeviceOIDIsCharging.OID.length > 5) {
+                if (this.device.WallboxOID.DeviceOIDIsCharging.Type == "URL") {
+                    this.AddUrl(this.device.WallboxOID.DeviceOIDIsCharging);
+                }
+                else {
+                    this.logDebug("subscribe OID_IsCharging " + this.device.WallboxOID.DeviceOIDIsCharging.OID);
+                    this.Gateway.adapter.subscribeForeignStates(this.device.WallboxOID.DeviceOIDIsCharging.OID);
+                    //and get last state
+                    const current = await this.Gateway.adapter.getForeignStateAsync(this.device.WallboxOID.DeviceOIDIsCharging.OID);
+                    if (current != null) {
+                        await this.setWallboxIsCharging(current.val);
+                    }
+                    else {
+                        this.logError("could not read value of " + this.device.WallboxOID.DeviceOIDIsCharging.OID);
+                    }
+                }
+            }
+            if (this.device.WallboxOID.DeviceOIDIsError != null && this.device.WallboxOID.DeviceOIDIsError.OID != null && this.device.WallboxOID.DeviceOIDIsError.OID.length > 5) {
+                if (this.device.WallboxOID.DeviceOIDIsError.Type == "URL") {
+                    this.AddUrl(this.device.WallboxOID.DeviceOIDIsError);
+                }
+                else {
+                    this.logDebug("subscribe OID_IsError " + this.device.WallboxOID.DeviceOIDIsError.OID);
+                    this.Gateway.adapter.subscribeForeignStates(this.device.WallboxOID.DeviceOIDIsError.OID);
+                    //and get last state
+                    const current = await this.Gateway.adapter.getForeignStateAsync(this.device.WallboxOID.DeviceOIDIsError.OID);
+                    if (current != null) {
+                        await this.setWallboxIsError(current.val);
+                    }
+                    else {
+                        this.logError("could not read value of " + this.device.WallboxOID.DeviceOIDIsError.OID);
+                    }
+                }
+            }
+            if (this.device.WallboxOID.DeviceOIDCounter != null && this.device.WallboxOID.DeviceOIDCounter.OID != null && this.device.WallboxOID.DeviceOIDCounter.OID.length > 5) {
+                if (this.device.WallboxOID.DeviceOIDCounter.Type == "URL") {
+                    this.AddUrl(this.device.WallboxOID.DeviceOIDCounter);
+                }
+                else {
+                    this.logDebug("subscribe OID_Counter " + this.device.WallboxOID.DeviceOIDCounter.OID);
+                    this.Gateway.adapter.subscribeForeignStates(this.device.WallboxOID.DeviceOIDCounter.OID);
+                    //and get last state
+                    const current = await this.Gateway.adapter.getForeignStateAsync(this.device.WallboxOID.DeviceOIDCounter.OID);
+                    if (current != null) {
+                        await this.setLastPower(Number(current.val), 0, 0);
+                    }
+                    else {
+                        this.logError("could not read value of " + this.device.WallboxOID.DeviceOIDCounter.OID);
+                    }
+                }
+            }
+            if (this.device.WallboxOID.DeviceOIDStatus != null && this.device.WallboxOID.DeviceOIDStatus.OID != null && this.device.WallboxOID.DeviceOIDStatus.OID.length > 5) {
+                if (this.device.WallboxOID.DeviceOIDStatus.Type == "URL") {
+                    this.AddUrl(this.device.WallboxOID.DeviceOIDStatus);
+                }
+                else {
+                    this.logDebug("subscribe OID_Status " + this.device.WallboxOID.DeviceOIDStatus.OID);
+                    this.Gateway.adapter.subscribeForeignStates(this.device.WallboxOID.DeviceOIDStatus.OID);
+                    //and get last state
+                    const current = await this.Gateway.adapter.getForeignStateAsync(this.device.WallboxOID.DeviceOIDStatus.OID);
+                    if (current != null) {
+                        await this.setOnOff(String(current.val));
+                    }
+                    else {
+                        this.logError("could not read value of " + this.device.WallboxOID.DeviceOIDStatus.OID);
+                    }
+                }
+            }
+            this.WallboxSubscribeUrl();
+            let key = "Devices." + this.device.Name + ".MinEnergy";
+            this.logDebug("subscribe  " + key);
+            this.Gateway.adapter.subscribeStates(key);
+            key = "Devices." + this.device.Name + ".MaxEnergy";
+            this.logDebug("subscribe  " + key);
+            this.Gateway.adapter.subscribeStates(key);
+            //and get last state
+            await this.GetEnergy4Wallbox();
+            key = "Devices." + this.device.Name + ".EnableFastCharging";
+            this.Gateway.adapter.subscribeStates(key);
+            if (this.device.WallboxChargeTime != null && Number(this.device.WallboxChargeTime) == 4) {
+                key = "Devices." + this.device.Name + ".MaxChargeTime";
+                this.Gateway.adapter.subscribeStates(key);
+            }
+        }
+    }
+    AddUrl(OID) {
+        this.logDebug(this.device.Name + " subscribe URL  " + JSON.stringify(OID));
+        const URL = OID.OID;
+        if (this.URLs2Check.indexOf(URL) < 0) {
+            this.URLs2Check.push(URL);
+        }
+        this.logDebug(this.device.Name + " subscribe URL  " + JSON.stringify(this.URLs2Check));
+    }
+    WallboxSubscribeUrl() {
+        for (let i = 0; i < this.URLs2Check.length; i++) {
+            //pro URL call 100ms verzögerung
+            let PollRate = this.device.URLReadPollRate;
+            if (PollRate == null || PollRate < 5) {
+                this.logWarn(this.device.Name + " setting URL pool rate to minimim of 5, current was  " + PollRate);
+                PollRate = 5;
+            }
+            this.UrlTimerId[i] = setInterval(this.CheckURLStatus.bind(this), PollRate * 1000 + i * 100, this.URLs2Check[i]);
+        }
+    }
+    async CheckURLStatus(url) {
+        //this.logDebug(this.device.Name + " check URL called  " + url);
+        try {
+            const axios = await import("axios");
+            const config = {
+                headers: {},
+                timeout: 5000
+            };
+            this.logDebug(this.device.Name + " call get URL " + url + " " + JSON.stringify(config));
+            if (typeof url != "string") {
+                this.logError(this.device.Name + " URL must be a string but is " + typeof url);
+            }
+            const result = await axios.default.get(url, config);
+            const data = result.data;
+            this.logDebug(this.device.Name + " result URL " + JSON.stringify(data));
+            if (this.device.WallboxOID.DeviceOIDPlugConnected !== undefined && this.device.WallboxOID.DeviceOIDPlugConnected !== null) {
+                const current = this.CheckURLResult(url, this.device.WallboxOID.DeviceOIDPlugConnected, data);
+                if (current) {
+                    if (!this.isConnected) {
+                        await this.setWallboxPlugConnected(true);
+                    }
+                }
+                else {
+                    if (this.isConnected) {
+                        await this.setWallboxPlugConnected(false);
+                    }
+                }
+            }
+            if (this.device.WallboxOID.DeviceOIDIsCharging !== undefined && this.device.WallboxOID.DeviceOIDIsCharging !== null) {
+                const current = this.CheckURLResult(url, this.device.WallboxOID.DeviceOIDIsCharging, data);
+                if (current) {
+                    if (!this.isCharging) {
+                        await this.setWallboxIsCharging(true);
+                    }
+                }
+                else {
+                    if (this.isCharging) {
+                        await this.setWallboxIsCharging(false);
+                    }
+                }
+            }
+            if (this.device.WallboxOID.DeviceOIDIsError !== undefined && this.device.WallboxOID.DeviceOIDIsError !== null) {
+                const current = this.CheckURLResult(url, this.device.WallboxOID.DeviceOIDIsError, data);
+                if (current) {
+                    if (!this.isError) {
+                        await this.setWallboxIsError(true);
+                    }
+                }
+                else {
+                    if (this.isError) {
+                        await this.setWallboxIsError(false);
+                    }
+                }
+            }
+            if (this.device.WallboxOID.DeviceOIDCounter !== undefined && this.device.WallboxOID.DeviceOIDCounter !== null) {
+                const current = this.CheckURLResult(url, this.device.WallboxOID.DeviceOIDCounter, data);
+                if (current != null) {
+                    await this.setLastPower(Number(current), 0, 0);
+                }
+            }
+            if (this.device.WallboxOID.DeviceOIDStatus !== undefined && this.device.WallboxOID.DeviceOIDStatus !== null) {
+                const current = this.CheckURLResult(url, this.device.WallboxOID.DeviceOIDStatus, data);
+                if (current) {
+                    await this.setOnOff("On");
+                    this.logDebug(this.device.Name + " set status " + current);
+                }
+                else {
+                    await this.setOnOff("Off");
+                    this.logDebug(this.device.Name + " set status " + current);
+                }
+            }
+        }
+        catch (e) {
+            this.logError(this.device.Name + " CheckURLStatus got error " + e + " after calling url " + url);
+        }
+    }
+    CheckURLResult(url, sensor, data) {
+        let ret = false;
+        try {
+            if (sensor != null && url == sensor.OID) {
+                const m = data[sensor.Path2Check];
+                if (m != null) {
+                    //wenn kein Wert zur Prüfung angegeben, wird der Wert selbst aus dem Pfad zuückgegeben (für currentPower genutzt)
+                    if (sensor.SetValue != null && sensor.SetValue.length > 0) {
+                        const regex = new RegExp(sensor.SetValue);
+                        const newValue = regex.exec(m);
+                        if (newValue != null) {
+                            this.logDebug(this.device.Name + " " + sensor.Name + " true ");
+                            ret = true;
+                        }
+                        else {
+                            this.logDebug(this.device.Name + " " + sensor.Name + " false ");
+                            ret = false;
+                        }
+                    }
+                    else {
+                        this.logDebug(this.device.Name + " got value from url-call " + m);
+                        ret = m;
+                    }
+                }
+                else {
+                    this.logWarn(this.device.Name + " result is for " + sensor.Name + ", not Found, locking for  '" + sensor.Path2Check + "' got " + m + " " + JSON.stringify(data) + " " + typeof sensor.SetValue);
+                }
+            }
+        }
+        catch (e) {
+            this.logError(this.device.Name + " CheckURLResult got error " + e + "  " + JSON.stringify(sensor));
+        }
+        return ret;
+    }
+    async GetEnergy4Wallbox() {
+        let key = "Devices." + this.device.Name + ".MinEnergy";
+        let current = await this.Gateway.adapter.getStateAsync(key);
+        let minEnergy = 0;
+        if (current != null && current.val != null) {
+            minEnergy = Number(current.val);
+        }
+        key = "Devices." + this.device.Name + ".MaxEnergy";
+        current = await this.Gateway.adapter.getStateAsync(key);
+        let maxEnergy = 0;
+        if (current != null && current.val != null) {
+            maxEnergy = Number(current.val);
+        }
+        if (minEnergy >= 0) {
+            if (this.planningrequest != null) {
+                this.planningrequest.SetMinEnergy(minEnergy);
+            }
+        }
+        if (maxEnergy > 0) {
+            if (this.planningrequest != null) {
+                this.planningrequest.SetMaxEnergy(maxEnergy);
+            }
+        }
+    }
+    async StartWallbox() {
+        if (this.device.WallboxOID.DeviceOIDStartCharge != null && this.device.WallboxOID.DeviceOIDStartCharge.OID != null && this.device.WallboxOID.DeviceOIDStartCharge.OID.length > 5) {
+            await this.setStateTypebased(this.device.WallboxOID.DeviceOIDStartCharge);
+        }
+        this.isStarting = true;
+        await this.SetDeviceState();
+    }
+    async StopWallbox() {
+        if (this.device.WallboxOID.DeviceOIDStopCharge != null && this.device.WallboxOID.DeviceOIDStopCharge.OID != null && this.device.WallboxOID.DeviceOIDStopCharge.OID.length > 5) {
+            await this.setStateTypebased(this.device.WallboxOID.DeviceOIDStopCharge);
+        }
+        this.isStopping = true;
+        await this.SetWallboxPower(0);
+        this.Check3PhaseCharge(0);
+        await this.SetDeviceState();
+    }
+    async SetWallboxPower(value) {
+        if (this.device.Type == "EVCharger") {
+            let Current2Set = 0;
+            if (this.device.WallboxNeedCurrentRecommendation) {
+                if (this.device.WallboxPhases == 1 || (this.device.WallboxPhases == 3 && this.WallboxIs3PhaseCharging == false)) {
+                    Current2Set = Math.floor(value / 230);
+                    //sollte zwischen 6 und 32 A sein
+                    if (Current2Set > 32) {
+                        Current2Set = 32;
+                        this.logWarn(this.device.Name + " current limited to 32A ");
+                    }
+                    if (Current2Set < 6 && Current2Set > 0) {
+                        Current2Set = 6;
+                        this.logWarn(this.device.Name + " current limited to 6A ");
+                    }
+                }
+                if (this.device.WallboxPhases == 2 || (this.device.WallboxPhases == 3 && this.WallboxIs3PhaseCharging == true)) {
+                    Current2Set = Math.floor(value / 400 / Math.sqrt(3));
+                    //sollte zwischen 6 und 32 A sein
+                    if (Current2Set > 32) {
+                        Current2Set = 32;
+                        this.logWarn(this.device.Name + " current limited to 32A ");
+                    }
+                    if (Current2Set < 6 && Current2Set > 0) {
+                        Current2Set = 6;
+                        this.logWarn(this.device.Name + " current limited to 6A ");
+                    }
+                }
+                this.logDebug(this.device.Name + " charge current " + Current2Set);
+                const key = "Devices." + this.device.Name + ".RecommendedCurrent";
+                await this.SetState(key, true, Current2Set);
+            }
+            if (this.device.WallboxOID.DeviceOIDChargePower != null && this.device.WallboxOID.DeviceOIDChargePower.OID != null && this.device.WallboxOID.DeviceOIDChargePower.OID.length > 5) {
+                //http://192.168.3.52/wallboxdummy/chargepower?amp=7
+                //bei URL steht in SetValue der wert aus dem admin
+                if (this.device.WallboxOID.DeviceOIDChargePower.Type == "URL") {
+                    this.device.WallboxOID.DeviceOIDChargePower.newValue = this.device.WallboxNeedCurrentRecommendation ? Current2Set : value;
+                }
+                else {
+                    this.device.WallboxOID.DeviceOIDChargePower.SetValue = value;
+                }
+                await this.setStateTypebased(this.device.WallboxOID.DeviceOIDChargePower);
+            }
+            this.logDebug(this.device.Name + " set new charge power " + value + " " + typeof value);
+            if (value > 0) {
+                this.isCharging = true;
+            }
+            else {
+                this.isCharging = false;
+            }
+            await this.SetDeviceState();
+        }
+    }
+    //wallbox interface 2 gateway
+    async setWallboxPlugConnected(value) {
+        //check type based and set value based
+        if (this.device.WallboxOID.DeviceOIDPlugConnected === undefined || this.device.WallboxOID.DeviceOIDPlugConnected === null) {
+            return;
+        }
+        const state = this.checkStateTypebased(this.device.WallboxOID.DeviceOIDPlugConnected, value);
+        this.logInfo(this.device.Name + " wallbox plug connected " + state);
+        //set timeframe and request
+        if (this.planningrequest != null) {
+            this.planningrequest.SetPlugConnected(state);
+        }
+        if (state) {
+            if (this.DisconnectTimerID) {
+                this.logDebug(this.device.Name + " cancel disconnect - timer");
+                clearTimeout(this.DisconnectTimerID);
+                this.DisconnectTimerID = null;
+            }
+            this.isConnected = true;
+            //2023-03-11 added to inform SHM that device can be controlled because it's connected
+            this.deviceStatus.EMSignalsAccepted = true;
+            this.EnergyData.lastTimestamp = -99;
+            this.EnergyData.SumEnergy = 0;
+            this.EnergyData.lastValue = 0;
+            await this.GetEnergy4Wallbox();
+            await this.GetMaxChargTime();
+        }
+        else {
+            if (this.isConnected) {
+                this.DisconnectTimerID = setTimeout(this.SetDisconnected.bind(this), 60 * 1000);
+                this.logDebug(this.device.Name + " start disconnect - timer");
+            }
+            else {
+                await this.SetDisconnected();
+            }
+        }
+        await this.SetDeviceState();
+    }
+    async SetDisconnected() {
+        this.logDebug(this.device.Name + " disconnect - timer fired");
+        if (this.DisconnectTimerID) {
+            clearTimeout(this.DisconnectTimerID);
+            this.DisconnectTimerID = null;
+        }
+        await this.Switch(false);
+        await this.setRecommendationPowerConsumption(0);
+        this.isConnected = false;
+        //2023-03-11 added to inform SHM that device can't' be controlled because it's not connected
+        this.deviceStatus.EMSignalsAccepted = false;
+        this.Check3PhaseCharge(0);
+        await this.stopFastCharging();
+        await this.SetDeviceState();
+    }
+    async setWallboxIsCharging(value) {
+        //check type based and set value based
+        if (this.device.WallboxOID.DeviceOIDIsCharging === undefined || this.device.WallboxOID.DeviceOIDIsCharging === null) {
+            return;
+        }
+        const state = this.checkStateTypebased(this.device.WallboxOID.DeviceOIDIsCharging, value);
+        this.logDebug(this.device.Name + " wallbox charging " + state);
+        this.isCharging = value;
+        await this.SetDeviceState();
+    }
+    async setWallboxIsError(value) {
+        //check type based and set value based
+        if (this.device.WallboxOID.DeviceOIDIsError === undefined || this.device.WallboxOID.DeviceOIDIsError === null) {
+            return;
+        }
+        const state = this.checkStateTypebased(this.device.WallboxOID.DeviceOIDIsError, value);
+        this.logDebug(this.device.Name + " wallbox error " + state);
+        this.isError = value;
+        await this.SetDeviceState();
+    }
+    setMinEnergy(state) {
+        this.logDebug(this.device.Name + " wallbox got new min energy " + state);
+        if (state >= 0) {
+            if (this.planningrequest != null) {
+                this.planningrequest.SetMinEnergy(state);
+            }
+        }
+    }
+    setMaxEnergy(state) {
+        this.logDebug(this.device.Name + " wallbox got new max energy " + state);
+        if (state > 0) {
+            if (this.planningrequest != null) {
+                this.planningrequest.SetMaxEnergy(state);
+            }
+        }
+    }
+    //aktuellen wert merkenn und energie vom letzten wert und aktueller ZeitDiff berechnen 
+    CalcEnergy(watts) {
+        const currentTimestamp = Date.now();
+        if (this.EnergyData.lastTimestamp > 0) {
+            const timeDiff = currentTimestamp - this.EnergyData.lastTimestamp;
+            this.EnergyData.SumEnergy = this.EnergyData.SumEnergy + this.EnergyData.lastValue * timeDiff / 1000 / 60 / 60; //in Wh
+            this.logDebug(this.device.Name + " calc energy " + this.EnergyData.lastValue + " " + this.EnergyData.lastTimestamp + " = " + this.EnergyData.SumEnergy + "Wh");
+            if (this.logger != null) {
+                const records = [];
+                //hier records bauen
+                const record = {
+                    Time: new Date().toLocaleString("de-DE"),
+                    DeviceId: this.device.ID,
+                    DeviceName: this.device.Name,
+                    Power: Math.round(watts),
+                    //LastTimeStamp: this.EnergyData.lastTimestamp,
+                    Timediff: timeDiff,
+                    Energy: Math.round(this.EnergyData.SumEnergy)
+                };
+                records.push(record);
+                //und jetzt alle schreiben
+                this.logger.WriteCSVLog(0, records);
+            }
+        }
+        this.EnergyData.lastTimestamp = currentTimestamp;
+        this.EnergyData.lastValue = watts;
+    }
+    //called by gateway
+    async EnableFastCharging(state) {
+        if (state) {
+            if (this.isConnected) {
+                if (this.isFastCharging) {
+                    this.logDebug(this.device.Name + " start fast charge ignored because already started");
+                }
+                else {
+                    this.logInfo(this.device.Name + " start fast charging");
+                    //device on
+                    await this.Switch(true);
+                    //max power
+                    await this.setRecommendationPowerConsumption(Number(this.deviceInfo?.Characteristics.MaxPowerConsumption ?? 0));
+                    //3phase check
+                    this.Check3PhaseCharge(Number(this.deviceInfo?.Characteristics.MaxPowerConsumption ?? 0));
+                    this.isFastCharging = true;
+                    //2023-03-11 added to inform SHM that device can't' be controlled because it's in fast charge mode
+                    this.deviceStatus.EMSignalsAccepted = false;
+                    await this.SetDeviceState();
+                }
+            }
+            else {
+                this.logWarn(this.device.Name + " fast charge cannot be started because EV is not connected");
+            }
+        }
+        else {
+            //disable fast charging
+            if (this.isFastCharging) {
+                await this.stopFastCharging();
+                await this.setWallboxPlugConnected(this.isConnected);
+            }
+        }
+    }
+    SetMaxChargeTime(state) {
+        this.logDebug(this.device.Name + " got new max charge time " + state);
+        if (this.planningrequest != null) {
+            this.planningrequest.SetMaxChargeTime(state);
+        }
+    }
+    async GetMaxChargTime() {
+        if (this.device.WallboxChargeTime != null && Number(this.device.WallboxChargeTime) == 4) {
+            const key = "Devices." + this.device.Name + ".MaxChargeTime";
+            const curVal = await this.Gateway.adapter.getStateAsync(key);
+            if (curVal != null) {
+                this.SetMaxChargeTime(String(curVal.val));
+            }
+        }
+    }
+    async stopFastCharging() {
+        if (this.isFastCharging) {
+            this.logInfo(this.device.Name + " stop fast charging");
+            this.isFastCharging = false;
+            await this.SetDeviceState();
+        }
+    }
+}
+exports.default = Device;
+//# sourceMappingURL=Device.js.map

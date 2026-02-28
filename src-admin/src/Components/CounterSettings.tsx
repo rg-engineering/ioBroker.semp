@@ -9,6 +9,7 @@ import {
     Select,
     InputLabel,
     MenuItem,
+    Badge
 } from '@mui/material';
 import type {
     SelectChangeEvent
@@ -90,6 +91,14 @@ export default function CounterSettings(props: Props): React.JSX.Element {
                 style={{ margin: 10 }}
                 sx={{ display: 'flex', gap: 2, alignItems: 'flex-end', flexWrap: 'wrap' }}
             >
+
+                <Badge color="primary" id='hint_counter' sx={{ display: 'block', mb: 2, minWidth: '100%' }}>
+                    {I18n.t('hint_counter')}
+                </Badge>
+
+                
+
+
                 <FormControl variant="standard" sx={{ minWidth: '20%',  maxWidth: '40%' }}>
                     <InputLabel id="device-MeasurementMethod-label">{I18n.t('select a type')}</InputLabel>
                     <Select

@@ -185,13 +185,13 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
     };
 
     // Hilfsfunktionen für wallbox_oid_write
-    const onWallboxWriteUpdate = (idx: number, key: string, value: any): void => {
-        const list = Array.isArray(device.wallbox_oid_write) ? device.wallbox_oid_write.slice() : [];
+    const onWallboxWriteUpdate = (idx: number, key: keyof OidSetting, value: OidSetting[keyof OidSetting]): void => {
+        const list = Array.isArray(device.wallbox_oid_write) ? (device.wallbox_oid_write.slice() as Partial<OidSetting>[]) : [];
         while (list.length <= idx) {
             list.push({});
         }
-        const item = { ...(list[idx] ?? {}) };
-        item[key] = value;
+        const item: Partial<OidSetting> = { ...(list[idx] ?? {}) };
+        item[key] = value as any;
         list[idx] = item;
         const updated = { ...(device ?? {}), wallbox_oid_write: list } as SempDevice;
         setDevice(updated);
@@ -199,11 +199,11 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
     };
 
     const onWallboxWriteToggleActive = (idx: number, active: boolean): void => {
-        const list = Array.isArray(device.wallbox_oid_write) ? device.wallbox_oid_write.slice() : [];
+        const list = Array.isArray(device.wallbox_oid_write) ? (device.wallbox_oid_write.slice() as Partial<OidSetting>[]) : [];
         while (list.length <= idx) {
             list.push({});
         }
-        const item = { ...(list[idx] ?? {}) };
+        const item: Partial<OidSetting> = { ...(list[idx] ?? {}) };
         item.active = active;
         list[idx] = item;
         const updated = { ...(device ?? {}), wallbox_oid_write: list } as SempDevice;
@@ -212,13 +212,13 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
     };
 
     // Hilfsfunktionen für wallbox_oid_read
-    const onWallboxReadUpdate = (idx: number, key: string, value: any): void => {
-        const list = Array.isArray(device.wallbox_oid_read) ? device.wallbox_oid_read.slice() : [];
+    const onWallboxReadUpdate = (idx: number, key: keyof OidSetting, value: OidSetting[keyof OidSetting]): void => {
+        const list = Array.isArray(device.wallbox_oid_read) ? (device.wallbox_oid_read.slice() as Partial<OidSetting>[]) : [];
         while (list.length <= idx) {
             list.push({});
         }
-        const item = { ...(list[idx] ?? {}) };
-        item[key] = value;
+        const item: Partial<OidSetting> = { ...(list[idx] ?? {}) };
+        item[key] = value as any;
         list[idx] = item;
         const updated = { ...(device ?? {}), wallbox_oid_read: list } as SempDevice;
         setDevice(updated);
@@ -226,11 +226,11 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
     };
 
     const onWallboxReadToggleActive = (idx: number, active: boolean): void => {
-        const list = Array.isArray(device.wallbox_oid_read) ? device.wallbox_oid_read.slice() : [];
+        const list = Array.isArray(device.wallbox_oid_read) ? (device.wallbox_oid_read.slice() as Partial<OidSetting>[]) : [];
         while (list.length <= idx) {
             list.push({});
         }
-        const item = { ...(list[idx] ?? {}) };
+        const item: Partial<OidSetting> = { ...(list[idx] ?? {}) };
         item.active = active;
         list[idx] = item;
         const updated = { ...(device ?? {}), wallbox_oid_read: list } as SempDevice;

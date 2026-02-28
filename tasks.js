@@ -2,7 +2,7 @@ const { renameSync } = require('node:fs');
 const { deleteFoldersRecursive, copyFiles, npmInstall, buildReact, patchHtmlFile } = require('@iobroker/build-tools');
 
 function clean() {
-    deleteFoldersRecursive(`${__dirname}/admin`, ['ai-heatingcontrol.png']);
+    deleteFoldersRecursive(`${__dirname}/admin`, ['semp.png']);
 }
 
 function copyAllFiles() {
@@ -42,6 +42,9 @@ if (process.argv.includes('--0-clean')) {
             process.exit(1);
         });
 } else if (process.argv.includes('--build')) {
+
+    console.info(`build called`);
+
     clean();
     npmInstall(`${__dirname}/src-admin`)
         .then(() =>
