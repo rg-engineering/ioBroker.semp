@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "semp",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "news": {
+      "2.0.3": {
+        "en": "lint reported errors solved",
+        "de": "flut gemeldete fehler behoben",
+        "ru": "объявленные ошибки решены",
+        "pt": "erros relatados pelo lint resolvidos",
+        "nl": "plint gemelde fouten opgelost",
+        "fr": "fautes rapportées résolues",
+        "it": "lint riferito errori risolti",
+        "es": "lint reportó errores resueltos",
+        "pl": "lint zgłoszone błędy rozwiązane",
+        "uk": "lint подані помилки",
+        "zh-cn": "提示已报告错误已解析"
+      },
       "2.0.2": {
         "en": "another lint reported errors solved",
         "de": "weitere lint gemeldete fehler behoben",
@@ -80,19 +93,6 @@
         "pl": "nowe badania\nwydanie # 333 sekwencja zmywarki: wyłączone wykrywanie zmienione",
         "uk": "новий тест\nпитання #333 послідовність посудомийної машини: від виявлення змінено",
         "zh-cn": "新测试\n发行 # 333 洗碗机序列: 关闭检测更改"
-      },
-      "1.5.1": {
-        "en": "bug fix calculation of used energy",
-        "de": "fehlerbehebung berechnung der verwendeten energie",
-        "ru": "баг фикс расчет использованной энергии",
-        "pt": "cálculo de correção de bugs da energia usada",
-        "nl": "bug fix berekening van de gebruikte energie",
-        "fr": "correction du bug calcul de l'énergie utilisée",
-        "it": "calcolo corretto bug dell'energia utilizzata",
-        "es": "corrección de errores cálculo de la energía utilizada",
-        "pl": "błąd fix obliczenia zużytej energii",
-        "uk": "виправлення помилок використовується енергія",
-        "zh-cn": "旧能量的bug 修正计算"
       }
     },
     "titleLang": {
