@@ -49,8 +49,34 @@ export default function GeneralSettings(props: Props): React.JSX.Element {
     }, [props.device]);
 
     // Kurzer Helfer für sichere Felderausgabe (verwende lokalen device)
-    const valString = (field: keyof SempDevice): string => (device && (device as any)[field] !== undefined ? String((device as any)[field]) : '');
-    const valNumber = (field: keyof SempDevice): string | number => (device && (device as any)[field] !== undefined ? (device as any)[field] : '');
+    type KeysOfType<T, ValueType> = {
+        [K in keyof T]: T[K] extends ValueType ? K : never
+    }[keyof T];
+
+    type StringKeys = KeysOfType<SempDevice, string | undefined>;
+
+    //const valString = (field: keyof SempDevice): string => (device && (device)[field] !== undefined ? String((device)[field]) : '');
+
+    const valString = (field: StringKeys): string => {
+        if (!device) {
+            return '';
+        }
+        const v = device[field];
+
+        return v ?? '';
+    };
+
+    const valNumber = (key: NumberKeys<SempDevice>): string | number => {
+        if (!device) {
+            return '';
+        }
+
+        const v = device[key];
+
+        return v ?? '';
+    };
+
+    //const valNumber = (field: keyof SempDevice): string | number => (device && (device as SempDevice)[field] !== undefined ? (device as SempDevice)[field] : '');
 
     // Persist-Funktion: ruft props.onChange mit einem string payload auf (Original-Props erwarten string)
     const persistDevice = (updated: SempDevice): void => {
@@ -83,23 +109,30 @@ export default function GeneralSettings(props: Props): React.JSX.Element {
         };
     };
 
+    type NumberKeys<T> = {
+        [K in keyof T]: T[K] extends number | undefined ? K : never
+    }[keyof T];
+
     // Numerische Felder (behandelt leeren String als Entfernen)
-    const handleNumberChange = (field: keyof SempDevice): ((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void) => {
-        return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
-            const raw = e.target.value;
-            const updated = { ...(device ?? {}) } as any;
-            if (raw === '' || raw === null) {
-                // Entferne Feld oder setze auf undefined
-                delete updated[field];
-            } else {
-                const num = Number(raw);
-                updated[field] = Number.isNaN(num) ? raw : num;
-            }
-            const updatedTyped = updated as SempDevice;
-            setDevice(updatedTyped);
-            persistDevice(updatedTyped);
-        };
-    };
+    const handleNumberChange =
+        (field: NumberKeys<SempDevice>) =>
+            (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+
+                const raw = e.target.value;
+                const updated = { ...(device ?? {}) } as SempDevice;
+
+                if (raw === '') {
+                    delete updated[field];
+                } else {
+                    const num = Number(raw);
+                    if (!Number.isNaN(num)) {
+                        updated[field] = num;
+                    }
+                }
+
+                setDevice(updated);
+                persistDevice(updated);
+            };
 
     // Checkbox / boolean Handler
     const handleBoolChange = (field: keyof SempDevice): ((e: React.ChangeEvent<HTMLInputElement>) => void) => {
@@ -259,7 +292,7 @@ export default function GeneralSettings(props: Props): React.JSX.Element {
                     control={
                         <Checkbox
                             color="primary"
-                            checked={!!(device && (device as any).InterruptionsAllowed)}
+                            checked={!!(device && device.InterruptionsAllowed)}
                             onChange={handleBoolChange('InterruptionsAllowed')}
                             aria-label="device Interruptions Allowed"
                         />
@@ -267,7 +300,7 @@ export default function GeneralSettings(props: Props): React.JSX.Element {
                     label={I18n.t('Interruption Allowed')}
                 />
 
-                {(device && (device as any).InterruptionAllowed) === true ? (
+                {(device && device.InterruptionsAllowed) === true ? (
                     <div>
                         <TextField
                             id='DeviceMinOnTime'

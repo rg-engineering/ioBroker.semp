@@ -46,8 +46,20 @@ export default function CounterSettings(props: Props): React.JSX.Element {
         setDevice(props.device);
     }, [props.device]);
 
+
+    type Primitive = string | number | boolean | null | undefined;
+
+    type PrimitiveKeys<T> = {
+        [K in keyof T]: T[K] extends Primitive ? K : never
+    }[keyof T];
+
     // Kurzer Helfer für sichere Felderausgabe (verwende lokalen device)
-    const valString = (field: keyof SempDevice): string => (device && (device as any)[field] !== undefined ? String((device as any)[field]) : '');
+    //const valString = (field: keyof SempDevice): string => (device && (device )[field] !== undefined ? String((device)[field]) : '');
+    const valString = (field: PrimitiveKeys<SempDevice>): string =>
+        device && device[field] !== undefined
+            ? String(device[field])
+            : '';
+    
     //const valNumber = (field: keyof SempDevice): string | number => (device && (device as any)[field] !== undefined ? (device as any)[field] : '');
 
     // Persist-Funktion: ruft props.onChange mit einem string payload auf (Original-Props erwarten string)
@@ -125,7 +137,7 @@ export default function CounterSettings(props: Props): React.JSX.Element {
             
                 {
 
-                    (device && (device as any).MeasurementMethod) === "Measurement" ? (
+                    (device && device.MeasurementMethod === "Measurement") ? (
 
                         <SelectOID
                             settingName={I18n.t('OIDPower')}

@@ -144,35 +144,69 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
     };
 
     // Helper: String-Werte aus device holen
+    type KeysOfType<T, ValueType> = {
+        [K in keyof T]: T[K] extends ValueType ? K : never
+    }[keyof T];
+
+    type StringKeys = KeysOfType<SempDevice, string | undefined>;
+    const valString = (field: StringKeys): string => {
+        if (!device) {
+            return '';
+        }
+        const v = device[field];
+
+        return v ?? '';
+    };
+    
+    /*
     const valString = (field: keyof SempDevice): string => {
-        const v = (device as any)?.[field];
+        const v = (device as SempDevice)?.[field];
         return v === undefined || v === null ? '' : String(v);
     };
+    */
 
     // Helper: Number-Felder als string (für inputs vom Typ number)
+
+    const valNumber = (key: NumberKeys<SempDevice>): string | number => {
+        if (!device) {
+            return '';
+        }
+
+        const v = device[key];
+
+        return v ?? '';
+    };
+    /*
     const valNumber = (field: keyof SempDevice): string => {
-        const v = (device as any)?.[field];
+        const v = (device as SempDevice)?.[field];
         return v === undefined || v === null ? '' : String(v);
     };
+    */
 
+    type NumberKeys<T> = {
+        [K in keyof T]: T[K] extends number | undefined ? K : never
+    }[keyof T];
 
     // Numerische Felder (behandelt leeren String als Entfernen)
-    const handleNumberChange = (field: keyof SempDevice): ((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void) => {
-        return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
-            const raw = e.target.value;
-            const updated = { ...(device ?? {}) } as any;
-            if (raw === '' || raw === null) {
-                // Entferne Feld oder setze auf undefined
-                delete updated[field];
-            } else {
-                const num = Number(raw);
-                updated[field] = Number.isNaN(num) ? raw : num;
-            }
-            const updatedTyped = updated as SempDevice;
-            setDevice(updatedTyped);
-            persistDevice(updatedTyped);
-        };
-    };
+    const handleNumberChange =
+        (field: NumberKeys<SempDevice>) =>
+            (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+
+                const raw = e.target.value;
+                const updated = { ...(device ?? {}) } as SempDevice;
+
+                if (raw === '') {
+                    delete updated[field];
+                } else {
+                    const num = Number(raw);
+                    if (!Number.isNaN(num)) {
+                        updated[field] = num;
+                    }
+                }
+
+                setDevice(updated);
+                persistDevice(updated);
+            };
 
     // Checkbox / boolean Handler
     const handleBoolChange = (field: keyof SempDevice): ((e: React.ChangeEvent<HTMLInputElement>) => void) => {

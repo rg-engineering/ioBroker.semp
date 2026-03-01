@@ -95,12 +95,18 @@ export default function EnergyRequestTimerSettings(props: Props): React.JSX.Elem
         };
     };
 
-    const valNumber = (key: string): string | number => {
+    type NumberKeys<T> = {
+        [K in keyof T]: T[K] extends number | undefined ? K : never
+    }[keyof T];
+
+    const valNumber = (key: NumberKeys<SempDevice>): string | number => {
         if (!device) {
             return '';
         }
-        const v = (device as any)[key];
-        return v === undefined || v === null ? '' : v;
+
+        const v = device[key];
+
+        return v ?? '';
     };
 
     const handleNumberChange = (key: string): ((e: React.ChangeEvent<HTMLInputElement>) => void) => {
@@ -167,7 +173,7 @@ export default function EnergyRequestTimerSettings(props: Props): React.JSX.Elem
                     control={
                         <Checkbox
                             color="primary"
-                            checked={!!(device && (device as any).TimerActive)}
+                            checked={!!(device && device.TimerActive)}
                             onChange={handleBoolChange('TimerActive')}
                             aria-label="energy request timer active"
                         />
@@ -176,7 +182,7 @@ export default function EnergyRequestTimerSettings(props: Props): React.JSX.Elem
                 />
             </Box>
 
-            {device && (device as any).TimerActive === true ? (
+            {device && device.TimerActive === true ? (
                 <Box
                     style={{ margin: 10 }}
                 >
@@ -185,7 +191,7 @@ export default function EnergyRequestTimerSettings(props: Props): React.JSX.Elem
                         control={
                             <Checkbox
                                 color="primary"
-                                checked={!!(device && (device as any).DeviceTimerCancelIfNotOn)}
+                                checked={!!(device && device.TimerCancelIfNotOn)}
                                 onChange={handleBoolChange('DeviceTimerCancelIfNotOn')}
                                 aria-label="DeviceTimerCancelIfNotOn"
                             />
@@ -199,15 +205,17 @@ export default function EnergyRequestTimerSettings(props: Props): React.JSX.Elem
                         variant="standard"
                         type="number"
                         InputProps={{ inputProps: { min: 0 } }}
-                        value={valNumber('DeviceTimerCancelIfNotOnTime')}
-                        onChange={handleNumberChange('DeviceTimerCancelIfNotOnTime')}
+                        value={valNumber('TimerCancelIfNotOnTime')}
+                        onChange={handleNumberChange('TimerCancelIfNotOnTime')}
                         sx={{ minWidth: '20%', maxWidth: '20%', marginRight: '10px' }}
                     />
+
+
                     <FormControlLabel
                         control={
                             <Checkbox
                                 color="primary"
-                                checked={!!(device && (device as any).DishwasherMode)}
+                                checked={!!(device && device.DishwasherMode)}
                                 onChange={handleBoolChange('DishwasherMode')}
                                 aria-label="DishwasherMode"
                             />

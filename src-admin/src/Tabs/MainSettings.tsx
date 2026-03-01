@@ -44,13 +44,20 @@ export default function MainSettings(props: MainSettingsProps): React.JSX.Elemen
 
     console.log("MainSettings render ");
 
-    const valString = (name: string): string => {
-        const v = (props.native as any)?.[name];
+
+    const valString = (name: keyof SempAdapterConfig): string => {
+        const v = props.native?.[name];
         return v === undefined || v === null ? '' : String(v);
     };
+    /*
+    const valString = (name: string): string => {
+        const v = (props.native as SempAdapterConfig)?.[name];
+        return v === undefined || v === null ? '' : String(v);
+    };
+    */
 
-    const valNumber = (name: string): number | '' => {
-        const v = (props.native as any)?.[name];
+    const valNumber = (name: keyof SempAdapterConfig): number | '' => {
+        const v = props.native?.[name];
         if (v === undefined || v === null || v === '') {
             return '';
         }
@@ -92,7 +99,7 @@ export default function MainSettings(props: MainSettingsProps): React.JSX.Elemen
 
         try {
             const newUUID = (await props.socket.sendTo(props.adapterName + "." + props.instance, 'getUUID'));
-            const updated: any = { ...(props.native as any), UUID: newUUID ?? '' };
+            const updated: SempAdapterConfig = { ...(props.native), UUID: newUUID ?? '' };
 
             // Direkt persistieren
             props.changeNative(updated);
@@ -192,7 +199,7 @@ export default function MainSettings(props: MainSettingsProps): React.JSX.Elemen
                     control={
                         <Checkbox
                             color="primary"
-                            checked={!!(props && (props.native as any).extendedLog)}
+                            checked={!!(props && props.native.extendedLog)}
                             onChange={handleBoolChange('extendedLog')}
                             aria-label="extendedLog"
                         />
@@ -205,7 +212,7 @@ export default function MainSettings(props: MainSettingsProps): React.JSX.Elemen
                     control={
                         <Checkbox
                             color="primary"
-                            checked={!!(props && (props.native as any).LogToCSV)}
+                            checked={!!(props && props.native.LogToCSV)}
                             onChange={handleBoolChange('LogToCSV')}
                             aria-label="LogToCSV"
                         />
@@ -217,7 +224,7 @@ export default function MainSettings(props: MainSettingsProps): React.JSX.Elemen
 
 
                 {
-                    (props && (props.native as any).LogToCSV) === true ? (
+                    (props && props.native.LogToCSV) === true ? (
                         <TextField
                             style={{ marginBottom: 16 }}
                             id='LogToCSVPath'

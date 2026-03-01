@@ -114,7 +114,7 @@ export interface SempDevice {
     //timer settings
     TimerActive: boolean;
     TimerCancelIfNotOn: boolean;
-    TimerCancelIfNotOnTime: string;
+    TimerCancelIfNotOnTime: number;
     DishwasherMode: boolean;
     EnergyRequestPeriods: EnergyRequestPeriod[];
 

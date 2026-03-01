@@ -57,26 +57,26 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
 
     console.log("DeviceSettings render ");
 
-    const [selectedDevice, setSelectedDevice] = useState<string>(() => (props.native as any).deviceSelector ?? ' ');
+    const [selectedDevice, setSelectedDevice] = useState<string>(() => props.native.deviceSelector ?? ' ');
 
     // findDevice als stable Callback, Abhängigkeit: props.native (die devices darin)
     const findDevice = useCallback((idOrName: string): SempDevice | undefined => {
         if (!idOrName) {
             return undefined;
         }
-        const arr: SempDevice[] = (props.native as any).devices ?? [];
+        const arr: SempDevice[] = props.native.devices ?? [];
         return arr.find(r => r && (r.ID === idOrName || r.Name === idOrName));
     }, [props.native]);
 
     // Vollständiges Device-Objekt für Bearbeitung
-    const [device, setDevice] = useState<SempDevice | undefined>(() => findDevice((props.native as any).deviceSelector ?? ''));
+    const [device, setDevice] = useState<SempDevice | undefined>(() => findDevice(props.native.deviceSelector ?? ''));
 
     // Original-ID beim Laden, damit wir beim Persistieren das richtige Objekt finden
-    const [editingDeviceOriginalId, setEditingDeviceOriginalId] = useState<string>(() => findDevice((props.native as any).deviceSelector ?? '')?.ID ?? '');
+    const [editingDeviceOriginalId, setEditingDeviceOriginalId] = useState<string>(() => findDevice(props.native.deviceSelector ?? '')?.ID ?? '');
 
     // Wenn die prop-Config von außen geändert wird, lokalen State anpassen
     useEffect(() => {
-        const external = (props.native as any).deviceSelector ?? '';
+        const external = props.native.deviceSelector ?? '';
         if (external !== selectedDevice) {
             setSelectedDevice(external);
             const cur = findDevice(external);
@@ -96,7 +96,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
 
         // Persistiere die Auswahl durch changeNative (deviceSelector = ID)
         const newNative: any = {
-            ...(props.native as any),
+            ...(props.native),
             deviceSelector: value,
         };
 
@@ -108,7 +108,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
         if (!newDevice) {
             return;
         }
-        const devices: SempDevice[] = (props.native as any).devices ?? [];
+        const devices: SempDevice[] = props.native.devices ?? [];
         const origId = editingDeviceOriginalId || newDevice.ID;
         const newDevices = devices.map(d => d && d.ID === origId ? { ...newDevice } : d);
 
@@ -117,13 +117,13 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
             newDevices.push(newDevice);
         }
 
-        const newNative: any = {
-            ...(props.native as any),
+        const newNative: SempAdapterConfig = {
+            ...(props.native),
             devices: newDevices,
         };
 
         // Wenn die ID geändert wurde und deviceSelector zeigte auf origId, aktualisiere selector
-        if ((props.native as any).deviceSelector === origId && newDevice.ID !== origId) {
+        if (props.native.deviceSelector === origId && newDevice.ID !== origId) {
             newNative.deviceSelector = newDevice.ID;
             setSelectedDevice(newDevice.ID);
             setEditingDeviceOriginalId(newDevice.ID);
@@ -135,7 +135,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
     };
 
     // isActive für das aktuell ausgewählten Gerät aus device
-    const deviceIsActive = !!(device && (device as any).IsActive);
+    const deviceIsActive = !!(device && device.IsActive);
 
     // Checkbox-Handler für IsActive (spezialisiert, weil IsActive auch UI-Checkbox ist)
     const persistDeviceIsActive = (checked: boolean): void => {
@@ -167,14 +167,14 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
 
     // Handler zum Erstellen eines neuen Devices mit Standardwerten
     const createNewDevice = (): void => {
-        const devices: SempDevice[] = (props.native as any).devices ?? [];
+        const devices: SempDevice[] = props.native.devices ?? [];
         const count = devices.length + 1;
 
         // Anzahl der Devices als String, auf 12 Zeichen mit führenden Nullen auffüllen
         const paddedCount = String(count).padStart(12, '0');
 
         // DeviceBaseID aus Konfiguration (sicherstellen, dass es ein String ist)
-        const baseId = String((props.native as any).DeviceBaseID ?? '');
+        const baseId = String(props.native.DeviceBaseID ?? '');
 
         // Neue ID nach Schema: "F-" + BaseID + paddedCount + "-00"
         const newId = 'F-' + baseId + "-"+ paddedCount + '-00';
@@ -192,8 +192,8 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
         } as SempDevice;
 
         const newDevices = [...devices, newDevice];
-        const newNative: any = {
-            ...(props.native as any),
+        const newNative: SempAdapterConfig = {
+            ...(props.native),
             devices: newDevices,
             deviceSelector: newId,
         };
@@ -207,13 +207,28 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
     };
 
     // Hilfsfunktion: wert eines string-feldes aus device anzeigen
+    type KeysOfType<T, ValueType> = {
+        [K in keyof T]: T[K] extends ValueType ? K : never
+    }[keyof T];
+
+    type StringKeys = KeysOfType<SempDevice, string | undefined>;
+    const valString = (field: StringKeys): string => {
+        if (!device) {
+            return '';
+        }
+        const v = device[field];
+
+        return v ?? '';
+    };
+    /*
     const valString = (key: string): string => {
         if (!props.native) {
             return '';
         }
-        const v = (props.native as any)[key];
+        const v = (props.native)[key];
         return v === undefined || v === null ? '' : String(v);
     };
+    */
 
     // Handler: Änderung des DeviceBaseID-Feldes
     const handleBaseIdChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
@@ -221,7 +236,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
             return;
         }
         const newVal = e.target.value ?? '';
-        const updated: any = { ...(props.native as any), DeviceBaseID: newVal };
+        const updated: any = { ...(props.native), DeviceBaseID: newVal };
 
         // Direkt persistieren
         props.changeNative(updated);
@@ -235,7 +250,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
 
         try {
             const newBaseID = (await props.socket.sendTo(props.adapterName + "." + props.instance, 'getDeviceBaseID'));
-            const updated: any = { ...(props.native as any), DeviceBaseID: newBaseID ?? '' };
+            const updated: any = { ...(props.native), DeviceBaseID: newBaseID ?? '' };
 
             // Direkt persistieren
             props.changeNative(updated);
@@ -260,7 +275,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                         <MenuItem value=" ">
                             <em>{I18n.t('no device selected')}</em>
                         </MenuItem>
-                        {(props.native as any).devices?.map((r: SempDevice) => (
+                        {props.native.devices?.map((r: SempDevice) => (
                             <MenuItem key={r.ID} value={r.ID}>
                                 {r.Name}
                             </MenuItem>
@@ -367,7 +382,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                         />
 
 
-                        {(device && (device as any).Type) === "EVCharger" ? (
+                        {(device && device.Type) === "EVCharger" ? (
                             <WallboxSettings
                                 theme={props.theme}
                                 socket={props.socket}

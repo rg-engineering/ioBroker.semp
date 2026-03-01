@@ -66,19 +66,49 @@ export default function SwitchSettings(props: Props): React.JSX.Element {
         persistDevice(updated);
     };
 
-    const valString = (name: string): string => {
-        const v = (device as any)?.[name];
-        return v === undefined || v === null ? '' : String(v);
+    type KeysOfType<T, ValueType> = {
+        [K in keyof T]: T[K] extends ValueType ? K : never
+    }[keyof T];
+
+    type StringKeys = KeysOfType<SempDevice, string | undefined>;
+    const valString = (field: StringKeys): string => {
+        if (!device) {
+            return '';
+        }
+        const v = device[field];
+
+        return v ?? '';
     };
 
+    /*
+    const valString = (name: string): string => {
+        const v = (device as SempDevice)?.[name];
+        return v === undefined || v === null ? '' : String(v);
+    };
+    */
+
+   type NumberKeys<T> = {
+        [K in keyof T]: T[K] extends number | undefined ? K : never
+    }[keyof T];
+   const valNumber = (key: NumberKeys<SempDevice>): string | number => {
+        if (!device) {
+            return '';
+        }
+
+        const v = device[key];
+
+        return v ?? '';
+    };
+    /*
     const valNumber = (name: string): number | '' => {
-        const v = (device as any)?.[name];
+        const v = (device as SempDevice)?.[name];
         if (v === undefined || v === null || v === '') {
             return '';
         }
         const n = Number(v);
         return Number.isNaN(n) ? '' : n;
     };
+    */
 
     const handleStringChangeValue = (name: string): ((value: string) => void) => (value: string): void => {
         const updated = { ...(device ?? {}), [name]: value } as SempDevice;
@@ -145,7 +175,7 @@ export default function SwitchSettings(props: Props): React.JSX.Element {
 
                     {/* SelectOID in Box mit Breitenbegrenzung, nur sichtbar bei SeparateOID */}
                     {
-                        (device && (device as any).StatusDetectionType) === "SeparateOID" ? (
+                        (device && device.StatusDetectionType) === "SeparateOID" ? (
                             
                                 <SelectOID
                                     settingName={I18n.t('OIDStatus')}
@@ -166,7 +196,7 @@ export default function SwitchSettings(props: Props): React.JSX.Element {
                 style={{ margin: 10 }}
             >
                 {
-                    (device && (device as any).StatusDetectionType) === "FromPowerValue" ? (
+                    (device && device.StatusDetectionType) === "FromPowerValue" ? (
 
                         <div>
                             <TextField
@@ -229,7 +259,7 @@ export default function SwitchSettings(props: Props): React.JSX.Element {
                     control={
                         <Checkbox
                             color="primary"
-                            checked={!!(device && (device as any).HasOIDSwitch)}
+                            checked={!!(device && device.HasOIDSwitch)}
                             onChange={handleBoolChange('HasOIDSwitch')}
                             aria-label="device has OID switch"
                         />
@@ -239,7 +269,7 @@ export default function SwitchSettings(props: Props): React.JSX.Element {
                 />
 
                 {
-                    (device && (device as any).HasOIDSwitch) === true ? (
+                    (device && device.HasOIDSwitch) === true ? (
                         <SelectOID
                             settingName={I18n.t('OIDSwitch')}
                             socket={props.socket}
