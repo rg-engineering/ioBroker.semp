@@ -45,9 +45,16 @@ export default function MainSettings(props: MainSettingsProps): React.JSX.Elemen
     console.log("MainSettings render ");
 
 
-    const valString = (name: keyof SempAdapterConfig): string => {
+    type KeysOfType<T, ValueType> = {
+        [K in keyof T]: T[K] extends ValueType ? K : never
+    }[keyof T];
+
+    type StringKeys = KeysOfType<SempAdapterConfig, string | undefined>;
+
+
+    const valString = (name: StringKeys): string => {
         const v = props.native?.[name];
-        return v === undefined || v === null ? '' : String(v);
+        return v ?? '';
     };
     /*
     const valString = (name: string): string => {
