@@ -90,13 +90,13 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
     ];
 
     const createOidSetting = (name: string, must: string): OidSetting => ({
-        active: true,
+        active: must == "mandatory" ? true : false,
         must: I18n.t(must),
         Name: name,
         OID: '',
-        Type: '',
-        SetValue: '',
-        Path2Check: ''
+        Type: 'Boolean',
+        SetValue: 'true',
+        Path2Check: I18n.t('not used')
     });
 
     // Ensure defaults helper returns updated device and whether it changed
@@ -446,14 +446,29 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
                                 </TableCell>
 
                                 <TableCell>
-                                    <TextField
-                                        fullWidth
-                                        value={t.Type ?? ''}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => onWallboxWriteUpdate(idx, 'Type', e.target.value)}
-                                        variant="standard"
-                                        placeholder={I18n.t('Type')}
+                                    <FormControl variant="standard" sx={{ minWidth: '100%' }}>
+                                        <Select
+                                            labelId="type"
+                                            value={t.Type || ''}
+                                            onChange={(e: SelectChangeEvent<string>) => {
+                                                const val = e.target.value ?? '';
+                                                onWallboxWriteUpdate(idx, 'Type', val)
+                                            }}
+                                            displayEmpty={false}
+                                        >
+                                            <MenuItem value="Boolean">
+                                                <em>{I18n.t('Boolean')}</em>
+                                            </MenuItem>
+                                            <MenuItem value="Number">
+                                                <em>{I18n.t('Number')}</em>
+                                            </MenuItem>
+                                            <MenuItem value="URL">
+                                                <em>{I18n.t('URL')}</em>
+                                            </MenuItem>
+                                        </Select>
 
-                                    />
+                                    </FormControl>
+
                                 </TableCell>
 
                                 <TableCell>
@@ -548,14 +563,31 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
                                 </TableCell>
 
                                 <TableCell>
-                                    <TextField
-                                        fullWidth
-                                        value={t.Type ?? ''}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => onWallboxReadUpdate(idx, 'Type', e.target.value)}
-                                        variant="standard"
-                                        placeholder={I18n.t('Type')}
 
-                                    />
+                                    <FormControl variant="standard" sx={{ minWidth: '100%' }}>
+                                        <Select
+                                            labelId="type"
+                                            value={t.Type || ''}
+                                            onChange={(e: SelectChangeEvent<string>) => {
+                                                const val = e.target.value ?? '';
+                                                onWallboxReadUpdate(idx, 'Type', val)
+                                            }}
+                                            displayEmpty={false}
+                                        >
+                                            <MenuItem value="Boolean">
+                                                <em>{I18n.t('Boolean')}</em>
+                                            </MenuItem>
+                                            <MenuItem value="Number">
+                                                <em>{I18n.t('Number')}</em>
+                                            </MenuItem>
+                                            <MenuItem value="URL">
+                                                <em>{I18n.t('URL')}</em>
+                                            </MenuItem>
+                                        </Select>
+                                    </FormControl>
+
+
+
                                 </TableCell>
 
                                 <TableCell>
@@ -587,4 +619,4 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
             </Box>
         </Box>
     );
-}
+} 

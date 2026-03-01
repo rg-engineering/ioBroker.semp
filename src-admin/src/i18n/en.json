@@ -31,18 +31,14 @@
   "DeviceMinPower": "Minimum power [W]",
   "DeviceMinPower (W)": "Min. power [W]",
   "DeviceName": "Device name",
-  "DeviceOID3PhaseChargeDisable": "3-phase charging function disabled",
-  "DeviceOID3PhaseChargeEnable": "3-phase charging activation",
-  "DeviceOIDChargePower": "Charging power",
-  "DeviceOIDCounter": "Switch",
-  "DeviceOIDIsCharging": "Loading",
-  "DeviceOIDIsError": "Is a mistake",
-  "DeviceOIDPlugConnected": "Plug connected",
-  "DeviceOIDPower": "Performance",
-  "DeviceOIDStartCharge": "Start charging",
-  "DeviceOIDStatus": "status",
-  "DeviceOIDStopCharge": "Stop charging",
-  "DeviceOIDSwitch": "Switch",
+  "OID3PhaseChargeDisable": "3-phase charging function disabled",
+  "OID3PhaseChargeEnable": "3-phase charging activation",
+  "OIDChargePower": "Charging power",
+  "OIDIsCharging": "Loading",
+  "OIDIsError": "Is a mistake",
+  "OIDPlugConnected": "Plug connected",
+  "OIDStartCharge": "Start charging",
+  "OIDStopCharge": "Stop charging",
   "DeviceSerialnumber": "Serial number",
   "DeviceStatusDetectionLimit": "Status detection threshold [W]",
   "DeviceStatusDetectionLimitTimeOff": "Minimum time for new OFF status [minutes]",
@@ -168,7 +164,6 @@
   "vendor": "Manufacturer",
   "wallbox": "Wallbox",
 
-
   "select a unit": "select a unit",
   "OIDPower": "OID Power",
   "OIDStatus": "OID Status",
@@ -179,7 +174,9 @@
   "DishwasherMode": "Dishwasher Mode",
   "Actions": "Actions",
   "select a charge time": "select a charge time",
-  "select a number of phases": "select number of phases"
+  "select a number of phases": "select number of phases",
+  "SwitchOffAtEndOfTimer": "Switch Off At End Of Timer",
+  "not used": "not used"
 
 
 
