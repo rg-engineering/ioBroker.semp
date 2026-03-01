@@ -456,8 +456,12 @@ export default class SEMPServer extends Base {
 					resolve(server);
 				});
 
-				server.on("error", (err) => {
-					reject(err);
+				server.on("error", (err: unknown) => {
+					if (err instanceof Error) {
+						reject(err);
+					} else {
+						reject(new Error(String(err)));
+					}
 				});
 			});
 		} catch (error) {
