@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "semp",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "news": {
+      "2.0.2": {
+        "en": "another lint reported errors solved",
+        "de": "weitere lint gemeldete fehler behoben",
+        "ru": "очередные ошибки, о которых сообщалось, решены",
+        "pt": "outro erro relatado pelo lint resolvido",
+        "nl": "een andere pluis gemelde fouten opgelost",
+        "fr": "une autre erreur de linte a été résolue",
+        "it": "un altro lint ha riferito errori risolti",
+        "es": "otro lint reportó errores resueltos",
+        "pl": "inne błędy zgłoszone w lint rozwiązane",
+        "uk": "інший лайт повідомляє помилки",
+        "zh-cn": "解决了另一个已报告的错误"
+      },
       "2.0.1": {
         "en": "solved a lot of lint reported errors",
         "de": "löste eine menge von lint gemeldeten fehlern",
@@ -80,19 +93,6 @@
         "pl": "błąd fix obliczenia zużytej energii",
         "uk": "виправлення помилок використовується енергія",
         "zh-cn": "旧能量的bug 修正计算"
-      },
-      "1.5.0": {
-        "en": "see issue #333: new sequence to handle devices with quiescent current. ATTENTION: new dishwasher sequence is used for dishwasher devices optionally!\nchanges requested by adapter checker\ndependencies updated",
-        "de": "siehe Ausgabe #333: neue Sequenz, um Geräte mit Ruhestrom zu handhaben. ACHTUNG: Eine neue Geschirrspülersequenz wird optional für Geschirrspüler verwendet!\nänderungen, die von adapter checker angefordert werden\naktualisierte abhängigkeiten",
-        "ru": "проблема #333: новая последовательность для обработки устройств с неподвижным током. ВНИМАНИЕ: новая последовательность посудомоечных машин используется для устройств посудомоечных машин необязательно!\nизменения, запрошенные adapter checker\nобновленные зависимости",
-        "pt": "veja a edição #333: nova sequência para lidar com dispositivos com corrente quiescente. ATENÇÃO: nova sequência de máquina de lavar louça é usada para dispositivos de máquina de lavar louça opcionalmente!\nalterações solicitadas pelo verificador do adaptador\ndependências atualizadas",
-        "nl": "zie nummer #333: nieuwe volgorde om apparaten te behandelen met rustige stroom. ATTENTIE: nieuwe vaatwasser sequentie wordt gebruikt voor vaatwasser apparaten optioneel!\nwijzigingen gevraagd door adaptercontrole\nafhankelijkheden bijgewerkt",
-        "fr": "voir le numéro 333: nouvelle séquence pour gérer les appareils avec courant quiescent. ATTENTION: nouvelle séquence de lave-vaisselle est utilisée pour les appareils de lave-vaisselle en option!\nmodifications demandées par l'adaptateur checker\ndépendances mises à jour",
-        "it": "vedi numero 333: nuova sequenza per gestire i dispositivi con corrente quiescente. ATTENZIONE: la nuova sequenza di lavastoviglie viene utilizzata per i dispositivi lavastoviglie in modo facoltativo!\nmodifiche richieste da adattatore checker\ndipendenze aggiornate",
-        "es": "ver número #333: nueva secuencia para manejar dispositivos con corriente quiescente. ATENCIÓN: nueva secuencia de lavavajillas se utiliza para dispositivos de lavavajillas opcionalmente!\ncambios solicitados por el adaptador\ndependencias actualizadas",
-        "pl": "zob. numer # 333: nowa sekwencja obsługi urządzeń z cichym prądem. UWAGA: Nowa sekwencja zmywarki jest używana do urządzeń zmywarki opcjonalnie!\nzmiany wymagane przez sprawdzacz adaptera\nzaktualizowane zależności",
-        "uk": "переглянути номер #333: нова послідовність для обробки пристроїв з струмом калькуляції. УВАГА!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nзміни, які вимагаються перевіркою адаптера\nоновлені залежності",
-        "zh-cn": "参见第333期:用quiscent电流处理设备的新序列。 注意:新洗碗机序列可选用于洗碗机设备!!\n适配器检查器要求的更改\n更新依赖关系"
       }
     },
     "titleLang": {
