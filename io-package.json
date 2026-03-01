@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "semp",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "news": {
+      "2.0.1": {
+        "en": "solved a lot of lint reported errors",
+        "de": "löste eine menge von lint gemeldeten fehlern",
+        "ru": "решено много ошибок, о которых сообщалось",
+        "pt": "resolveu muitos erros reportados pelo lint",
+        "nl": "loste veel pluis gemelde fouten op",
+        "fr": "a résolu un grand nombre d'erreurs rapportées",
+        "it": "risolto un sacco di lint segnalati errori",
+        "es": "solucionó muchos errores de lint reportados",
+        "pl": "rozwiązano wiele błędów zgłoszonych w liniach",
+        "uk": "вирішило багато помилок",
+        "zh-cn": "解析了许多已报错误"
+      },
       "2.0.0": {
         "en": "admin overworked completely with react and vite. **ATTENTION**: breaking changes in admin settings !!!\nbackend complete overworked with typescript",
         "de": "admin komplett mit Reakt und Vite überarbeitet. **ATTENTION**: Änderungen in Admin-Einstellungen brechen !!!\nbackend komplett überbearbeitet mit schrift",
@@ -80,19 +93,6 @@
         "pl": "zob. numer # 333: nowa sekwencja obsługi urządzeń z cichym prądem. UWAGA: Nowa sekwencja zmywarki jest używana do urządzeń zmywarki opcjonalnie!\nzmiany wymagane przez sprawdzacz adaptera\nzaktualizowane zależności",
         "uk": "переглянути номер #333: нова послідовність для обробки пристроїв з струмом калькуляції. УВАГА!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nзміни, які вимагаються перевіркою адаптера\nоновлені залежності",
         "zh-cn": "参见第333期:用quiscent电流处理设备的新序列。 注意:新洗碗机序列可选用于洗碗机设备!!\n适配器检查器要求的更改\n更新依赖关系"
-      },
-      "1.4.8": {
-        "en": "update dependencies\ntest with nodejs@22\nissue #317: links to docu updated",
-        "de": "aktualisierung der abhängigkeiten\ntest mit nodejs@22\nausgabe #317: links zu docu aktualisiert",
-        "ru": "обновление зависимостей\nтест с nodejs@22\n#317: ссылки на docu",
-        "pt": "dependências\nteste com nodejs@22\nissue #317: links para docu atualizado",
-        "nl": "afhankelijkheden bijwerken\ntest met nodejs@22\nnummer #317: links naar document bijgewerkt",
-        "fr": "mettre à jour les dépendances\ntest avec nodejs@22\nnuméro 317: liens vers docu mis à jour",
-        "it": "aggiornamento dipendenze\ntest con nodejs@22\nnumero #317: link a docu aggiornato",
-        "es": "dependencias de actualización\nprueba con nodejs@22\ntema #317: enlaces a docu actualizado",
-        "pl": "aktualizacji zależności\ntest z nodejs @ 22\nwydanie # 317: linki do zaktualizowanego doku",
-        "uk": "оновлення залежності\nтест з nodejs@22\nproblem #317: посилання на docu оновлений",
-        "zh-cn": "更新依赖关系\n用节点测试@ 22\n问题 317: 要更新的链接"
       }
     },
     "titleLang": {
