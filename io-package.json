@@ -4,45 +4,7 @@
     "version": "2.0.3",
     "news": {
       "2.0.3": {
-        "en": "lint reported errors solved",
-        "de": "flut gemeldete fehler behoben",
-        "ru": "объявленные ошибки решены",
-        "pt": "erros relatados pelo lint resolvidos",
-        "nl": "plint gemelde fouten opgelost",
-        "fr": "fautes rapportées résolues",
-        "it": "lint riferito errori risolti",
-        "es": "lint reportó errores resueltos",
-        "pl": "lint zgłoszone błędy rozwiązane",
-        "uk": "lint подані помилки",
-        "zh-cn": "提示已报告错误已解析"
-      },
-      "2.0.2": {
-        "en": "another lint reported errors solved",
-        "de": "weitere lint gemeldete fehler behoben",
-        "ru": "очередные ошибки, о которых сообщалось, решены",
-        "pt": "outro erro relatado pelo lint resolvido",
-        "nl": "een andere pluis gemelde fouten opgelost",
-        "fr": "une autre erreur de linte a été résolue",
-        "it": "un altro lint ha riferito errori risolti",
-        "es": "otro lint reportó errores resueltos",
-        "pl": "inne błędy zgłoszone w lint rozwiązane",
-        "uk": "інший лайт повідомляє помилки",
-        "zh-cn": "解决了另一个已报告的错误"
-      },
-      "2.0.1": {
-        "en": "solved a lot of lint reported errors",
-        "de": "löste eine menge von lint gemeldeten fehlern",
-        "ru": "решено много ошибок, о которых сообщалось",
-        "pt": "resolveu muitos erros reportados pelo lint",
-        "nl": "loste veel pluis gemelde fouten op",
-        "fr": "a résolu un grand nombre d'erreurs rapportées",
-        "it": "risolto un sacco di lint segnalati errori",
-        "es": "solucionó muchos errores de lint reportados",
-        "pl": "rozwiązano wiele błędów zgłoszonych w liniach",
-        "uk": "вирішило багато помилок",
-        "zh-cn": "解析了许多已报错误"
-      },
-      "2.0.0": {
+   
         "en": "admin overworked completely with react and vite. **ATTENTION**: breaking changes in admin settings !!!\nbackend complete overworked with typescript",
         "de": "admin komplett mit Reakt und Vite überarbeitet. **ATTENTION**: Änderungen in Admin-Einstellungen brechen !!!\nbackend komplett überbearbeitet mit schrift",
         "ru": "админ полностью перегружен реакцией и добротой. ** ВНИМАНИЕ**: изменение настроек администратора!!!\nbackend полностью перегружен шрифтом",
