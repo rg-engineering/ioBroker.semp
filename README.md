@@ -82,7 +82,7 @@ The adapter allows you to control a dishwasher or other devices that consume sta
   Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
 -->
-### 2.0.4 (2026-03-16)
+### **WORK IN PROGRESS**
 * (René) update dependencies + changes based on adapter checker
 
 ### 2.0.3 (2026-03-01)
