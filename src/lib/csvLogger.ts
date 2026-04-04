@@ -1,8 +1,8 @@
 /* eslint-disable prefer-template */
 
 import { createObjectCsvWriter } from "csv-writer";
-import fs from "fs";
-import * as Path from "path";
+import fs from "node:fs";
+import * as Path from "node:path";
 
 import type { Semp } from "../main";
 import Base from "./base";
