@@ -3,7 +3,7 @@
 
 
 import express from "express";
-import type { Server } from "http";
+import type { Server } from "node:http";
 import type { Express } from "express";
 import { js2xml, xml2js } from "xml-js";
 

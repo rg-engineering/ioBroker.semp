@@ -8,7 +8,7 @@
 
 import * as utils from "@iobroker/adapter-core";
 import Gateway from "./lib/Gateway";
-//import { networkInterfaces } from "os";
+//import { networkInterfaces } from "node:os";
 
 import { v4 as uuidv4 } from "uuid";
 
