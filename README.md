@@ -82,7 +82,7 @@ The adapter allows you to control a dishwasher or other devices that consume sta
   Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 2.0.6 (2026-04-05)
 * (René) see issue #433: make sure this.device.WallboxOID is defined before using it
 
 ### 2.0.5 (2026-03-17)
