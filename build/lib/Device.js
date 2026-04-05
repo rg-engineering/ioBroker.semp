@@ -122,6 +122,12 @@ class Device extends base_1.default {
             this.logError(this.device.Name + " max. Power not set!  " + this.device.MaxPower + "; setting to default 100");
             this.device.MaxPower = 100;
         }
+        // Sicherstellen, dass WallboxOID existiert
+        if (this.device.Type === "EVCharger") {
+            if (!this.device.WallboxOID) {
+                this.device.WallboxOID = {};
+            }
+        }
         //muss true sein, um das entsprechende Menü im portal zu bekommen
         device.OptionalEnergy = this.GetOptionalEnergy();
         this.deviceInfo = {
@@ -175,34 +181,23 @@ class Device extends base_1.default {
             }
             else {
                 this.logDebug("wallbox OID configuration (1) " + JSON.stringify(this.device.wallbox_oid_read) + " " + JSON.stringify(this.device.wallbox_oid_write));
-                /*
-                let DeviceOIDPlugConnected: WallboxOIDSettings | null = null;
-                let DeviceOIDIsCharging: WallboxOIDSettings | null = null;
-                let DeviceOIDIsError: WallboxOIDSettings | null = null;
-                let DeviceOIDChargePower: WallboxOIDSettings | null = null;
-                let DeviceOIDStartCharge: WallboxOIDSettings | null = null;
-                let DeviceOIDStopCharge: WallboxOIDSettings | null = null;
-                let DeviceOID3PhaseChargeEnable: WallboxOIDSettings | null = null;
-                let DeviceOID3PhaseChargeDisable: WallboxOIDSettings | null = null;
-                let DeviceOIDCounter: WallboxOIDSettings | null = null;
-                let DeviceOIDStatus: WallboxOIDSettings | null = null;
-                let DeviceOIDSwitch: WallboxOIDSettings | null = null;
-                */
                 for (let o = 0; o < this.device.wallbox_oid_read.length; o++) {
                     if (this.device.wallbox_oid_read[o].active) {
-                        this.device.WallboxOID.DeviceOIDPlugConnected = this.device.wallbox_oid_read[o];
-                    }
-                    else if (this.device.wallbox_oid_read[o].Name == "DeviceOIDIsCharging") {
-                        this.device.WallboxOID.DeviceOIDIsCharging = this.device.wallbox_oid_read[o];
-                    }
-                    else if (this.device.wallbox_oid_read[o].Name == "DeviceOIDIsError") {
-                        this.device.WallboxOID.DeviceOIDIsError = this.device.wallbox_oid_read[o];
-                    }
-                    else if (this.device.wallbox_oid_read[o].Name == "DeviceOIDCounter") {
-                        this.device.WallboxOID.DeviceOIDCounter = this.device.wallbox_oid_read[o];
-                    }
-                    else if (this.device.wallbox_oid_read[o].Name == "DeviceOIDStatus") {
-                        this.device.WallboxOID.DeviceOIDStatus = this.device.wallbox_oid_read[o];
+                        if (this.device.wallbox_oid_read[o].Name == "DeviceOIDPlugConnected") {
+                            this.device.WallboxOID.DeviceOIDPlugConnected = this.device.wallbox_oid_read[o];
+                        }
+                        else if (this.device.wallbox_oid_read[o].Name == "DeviceOIDIsCharging") {
+                            this.device.WallboxOID.DeviceOIDIsCharging = this.device.wallbox_oid_read[o];
+                        }
+                        else if (this.device.wallbox_oid_read[o].Name == "DeviceOIDIsError") {
+                            this.device.WallboxOID.DeviceOIDIsError = this.device.wallbox_oid_read[o];
+                        }
+                        else if (this.device.wallbox_oid_read[o].Name == "DeviceOIDCounter") {
+                            this.device.WallboxOID.DeviceOIDCounter = this.device.wallbox_oid_read[o];
+                        }
+                        else if (this.device.wallbox_oid_read[o].Name == "DeviceOIDStatus") {
+                            this.device.WallboxOID.DeviceOIDStatus = this.device.wallbox_oid_read[o];
+                        }
                     }
                 }
                 for (let o = 0; o < this.device.wallbox_oid_write.length; o++) {
@@ -227,21 +222,6 @@ class Device extends base_1.default {
                         }
                     }
                 }
-                /*
-                this.device.WallboxOID = {
-                    DeviceOIDPlugConnected: DeviceOIDPlugConnected,
-                    DeviceOIDIsCharging: DeviceOIDIsCharging,
-                    DeviceOIDIsError: DeviceOIDIsError,
-                    DeviceOIDChargePower: DeviceOIDChargePower,
-                    DeviceOIDStartCharge: DeviceOIDStartCharge,
-                    DeviceOIDStopCharge: DeviceOIDStopCharge,
-                    DeviceOID3PhaseChargeEnable: DeviceOID3PhaseChargeEnable,
-                    DeviceOID3PhaseChargeDisable: DeviceOID3PhaseChargeDisable,
-                    DeviceOIDCounter: DeviceOIDCounter,
-                    DeviceOIDStatus: DeviceOIDStatus,
-                    DeviceOIDSwitch: DeviceOIDSwitch
-                };
-                */
                 this.logDebug(this.device.Name + " wallbox OID configuration (2) " + JSON.stringify(this.device.WallboxOID));
                 // check, dass enable und disable nicht gleich ist
                 if (this.device.WallboxOID.DeviceOID3PhaseChargeEnable != null && this.device.WallboxOID.DeviceOID3PhaseChargeEnable.OID != null && this.device.WallboxOID.DeviceOID3PhaseChargeEnable.OID.length > 5

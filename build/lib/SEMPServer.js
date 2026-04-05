@@ -289,7 +289,12 @@ class SEMPServer extends base_1.default {
                     resolve(server);
                 });
                 server.on("error", (err) => {
-                    reject(err);
+                    if (err instanceof Error) {
+                        reject(err);
+                    }
+                    else {
+                        reject(new Error(String(err)));
+                    }
                 });
             });
         }

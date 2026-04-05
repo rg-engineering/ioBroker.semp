@@ -38,8 +38,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const csv_writer_1 = require("csv-writer");
-const fs_1 = __importDefault(require("fs"));
-const Path = __importStar(require("path"));
+const node_fs_1 = __importDefault(require("node:fs"));
+const Path = __importStar(require("node:path"));
 const base_1 = __importDefault(require("./base"));
 class csvLogger extends base_1.default {
     parentAdapter;
@@ -117,13 +117,13 @@ class csvLogger extends base_1.default {
         try {
             let stats = null;
             try {
-                stats = fs_1.default.statSync(file);
+                stats = node_fs_1.default.statSync(file);
             }
             catch (e) {
                 // fs.statSync throws if file does not exist - that's OK, we catch and continue
                 this.parentAdapter.log.debug("fs.statSync error (may be non-existent file): " + e);
             }
-            const exist = fs_1.default.existsSync(file);
+            const exist = node_fs_1.default.existsSync(file);
             this.parentAdapter.log.debug(" CreateFilename stats: " + JSON.stringify(stats) + " exist:" + exist);
             let targetPath = "";
             let filename = "semp";
@@ -169,18 +169,18 @@ class csvLogger extends base_1.default {
     }
     deleteOldFiles() {
         try {
-            if (!this.Path2Csv || !fs_1.default.existsSync(this.Path2Csv)) {
+            if (!this.Path2Csv || !node_fs_1.default.existsSync(this.Path2Csv)) {
                 return;
             }
             this.walkDir(this.Path2Csv, (filePath) => {
-                fs_1.default.stat(filePath, (err, stat) => {
+                node_fs_1.default.stat(filePath, (err, stat) => {
                     if (err || !stat) {
                         return;
                     }
                     const now = Date.now();
                     const endTime = new Date(stat.mtime).getTime() + (3 * 24 * 60 * 60 * 1000); // 3 days in miliseconds
                     if (now > endTime) {
-                        fs_1.default.unlink(filePath, (err) => {
+                        node_fs_1.default.unlink(filePath, (err) => {
                             if (err) {
                                 // ignore
                             }
@@ -194,10 +194,10 @@ class csvLogger extends base_1.default {
         }
     }
     walkDir(dir, callback) {
-        const entries = fs_1.default.readdirSync(dir);
+        const entries = node_fs_1.default.readdirSync(dir);
         entries.forEach(f => {
             const dirPath = Path.join(dir, f);
-            const stat = fs_1.default.statSync(dirPath);
+            const stat = node_fs_1.default.statSync(dirPath);
             const isDirectory = stat.isDirectory();
             if (isDirectory) {
                 this.walkDir(dirPath, callback);

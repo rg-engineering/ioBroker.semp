@@ -44,7 +44,7 @@ exports.Semp = void 0;
 //https://www.iobroker.net/#en/documentation/dev/adapterdev.md
 const utils = __importStar(require("@iobroker/adapter-core"));
 const Gateway_1 = __importDefault(require("./lib/Gateway"));
-//import { networkInterfaces } from "os";
+//import { networkInterfaces } from "node:os";
 const uuid_1 = require("uuid");
 class Semp extends utils.Adapter {
     gw = null;
