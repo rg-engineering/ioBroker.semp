@@ -134,7 +134,6 @@ export default class Device extends Base {
 			DishwasherMode: this.DishWasherMode,
 			Type: this.device.Type,
 			Name: this.device.Name,
-			
 		};
 
 
@@ -180,6 +179,13 @@ export default class Device extends Base {
 		if (this.device.MaxPower === undefined || this.device.MaxPower == null || this.device.MaxPower < 1) {
 			this.logError(this.device.Name + " max. Power not set!  " + this.device.MaxPower + "; setting to default 100");
 			this.device.MaxPower = 100;
+		}
+
+		// Sicherstellen, dass WallboxOID existiert
+		if (this.device.Type === "EVCharger") {
+			if (!this.device.WallboxOID) {
+				this.device.WallboxOID = {};
+			}
 		}
 
 		//muss true sein, um das entsprechende Menü im portal zu bekommen
@@ -240,35 +246,23 @@ export default class Device extends Base {
 			} else {
 				this.logDebug("wallbox OID configuration (1) " + JSON.stringify(this.device.wallbox_oid_read) + " " + JSON.stringify(this.device.wallbox_oid_write));
 
-				/*
-				let DeviceOIDPlugConnected: WallboxOIDSettings | null = null;
-				let DeviceOIDIsCharging: WallboxOIDSettings | null = null;
-				let DeviceOIDIsError: WallboxOIDSettings | null = null;
-				let DeviceOIDChargePower: WallboxOIDSettings | null = null;
-				let DeviceOIDStartCharge: WallboxOIDSettings | null = null;
-				let DeviceOIDStopCharge: WallboxOIDSettings | null = null;
-				let DeviceOID3PhaseChargeEnable: WallboxOIDSettings | null = null;
-				let DeviceOID3PhaseChargeDisable: WallboxOIDSettings | null = null;
-				let DeviceOIDCounter: WallboxOIDSettings | null = null;
-				let DeviceOIDStatus: WallboxOIDSettings | null = null;
-				let DeviceOIDSwitch: WallboxOIDSettings | null = null;
-				*/
-
-
 				for (let o = 0; o < this.device.wallbox_oid_read.length; o++) {
 					if (this.device.wallbox_oid_read[o].active) {
-						this.device.WallboxOID.DeviceOIDPlugConnected = this.device.wallbox_oid_read[o];
-					} else if (this.device.wallbox_oid_read[o].Name == "DeviceOIDIsCharging") {
-						this.device.WallboxOID.DeviceOIDIsCharging = this.device.wallbox_oid_read[o];
-					} else if (this.device.wallbox_oid_read[o].Name == "DeviceOIDIsError") {
-						this.device.WallboxOID.DeviceOIDIsError = this.device.wallbox_oid_read[o];
-					} else if (this.device.wallbox_oid_read[o].Name == "DeviceOIDCounter") {
-						this.device.WallboxOID.DeviceOIDCounter = this.device.wallbox_oid_read[o];
-					} else if (this.device.wallbox_oid_read[o].Name == "DeviceOIDStatus") {
-						this.device.WallboxOID.DeviceOIDStatus = this.device.wallbox_oid_read[o];
+
+						if (this.device.wallbox_oid_read[o].Name == "DeviceOIDPlugConnected") {
+							this.device.WallboxOID.DeviceOIDPlugConnected = this.device.wallbox_oid_read[o];
+						} else if (this.device.wallbox_oid_read[o].Name == "DeviceOIDIsCharging") {
+							this.device.WallboxOID.DeviceOIDIsCharging = this.device.wallbox_oid_read[o];
+						} else if (this.device.wallbox_oid_read[o].Name == "DeviceOIDIsError") {
+							this.device.WallboxOID.DeviceOIDIsError = this.device.wallbox_oid_read[o];
+						} else if (this.device.wallbox_oid_read[o].Name == "DeviceOIDCounter") {
+							this.device.WallboxOID.DeviceOIDCounter = this.device.wallbox_oid_read[o];
+						} else if (this.device.wallbox_oid_read[o].Name == "DeviceOIDStatus") {
+							this.device.WallboxOID.DeviceOIDStatus = this.device.wallbox_oid_read[o];
+						}
 					}
 				}
-			
+
 				for (let o = 0; o < this.device.wallbox_oid_write.length; o++) {
 					if (this.device.wallbox_oid_write[o].active) {
 						if (this.device.wallbox_oid_write[o].Name == "DeviceOIDChargePower") {
@@ -286,22 +280,6 @@ export default class Device extends Base {
 						}
 					}
 				}
-
-				/*
-				this.device.WallboxOID = {
-					DeviceOIDPlugConnected: DeviceOIDPlugConnected,
-					DeviceOIDIsCharging: DeviceOIDIsCharging,
-					DeviceOIDIsError: DeviceOIDIsError,
-					DeviceOIDChargePower: DeviceOIDChargePower,
-					DeviceOIDStartCharge: DeviceOIDStartCharge,
-					DeviceOIDStopCharge: DeviceOIDStopCharge,
-					DeviceOID3PhaseChargeEnable: DeviceOID3PhaseChargeEnable,
-					DeviceOID3PhaseChargeDisable: DeviceOID3PhaseChargeDisable,
-					DeviceOIDCounter: DeviceOIDCounter,
-					DeviceOIDStatus: DeviceOIDStatus,
-					DeviceOIDSwitch: DeviceOIDSwitch
-				};
-				*/
 
 				this.logDebug(this.device.Name + " wallbox OID configuration (2) " + JSON.stringify(this.device.WallboxOID));
 
@@ -1112,11 +1090,11 @@ export default class Device extends Base {
 				type: "state",
 				common: {
 					name: "minimum energy for charging",
-					type: "number",
-					role: "value",
-					read: true,
-					write: true,
-					desc: "min energy Wh"
+				 type: "number",
+				 role: "value",
+				 read: true,
+				 write: true,
+				 desc: "min energy Wh"
 				}
 			};
 			await this.CreateObject(key, obj);
