@@ -3,7 +3,20 @@
     "name": "semp",
     "version": "2.0.6",
     "news": {
-      
+      "2.0.7": {
+        "en": "github workflow with node@24\nsee issue #433: make sure this.device.WallboxOID is defined before using it",
+        "de": "github workflow mit node@24\nsiehe Ausgabe #433: sicherstellen, dass this.device.WallboxOID definiert ist, bevor es verwendet wird",
+        "ru": "рабочий процесс на github с помощью node@24\nсм. выпуск #433: убедитесь, что this.device.WallboxOID определен, прежде чем использовать его",
+        "pt": "fluxo de trabalho do github com node@24\nver questão #433: certifique-se de que this.device.WallboxOID está definido antes de o utilizar",
+        "nl": "github-workflow met node@24\nzie probleem #433: zorg ervoor dat this.device.WallboxOID gedefinieerd is voordat je het gebruikt.",
+        "fr": "flux de travail github avec node@24\nvoir le problème #433 : assurez-vous que this.device.WallboxOID est défini avant de l'utiliser",
+        "it": "flusso di lavoro github con node@24\nvedere il problema #433: assicurarsi che this.device.WallboxOID sia definito prima di usarlo",
+        "es": "flujo de trabajo github con node@24\nver incidencia #433: asegúrate de que this.device.WallboxOID está definido antes de usarlo",
+        "pl": "github workflow z node@24\nzobacz błąd #433: upewnij się, że this.device.WallboxOID jest zdefiniowany przed jego użyciem",
+        "uk": "робочий процес на github з node@24\nдив. проблему #433: перед використанням переконайтеся, що визначено ідентифікатор this.device.WallboxOID.",
+        "zh-cn": "github workflow with node@24\nsee issue #433: make sure this.device.WallboxOID is defined before using it"
+      },
+
       "2.0.5": {
         "en": "update dependencies + changes based on adapter checker",
         "de": "aktualisierung abhängigkeiten + änderungen basierend auf adapter-checker",
