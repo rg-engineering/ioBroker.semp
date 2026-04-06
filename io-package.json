@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "semp",
-    "version": "2.0.7",
+    "version": "2.0.6",
     "news": {
       "2.0.7": {
         "en": "github workflow with node@24\nsee issue #433: make sure this.device.WallboxOID is defined before using it",
