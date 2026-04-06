@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "semp",
-    "version": "2.0.6",
+    "version": "2.0.7",
     "news": {
       "2.0.7": {
         "en": "github workflow with node@24\nsee issue #433: make sure this.device.WallboxOID is defined before using it",
@@ -16,7 +16,6 @@
         "uk": "робочий процес на github з node@24\nдив. проблему #433: перед використанням переконайтеся, що визначено ідентифікатор this.device.WallboxOID.",
         "zh-cn": "github workflow with node@24\nsee issue #433: make sure this.device.WallboxOID is defined before using it"
       },
-
       "2.0.5": {
         "en": "update dependencies + changes based on adapter checker",
         "de": "aktualisierung abhängigkeiten + änderungen basierend auf adapter-checker",
