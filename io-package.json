@@ -3,19 +3,7 @@
     "name": "semp",
     "version": "2.0.6",
     "news": {
-      "2.0.6": {
-        "en": "see issue #433: make sure this.device.WallboxOID is defined before using it",
-        "de": "siehe Ausgabe #433: Achten Sie darauf.device. WallboxOID wird vor der Verwendung definiert",
-        "ru": "#433: Убедитесь, что это устройство. WallboxOID определяется перед использованием",
-        "pt": "ver edição #433: certifique-se disto.dispositivo. WallboxOID é definido antes de usá-lo",
-        "nl": "zie nummer #433: zorg ervoor dat dit.apparaat. WallboxOID wordt gedefinieerd voor gebruik ervan",
-        "fr": "voir le numéro #433: assurez-vous que ce.device. WallboxOID est défini avant son utilisation",
-        "it": "vedi numero 433: assicurarsi che questo.dispositivo. WallboxOID è definito prima di utilizzarlo",
-        "es": "ver número #433: asegúrate de este.dispositivo. WallboxOID se define antes de utilizarlo",
-        "pl": "zobacz numer # 433: upewnij się, że to .device. Przed użyciem WallboxOID jest definiowany",
-        "uk": "переглянути проблему #433: переконайтеся, що це.device. WallboxOID визначається перед використанням",
-        "zh-cn": "参见第433期:确保这个.device. 使用前定义了墙框OID"
-      },
+      
       "2.0.5": {
         "en": "update dependencies + changes based on adapter checker",
         "de": "aktualisierung abhängigkeiten + änderungen basierend auf adapter-checker",
