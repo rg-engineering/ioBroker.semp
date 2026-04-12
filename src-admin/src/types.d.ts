@@ -6,8 +6,8 @@ interface EnergyRequestPeriod {
     Days: string;
     EarliestStartTime: string;
     LatestEndTime: string;
-    MinRunTime: number;
-    MaxRunTime: number;
+    MinRunTime: string;
+    MaxRunTime: string;
 }
 
 interface WallboxOIDSettings {

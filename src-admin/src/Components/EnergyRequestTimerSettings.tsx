@@ -329,8 +329,6 @@ export default function EnergyRequestTimerSettings(props: Props): React.JSX.Elem
                                                 onChange={(e) => onUpdate(idx, 'MinRunTime', e.target.value === '' ? '' : Number(e.target.value))}
                                                 variant="standard"
                                                 placeholder={I18n.t('MinRunTime')}
-                                                type="number"
-                                                InputProps={{ inputProps: { min: 0 } }}
                                             />
                                         </TableCell>
 
@@ -341,8 +339,6 @@ export default function EnergyRequestTimerSettings(props: Props): React.JSX.Elem
                                                 onChange={(e) => onUpdate(idx, 'MaxRunTime', e.target.value === '' ? '' : Number(e.target.value))}
                                                 variant="standard"
                                                 placeholder={I18n.t('MaxRunTime')}
-                                                type="number"
-                                                InputProps={{ inputProps: { min: 0 } }}
                                             />
                                         </TableCell>
 
