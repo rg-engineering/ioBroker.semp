@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "semp",
-    "version": "2.0.8",
+    "version": "2.0.9",
     "news": {
+      "2.0.9": {
+        "en": "bug fix in admin, see issue #442: time settings in energy request corrected",
+        "de": "fehlerbehebung in admin, siehe ausgabe #442: zeiteinstellungen in energieanfrage korrigiert",
+        "ru": "исправление ошибок в администраторе, см. выпуск #442: временные настройки запроса энергии исправлены",
+        "pt": "correção de bug no administrador, veja problema #442: configurações de tempo na solicitação de energia corrigida",
+        "nl": "bug fix in admin, zie probleem #442: tijdinstellingen in energieverzoek gecorrigeerd",
+        "fr": "correction du bug dans l'admin, voir le problème #442 : correction des paramètres de temps dans la demande d'énergie",
+        "it": "bug fix in admin, vedi numero #442: le impostazioni del tempo nella richiesta di energia corretti",
+        "es": "bug fix in admin, ver número #442: configuración del tiempo en la solicitud de energía corregida",
+        "pl": "błąd naprawić w admin, patrz numer # 442: ustawienia czasu w żądaniu energii poprawione",
+        "uk": "виправлення помилок в адміні, див. питання #442: налаштування часу в енергетичному запиту виправлено",
+        "zh-cn": "管理器中的错误修复, 参见问题442: 能量请求中的时间设置更正"
+      },
       "2.0.8": {
         "en": "bug fix in admin, see issue #442: time settings in energy request corrected",
         "de": "fehlerbehebung in admin, siehe ausgabe #442: zeiteinstellungen in energieanfrage korrigiert",
@@ -80,19 +93,6 @@
         "pl": "aktualizacja zależności + zmiany w oparciu o sprawdzacz adaptera",
         "uk": "оновлення залежності + зміни на основі перевірки адаптера",
         "zh-cn": "根据适配器检查器更新依赖性+变化"
-      },
-      "1.5.2": {
-        "en": "new testing\nissue #333 dishwasher sequence: off detection changed",
-        "de": "neue tests\nausgabe #333 geschirrspüler-sequenz: off-detektion geändert",
-        "ru": "новые испытания\nпроблема #333 посудомоечная машина последовательность: вне обнаружения изменена",
-        "pt": "novos testes\nquestão #333 sequência da máquina de lavar louça: fora detecção alterada",
-        "nl": "nieuwe tests\nprobleem #333 vaatwasser sequentie: uit detectie veranderd",
-        "fr": "nouveaux essais\nnuméro 333 séquence de lave-vaisselle: la détection a changé",
-        "it": "nuovi test\nnumero #333 sequenza lavastoviglie: disattivare il rilevamento cambiato",
-        "es": "nuevas pruebas\nemisión #333 secuencia de lavavajillas: fuera de detección cambió",
-        "pl": "nowe badania\nwydanie # 333 sekwencja zmywarki: wyłączone wykrywanie zmienione",
-        "uk": "новий тест\nпитання #333 послідовність посудомийної машини: від виявлення змінено",
-        "zh-cn": "新测试\n发行 # 333 洗碗机序列: 关闭检测更改"
       }
     },
     "titleLang": {

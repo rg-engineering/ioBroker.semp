@@ -1,4 +1,8 @@
 # Older changes
+## 2.0.0 (2026-03-01)
+* (René) admin overworked completely with react and vite. **ATTENTION**: breaking changes in admin settings !!!
+* (René) backend complete overworked with typescript
+
 ## 1.5.4 (2025-10-26)
 * (René) bug fix sentry
 
