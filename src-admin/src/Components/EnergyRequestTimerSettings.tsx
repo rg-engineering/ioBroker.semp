@@ -130,8 +130,8 @@ export default function EnergyRequestTimerSettings(props: Props): React.JSX.Elem
             Days: 'everyDay',
             EarliestStartTime: '08:00',
             LatestEndTime: '16:00',
-            MinRunTime: 60,
-            MaxRunTime: 240,
+            MinRunTime: '01:00',
+            MaxRunTime: '04:00',
         };
         const newSettings = [...EnergyRequestPeriods, newEntry];
         setEnergyRequestPeriods(newSettings);
@@ -326,7 +326,7 @@ export default function EnergyRequestTimerSettings(props: Props): React.JSX.Elem
                                             <TextField
                                                 fullWidth
                                                 value={t.MinRunTime}
-                                                onChange={(e) => onUpdate(idx, 'MinRunTime', e.target.value === '' ? '' : Number(e.target.value))}
+                                                onChange={(e) => onUpdate(idx, 'MinRunTime', e.target.value )}
                                                 variant="standard"
                                                 placeholder={I18n.t('MinRunTime')}
                                             />
@@ -336,7 +336,7 @@ export default function EnergyRequestTimerSettings(props: Props): React.JSX.Elem
                                             <TextField
                                                 fullWidth
                                                 value={t.MaxRunTime}
-                                                onChange={(e) => onUpdate(idx, 'MaxRunTime', e.target.value === '' ? '' : Number(e.target.value))}
+                                                onChange={(e) => onUpdate(idx, 'MaxRunTime', e.target.value )}
                                                 variant="standard"
                                                 placeholder={I18n.t('MaxRunTime')}
                                             />
