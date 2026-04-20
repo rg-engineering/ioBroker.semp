@@ -38,8 +38,8 @@ export default class SSDPServer extends Base {
 		this.Gateway.logDebug("SSDPServer created: " + descriptionURL + " " + uniqueDeviceName);
 	}
 
-	start(): void {
-		this.ssdp.start();
+	async start(): Promise<void> {
+		await this.ssdp.start();
 		this.Gateway.logDebug("SSDPServer started");
 	}
 

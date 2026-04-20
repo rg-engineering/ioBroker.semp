@@ -100,9 +100,9 @@ class Device extends base_1.default {
         if (this.device.ID === undefined || this.device.ID.length < 25) {
             this.logError(this.device.Name + " wrong device id " + this.device.ID + "! must follow F-xxxxxxxx-yyyyyyyyyyyy-zz");
         }
-        this.logDebug(this.device.Name + " check DeviceID " + this.device.ID + " type " + typeof this.device.ID);
+        this.logDebug("check DeviceID " + this.device.ID + " type " + typeof this.device.ID);
         const ids = this.device.ID.split("-");
-        this.logDebug(this.device.Name + " BaseId " + ids[1] + " length " + ids[1].length);
+        this.logDebug("BaseId " + ids[1] + " length " + ids[1].length);
         if (ids[1].length != 8 || !Number.isInteger(Number(ids[1]))) {
             this.logError(this.device.Name + " wrong BaseId " + ids[1] + ". Must be a integer with 8 digits." + ids[1].length + " " + Number.isInteger(Number(ids[1])));
         }
@@ -222,7 +222,7 @@ class Device extends base_1.default {
                         }
                     }
                 }
-                this.logDebug(this.device.Name + " wallbox OID configuration (2) " + JSON.stringify(this.device.WallboxOID));
+                this.logDebug("wallbox OID configuration (2) " + JSON.stringify(this.device.WallboxOID));
                 // check, dass enable und disable nicht gleich ist
                 if (this.device.WallboxOID.DeviceOID3PhaseChargeEnable != null && this.device.WallboxOID.DeviceOID3PhaseChargeEnable.OID != null && this.device.WallboxOID.DeviceOID3PhaseChargeEnable.OID.length > 5
                     && this.device.WallboxOID.DeviceOID3PhaseChargeDisable != null && this.device.WallboxOID.DeviceOID3PhaseChargeDisable.OID != null && this.device.WallboxOID.DeviceOID3PhaseChargeDisable.OID.length > 5
@@ -245,7 +245,7 @@ class Device extends base_1.default {
             this.DishwasherStatusTimerID = setInterval(this.DishWasherSequence.bind(this), 10 * 1000);
             this.DishwasherOffTimeoutID = null;
             this.DishWasherOffTimerCheckExceeded = false;
-            this.logDebug(this.device.Name + " is in dishwashermoder");
+            this.logDebug("is in dishwashermoder");
         }
         this.deviceStatus = {
             DeviceId: device.ID,
@@ -316,45 +316,44 @@ class Device extends base_1.default {
         }
     }
     async SwitchOff() {
-        this.logDebug(this.device.Name + " turn device off");
+        this.logDebug("turn device off");
         await this.Switch(false);
     }
     async SwitchOn() {
-        this.logDebug(this.device.Name + " turn device on");
+        this.logDebug("turn device on");
         await this.Switch(true);
     }
     async setLastPower(watts, minPower, maxPower) {
         if (this.device.MeasurementUnit == "kW") {
-            watts = watts * 1000;
+            watts *= 1000;
         }
-        this.logDebug(this.device.Name + " setLastPower " + watts + " " + typeof watts + " " + this.device.StatusDetectionType + " " + this.device.MeasurementUnit);
+        this.logDebug(`setLastPower ${watts} ${typeof watts} ${this.device.StatusDetectionType} ${this.device.MeasurementUnit} ${this.deviceStatus.Status}`);
         this.CalcEnergy(watts);
-        if (this.planningrequest != null) {
+        if (this.planningrequest) {
             this.planningrequest.SetCurrentEnergy(Math.round(this.EnergyData.SumEnergy));
         }
-        const key = "Devices." + this.device.Name + ".Energy";
+        const key = `Devices.${this.device.Name}.Energy`;
         await this.SetState(key, true, Math.round(this.EnergyData.SumEnergy));
-        if (this.device.StatusDetectionType == "FromPowerValue") {
-            //limit festlegen, 1 Watt könnte standby sein
-            let limit = 0;
-            if (this.device.StatusDetectionLimit !== undefined && this.device.StatusDetectionLimit != null && Number(this.device.StatusDetectionLimit) > 0) {
-                limit = Number(this.device.StatusDetectionLimit);
-                this.logDebug(this.device.Name + " set status detection limit to " + limit);
+        if (this.device.StatusDetectionType == "AlwaysOn") {
+            await this.setOnOff("On");
+        }
+        else if (this.device.StatusDetectionType == "FromPowerValue") {
+            const limit = Number(this.device.StatusDetectionLimit) > 0 ? Number(this.device.StatusDetectionLimit) : 0;
+            if (limit) {
+                this.logDebug(`set status detection limit to ${limit}`);
             }
             if (watts > limit) {
-                if (this.device.StatusDetectionLimitTimeOn !== undefined && this.device.StatusDetectionLimitTimeOn != null && Number(this.device.StatusDetectionLimitTimeOn) > 0) {
-                    this.logDebug(this.device.Name + " status detection time limit is " + this.device.StatusDetectionLimitTimeOn + " going to on");
-                    //going to on
-                    if (this.deviceStatus.Status == "On" || this.StatusDetectionOnTimerID != null) {
-                        //nothing to do, already true or timer started
-                        this.logDebug(this.device.Name + " already on, no timer start " + this.deviceStatus.Status + " " + (this.StatusDetectionOnTimerID != null ? "StatusDetectionOnTimerID already running" : "StatusDetectionOnTimerID not running"));
+                if (Number(this.device.StatusDetectionLimitTimeOn) > 0) {
+                    this.logDebug(`status detection time limit is ${this.device.StatusDetectionLimitTimeOn} going to on`);
+                    if (this.deviceStatus.Status != "On" && !this.StatusDetectionOnTimerID) {
+                        this.StatusDetectionOnTimerID = setTimeout(this.SetStatusOn.bind(this), this.device.StatusDetectionLimitTimeOn * 60 * 1000);
+                        this.logDebug(`start setStatusOn - timer`);
                     }
                     else {
-                        this.StatusDetectionOnTimerID = setTimeout(this.SetStatusOn.bind(this), this.device.StatusDetectionLimitTimeOn * 60 * 1000);
-                        this.logDebug(this.device.Name + " start setStatusOn - timer");
+                        this.logDebug(`already on, no timer start ${this.deviceStatus.Status} ${this.StatusDetectionOnTimerID ? "StatusDetectionOnTimerID already running" : "StatusDetectionOnTimerID not running"}`);
                     }
                     if (this.StatusDetectionOffTimerID) {
-                        this.logDebug(this.device.Name + " cancel setStatusOff - timer");
+                        this.logDebug(`cancel setStatusOff - timer`);
                         clearTimeout(this.StatusDetectionOffTimerID);
                         this.StatusDetectionOffTimerID = null;
                     }
@@ -362,17 +361,17 @@ class Device extends base_1.default {
                 else {
                     await this.setOnOff("On");
                 }
-                if (this.device.StatusDetectionMinRunTime !== undefined && this.device.StatusDetectionMinRunTime != null && Number(this.device.StatusDetectionMinRunTime) > 0) {
-                    if (this.InMinRunTime == true || this.MinRunTimeExpired == true) {
-                        this.logDebug(this.device.Name + " already in MinRunTime or already expired, no timer restart");
+                if (Number(this.device.StatusDetectionMinRunTime) > 0) {
+                    if (this.InMinRunTime || this.MinRunTimeExpired) {
+                        this.logDebug(`already in MinRunTime or already expired, no timer restart`);
                     }
                     else {
-                        if (this.StatusDetectionMinRunTimerID != null) {
+                        if (this.StatusDetectionMinRunTimerID) {
                             clearTimeout(this.StatusDetectionMinRunTimerID);
                             this.StatusDetectionMinRunTimerID = null;
                         }
                         this.StatusDetectionMinRunTimerID = setTimeout(this.ResetMinRunTime.bind(this), this.device.StatusDetectionMinRunTime * 60 * 1000);
-                        this.logDebug(this.device.Name + " start min run time for status detection " + this.device.StatusDetectionMinRunTime * 60 * 1000 + " ms");
+                        this.logDebug(`start min run time for status detection ${this.device.StatusDetectionMinRunTime * 60 * 1000} ms`);
                         this.InMinRunTime = true;
                         this.MinRunTimeExpired = false;
                     }
@@ -380,19 +379,17 @@ class Device extends base_1.default {
             }
             else {
                 if (!this.InMinRunTime) {
-                    if (this.device.StatusDetectionLimitTimeOff !== undefined && this.device.StatusDetectionLimitTimeOff != null && Number(this.device.StatusDetectionLimitTimeOff) > 0) {
-                        this.logDebug(this.device.Name + " status detection time limit is " + this.device.StatusDetectionLimitTimeOff + " going to off");
-                        //going to off
-                        if (this.deviceStatus.Status == "Off" || this.StatusDetectionOffTimerID != null) {
-                            //nothing to do, already false or timer started
-                            this.logDebug(this.device.Name + " already off, no timer start " + this.deviceStatus.Status + " " + (this.StatusDetectionOffTimerID != null ? "StatusDetectionOffTimerID already running" : "StatusDetectionOffTimerID not running"));
+                    if (Number(this.device.StatusDetectionLimitTimeOff) > 0) {
+                        this.logDebug(`status detection time limit is ${this.device.StatusDetectionLimitTimeOff} going to off`);
+                        if (this.deviceStatus.Status != "Off" && !this.StatusDetectionOffTimerID) {
+                            this.StatusDetectionOffTimerID = setTimeout(this.SetStatusOff.bind(this), this.device.StatusDetectionLimitTimeOff * 60 * 1000);
+                            this.logDebug(`start setStatusOff - timer`);
                         }
                         else {
-                            this.StatusDetectionOffTimerID = setTimeout(this.SetStatusOff.bind(this), this.device.StatusDetectionLimitTimeOff * 60 * 1000);
-                            this.logDebug(this.device.Name + " start setStatusOff - timer");
+                            this.logDebug(`already off, no timer start ${this.deviceStatus.Status} ${this.StatusDetectionOffTimerID ? "StatusDetectionOffTimerID already running" : "StatusDetectionOffTimerID not running"}`);
                         }
                         if (this.StatusDetectionOnTimerID) {
-                            this.logDebug(this.device.Name + " cancel setStatusOn - timer");
+                            this.logDebug(`cancel setStatusOn - timer`);
                             clearTimeout(this.StatusDetectionOnTimerID);
                             this.StatusDetectionOnTimerID = null;
                         }
@@ -403,7 +400,7 @@ class Device extends base_1.default {
                     }
                 }
                 else {
-                    this.logDebug(this.device.Name + " still in min run time... not to switch off");
+                    this.logDebug(`still in min run time... not to switch off`);
                 }
             }
         }
@@ -418,9 +415,7 @@ class Device extends base_1.default {
         if (minPower) {
             powerInfo.MinPower = Math.round(minPower);
         }
-        this.deviceStatus.PowerConsumption = {
-            PowerInfo: [powerInfo]
-        };
+        this.deviceStatus.PowerConsumption = { PowerInfo: [powerInfo] };
     }
     async ResetMinRunTime() {
         this.InMinRunTime = false;
@@ -429,7 +424,7 @@ class Device extends base_1.default {
             clearTimeout(this.StatusDetectionMinRunTimerID);
             this.StatusDetectionMinRunTimerID = null;
         }
-        this.logDebug(this.device.Name + " min run time for status detection finished, timer cleared ");
+        this.logDebug("min run time for status detection finished, timer cleared ");
         //get power and call setLastPower(watts, minPower, maxPower)
         if (this.device.OID_Power !== undefined && this.device.OID_Power != null && this.device.OID_Power.length > 0) {
             if (this.Gateway.adapter != null) {
@@ -459,6 +454,9 @@ class Device extends base_1.default {
         await this.setOnOff("Off");
     }
     async setOnOff(state) {
+        if (this.device.StatusDetectionType == "AlwaysOn") {
+            state = "On";
+        }
         if (state == "On") {
             //cancel timer if running
             if (this.CancelRequestTimerID) {
@@ -466,13 +464,15 @@ class Device extends base_1.default {
                 this.CancelRequestTimerID = null;
             }
         }
-        //could be On, Off, Offline
-        this.logDebug(this.device.Name + " setState " + state);
-        this.deviceStatus.Status = state;
-        if (this.planningrequest != null) {
-            this.planningrequest.SetDeviceStatus(state);
+        if (this.deviceStatus.Status != state) {
+            //could be On, Off, Offline
+            this.logDebug("setState " + state);
+            this.deviceStatus.Status = state;
+            if (this.planningrequest != null) {
+                this.planningrequest.SetDeviceStatus(state);
+            }
+            await this.SetDeviceState();
         }
-        await this.SetDeviceState();
         if (this.device.MeasurementMethod == "Estimation") {
             //see issue #250: no Power to be send for devices without measurement in off-status
             if (state === "On") {
@@ -486,7 +486,7 @@ class Device extends base_1.default {
         }
     }
     DishWasherOffTimerCheck() {
-        this.logDebug(this.device.Name + " DishWasherOffTimerCheck");
+        this.logDebug("DishWasherOffTimerCheck");
         this.DishWasherOffTimerCheckExceeded = true;
     }
     async DishWasherSequence() {
@@ -519,14 +519,14 @@ class Device extends base_1.default {
                             clearTimeout(this.StatusDetectionMinRunTimerID);
                             this.StatusDetectionMinRunTimerID = null;
                         }
-                        this.logDebug(this.device.Name + " not to wait MinRunTime here");
+                        this.logDebug("not to wait MinRunTime here");
                     }
                 }
                 break;
             case this.states.waiting4FirstOff:
                 if (this.deviceStatus.Status == "Off" || this.StatusDetectionOffTimerID != null) {
                     this.dishwasherstate = this.states.waiting4OnRecommendation;
-                    this.logDebug(this.device.Name + " device is off (or going to off) after first on");
+                    this.logDebug("device is off (or going to off) after first on");
                     if (this.DishwasherOffTimeoutID) {
                         clearTimeout(this.DishwasherOffTimeoutID);
                         this.DishwasherOffTimeoutID = null;
@@ -541,7 +541,7 @@ class Device extends base_1.default {
             case this.states.waiting4OnRecommendation:
                 //das muss ein manuelles ein sein!!!
                 if (this.deviceStatus.Status == "On") {
-                    this.logDebug(this.device.Name + " device is on after first off without recommendation");
+                    this.logDebug("device is on after first off ohne recommendation");
                     this.dishwasherstate = this.states.on;
                 }
                 //now waiting for On-recommndation
@@ -553,7 +553,7 @@ class Device extends base_1.default {
                 }
                 //notausgang
                 if (this.planningrequest != null && this.planningrequest.getAllTimeframesFinished()) {
-                    this.logDebug(this.device.Name + " device will not recommended to turn on today");
+                    this.logDebug("device will nicht recommended to turn on today");
                     // falls manuell on dann nach on
                     if (this.deviceStatus.Status == "Off") {
                         this.dishwasherstate = this.states.off;
@@ -573,10 +573,10 @@ class Device extends base_1.default {
                 if (this.deviceStatus.Status == "Off") {
                     if (this.planningrequest != null) {
                         this.planningrequest.CancelActiveTimeframes();
-                        this.logDebug(this.device.Name + " cancel timeframe because device is off");
+                        this.logDebug("cancel timeframe because device is off");
                     }
                     //if finished start sequence again
-                    this.logDebug(this.device.Name + " device is off now");
+                    this.logDebug("device is off now");
                     this.dishwasherstate = this.states.off;
                     this.deviceStatus.Status = "Off";
                 }
@@ -587,14 +587,14 @@ class Device extends base_1.default {
                 break;
         }
         await this.SetDeviceState();
-        this.logDebug(this.device.Name + " DishWasherSequence: dishwasherstate: " + this.dishwasherstate + " status " + this.deviceStatus.Status);
+        this.logDebug("DishWasherSequence: dishwasherstate: " + this.dishwasherstate + " status " + this.deviceStatus.Status);
     }
     async sendEMRecommendation(em2dev) {
         if (this.device.Type == "EVCharger" && this.isFastCharging) {
-            this.logDebug(this.device.Name + " ignoring recommendation because fast charging is active");
+            this.logDebug("ignoring recommendation because fast charging is active");
         }
         else {
-            this.logDebug(this.device.Name + " received recommendation " + JSON.stringify(em2dev) + " " + JSON.stringify(this.lastRecommendation));
+            this.logDebug("received recommendation " + JSON.stringify(em2dev) + " " + JSON.stringify(this.lastRecommendation));
             if (this.lastRecommendation == null || this.lastRecommendation.DeviceControl.On != em2dev.DeviceControl.On) {
                 await this.setRecommendationState(em2dev.DeviceControl.On);
             }
@@ -614,10 +614,10 @@ class Device extends base_1.default {
             if (this.device.TimerCancelIfNotOn != null && this.device.TimerCancelIfNotOn) {
                 if (this.device.TimerCancelIfNotOnTime != null && Number(this.device.TimerCancelIfNotOnTime) > 0) {
                     if (this.CancelRequestTimerID) {
-                        this.logDebug(this.device.Name + " StartCancelRequest, nothing to do, already running");
+                        this.logDebug("StartCancelRequest, nothing to do, already running");
                     }
                     else {
-                        this.logDebug(this.device.Name + " StartCancelRequest");
+                        this.logDebug("StartCancelRequest");
                         this.CancelRequestTimerID = setTimeout(this.CancelRequest.bind(this), Number(this.device.TimerCancelIfNotOnTime) * 60 * 1000);
                     }
                 }
@@ -636,7 +636,7 @@ class Device extends base_1.default {
         }
     }
     async CancelRequest() {
-        this.logDebug(this.device.Name + " cancel energy request because device is not switched on");
+        this.logDebug("cancel energy request because device is not switched on");
         if (this.planningrequest != null) {
             this.planningrequest.CancelActiveTimeframes();
         }
@@ -652,29 +652,29 @@ class Device extends base_1.default {
             if (power > this.device.Wallbox3phaseSwitchLimit) {
                 if (this.start3PhaseChargeTimer == null) {
                     this.start3PhaseChargeTimer = setTimeout(this.Start3PhaseCharging.bind(this), this.device.Wallbox3phaseSwitchDelay * 60 * 1000);
-                    this.logDebug(this.device.Name + " start 3phase charging start timer");
+                    this.logDebug("start 3phase charging start timer");
                 }
                 if (this.stop3PhaseChargeTimer != null) {
                     clearTimeout(this.stop3PhaseChargeTimer);
                     this.stop3PhaseChargeTimer = null;
-                    this.logDebug(this.device.Name + " cancel 3phase charging stop timer");
+                    this.logDebug("cancel 3phase charging stop timer");
                 }
             }
             else {
                 if (this.stop3PhaseChargeTimer == null) {
                     this.stop3PhaseChargeTimer = setTimeout(this.Stop3PhaseCharging.bind(this), this.device.Wallbox3phaseSwitchDelay * 60 * 1000);
-                    this.logDebug(this.device.Name + " start 3phase charging stop timer");
+                    this.logDebug("start 3phase charging stop timer");
                 }
                 if (this.start3PhaseChargeTimer != null) {
                     clearTimeout(this.start3PhaseChargeTimer);
                     this.start3PhaseChargeTimer = null;
-                    this.logDebug(this.device.Name + " cancel 3phase charging start timer");
+                    this.logDebug("cancel 3phase charging start timer");
                 }
             }
         }
     }
     async Start3PhaseCharging() {
-        this.logDebug(this.device.Name + " start 3phase charging");
+        this.logDebug("start 3phase charging");
         const key = "Devices." + this.device.Name + ".Enable3PhaseCharge";
         await this.SetState(key, true, true);
         this.WallboxIs3PhaseCharging = true;
@@ -687,7 +687,7 @@ class Device extends base_1.default {
         }
     }
     async Stop3PhaseCharging() {
-        this.logDebug(this.device.Name + " stop 3phase charging");
+        this.logDebug("stop 3phase charging");
         const key = "Devices." + this.device.Name + ".Enable3PhaseCharge";
         await this.SetState(key, true, false);
         this.WallboxIs3PhaseCharging = false;
@@ -700,7 +700,7 @@ class Device extends base_1.default {
         }
     }
     async setRecommendationState(value) {
-        this.logDebug(this.device.Name + " new recommendation " + value + " " + typeof value);
+        this.logDebug("new recommendation " + value + " " + typeof value);
         let boolVal = value;
         if (typeof value === "string") {
             //convert to boolean
@@ -723,7 +723,7 @@ class Device extends base_1.default {
         else {
             val = value;
         }
-        this.logDebug(this.device.Name + " new recommendation power " + val + " " + typeof val);
+        this.logDebug("new recommendation power " + val + " " + typeof val);
         await this.SetWallboxPower(val);
         const key = "Devices." + this.device.Name + ".RecommendedPower";
         await this.SetState(key, true, val);
@@ -732,10 +732,10 @@ class Device extends base_1.default {
         if (this.device.HasOIDSwitch) {
             if (this.DishWasherMode) {
                 this.DishWasherRecommendation = value;
-                this.logDebug(this.device.Name + " set new recommendation state for dishwasher to " + value);
+                this.logDebug("set new recommendation state for dishwasher to " + value);
             }
             else {
-                this.logDebug(this.device.Name + " set new recommendation state to " + value);
+                this.logDebug("set new recommendation state to " + value);
                 await this.Switch(value);
             }
         }
@@ -753,7 +753,7 @@ class Device extends base_1.default {
         //get current state, if different set it
         if (this.device.OID_Switch != null && this.device.OID_Switch.length > 3) {
             const curVal = await this.Gateway.adapter.getForeignStateAsync(this.device.OID_Switch);
-            this.logDebug(this.device.Name + " got state " + JSON.stringify(curVal) + " target is " + value);
+            this.logDebug("got state " + JSON.stringify(curVal) + " target is " + value);
             if (curVal != null && curVal.val != value) {
                 this.logDebug(this.device.OID_Switch + " set state " + value);
                 await this.Gateway.adapter.setForeignStateAsync(this.device.OID_Switch, value);
@@ -766,7 +766,7 @@ class Device extends base_1.default {
             }
         }
         else {
-            this.logDebug(this.device.Name + " no switch configured");
+            this.logDebug("no switch configured");
         }
         if (this.logger != null) {
             const records = [];
@@ -1048,14 +1048,14 @@ class Device extends base_1.default {
         const key = "Devices." + this.device.Name + ".State";
         //nur setzen, wenn geändert 2023-02-25
         const currentState = await this.Gateway.adapter.getStateAsync(key);
-        this.logDebug(this.device.Name + " in SetState got " + JSON.stringify(currentState) + " from " + key);
+        this.logDebug("in SetState got " + JSON.stringify(currentState) + " from " + key);
         //2023-03-11 check for null added
         if (currentState == null || currentState.val != state) {
             await this.SetState(key, true, state);
-            this.logDebug(this.device.Name + " in SetState, set new state " + state);
+            this.logDebug("in SetState, set new state " + state);
         }
         else {
-            this.logDebug(this.device.Name + " in SetState, no new state to set, is " + state);
+            this.logDebug("in SetState, no new state to set, is " + state);
         }
     }
     //=====================================================================================
@@ -1292,12 +1292,12 @@ class Device extends base_1.default {
         }
     }
     AddUrl(OID) {
-        this.logDebug(this.device.Name + " subscribe URL  " + JSON.stringify(OID));
+        this.logDebug("subscribe URL  " + JSON.stringify(OID));
         const URL = OID.OID;
         if (this.URLs2Check.indexOf(URL) < 0) {
             this.URLs2Check.push(URL);
         }
-        this.logDebug(this.device.Name + " subscribe URL  " + JSON.stringify(this.URLs2Check));
+        this.logDebug("subscribe URL  " + JSON.stringify(this.URLs2Check));
     }
     WallboxSubscribeUrl() {
         for (let i = 0; i < this.URLs2Check.length; i++) {
@@ -1318,13 +1318,13 @@ class Device extends base_1.default {
                 headers: {},
                 timeout: 5000
             };
-            this.logDebug(this.device.Name + " call get URL " + url + " " + JSON.stringify(config));
+            this.logDebug("call get URL " + url + " " + JSON.stringify(config));
             if (typeof url != "string") {
                 this.logError(this.device.Name + " URL must be a string but is " + typeof url);
             }
             const result = await axios.default.get(url, config);
             const data = result.data;
-            this.logDebug(this.device.Name + " result URL " + JSON.stringify(data));
+            this.logDebug("result URL " + JSON.stringify(data));
             if (this.device.WallboxOID.DeviceOIDPlugConnected !== undefined && this.device.WallboxOID.DeviceOIDPlugConnected !== null) {
                 const current = this.CheckURLResult(url, this.device.WallboxOID.DeviceOIDPlugConnected, data);
                 if (current) {
@@ -1374,12 +1374,11 @@ class Device extends base_1.default {
                 const current = this.CheckURLResult(url, this.device.WallboxOID.DeviceOIDStatus, data);
                 if (current) {
                     await this.setOnOff("On");
-                    this.logDebug(this.device.Name + " set status " + current);
                 }
                 else {
                     await this.setOnOff("Off");
-                    this.logDebug(this.device.Name + " set status " + current);
                 }
+                this.logDebug("set status " + current);
             }
         }
         catch (e) {
@@ -1397,26 +1396,26 @@ class Device extends base_1.default {
                         const regex = new RegExp(sensor.SetValue);
                         const newValue = regex.exec(m);
                         if (newValue != null) {
-                            this.logDebug(this.device.Name + " " + sensor.Name + " true ");
+                            this.logDebug(sensor.Name + " true ");
                             ret = true;
                         }
                         else {
-                            this.logDebug(this.device.Name + " " + sensor.Name + " false ");
+                            this.logDebug(sensor.Name + " false ");
                             ret = false;
                         }
                     }
                     else {
-                        this.logDebug(this.device.Name + " got value from url-call " + m);
+                        this.logDebug("got value from url-call " + m);
                         ret = m;
                     }
                 }
                 else {
-                    this.logWarn(this.device.Name + " result is for " + sensor.Name + ", not Found, locking for  '" + sensor.Path2Check + "' got " + m + " " + JSON.stringify(data) + " " + typeof sensor.SetValue);
+                    this.logWarn("result is for " + sensor.Name + ", not Found, locking for  '" + sensor.Path2Check + "' got " + m + " " + JSON.stringify(data) + " " + typeof sensor.SetValue);
                 }
             }
         }
         catch (e) {
-            this.logError(this.device.Name + " CheckURLResult got error " + e + "  " + JSON.stringify(sensor));
+            this.logError("CheckURLResult got error " + e + "  " + JSON.stringify(sensor));
         }
         return ret;
     }
@@ -1488,7 +1487,7 @@ class Device extends base_1.default {
                         this.logWarn(this.device.Name + " current limited to 6A ");
                     }
                 }
-                this.logDebug(this.device.Name + " charge current " + Current2Set);
+                this.logDebug("charge current " + Current2Set);
                 const key = "Devices." + this.device.Name + ".RecommendedCurrent";
                 await this.SetState(key, true, Current2Set);
             }
@@ -1503,7 +1502,7 @@ class Device extends base_1.default {
                 }
                 await this.setStateTypebased(this.device.WallboxOID.DeviceOIDChargePower);
             }
-            this.logDebug(this.device.Name + " set new charge power " + value + " " + typeof value);
+            this.logDebug("set new charge power " + value + " " + typeof value);
             if (value > 0) {
                 this.isCharging = true;
             }
@@ -1527,7 +1526,7 @@ class Device extends base_1.default {
         }
         if (state) {
             if (this.DisconnectTimerID) {
-                this.logDebug(this.device.Name + " cancel disconnect - timer");
+                this.logDebug("cancel disconnect - timer");
                 clearTimeout(this.DisconnectTimerID);
                 this.DisconnectTimerID = null;
             }
@@ -1543,7 +1542,7 @@ class Device extends base_1.default {
         else {
             if (this.isConnected) {
                 this.DisconnectTimerID = setTimeout(this.SetDisconnected.bind(this), 60 * 1000);
-                this.logDebug(this.device.Name + " start disconnect - timer");
+                this.logDebug("start disconnect - timer");
             }
             else {
                 await this.SetDisconnected();
@@ -1552,7 +1551,7 @@ class Device extends base_1.default {
         await this.SetDeviceState();
     }
     async SetDisconnected() {
-        this.logDebug(this.device.Name + " disconnect - timer fired");
+        this.logDebug("disconnect - timer fired");
         if (this.DisconnectTimerID) {
             clearTimeout(this.DisconnectTimerID);
             this.DisconnectTimerID = null;
@@ -1572,7 +1571,7 @@ class Device extends base_1.default {
             return;
         }
         const state = this.checkStateTypebased(this.device.WallboxOID.DeviceOIDIsCharging, value);
-        this.logDebug(this.device.Name + " wallbox charging " + state);
+        this.logDebug("wallbox charging " + state);
         this.isCharging = value;
         await this.SetDeviceState();
     }
@@ -1582,12 +1581,12 @@ class Device extends base_1.default {
             return;
         }
         const state = this.checkStateTypebased(this.device.WallboxOID.DeviceOIDIsError, value);
-        this.logDebug(this.device.Name + " wallbox error " + state);
+        this.logDebug("wallbox error " + state);
         this.isError = value;
         await this.SetDeviceState();
     }
     setMinEnergy(state) {
-        this.logDebug(this.device.Name + " wallbox got new min energy " + state);
+        this.logDebug("wallbox got new min energy " + state);
         if (state >= 0) {
             if (this.planningrequest != null) {
                 this.planningrequest.SetMinEnergy(state);
@@ -1595,7 +1594,7 @@ class Device extends base_1.default {
         }
     }
     setMaxEnergy(state) {
-        this.logDebug(this.device.Name + " wallbox got new max energy " + state);
+        this.logDebug("wallbox got new max energy " + state);
         if (state > 0) {
             if (this.planningrequest != null) {
                 this.planningrequest.SetMaxEnergy(state);
@@ -1608,7 +1607,7 @@ class Device extends base_1.default {
         if (this.EnergyData.lastTimestamp > 0) {
             const timeDiff = currentTimestamp - this.EnergyData.lastTimestamp;
             this.EnergyData.SumEnergy = this.EnergyData.SumEnergy + this.EnergyData.lastValue * timeDiff / 1000 / 60 / 60; //in Wh
-            this.logDebug(this.device.Name + " calc energy " + this.EnergyData.lastValue + " " + this.EnergyData.lastTimestamp + " = " + this.EnergyData.SumEnergy + "Wh");
+            this.logDebug("calc energy " + this.EnergyData.lastValue + " " + this.EnergyData.lastTimestamp + " = " + this.EnergyData.SumEnergy + "Wh");
             if (this.logger != null) {
                 const records = [];
                 //hier records bauen
@@ -1634,10 +1633,10 @@ class Device extends base_1.default {
         if (state) {
             if (this.isConnected) {
                 if (this.isFastCharging) {
-                    this.logDebug(this.device.Name + " start fast charge ignored because already started");
+                    this.logDebug("start fast charge ignored because already started");
                 }
                 else {
-                    this.logInfo(this.device.Name + " start fast charging");
+                    this.logInfo("start fast charging");
                     //device on
                     await this.Switch(true);
                     //max power
@@ -1651,7 +1650,7 @@ class Device extends base_1.default {
                 }
             }
             else {
-                this.logWarn(this.device.Name + " fast charge cannot be started because EV is not connected");
+                this.logWarn("fast charge cannot be started because EV is not connected");
             }
         }
         else {
@@ -1663,7 +1662,7 @@ class Device extends base_1.default {
         }
     }
     SetMaxChargeTime(state) {
-        this.logDebug(this.device.Name + " got new max charge time " + state);
+        this.logDebug("got new max charge time " + state);
         if (this.planningrequest != null) {
             this.planningrequest.SetMaxChargeTime(state);
         }
@@ -1679,7 +1678,7 @@ class Device extends base_1.default {
     }
     async stopFastCharging() {
         if (this.isFastCharging) {
-            this.logInfo(this.device.Name + " stop fast charging");
+            this.logInfo("stop fast charging");
             this.isFastCharging = false;
             await this.SetDeviceState();
         }

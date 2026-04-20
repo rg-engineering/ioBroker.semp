@@ -99,6 +99,7 @@ class Planningrequest extends base_1.default {
         if (this.WallboxPlugConnected || this.settings.DeviceType != "EVCharger") {
             for (let t = 0; t < this.timeframes.length; t++) {
                 const timeframeData = this.timeframes[t].getTimeframeData();
+                this.logDebug("!!! got timeframe data " + JSON.stringify(timeframeData));
                 if (timeframeData != null) {
                     PlanningrequestData.push(timeframeData);
                 }

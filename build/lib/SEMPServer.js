@@ -18,6 +18,7 @@ class SEMPServer extends base_1.default {
     extendedLog;
     DiscoveryheckTimerID;
     logger;
+    testtimer;
     /**
      * Creates a new SEMP Server instance
      */
@@ -36,7 +37,7 @@ class SEMPServer extends base_1.default {
         this.logDebug("SEMPServer created");
         this.DiscoveryheckTimerID = null;
         this.DiscoveryheckTimerID = setTimeout(this.InfoNotDiscovered.bind(this), 3 * 60 * 1000);
-        //this.testtimer = null;
+        this.testtimer = null;
     }
     InfoNotDiscovered() {
         this.logError("adapter / gateway not yet discovered by SHM! check adapter and network settings!");
@@ -48,7 +49,7 @@ class SEMPServer extends base_1.default {
      * Initializes SEMP routes
      */
     initRoutes() {
-        //this.testtimer = setInterval(this.test.bind(this), 30 * 1000);
+        this.testtimer = setInterval(this.test.bind(this), 30 * 1000);
         this.app.get("/description.xml", (req, res) => {
             this.logDebug("SHM requested description");
             if (this.DiscoveryheckTimerID != null) {
@@ -130,18 +131,14 @@ class SEMPServer extends base_1.default {
             res.end();
         });
     }
-    /*
     test() {
-
-        this.Gateway.parentAdapter.log.debug("TEST!!! SHM requested all devices. " );
+        this.logDebug("TEST!!! SHM requested all devices. ");
         const deviceList = this.Gateway.getAllDevices();
-        //this.Gateway.parentAdapter.log.debug("got device list");
+        this.logDebug("got device list " + JSON.stringify(deviceList));
         const devices = this.convertDevices(deviceList);
         //this.Gateway.parentAdapter.log.debug("response " );
-        this.Gateway.parentAdapter.log.debug("TEST!!! to send " +this.convertJSToXML(devices));
-
+        this.logDebug("TEST!!! to send " + this.convertJSToXML(devices));
     }
-    */
     convertJSToXML(js) {
         const rawJs = {
             _declaration: {

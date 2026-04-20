@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable prettier/prettier */
 declare global {
     interface Window {
         CryptoJS: any;

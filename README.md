@@ -82,6 +82,10 @@ The adapter allows you to control a dishwasher or other devices that consume sta
   Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+* (René) bug fix for issue #445: planning requests corrected
+
 ### 2.0.9 (2026-04-13)
 * (René) bug fix in admin, see issue #442: time settings in energy request corrected
 

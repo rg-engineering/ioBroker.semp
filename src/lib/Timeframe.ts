@@ -270,7 +270,7 @@ export default class Timeframe extends Base {
 		}
 	}
 
-	async getTimeframeData(): Promise<Timeframedata | null> {
+	 getTimeframeData(): Timeframedata | null {
 
 		let timeframeData = null;
 
@@ -295,11 +295,12 @@ export default class Timeframe extends Base {
 				};
 			}
 
-			//this.parentAdapter.log.debug(this.deviceName + " ( " + this.settings.ID + ") timeframe data " + JSON.stringify(timeframeData));
+			this.logDebug(this.deviceName + " ( " + this.settings.ID + ") timeframe data " + JSON.stringify(timeframeData));
 
 			const key = "Devices." + this.deviceName + ".TimeFrames." + this.settings.ID + ".LastSent";
 
-			await this.SetState(key,  true, JSON.stringify(timeframeData) );
+			//no await!
+			void this.SetState(key,  true, JSON.stringify(timeframeData) );
 		} else {
 
 			if (!this.enabledbyUser) {

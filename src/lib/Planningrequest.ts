@@ -139,13 +139,16 @@ export default class Planningrequest extends Base {
 	}
 
 
-	getPlanningrequestData(): Array<any> {
+	 getPlanningrequestData(): Array<any> {
 
 		const PlanningrequestData: Array<any> = [];
 
 		if (this.WallboxPlugConnected || this.settings.DeviceType != "EVCharger") {
 			for (let t = 0; t < this.timeframes.length; t++) {
 				const timeframeData = this.timeframes[t].getTimeframeData();
+
+                this.logDebug("!!! got timeframe data " + JSON.stringify(timeframeData)); 
+
 				if (timeframeData != null) {
 					PlanningrequestData.push(timeframeData);
 				}

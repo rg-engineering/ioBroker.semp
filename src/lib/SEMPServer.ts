@@ -109,6 +109,8 @@ export default class SEMPServer extends Base {
 	DiscoveryheckTimerID: TimeoutHandle | null;
 	logger: csvLogger | null;
 
+    //testtimer: TimeoutHandle | null;
+
 	/**
 	 * Creates a new SEMP Server instance
 	 */
@@ -211,7 +213,7 @@ export default class SEMPServer extends Base {
 				}) as EM2DeviceInput;   
 
 				if (this.isEM2DeviceInput(json)) {
-					this.Gateway.onSEMPMessage(this.convertEM2Device(json));
+					void this.Gateway.onSEMPMessage(this.convertEM2Device(json));
 				}
 				res.end();
 				res.end();
@@ -261,14 +263,14 @@ export default class SEMPServer extends Base {
 
 
 	/*
-	test() {
+	test(): void {
 
-		this.Gateway.parentAdapter.log.debug("TEST!!! SHM requested all devices. " );
+		this.logDebug("TEST!!! SHM requested all devices. ");
 		const deviceList = this.Gateway.getAllDevices();
-		//this.Gateway.parentAdapter.log.debug("got device list");
+		this.logDebug("got device list " + JSON.stringify(deviceList));
 		const devices = this.convertDevices(deviceList);
 		//this.Gateway.parentAdapter.log.debug("response " );
-		this.Gateway.parentAdapter.log.debug("TEST!!! to send " +this.convertJSToXML(devices));
+		this.logDebug("TEST!!! to send " + this.convertJSToXML(devices));
 
 	}
 	*/
@@ -322,7 +324,7 @@ export default class SEMPServer extends Base {
 				RecommendationPower: JSON.stringify(device)
 			};
 
-			this.logger.WriteCSVLog(0, [record]);
+			void this.logger.WriteCSVLog(0, [record]);
 		}
 
 		const oRet: ConvertResult = {
@@ -418,7 +420,7 @@ export default class SEMPServer extends Base {
 		}
 		if (this.logger != null) {
 			//und jetzt alle schreiben
-			this.logger.WriteCSVLog(0, records);
+			void this.logger.WriteCSVLog(0, records);
 		}
 
 		return {

@@ -207,7 +207,7 @@ class Timeframe extends base_1.default {
             this.logDebug(this.deviceName + " timeframe " + this.settings.ID + " inactive");
         }
     }
-    async getTimeframeData() {
+    getTimeframeData() {
         let timeframeData = null;
         //const key = "Devices." + this.deviceName + ".TimeFrames." + this.settings.ID + ".active";
         //const current = await this.parentAdapter.getStateAsync(key);
@@ -224,9 +224,10 @@ class Timeframe extends base_1.default {
                     MaxRunningTime: this.MaxRunningTime,
                 };
             }
-            //this.parentAdapter.log.debug(this.deviceName + " ( " + this.settings.ID + ") timeframe data " + JSON.stringify(timeframeData));
+            this.logDebug(this.deviceName + " ( " + this.settings.ID + ") timeframe data " + JSON.stringify(timeframeData));
             const key = "Devices." + this.deviceName + ".TimeFrames." + this.settings.ID + ".LastSent";
-            await this.SetState(key, true, JSON.stringify(timeframeData));
+            //no await!
+            void this.SetState(key, true, JSON.stringify(timeframeData));
         }
         else {
             if (!this.enabledbyUser) {

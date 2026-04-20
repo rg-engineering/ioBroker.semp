@@ -191,7 +191,6 @@ class App extends GenericApp<GenericAppProps, AppState> {
         } catch (err) {
             console.error('Fehler beim Download der Konfiguration:', err);
             // einfache Nutzerinfo
-            // eslint-disable-next-line no-alert
             alert(I18n.t('Failed to download configuration'));
         }
     };
@@ -215,11 +214,11 @@ class App extends GenericApp<GenericAppProps, AppState> {
                 const parsed = JSON.parse(text) as SempAdapterConfig;
                 // Set native and mark as changed
                 this.setState({ native: parsed as any, changed: this.getIsChanged(parsed as any) });
-                // eslint-disable-next-line no-alert
+                
                 alert(I18n.t('Configuration loaded from file'));
             } catch (err) {
                 console.error('Fehler beim Einlesen der Konfigurationsdatei:', err);
-                // eslint-disable-next-line no-alert
+                
                 alert(I18n.t('Invalid configuration file'));
             } finally {
                 // Clear file input so same file can be selected again if needed
@@ -230,7 +229,7 @@ class App extends GenericApp<GenericAppProps, AppState> {
         };
         reader.onerror = (ev) => {
             console.error('FileReader error', ev);
-            // eslint-disable-next-line no-alert
+            
             alert(I18n.t('Failed to read file'));
         };
         reader.readAsText(file);
