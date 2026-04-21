@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "semp",
-    "version": "2.0.9",
+    "version": "2.0.10",
     "news": {
+      "2.0.10": {
+        "en": "bug fix for issue #445: planning requests corrected",
+        "de": "fehlerbehebung für ausgabe #445: planungsanfragen korrigiert",
+        "ru": "исправление ошибок в выпуске #445: запросы на планирование исправлены",
+        "pt": "correção de bug para o problema #445: solicitações de planejamento corrigidas",
+        "nl": "bug fix voor probleem #445: correctie van planningsverzoeken",
+        "fr": "correction du bug pour le problème #445: correction des requêtes de planification",
+        "it": "bug fix per il problema #445: le richieste di pianificazione corrette",
+        "es": "bug fix for issue #445: planning requests corrected",
+        "pl": "bug fix for issue # 445: planowanie wniosków poprawionych",
+        "uk": "виправлення помилок для випуску #445: планування запитів, виправлених",
+        "zh-cn": "第445期的错误修正: 规划请求得到纠正"
+      },
       "2.0.9": {
         "en": "bug fix in admin, see issue #442: time settings in energy request corrected",
         "de": "fehlerbehebung in admin, siehe ausgabe #442: zeiteinstellungen in energieanfrage korrigiert",
@@ -80,19 +93,6 @@
         "pl": "bug fix sentry",
         "uk": "виправлення помилок",
         "zh-cn": "错误修正哨兵"
-      },
-      "1.5.3": {
-        "en": "update dependencies + changes based on adapter checker",
-        "de": "aktualisierung abhängigkeiten + änderungen basierend auf adapter-checker",
-        "ru": "зависимости обновления + изменения на основе проверки адаптера",
-        "pt": "atualizar dependências + alterações com base no verificador de adaptadores",
-        "nl": "update afhankelijkheden + wijzigingen op basis van adaptercontrole",
-        "fr": "mettre à jour les dépendances + les changements basés sur le vérificateur d'adaptateur",
-        "it": "aggiornamento dipendenze + modifiche in base all'adattatore checker",
-        "es": "dependencias de actualización + cambios basados en el control de adaptador",
-        "pl": "aktualizacja zależności + zmiany w oparciu o sprawdzacz adaptera",
-        "uk": "оновлення залежності + зміни на основі перевірки адаптера",
-        "zh-cn": "根据适配器检查器更新依赖性+变化"
       }
     },
     "titleLang": {

@@ -1,4 +1,7 @@
 # Older changes
+## 2.0.3 (2026-03-01)
+ * (René) lint reported errors solved
+
 ## 2.0.0 (2026-03-01)
 * (René) admin overworked completely with react and vite. **ATTENTION**: breaking changes in admin settings !!!
 * (René) backend complete overworked with typescript
