@@ -31,7 +31,7 @@ class Gateway extends base_1.default {
         }
         try {
             await this.sempServer.start();
-            this.ssdpServer.start();
+            await this.ssdpServer.start();
             this.logDebug("gateway started...");
         }
         catch (e) {

@@ -26,8 +26,8 @@ class SSDPServer extends base_1.default {
         this.ssdp.addUSN("urn:schemas-simple-energy-management-protocol:device:Gateway:1");
         this.Gateway.logDebug("SSDPServer created: " + descriptionURL + " " + uniqueDeviceName);
     }
-    start() {
-        this.ssdp.start();
+    async start() {
+        await this.ssdp.start();
         this.Gateway.logDebug("SSDPServer started");
     }
     stop() {

@@ -18,7 +18,7 @@ class SEMPServer extends base_1.default {
     extendedLog;
     DiscoveryheckTimerID;
     logger;
-    testtimer;
+    //testtimer: TimeoutHandle | null;
     /**
      * Creates a new SEMP Server instance
      */
@@ -37,7 +37,7 @@ class SEMPServer extends base_1.default {
         this.logDebug("SEMPServer created");
         this.DiscoveryheckTimerID = null;
         this.DiscoveryheckTimerID = setTimeout(this.InfoNotDiscovered.bind(this), 3 * 60 * 1000);
-        this.testtimer = null;
+        //this.testtimer = null;
     }
     InfoNotDiscovered() {
         this.logError("adapter / gateway not yet discovered by SHM! check adapter and network settings!");
@@ -49,7 +49,7 @@ class SEMPServer extends base_1.default {
      * Initializes SEMP routes
      */
     initRoutes() {
-        this.testtimer = setInterval(this.test.bind(this), 30 * 1000);
+        //this.testtimer = setInterval(this.test.bind(this), 30 * 1000);
         this.app.get("/description.xml", (req, res) => {
             this.logDebug("SHM requested description");
             if (this.DiscoveryheckTimerID != null) {
@@ -87,7 +87,7 @@ class SEMPServer extends base_1.default {
                     nativeType: true
                 });
                 if (this.isEM2DeviceInput(json)) {
-                    this.Gateway.onSEMPMessage(this.convertEM2Device(json));
+                    void this.Gateway.onSEMPMessage(this.convertEM2Device(json));
                 }
                 res.end();
                 res.end();
@@ -131,14 +131,18 @@ class SEMPServer extends base_1.default {
             res.end();
         });
     }
-    test() {
+    /*
+    test(): void {
+
         this.logDebug("TEST!!! SHM requested all devices. ");
         const deviceList = this.Gateway.getAllDevices();
         this.logDebug("got device list " + JSON.stringify(deviceList));
         const devices = this.convertDevices(deviceList);
         //this.Gateway.parentAdapter.log.debug("response " );
         this.logDebug("TEST!!! to send " + this.convertJSToXML(devices));
+
     }
+    */
     convertJSToXML(js) {
         const rawJs = {
             _declaration: {
@@ -182,7 +186,7 @@ class SEMPServer extends base_1.default {
                 RecommendationStatus: device.On._text,
                 RecommendationPower: JSON.stringify(device)
             };
-            this.logger.WriteCSVLog(0, [record]);
+            void this.logger.WriteCSVLog(0, [record]);
         }
         const oRet = {
             DeviceControl: {
@@ -257,7 +261,7 @@ class SEMPServer extends base_1.default {
         }
         if (this.logger != null) {
             //und jetzt alle schreiben
-            this.logger.WriteCSVLog(0, records);
+            void this.logger.WriteCSVLog(0, records);
         }
         return {
             _attributes: {
