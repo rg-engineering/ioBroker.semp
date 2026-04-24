@@ -1,9 +1,21 @@
 {
   "common": {
     "name": "semp",
-    "version": "2.0.11",
+    "version": "2.0.12",
     "news": {
-
+      "2.0.12": {
+        "en": "bug fix for issue #451: device base ID is editable now",
+        "de": "fehlerbehebung für Ausgabe #451: Gerätebasis-ID ist jetzt editierbar",
+        "ru": "исправление ошибок для проблемы #451: идентификатор базы устройства теперь можно редактировать",
+        "pt": "correção de bug para problema #451: ID base do dispositivo é editável agora",
+        "nl": "bug fix voor probleem #451: apparaat basis ID is nu bewerkbaar",
+        "fr": "correction du bug pour le problème #451: l'ID de base du périphérique est modifiable maintenant",
+        "it": "bug fix per il numero #451: ID base dispositivo è ora modificabile",
+        "es": "bug fix for issue #451: device base ID is editable now",
+        "pl": "bug fix for issue # 451: device base ID is edytable now",
+        "uk": "виправлення помилок для випуску #451: ідентифікатор бази даних пристрою редагується зараз",
+        "zh-cn": "第451期错误修复: 设备基础ID现在可编辑"
+      },
       "2.0.10": {
         "en": "bug fix for issue #445: planning requests corrected",
         "de": "fehlerbehebung für ausgabe #445: planungsanfragen korrigiert",
