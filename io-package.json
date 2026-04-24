@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "semp",
-    "version": "2.0.10",
+    "version": "2.0.11",
     "news": {
+      "2.0.11": {
+        "en": "bug fix for issue #451: device base ID is editable now",
+        "de": "fehlerbehebung für Ausgabe #451: Gerätebasis-ID ist jetzt editierbar",
+        "ru": "исправление ошибок для проблемы #451: идентификатор базы устройства теперь можно редактировать",
+        "pt": "correção de bug para problema #451: ID base do dispositivo é editável agora",
+        "nl": "bug fix voor probleem #451: apparaat basis ID is nu bewerkbaar",
+        "fr": "correction du bug pour le problème #451: l'ID de base du périphérique est modifiable maintenant",
+        "it": "bug fix per il numero #451: ID base dispositivo è ora modificabile",
+        "es": "bug fix for issue #451: device base ID is editable now",
+        "pl": "bug fix for issue # 451: device base ID is edytable now",
+        "uk": "виправлення помилок для випуску #451: ідентифікатор бази даних пристрою редагується зараз",
+        "zh-cn": "第451期错误修复: 设备基础ID现在可编辑"
+      },
       "2.0.10": {
         "en": "bug fix for issue #445: planning requests corrected",
         "de": "fehlerbehebung für ausgabe #445: planungsanfragen korrigiert",
@@ -80,19 +93,6 @@
         "pl": "admin przepracował całkowicie z reakcji i vite. ** UWAGA* *: łamanie zmian w ustawieniach administratora!!! \nbackend całkowicie przerobione z maszynopisem",
         "uk": "адмін перероблений повністю з реагацією і вітом. **ATTENTION***: зміни в налаштуваннях адміністратора !!!\nзворотній зв'язок завершено",
         "zh-cn": "处理过度 完全与反应和vite。 校对:Soup!\n后端用打字符完成过度工作"
-      },
-      "1.5.4": {
-        "en": "bug fix sentry",
-        "de": "fehlerbehebung gesendet",
-        "ru": "исправлять ошибки",
-        "pt": "corrigir o erro sentinela",
-        "nl": "bug repareren wacht",
-        "fr": "correction du bug sentinelle",
-        "it": "bug fix sendry",
-        "es": "bug fix centry",
-        "pl": "bug fix sentry",
-        "uk": "виправлення помилок",
-        "zh-cn": "错误修正哨兵"
       }
     },
     "titleLang": {

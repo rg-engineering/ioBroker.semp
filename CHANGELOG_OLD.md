@@ -1,4 +1,7 @@
 # Older changes
+## 2.0.5 (2026-03-17)
+* (René) update dependencies + changes based on adapter checker
+
 ## 2.0.3 (2026-03-01)
  * (René) lint reported errors solved
 
