@@ -205,31 +205,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
         setDevice(newDevice);
         setEditingDeviceOriginalId(newId);
     };
-
-    // Hilfsfunktion: wert eines string-feldes aus device anzeigen
-    type KeysOfType<T, ValueType> = {
-        [K in keyof T]: T[K] extends ValueType ? K : never
-    }[keyof T];
-
-    type StringKeys = KeysOfType<SempDevice, string | undefined>;
-    const valString = (field: StringKeys): string => {
-        if (!device) {
-            return '';
-        }
-        const v = device[field];
-
-        return v ?? '';
-    };
-    /*
-    const valString = (key: string): string => {
-        if (!props.native) {
-            return '';
-        }
-        const v = (props.native)[key];
-        return v === undefined || v === null ? '' : String(v);
-    };
-    */
-
+    
     // Handler: Änderung des DeviceBaseID-Feldes
     const handleBaseIdChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
         if (!props.native) {
