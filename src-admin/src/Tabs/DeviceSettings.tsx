@@ -319,7 +319,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                     id='DeviceBaseID'
                     label={I18n.t('DeviceBaseID')}
                     variant="standard"
-                    value={valString('DeviceBaseID')}
+                    value={props.native?.DeviceBaseID}
                     onChange={handleBaseIdChange}
                     sx={{ minWidth: '30%', maxWidth: '50%', marginRight: '10px' }}
                 />

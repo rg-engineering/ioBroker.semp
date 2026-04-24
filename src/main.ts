@@ -409,7 +409,7 @@ export class Semp extends utils.Adapter {
 
 			// Safely read latitude
 			const common: any = (ret as any).common;
-			if (common && typeof common.latitude === "number" && !Number.isNaN(common.latitude)) {
+			if (common && (typeof common.latitude === "number" || typeof common.latitude === "string") && !Number.isNaN(common.latitude)) {
 				const latitude: number = common.latitude;
 
 				devicebaseid = ("00000000" + Math.round(latitude * 100000000)).slice(-8);
@@ -418,7 +418,8 @@ export class Semp extends utils.Adapter {
 
 				this.log.debug("new created BaseID " + devicebaseid + " type " + typeof devicebaseid);
 			} else {
-				this.log.warn("system.config.common.latitude is not a valid number, using default devicebaseid " + devicebaseid);
+				this.log.error("system.config.common.latitude is not a valid number, using default devicebaseid " + devicebaseid);
+                this.log.warn("current value of latitude: " + common?.latitude);
 			}
 
 

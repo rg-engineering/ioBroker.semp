@@ -387,14 +387,15 @@ class Semp extends utils.Adapter {
             //this.log.debug("system config " + JSON.stringify(ret));
             // Safely read latitude
             const common = ret.common;
-            if (common && typeof common.latitude === "number" && !Number.isNaN(common.latitude)) {
+            if (common && (typeof common.latitude === "number" || typeof common.latitude === "string") && !Number.isNaN(common.latitude)) {
                 const latitude = common.latitude;
                 devicebaseid = ("00000000" + Math.round(latitude * 100000000)).slice(-8);
                 this.CheckBaseId(devicebaseid);
                 this.log.debug("new created BaseID " + devicebaseid + " type " + typeof devicebaseid);
             }
             else {
-                this.log.warn("system.config.common.latitude is not a valid number, using default devicebaseid " + devicebaseid);
+                this.log.error("system.config.common.latitude is not a valid number, using default devicebaseid " + devicebaseid);
+                this.log.warn("current value of latitude: " + common?.latitude);
             }
         }
         return devicebaseid;
