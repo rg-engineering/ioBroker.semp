@@ -23,12 +23,12 @@
   },
   "dependencies": {
     "@iobroker/adapter-core": "^3.3.2",
+    "axios": "^1.15.1",
     "csv-writer": "^1.6.0",
     "express": "^5.2.1",
     "node-ssdp": "^4.0.1",
     "uuid": "^8.0.0",
-    "xml-js": "^1.6.11",
-    "axios": "^1.15.1"
+    "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "@alcalzone/release-script": "^5.2.0",
@@ -39,6 +39,7 @@
     "@iobroker/build-tools": "^3.0.1",
     "@iobroker/eslint-config": "^2.2.0",
     "@iobroker/testing": "^5.2.2",
+    "@tsconfig/node22": "^22.0.5",
     "@types/express": "^5.0.6",
     "@types/node-ssdp": "^4.0.5",
     "@types/uuid": "^10.0.0"
