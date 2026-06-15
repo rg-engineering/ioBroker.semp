@@ -111,20 +111,20 @@ export default function SwitchSettings(props: Props): React.JSX.Element {
     */
 
     const handleStringChangeValue = (name: string): ((value: string) => void) => (value: string): void => {
-        const updated = { ...(device ?? {}), [name]: value } as SempDevice;
+        const updated = { ...(device ?? {}), [name]: value };
         updateDevice(updated);
     };
 
     const handleNumberChange = (name: string): ((e: React.ChangeEvent<HTMLInputElement>) => void) => (e: React.ChangeEvent<HTMLInputElement>): void => {
         const raw = e.target.value;
         const num = raw === '' ? undefined : Number(raw);
-        const updated = { ...(device ?? {}), [name]: num } as SempDevice;
+        const updated = { ...(device ?? {}), [name]: num } ;
         updateDevice(updated);
     };
 
     const handleBoolChange = (name: string): ((e: React.ChangeEvent<HTMLInputElement>) => void) => (e: React.ChangeEvent<HTMLInputElement>): void => {
         const checked = e.target.checked;
-        const updated = { ...(device ?? {}), [name]: checked } as SempDevice;
+        const updated = { ...(device ?? {}), [name]: checked } ;
         updateDevice(updated);
     };
 
@@ -156,7 +156,7 @@ export default function SwitchSettings(props: Props): React.JSX.Element {
                             value={valString('StatusDetectionType') || 'SeparateOID'}
                             onChange={(e: SelectChangeEvent<string>) => {
                                 const val = e.target.value ?? '';
-                                const updated = { ...(device ?? {}), StatusDetectionType: val } as SempDevice;
+                                const updated = { ...(device ?? {}), StatusDetectionType: val } ;
                                 updateDevice(updated);
                             }}
                             displayEmpty={false}

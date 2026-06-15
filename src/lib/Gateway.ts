@@ -68,7 +68,7 @@ export default class Gateway extends Base{
 
 			this.logDebug("gateway started...");
 		} catch (e) {
-			this.logError("exception in start [" + e + "]");
+			this.logError("exception in start [" + String(e) + "]");
 		}
 
 		if (this.adapter!==null && this.adapter.config.LogToCSV) {
@@ -143,7 +143,7 @@ export default class Gateway extends Base{
 			 this.ssdpServer.stop();
 			this.logDebug("gateway stopped...");
 		} catch (e) {
-			this.logError("exception in stop [" + e + "]");
+			this.logError("exception in stop [" + String(e) + "]");
 		}
 	}
 
@@ -268,7 +268,7 @@ export default class Gateway extends Base{
 			this.setDevice(device.ID, d);
 
 		} catch (e) {
-			this.logError("exception in addDevice [" + e + "]");
+			this.logError("exception in addDevice [" + String(e) + "]");
 		}
 	}
 
@@ -298,7 +298,7 @@ export default class Gateway extends Base{
 						(dev as any).Check2Switch();
 					}
 				} catch (err) {
-					this.logError("error in Check2Switch [" + err + "]");
+					this.logError("error in Check2Switch [" + String(err) + "]");
 				}
 
 				let requests: any[] = [];
@@ -323,7 +323,7 @@ export default class Gateway extends Base{
 				ds.push(device);
 			}
 		} catch (e) {
-			this.logError("exception in getAllDevices [" + e + "]");
+			this.logError("exception in getAllDevices [" + String(e) + "]");
 		}
 
 		return ds;

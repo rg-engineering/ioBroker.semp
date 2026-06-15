@@ -80,7 +80,7 @@ export default function MainSettings(props: MainSettingsProps): React.JSX.Elemen
     // String-Handler erwartet jetzt das ChangeEvent
     const handleStringChange = (name: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
         const value = e.target.value;
-        const updated = { ...(props.native ?? {}), [name]: value } as SempAdapterConfig;
+        const updated = { ...(props.native ?? {}), [name]: value };
         updateDevice(updated);
     };
 
@@ -88,13 +88,13 @@ export default function MainSettings(props: MainSettingsProps): React.JSX.Elemen
     const handleNumberChange = (name: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
         const raw = (e.target as HTMLInputElement).value;
         const num = raw === '' ? undefined : Number(raw);
-        const updated = { ...(props.native ?? {}), [name]: num } as SempAdapterConfig;
+        const updated = { ...(props.native ?? {}), [name]: num };
         updateDevice(updated);
     };
 
     const handleBoolChange = (name: string) => (e: React.ChangeEvent<HTMLInputElement>): void => {
         const checked = e.target.checked;
-        const updated = { ...(props.native ?? {}), [name]: checked } as SempAdapterConfig;
+        const updated = { ...(props.native ?? {}), [name]: checked };
         updateDevice(updated);
     };
 

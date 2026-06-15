@@ -467,7 +467,7 @@ export default class SEMPServer extends Base {
 				});
 			});
 		} catch (error) {
-			this.logError("SEMP server cannot start: " + error);
+			this.logError("SEMP server cannot start: " + String(error));
 			
 		}
 	}

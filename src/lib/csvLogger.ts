@@ -66,7 +66,7 @@ export default class csvLogger extends Base {
 			};
 			this.logData.push(data);
 		} catch (e) {
-			this.parentAdapter.log.error("exception in StartLog [" + e + "]");
+			this.parentAdapter.log.error("exception in StartLog [" + String(e) + "]");
 		}
 	}
 
@@ -77,7 +77,7 @@ export default class csvLogger extends Base {
 
 			this.CreateCsvWriter(file, headers);
 		} catch (e) {
-			this.parentAdapter.log.error("exception in RestartLog [" + e + "]");
+			this.parentAdapter.log.error("exception in RestartLog [" + String(e) + "]");
 		}
 	}
 
@@ -112,7 +112,7 @@ export default class csvLogger extends Base {
 				stats = fs.statSync(file);
 			} catch (e) {
 				// fs.statSync throws if file does not exist - that's OK, we catch and continue
-				this.parentAdapter.log.debug("fs.statSync error (may be non-existent file): " + e);
+				this.parentAdapter.log.debug("fs.statSync error (may be non-existent file): " + String(e));
 			}
 
 			const exist = fs.existsSync(file);
@@ -152,7 +152,7 @@ export default class csvLogger extends Base {
 			newFilename = Path.join(targetPath, filename + "_" + datestring + extension);
 
 		} catch (e) {
-			this.parentAdapter.log.error("exception in CreateFilename [" + e + "]");
+			this.parentAdapter.log.error("exception in CreateFilename [" + String(e) + "]");
 		}
 		return newFilename;
 	}
@@ -168,7 +168,7 @@ export default class csvLogger extends Base {
 				await this.csvWriters[id].writeRecords(records);
 			}
 		} catch (e) {
-			this.parentAdapter.log.error("exception in WriteCSVLog [" + e + "]");
+			this.parentAdapter.log.error("exception in WriteCSVLog [" + String(e) + "]");
 		}
 	}
 
@@ -195,7 +195,7 @@ export default class csvLogger extends Base {
 				});
 			});
 		} catch (e) {
-			this.parentAdapter.log.error("exception in deleteOldFiles [" + e + "]");
+			this.parentAdapter.log.error("exception in deleteOldFiles [" + String(e) + "]");
 		}
 	}
 

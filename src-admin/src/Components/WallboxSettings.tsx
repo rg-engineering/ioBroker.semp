@@ -193,7 +193,7 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
             (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
 
                 const raw = e.target.value;
-                const updated = { ...(device ?? {}) } as SempDevice;
+                const updated = { ...(device ?? {}) };
 
                 if (raw === '') {
                     delete updated[field];
@@ -212,7 +212,7 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
     const handleBoolChange = (field: keyof SempDevice): ((e: React.ChangeEvent<HTMLInputElement>) => void) => {
         return (e: React.ChangeEvent<HTMLInputElement>): void => {
             const val = e.target.checked;
-            const updated = { ...(device ?? {}), [field]: val } as SempDevice;
+            const updated = { ...(device ?? {}), [field]: val };
             setDevice(updated);
             persistDevice(updated);
         };
@@ -304,7 +304,7 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
                         value={valString('WallboxChargeTime') || '1'}
                         onChange={(e: SelectChangeEvent<string>): void => {
                             const val = e.target.value ?? '';
-                            const updated = { ...(device ?? {}), WallboxChargeTime: val } as SempDevice;
+                            const updated = { ...(device ?? {}), WallboxChargeTime: val };
                             setDevice(updated);
                             persistDevice(updated);
                         }}
@@ -338,7 +338,7 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
                         value={valString('WallboxPhases') || '1'}
                         onChange={(e: SelectChangeEvent<string>): void => {
                             const val = e.target.value ?? '';
-                            const updated = { ...(device ?? {}), WallboxPhases: val } as SempDevice;
+                            const updated = { ...(device ?? {}), WallboxPhases: val } ;
                             setDevice(updated);
                             persistDevice(updated);
                         }}
@@ -440,7 +440,7 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
                                 <TableCell>
                                     <Checkbox
                                         checked={!!t.active}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => onWallboxWriteToggleActive(idx, (e.target as HTMLInputElement).checked)}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => onWallboxWriteToggleActive(idx, e.target.checked)}
                                     />
                                 </TableCell>
                                 <TableCell>
@@ -557,7 +557,7 @@ export default function WallboxSettings(props: Props): React.JSX.Element {
                                 <TableCell>
                                     <Checkbox
                                         checked={!!t.active}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => onWallboxReadToggleActive(idx, (e.target as HTMLInputElement).checked)}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => onWallboxReadToggleActive(idx, e.target.checked)}
                                     />
                                 </TableCell>
                                 <TableCell>

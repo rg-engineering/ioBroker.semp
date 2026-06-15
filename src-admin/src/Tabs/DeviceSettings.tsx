@@ -142,7 +142,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
         if (!device) {
             return;
         }
-        const updated = { ...device, IsActive: !!checked } as SempDevice;
+        const updated = { ...device, IsActive: !!checked };
         setDevice(updated);
         persistDevice(updated);
     };
@@ -279,7 +279,7 @@ export default function DeviceSettings(props: SettingsProps): React.JSX.Element 
                             <Checkbox
                                 color="primary"
                                 checked={deviceIsActive}
-                                onChange={(e) => persistDeviceIsActive((e.target as HTMLInputElement).checked)}
+                                onChange={(e) => persistDeviceIsActive(e.target.checked)}
                                 aria-label="device active checkbox"
                             />
                         }
