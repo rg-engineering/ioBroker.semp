@@ -23,11 +23,12 @@
   },
   "dependencies": {
     "@iobroker/adapter-core": "^3.4.1",
-    "axios": "^1.17.0",
+    "axios": "^1.18.1",
     "csv-writer": "^1.6.0",
     "express": "^5.2.1",
+    "libxmljs2": "^0.37.0",
     "node-ssdp": "^4.0.1",
-    "uuid": "^8.0.0",
+    "uuid": "^11.0.0",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
@@ -39,13 +40,12 @@
     "@iobroker/build-tools": "^3.0.1",
     "@iobroker/eslint-config": "^2.3.4",
     "@iobroker/testing": "^5.2.2",
-    "@iobroker/types": "^7.1.2",
-    "@tsconfig/node20": "^20.1.9",
+    "@iobroker/types": "^7.2.2",
     "@tsconfig/node22": "^22.0.5",
     "@types/express": "^5.0.6",
     "@types/node": "^22.19.20",
     "@types/node-ssdp": "^4.0.5",
-    "@types/uuid": "^10.0.0"
+    "@types/uuid": "^11.0.0"
   },
   "main": "build/main.js",
   "scripts": {

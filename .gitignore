@@ -34,3 +34,4 @@ admin/i18n/*/flat.txt
 /docu/.$semp_dishwasher.drawio.bkp
 .commitinfo
 /.vscode/extensions.json
+/.github/copilot-instructions.md
