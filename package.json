@@ -22,7 +22,7 @@
     "node": ">=22.0.0"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^3.4.1",
+    "@iobroker/adapter-core": "^3.4.2",
     "axios": "^1.18.1",
     "csv-writer": "^1.6.0",
     "express": "^5.2.1",
