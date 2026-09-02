@@ -22,13 +22,13 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { I18n } from '@iobroker/adapter-react-v5';
+import { I18n } from '@iobroker/gui-components';
 import type {
     IobTheme,
     ThemeName,
     ThemeType,
     AdminConnection
-} from '@iobroker/adapter-react-v5';
+} from '@iobroker/gui-components';
 
 import type { SempDevice, EnergyRequestPeriod } from "../types";
 import BoxDivider from './BoxDivider'

@@ -17,13 +17,13 @@ import {
 import type {
     SelectChangeEvent
 } from '@mui/material';
-import { I18n } from '@iobroker/adapter-react-v5';
+import { I18n } from '@iobroker/gui-components';
 import type {
     IobTheme,
     ThemeName,
     ThemeType,
     AdminConnection
-} from '@iobroker/adapter-react-v5';
+} from '@iobroker/gui-components';
 
 import type { SempDevice } from "../types";
 import SelectOID from './SelectOID'; // vorhandene Komponente importieren (oder anpassen)

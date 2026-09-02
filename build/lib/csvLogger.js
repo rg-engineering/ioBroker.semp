@@ -84,7 +84,7 @@ class csvLogger extends base_1.default {
             this.logData.push(data);
         }
         catch (e) {
-            this.parentAdapter.log.error("exception in StartLog [" + e + "]");
+            this.parentAdapter.log.error("exception in StartLog [" + String(e) + "]");
         }
     }
     RestartLog(idx) {
@@ -94,7 +94,7 @@ class csvLogger extends base_1.default {
             this.CreateCsvWriter(file, headers);
         }
         catch (e) {
-            this.parentAdapter.log.error("exception in RestartLog [" + e + "]");
+            this.parentAdapter.log.error("exception in RestartLog [" + String(e) + "]");
         }
     }
     CreateCsvWriter(file, headers) {
@@ -121,7 +121,7 @@ class csvLogger extends base_1.default {
             }
             catch (e) {
                 // fs.statSync throws if file does not exist - that's OK, we catch and continue
-                this.parentAdapter.log.debug("fs.statSync error (may be non-existent file): " + e);
+                this.parentAdapter.log.debug("fs.statSync error (may be non-existent file): " + String(e));
             }
             const exist = node_fs_1.default.existsSync(file);
             this.parentAdapter.log.debug(" CreateFilename stats: " + JSON.stringify(stats) + " exist:" + exist);
@@ -151,7 +151,7 @@ class csvLogger extends base_1.default {
             newFilename = Path.join(targetPath, filename + "_" + datestring + extension);
         }
         catch (e) {
-            this.parentAdapter.log.error("exception in CreateFilename [" + e + "]");
+            this.parentAdapter.log.error("exception in CreateFilename [" + String(e) + "]");
         }
         return newFilename;
     }
@@ -164,7 +164,7 @@ class csvLogger extends base_1.default {
             }
         }
         catch (e) {
-            this.parentAdapter.log.error("exception in WriteCSVLog [" + e + "]");
+            this.parentAdapter.log.error("exception in WriteCSVLog [" + String(e) + "]");
         }
     }
     deleteOldFiles() {
@@ -190,7 +190,7 @@ class csvLogger extends base_1.default {
             });
         }
         catch (e) {
-            this.parentAdapter.log.error("exception in deleteOldFiles [" + e + "]");
+            this.parentAdapter.log.error("exception in deleteOldFiles [" + String(e) + "]");
         }
     }
     walkDir(dir, callback) {

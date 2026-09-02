@@ -105,7 +105,7 @@ class Semp extends utils.Adapter {
             */
         }
         catch (e) {
-            this.log.error("exception in onReady [" + e + "]");
+            this.log.error("exception in onReady [" + String(e) + "]");
         }
     }
     UpdateData() {
@@ -117,7 +117,7 @@ class Semp extends utils.Adapter {
             }
         }
         catch (e) {
-            this.log.error("exception in UpdateData [" + e + "]");
+            this.log.error("exception in UpdateData [" + String(e) + "]");
         }
         this.log.debug("result " + JSON.stringify(this.config.devices));
     }
@@ -157,7 +157,7 @@ class Semp extends utils.Adapter {
             callback();
         }
         catch (e) {
-            this.log.error("exception in onUnload " + e);
+            this.log.error("exception in onUnload " + String(e));
             callback();
         }
     }

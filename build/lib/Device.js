@@ -787,7 +787,7 @@ class Device extends base_1.default {
             //placeholder for future logic
         }
         catch (e) {
-            this.logError("exception in getCurrentStates [" + e + "]");
+            this.logError("exception in getCurrentStates [" + String(e) + "]");
         }
     }
     async createObjects() {
@@ -1140,7 +1140,7 @@ class Device extends base_1.default {
                         this.logDebug(actor.Name + " result URL " + JSON.stringify(result.data));
                     }
                     catch (e) {
-                        this.logError(actor.Name + " got error " + e + " after calling url");
+                        this.logError(actor.Name + " got error " + String(e) + " after calling url");
                     }
                 }
                 else {
@@ -1382,7 +1382,7 @@ class Device extends base_1.default {
             }
         }
         catch (e) {
-            this.logError(this.device.Name + " CheckURLStatus got error " + e + " after calling url " + url);
+            this.logError(this.device.Name + " CheckURLStatus got error " + String(e) + " after calling url " + url);
         }
     }
     CheckURLResult(url, sensor, data) {
@@ -1415,7 +1415,7 @@ class Device extends base_1.default {
             }
         }
         catch (e) {
-            this.logError("CheckURLResult got error " + e + "  " + JSON.stringify(sensor));
+            this.logError("CheckURLResult got error " + String(e) + "  " + JSON.stringify(sensor));
         }
         return ret;
     }

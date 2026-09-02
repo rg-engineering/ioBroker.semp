@@ -35,7 +35,7 @@ class Gateway extends base_1.default {
             this.logDebug("gateway started...");
         }
         catch (e) {
-            this.logError("exception in start [" + e + "]");
+            this.logError("exception in start [" + String(e) + "]");
         }
         if (this.adapter !== null && this.adapter.config.LogToCSV) {
             this.csvLogger = new csvLogger_1.default(this.adapter);
@@ -100,7 +100,7 @@ class Gateway extends base_1.default {
             this.logDebug("gateway stopped...");
         }
         catch (e) {
-            this.logError("exception in stop [" + e + "]");
+            this.logError("exception in stop [" + String(e) + "]");
         }
     }
     setPowerDevice(id, power) {
@@ -224,7 +224,7 @@ class Gateway extends base_1.default {
             this.setDevice(device.ID, d);
         }
         catch (e) {
-            this.logError("exception in addDevice [" + e + "]");
+            this.logError("exception in addDevice [" + String(e) + "]");
         }
     }
     setDevice(id, device) {
@@ -250,7 +250,7 @@ class Gateway extends base_1.default {
                     }
                 }
                 catch (err) {
-                    this.logError("error in Check2Switch [" + err + "]");
+                    this.logError("error in Check2Switch [" + String(err) + "]");
                 }
                 let requests = [];
                 if (dev.planningrequest != null) {
@@ -272,7 +272,7 @@ class Gateway extends base_1.default {
             }
         }
         catch (e) {
-            this.logError("exception in getAllDevices [" + e + "]");
+            this.logError("exception in getAllDevices [" + String(e) + "]");
         }
         return ds;
     }

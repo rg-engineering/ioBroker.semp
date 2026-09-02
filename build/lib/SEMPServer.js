@@ -300,7 +300,7 @@ class SEMPServer extends base_1.default {
             });
         }
         catch (error) {
-            this.logError("SEMP server cannot start: " + error);
+            this.logError("SEMP server cannot start: " + String(error));
         }
     }
     async stop() {

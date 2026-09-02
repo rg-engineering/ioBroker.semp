@@ -158,7 +158,7 @@ class Timeframe extends base_1.default {
             this.logDebug(this.deviceName + " timeframe " + this.settings.ID + " start earliest: " + this.EarliestStart + " latest: " + this.LatestEnd + " MinRunTime: " + this.MinRunningTime + " MaxRuntime: " + this.MaxRunningTime);
         }
         catch (e) {
-            this.logError("exception in timeframe start [" + e + "]");
+            this.logError("exception in timeframe start [" + String(e) + "]");
         }
     }
     async GetEnabled() {
