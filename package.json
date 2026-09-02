@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@iobroker/adapter-core": "^3.4.3",
-    "axios": "^1.19.0",
+    "axios": "^1.20.0",
     "csv-writer": "^1.6.0",
     "express": "^5.2.1",
     "libxmljs2": "^0.37.0",
