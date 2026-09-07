@@ -13,6 +13,12 @@ import type Gateway from "./Gateway";
 
 import type { deviceInfo } from "./types";
 
+import {
+	formatSempValidationIssues,
+	validateSempResponse,
+} from "./sempRuntimeValidator";
+
+
 type TimeoutHandle = ReturnType<typeof setTimeout>;
 
 
@@ -191,10 +197,21 @@ export default class SEMPServer extends Base {
 		this.app.get("/semp/", (req, res) => {
 			this.logDebug("SHM requested all devices. " + req.originalUrl  + " " + req.ip + " " + req.protocol);
 			const deviceList = this.Gateway.getAllDevices();
-			//this.Gateway.parentAdapter.log.debug("got device list");
 			const devices = this.convertDevices(deviceList);
-			//this.Gateway.parentAdapter.log.debug("response " );
-			res.send(this.convertJSToXML(devices));
+			const xml = this.convertJSToXML(devices);
+
+			try {
+				const issues = validateSempResponse(xml);
+
+				for (const line of formatSempValidationIssues(issues)) {
+					this.logError(line);
+				}
+			} catch (error) {
+				// Der Validator selbst darf die SEMP-Kommunikation niemals verhindern.
+				this.logError("SEMP runtime validation failed internally: " + String(error));
+			}
+
+			res.send(xml);
 			this.logDebug("response sent");
 		});
 
