@@ -7,6 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const xml_js_1 = require("xml-js");
 const base_1 = __importDefault(require("./base"));
+const sempRuntimeValidator_1 = require("./sempRuntimeValidator");
 class SEMPServer extends base_1.default {
     uuid;
     ipAddress;
@@ -67,10 +68,19 @@ class SEMPServer extends base_1.default {
         this.app.get("/semp/", (req, res) => {
             this.logDebug("SHM requested all devices. " + req.originalUrl + " " + req.ip + " " + req.protocol);
             const deviceList = this.Gateway.getAllDevices();
-            //this.Gateway.parentAdapter.log.debug("got device list");
             const devices = this.convertDevices(deviceList);
-            //this.Gateway.parentAdapter.log.debug("response " );
-            res.send(this.convertJSToXML(devices));
+            const xml = this.convertJSToXML(devices);
+            try {
+                const issues = (0, sempRuntimeValidator_1.validateSempResponse)(xml);
+                for (const line of (0, sempRuntimeValidator_1.formatSempValidationIssues)(issues)) {
+                    this.logError(line);
+                }
+            }
+            catch (error) {
+                // Der Validator selbst darf die SEMP-Kommunikation niemals verhindern.
+                this.logError("SEMP runtime validation failed internally: " + String(error));
+            }
+            res.send(xml);
             this.logDebug("response sent");
         });
         this.app.post("/semp/", (req, res) => {
