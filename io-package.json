@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "semp",
-    "version": "2.0.12",
+    "version": "2.1.0",
     "news": {
+      "2.1.0": {
+        "en": "semp protocol verifaction added\nadded some additional verification checks for DeviceId and others \nAdapter requires node.js >= 22 now\ndependencies updated",
+        "de": "Semp Protokollprüfung hinzugefügt\nzusätzliche Prüfungen für Geräte-ID und andere hinzugefügt \nAdapter benötigt jetzt node.js >= 22\nAbhängigkeiten aktualisiert",
+        "ru": "добавлена верификация протокола semp\nдобавлено несколько дополнительных проверок для DeviceID и других \nТеперь для адаптера требуется файл node.js >= 22\nзависимости обновлены",
+        "pt": "adição da verificação do protocolo semp\nadicionou mais verificações para DeviceID e outras \nO adaptador exige node.js >= 2\ndependências atualizadas",
+        "nl": "verificatie van het semp protocol toegevoegd\nenkele aanvullende verificatiecontroles toegevoegd voor DeviceID en andere \nVoor de adapter is nu node.js >= 22 nodig\nafhankelijkheden bijgewerkt",
+        "fr": "protocole SEMP vérifié\na ajouté des contrôles supplémentaires pour DeviceID et d'autres \nAdapter nécessite node.js >= 22\ndépendances mises à jour",
+        "it": "Aggiunta la verifica semp\nha aggiunto altri controlli di verifica per DeviceID e altri \nAdapter richiede node.js =2 ora\ndipendenze aggiornate",
+        "es": "verificación de protocolo semp añadida\nañadió algunos controles de verificación adicionales para DeviceID y otros \nEl adaptador necesita node.js >= 22 ahora\ndependencias actualizadas",
+        "pl": "dodano weryfikację protokołu semp\ndodano dodatkowe kontrole weryfikacyjne dla DeviceID i innych \nAdapter wymaga teraz node.js >= 22\naktualizacja zależności",
+        "uk": "додано перевірку протоколу semp\nдодано деякі додаткові перевірки перевірки для DeviceId та інших \nАдаптер вимагає node.js >= 22 зараз\nзалежності оновлені",
+        "zh-cn": "已添加 semp 协议验证\n为 deviceID 等添加了一些额外的验证检查 \n适配器现在需要 node.js >= 22\n依赖关系已更新"
+      },
       "2.0.12": {
         "en": "bug fix for issue #451: device base ID is editable now",
         "de": "fehlerbehebung für Ausgabe #451: Gerätebasis-ID ist jetzt editierbar",
@@ -80,19 +93,6 @@
         "pl": "aktualizacja zależności + zmiany w oparciu o sprawdzacz adaptera",
         "uk": "оновлення залежності + зміни на основі перевірки адаптера",
         "zh-cn": "根据适配器检查器更新依赖性+变化"
-      },
-      "2.0.3": {
-        "en": "admin overworked completely with react and vite. **ATTENTION**: breaking changes in admin settings !!!\nbackend complete overworked with typescript",
-        "de": "admin komplett mit Reakt und Vite überarbeitet. **ATTENTION**: Änderungen in Admin-Einstellungen brechen !!!\nbackend komplett überbearbeitet mit schrift",
-        "ru": "админ полностью перегружен реакцией и добротой. ** ВНИМАНИЕ**: изменение настроек администратора!!!\nbackend полностью перегружен шрифтом",
-        "pt": "admin overworked completamente com reação e vite. ** ATENÇÃO**: quebrando alterações nas configurações de administrador !!!\ninfra- estrutura completa sobrecarregada com texto",
-        "nl": "admin overwerkte volledig met reactie en vite. **Opmerking**: wijzigingen in admin instellingen breken !!!\nbackend compleet overwerkt met typescript",
-        "fr": "administrateur surchargé complètement avec réaction et rite. **ATTENTION**: casser les changements dans les paramètres d'administration !!!\nbackend complet surtravaillé avec dactylographie",
-        "it": "admin ha lavorato completamente con reagire e vite. **ATTENZIONE**: rompere i cambiamenti nelle impostazioni di amministrazione!\nbackend completo overworked con typescript",
-        "es": "admin superó completamente el trabajo con reacción y vite. **ATENCIÓN**: romper cambios en la configuración de administración !!!\nbackend completo overworked with typescript",
-        "pl": "admin przepracował całkowicie z reakcji i vite. ** UWAGA* *: łamanie zmian w ustawieniach administratora!!! \nbackend całkowicie przerobione z maszynopisem",
-        "uk": "адмін перероблений повністю з реагацією і вітом. **ATTENTION***: зміни в налаштуваннях адміністратора !!!\nзворотній зв'язок завершено",
-        "zh-cn": "处理过度 完全与反应和vite。 校对:Soup!\n后端用打字符完成过度工作"
       }
     },
     "titleLang": {
