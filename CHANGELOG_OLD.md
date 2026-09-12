@@ -1,8 +1,11 @@
 # Older changes
+## 2.0.8 (2026-04-12)
+* (René) bug fix in admin, see issue #442: time settings in energy request corrected
+
+
 ## 2.0.7 (2026-04-06)
 * (René) github workflow with node@24
 * (René) see issue #433: make sure this.device.WallboxOID is defined before using it
-
 
 ## 2.0.5 (2026-03-17)
 * (René) update dependencies + changes based on adapter checker
