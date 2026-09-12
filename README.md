@@ -80,7 +80,11 @@ The adapter allows you to control a dishwasher or other devices that consume sta
 
 <!--
   Placeholder for the next version (at the beginning of the line):
+  ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (René) dependencies updated
+
 ### 2.1.0 (2026-09-08)
 * (René) semp protocol verifaction added
 * (René) added some additional verification checks for DeviceId and others 
