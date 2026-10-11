@@ -32,7 +32,7 @@ export class Semp extends utils.Adapter {
 	 * Is called when databases are connected and adapter received configuration.
 	 */
 	private async onReady(): Promise<void> {
-		this.log.debug(JSON.stringify(this.config));
+		//this.log.debug(JSON.stringify(this.config));
 
 
 		try {
@@ -87,11 +87,11 @@ export class Semp extends utils.Adapter {
 	}
 
 	UpdateData():void {
-		this.log.debug("UpdateData");
+		//this.log.debug("UpdateData");
 		try {
 			for (let d = 0; d < this.config.devices.length; d++) {
 
-				this.log.debug("device " + JSON.stringify(this.config.devices[d]));
+				//this.log.debug("device " + JSON.stringify(this.config.devices[d]));
 
 				
 
@@ -103,7 +103,7 @@ export class Semp extends utils.Adapter {
 			this.log.error("exception in UpdateData [" + String(e) + "]");
 		}
 
-		this.log.debug("result " + JSON.stringify(this.config.devices));
+		//this.log.debug("result " + JSON.stringify(this.config.devices));
 
 	}
 
@@ -119,7 +119,7 @@ export class Semp extends utils.Adapter {
 
 			const device = this.config.devices[d];
 
-			this.log.debug("add device " + JSON.stringify(device));
+			this.log.debug("main: add device " + JSON.stringify(device));
 
 			if (device.IsActive) {
 				await this.gw.addDevice(device);

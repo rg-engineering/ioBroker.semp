@@ -63,7 +63,7 @@ class Semp extends utils.Adapter {
      * Is called when databases are connected and adapter received configuration.
      */
     async onReady() {
-        this.log.debug(JSON.stringify(this.config));
+        //this.log.debug(JSON.stringify(this.config));
         try {
             //"290B3891-0311-4854-4333-7C70BC802C2D"
             const uuid = this.config.UUID;
@@ -109,17 +109,17 @@ class Semp extends utils.Adapter {
         }
     }
     UpdateData() {
-        this.log.debug("UpdateData");
+        //this.log.debug("UpdateData");
         try {
             for (let d = 0; d < this.config.devices.length; d++) {
-                this.log.debug("device " + JSON.stringify(this.config.devices[d]));
+                //this.log.debug("device " + JSON.stringify(this.config.devices[d]));
                 //this.log.debug("result " + JSON.stringify(this.config.devices[d].EnergyRequestPeriods));
             }
         }
         catch (e) {
             this.log.error("exception in UpdateData [" + String(e) + "]");
         }
-        this.log.debug("result " + JSON.stringify(this.config.devices));
+        //this.log.debug("result " + JSON.stringify(this.config.devices));
     }
     //add all devices which are configured in admin page
     async AddDevices() {
@@ -129,7 +129,7 @@ class Semp extends utils.Adapter {
         }
         for (let d = 0; d < this.config.devices.length; d++) {
             const device = this.config.devices[d];
-            this.log.debug("add device " + JSON.stringify(device));
+            this.log.debug("main: add device " + JSON.stringify(device));
             if (device.IsActive) {
                 await this.gw.addDevice(device);
                 //await this.SubscribeDevice(device);
