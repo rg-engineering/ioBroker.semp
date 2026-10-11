@@ -1,7 +1,10 @@
 # Older changes
-## 2.0.8 (2026-04-12)
+## 2.0.9 (2026-04-13)
 * (René) bug fix in admin, see issue #442: time settings in energy request corrected
 
+
+## 2.0.8 (2026-04-12)
+* (René) bug fix in admin, see issue #442: time settings in energy request corrected
 
 ## 2.0.7 (2026-04-06)
 * (René) github workflow with node@24

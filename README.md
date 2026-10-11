@@ -82,8 +82,7 @@ The adapter allows you to control a dishwasher or other devices that consume sta
   Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.1.2 (2026-10-11)
 * (René) bug fix for issue #494: correct usage of type and name in CreateObjects
 
 ### 2.1.1 (2026-09-12)
@@ -100,9 +99,6 @@ The adapter allows you to control a dishwasher or other devices that consume sta
 
 ### 2.0.10 (2026-04-21)
 * (René) bug fix for issue #445: planning requests corrected
-
-### 2.0.9 (2026-04-13)
-* (René) bug fix in admin, see issue #442: time settings in energy request corrected
 
 [Older changelogs can be found there](CHANGELOG_OLD.md)
 

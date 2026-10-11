@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "semp",
-    "version": "2.1.1",
+    "version": "2.1.2",
     "news": {
+      "2.1.2": {
+        "en": "bug fix for issue #494: correct usage of type and name in CreateObjects",
+        "de": "Bugfix für Problem #494: Typ und Name in CreateObjects korrekt",
+        "ru": "исправление ошибки #494: правильное использование типа и имени в CreateObjects",
+        "pt": "bug do problema #494: uso correto de tipo e nome em CreateObjects",
+        "nl": "probleemoplossing voor probleem #494: correct gebruik van type en naam in CreateObjects",
+        "fr": "correctif #494 : utilisation correcte du type et du nom dans CreateObjects",
+        "it": "bug fix #494: uso corretto di tipo e nome in CreateObjects",
+        "es": "solución para el tema #494: uso correcto del tipo y el nombre en CreateObjects",
+        "pl": "poprawka błędu dla problemu #494: poprawne użycie typu i nazwy w CreateObjects",
+        "uk": "виправлення помилки для проблеми #494: правильне використання типу та імені в CreateObjects",
+        "zh-cn": "问题 #494 的错误修复：在 createObjects 中正确使用类型和名称"
+      },
       "2.1.1": {
         "en": "dependencies updated",
         "de": "Abhängigkeiten aktualisiert",
@@ -80,19 +93,6 @@
         "pl": "błąd naprawić w admin, patrz numer # 442: ustawienia czasu w żądaniu energii poprawione",
         "uk": "виправлення помилок в адміні, див. питання #442: налаштування часу в енергетичному запиту виправлено",
         "zh-cn": "管理器中的错误修复, 参见问题442: 能量请求中的时间设置更正"
-      },
-      "2.0.7": {
-        "en": "github workflow with node@24\nsee issue #433: make sure this.device.WallboxOID is defined before using it",
-        "de": "github workflow mit node@24\nsiehe Ausgabe #433: sicherstellen, dass this.device.WallboxOID definiert ist, bevor es verwendet wird",
-        "ru": "рабочий процесс на github с помощью node@24\nсм. выпуск #433: убедитесь, что this.device.WallboxOID определен, прежде чем использовать его",
-        "pt": "fluxo de trabalho do github com node@24\nver questão #433: certifique-se de que this.device.WallboxOID está definido antes de o utilizar",
-        "nl": "github-workflow met node@24\nzie probleem #433: zorg ervoor dat this.device.WallboxOID gedefinieerd is voordat je het gebruikt.",
-        "fr": "flux de travail github avec node@24\nvoir le problème #433 : assurez-vous que this.device.WallboxOID est défini avant de l'utiliser",
-        "it": "flusso di lavoro github con node@24\nvedere il problema #433: assicurarsi che this.device.WallboxOID sia definito prima di usarlo",
-        "es": "flujo de trabajo github con node@24\nver incidencia #433: asegúrate de que this.device.WallboxOID está definido antes de usarlo",
-        "pl": "github workflow z node@24\nzobacz błąd #433: upewnij się, że this.device.WallboxOID jest zdefiniowany przed jego użyciem",
-        "uk": "робочий процес на github з node@24\nдив. проблему #433: перед використанням переконайтеся, що визначено ідентифікатор this.device.WallboxOID.",
-        "zh-cn": "github workflow with node@24\nsee issue #433: make sure this.device.WallboxOID is defined before using it"
       }
     },
     "titleLang": {
