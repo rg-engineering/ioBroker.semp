@@ -47,21 +47,32 @@ export default class Base {
 
     async CreateObject(key: string, obj: iobObject): Promise<void> {
 
+        //bug fix issue #494
         await this.CreateDatapoint(
-            key,
-            obj.type,
-            obj.common.name,
+            key, 
+            obj.common.name, 
+            obj.type, 
             obj.common.role,
-            obj.common.type,
-            obj.common.unit,
-            obj.common.read,
-            obj.common.write,
+            obj.common.type, 
+            obj.common.unit, 
+            obj.common.read, 
+            obj.common.write, 
             obj.common.desc
         );
 
+
     }
 
-    async CreateDatapoint(key: string, name: string | undefined, type: any, common_role: string | undefined, common_type: string, common_unit: string | undefined, common_read: boolean, common_write: boolean, common_desc: ioBroker.StringOrTranslated | undefined): Promise<void> {
+    async CreateDatapoint(
+        key: string, 
+        name: string | undefined, 
+        type: any, 
+        common_role: string | undefined, 
+        common_type: string, 
+        common_unit: string | undefined, 
+        common_read: boolean, 
+        common_write: boolean, 
+        common_desc: ioBroker.StringOrTranslated | undefined): Promise<void> {
 
 
         if (this.adapter == null) {
@@ -107,6 +118,7 @@ export default class Base {
                 || obj.common.name != name
                 || obj.common.desc != common_desc
             ) {
+                this.logInfo("update object " + key + " with new properties");
                 await this.adapter.extendObject(key, {
                     common: {
                         name: name,
