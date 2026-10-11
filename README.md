@@ -82,8 +82,9 @@ The adapter allows you to control a dishwasher or other devices that consume sta
   Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
 -->
-### 2.1.2 (2026-10-11)
+### **WORK IN PROGRESS**
 * (René) bug fix for issue #494: correct usage of type and name in CreateObjects
+* (René) dependencies updated
 
 ### 2.1.1 (2026-09-12)
 * (René) dependencies updated
