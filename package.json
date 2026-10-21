@@ -42,7 +42,7 @@
     "@iobroker/types": "^7.2.4",
     "@tsconfig/node22": "^22.0.6",
     "@types/express": "^5.0.6",
-    "@types/node": "^22.19.20",
+    "@types/node": "^26.6.5",
     "@types/node-ssdp": "^4.0.5",
     "@types/uuid": "^11.0.0"
   },
