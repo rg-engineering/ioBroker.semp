@@ -40,7 +40,7 @@
     "@iobroker/eslint-config": "^2.3.4",
     "@iobroker/testing": "^6.3.1",
     "@iobroker/types": "^7.2.4",
-    "@tsconfig/node22": "^22.0.6",
+    "@tsconfig/node22": "^22.0.7",
     "@types/express": "^5.0.6",
     "@types/node": "^22.19.20",
     "@types/node-ssdp": "^4.0.5",
